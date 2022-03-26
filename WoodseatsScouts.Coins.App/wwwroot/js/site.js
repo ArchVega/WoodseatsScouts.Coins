@@ -12,7 +12,7 @@ function CoinModel() {
 
 function ViewModel() {
     const self = this
-    self.scoutCode = ko.observable('M007B004')
+    self.scoutCode = ko.observable('')
     self.scoutName = ko.observable('')
     self.scoutTroopNumber = ko.observable('')
     self.scoutSection = ko.observable('')
