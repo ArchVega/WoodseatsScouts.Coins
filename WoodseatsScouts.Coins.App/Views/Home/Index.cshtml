@@ -4,11 +4,10 @@
     <div class="col-12" style="margin-bottom: 2em">
         <input id="scout-code-textbox"
                type="text"
-               data-bind="textInput: scoutCode, valueUpdate: 'keyup', event: { paste: updateScoutDetailsOnPaste }"
+               data-bind="textInput: scoutCode, valueUpdate: 'keyup', event: { keypress: onScoutCodeFieldKepPressed }"
                class="form-control"
                placeholder="Click here and scan scout code"
                autocomplete="off"
-               readonly="readonly"
                style="background-color: white"/>
     </div>
 
@@ -27,11 +26,10 @@
         <div class="row" style="margin-bottom: 1em">
             <div class="col-12">
                 <input type="text"
-                       data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { paste: addScannedCoinOnPaste }, enable: scanCoinFieldEnabled"
+                       data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { keypress: onCoinCodeFieldKepPressed }, enable: scanCoinFieldEnabled"
                        class="form-control"
                        placeholder="Click here and scan a new coin"
                        autocomplete="off"
-                       readonly="readonly"
                        style="background-color: white"/>
             </div>
         </div>

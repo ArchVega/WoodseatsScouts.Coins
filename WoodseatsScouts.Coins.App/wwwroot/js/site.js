@@ -25,9 +25,13 @@ function ViewModel() {
     self.toaster = $('.toast')
     self.confirmationMessage = ko.observable('')
 
-    self.updateScoutDetailsOnPaste = (model, event) => {
+    self.onScoutCodeFieldKepPressed = (model, event) => {
+        if (event.keyCode !== 13) {
+            return true
+        }
+        
         event.preventDefault();
-        const scoutCode = (event.originalEvent.clipboardData || window.clipboardData).getData('text');
+        const scoutCode = event.currentTarget.value;
         model.scoutCode(scoutCode)
 
         const url = `/Home/GetScoutInfoFromCode?code=${scoutCode}`
@@ -49,15 +53,20 @@ function ViewModel() {
                 model.scoutTroopNumber('')
                 model.scoutSection('')
                 model.showUserSection(false)
+                model.scoutCode('')
             }
         })
 
         return true
     }
 
-    self.addScannedCoinOnPaste = (model, event) => {
+    self.onCoinCodeFieldKepPressed = (model, event) => {
+        if (event.keyCode !== 13) {
+            return true
+        }
+        
         event.preventDefault();
-        const lastScannedCoinCode = (event.originalEvent.clipboardData || window.clipboardData).getData('text');
+        const lastScannedCoinCode = event.currentTarget.value;
         model.lastScannedCoinCode(lastScannedCoinCode)
         const url = `/Home/GetPointValueFromCode?code=${lastScannedCoinCode}`
         $.get({
@@ -79,6 +88,7 @@ function ViewModel() {
             error: () => {
                 model.errorMessage(`An error occurred while processing code '${lastScannedCoinCode}'. It could be a general error or the code is not valid.`)
                 self.toaster.toast('show')
+                model.lastScannedCoinCode("")
             }
         })
 
