@@ -25,15 +25,25 @@ public class HomeController : Controller
     {
         var translationResult = CodeTranslator.TranslateScoutCode(code);
 
+        //
         var scout = context.Scouts!
-            .Single(x => x.ScoutNumber == translationResult.ScoutNumber);
+            .Single(x => x.ScoutNumber == translationResult.ScoutNumber
+                      && x.TroopNumber == translationResult.TroopNumber
+                      && x.Section == translationResult.Section);
+
+        //
+
+        //var scout = context.Scouts!
+        //    .Single(x => x.ScoutNumber == translationResult.ScoutNumber);
 
         return new
         {
             ScoutName = scout.Name,
-            ScoutPhotoPath = $"/scout-images/{scout.ScoutNumber}.jpg",
+            ScoutPhotoPath = $"/scout-images/{scout.Id}.jpg",
             ScoutTroopNumber = scout.TroopNumber, 
-            ScoutSection = scout.Section
+            ScoutSection = scout.Section,
+            ScoutID = scout.Id,
+            ScoutNumber = scout.ScoutNumber
         };
     }
 
@@ -52,10 +62,13 @@ public class HomeController : Controller
     [HttpPost]
     public void AddPointsToScout(PointsForScoutViewModel viewModel)
     {
-        var scoutResult = CodeTranslator.TranslateScoutCode(viewModel.ScoutCode);
-        
-        var scout = context.Scouts.Single(x => x.ScoutNumber == scoutResult.ScoutNumber);
-        
+        var translationResult = CodeTranslator.TranslateScoutCode(viewModel.ScoutCode);
+
+        var scout = context.Scouts!
+            .Single(x => x.ScoutNumber == translationResult.ScoutNumber
+                      && x.TroopNumber == translationResult.TroopNumber
+                      && x.Section == translationResult.Section);
+
         foreach (var coinCode in viewModel.CoinCodes)
         {
             var result = CodeTranslator.TranslateCoinPointCode(coinCode);
@@ -70,5 +83,87 @@ public class HomeController : Controller
         }
 
         context.SaveChanges();
+    }
+
+    [HttpPost]
+    public object CreateMember(String Name, int TroopNumber, String Section)
+    {
+        var SectionMembers = context.Scouts!
+            .Where(x => x.TroopNumber == TroopNumber
+                      && x.Section == Section);
+
+        var NextSectionMemberNumber = 1;
+
+        if (SectionMembers.FirstOrDefault() != null)
+        {
+            NextSectionMemberNumber = SectionMembers.Max(m => m.ScoutNumber) + 1;
+        }
+        //else
+        //{
+        //    NextSectionMemberNumber =  1;
+        //}
+
+       
+        context.Scouts?.Add(new Scout
+        {
+            ScoutNumber = NextSectionMemberNumber,
+            Name = Name,
+            TroopNumber = TroopNumber,
+            Section = Section
+        });
+
+        context.SaveChanges();
+
+        var scout = context.Scouts!
+            .Single(x => x.ScoutNumber == NextSectionMemberNumber
+                      && x.TroopNumber == TroopNumber
+                      && x.Section == Section);
+
+        return new
+        {
+            MemberNumber = scout.ScoutNumber,
+            MemberID = scout.Id,
+        };
+
+    }
+
+    [HttpPut]
+    public object UpdateMemberName(int ScoutID, String Name)
+    {
+        var entityOrNull = context.Scouts!.SingleOrDefault(x => x.Id == ScoutID);
+
+        if(entityOrNull != null) {
+            entityOrNull.Name = Name;
+            // other updates here it there are any
+            context.SaveChanges();
+        } else
+        {
+            throw new ArgumentException("ScoutID not found");
+        }
+
+        var scout = context.Scouts!
+            .Single(x => x.Id == ScoutID);
+
+        return new
+        {
+            MemberNumber = scout.ScoutNumber,
+            MemberID = scout.Id,
+        };
+
+    }
+
+    [HttpGet]
+    public object GetClueStatus(int ScoutID)
+    {
+       var scout = context.Scouts!
+            .Single(x => x.Id == ScoutID);
+
+        return new
+        {
+            ScoutID = ScoutID,
+            Clue1State = scout.Clue1State,
+            Clue2State = scout.Clue2State,
+            Clue3State = scout.Clue3State
+        };
     }
 }

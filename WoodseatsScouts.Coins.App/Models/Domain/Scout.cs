@@ -15,5 +15,11 @@
         public int TroopNumber { get; init; }
         
         public string? Section { get; init; }
+
+        public string? Clue1State { get; init; }
+
+        public string? Clue2State { get; init; }
+
+        public string? Clue3State { get; init; }
     }
 }

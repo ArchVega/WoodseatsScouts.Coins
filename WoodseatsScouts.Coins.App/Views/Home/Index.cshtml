@@ -25,7 +25,8 @@
 
         <div class="row" style="margin-bottom: 1em">
             <div class="col-12">
-                <input type="text"
+                <input id="coin-textbox"
+                       type="text"
                        data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { keypress: onCoinCodeFieldKepPressed }, enable: scanCoinFieldEnabled"
                        class="form-control"
                        placeholder="Click here and scan a new coin"
