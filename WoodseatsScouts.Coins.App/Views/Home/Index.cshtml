@@ -8,7 +8,8 @@
                class="form-control"
                placeholder="Click here and scan scout code"
                autocomplete="off"
-               style="background-color: white"/>
+               style="background-color: white"
+               autofocus/>
     </div>
 
     <!-- ko if:showUserSection -->
@@ -44,6 +45,9 @@
             </span>
         </div>
 
+        <span>
+            <b>Tokens Scanned:&nbsp;</b><span data-bind="text: NumberScanned"></span>
+        </span>
         <span>
             <b>Total:&nbsp;</b><span data-bind="text: totalPoints"></span>
         </span>

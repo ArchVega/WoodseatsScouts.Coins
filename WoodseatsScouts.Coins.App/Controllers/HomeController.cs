@@ -51,6 +51,10 @@ public class HomeController : Controller
     public object GetPointValueFromCode(string code)
     {
         var result = CodeTranslator.TranslateCoinPointCode(code);
+        if (result.PointValue > 50)
+        {
+            throw new ArgumentException("Points value is greater than 50");
+        }
         return new
         {
             result.PointValue,

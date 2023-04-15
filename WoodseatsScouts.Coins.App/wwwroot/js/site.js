@@ -44,6 +44,7 @@ function ViewModel() {
                     model.scoutTroopNumber(result.scoutTroopNumber)
                     model.scoutSection(result.scoutSection)
                     model.showUserSection(true)
+                    $('#coin-textbox').focus()
                 }, 250)
             },
             error: () => {
@@ -83,6 +84,7 @@ function ViewModel() {
 
                     model.scanCoinFieldEnabled(true)
                     model.lastScannedCoinCode("")
+                    $('#coin-textbox').focus()
                 }, 250)
             },
             error: () => {
@@ -109,30 +111,37 @@ function ViewModel() {
         return total;
     }, this);
 
+    self.NumberScanned = ko.computed(() => {
+        let total = 0;
+
+        this.scannedCoins().forEach(function (x) {
+            total += 1
+        })
+
+        return total;
+    }, this);
+
     self.scoutTroopNumberAndSection = ko.computed(() => {        
         return `Troop #: ${this.scoutTroopNumber()}, Section: ${this.scoutSection()}`;
     }, this);
 
     self.confirmSubmit = () => {
-        const scoutName = this.scoutName()
-        const totalPoints = this.totalPoints()
-        const message = `Submit coins with a total of ${totalPoints} points for scout ${scoutName}?`
-        if (confirm(message) === true) {
-            let coinCodes = [];
-            this.scannedCoins().forEach(function (x) {
-                coinCodes.push(x.code)
-            })
+    const scoutName = this.scoutName()
+    const totalPoints = this.totalPoints()
+        let coinCodes = [];
+        this.scannedCoins().forEach(function (x) {
+            coinCodes.push(x.code)
+        })
 
-            const payload = {
-                scoutCode: this.scoutCode(),
-                coinCodes: coinCodes
-            }
+        const payload = {
+            scoutCode: this.scoutCode(),
+            coinCodes: coinCodes
+        }
 
-            const url = `/Home/AddPointsToScout`
-            $.post(url, payload, function() {
-                window.location.reload()                
-            });
-        } 
+        const url = `/Home/AddPointsToScout`
+        $.post(url, payload, function() {
+            window.location.reload()                
+        });
     }
 }
 

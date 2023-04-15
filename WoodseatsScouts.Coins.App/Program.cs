@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
 {
-    options.UseSqlServer("Server=server.sheafdistrict.local;Database=WoodseatsScouts.Coins;Trusted_Connection=true");
+    options.UseSqlServer("Server=localhost;Database=WoodseatsScouts.Coins;Trusted_Connection=true");
 });
 
 var app = builder.Build();
