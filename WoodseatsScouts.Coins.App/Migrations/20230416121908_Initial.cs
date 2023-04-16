@@ -17,7 +17,10 @@ namespace WoodseatsScouts.Coins.App.Migrations
                     ScoutNumber = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TroopNumber = table.Column<int>(type: "int", nullable: false),
-                    Section = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Section = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Clue1State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Clue2State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Clue3State = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -48,14 +51,14 @@ namespace WoodseatsScouts.Coins.App.Migrations
 
             migrationBuilder.InsertData(
                 table: "Scouts",
-                columns: new[] { "Id", "Name", "ScoutNumber", "Section", "TroopNumber" },
+                columns: new[] { "Id", "Clue1State", "Clue2State", "Clue3State", "Name", "ScoutNumber", "Section", "TroopNumber" },
                 values: new object[,]
                 {
-                    { 1, "Scout A", 4, "B", 13 },
-                    { 2, "Scout B", 5, "B", 13 },
-                    { 3, "Scout C", 8, "B", 13 },
-                    { 4, "Scout D", 10, "C", 16 },
-                    { 5, "Scout E", 19, "C", 16 }
+                    { 1, null, null, null, "Scout A", 4, "B", 13 },
+                    { 2, null, null, null, "Scout B", 5, "B", 13 },
+                    { 3, null, null, null, "Scout C", 8, "B", 13 },
+                    { 4, null, null, null, "Scout D", 10, "C", 16 },
+                    { 5, null, null, null, "Scout E", 19, "C", 16 }
                 });
 
             migrationBuilder.CreateIndex(

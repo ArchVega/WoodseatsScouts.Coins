@@ -29,6 +29,15 @@ namespace WoodseatsScouts.Coins.App.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Clue1State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Clue2State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Clue3State")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

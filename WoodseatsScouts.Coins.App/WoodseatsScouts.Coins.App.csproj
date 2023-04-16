@@ -21,6 +21,7 @@
 
     <ItemGroup>
         <Folder Include="AppLogic" />
+        <Folder Include="Migrations\" />
         <Folder Include="wwwroot\images" />
     </ItemGroup>
 

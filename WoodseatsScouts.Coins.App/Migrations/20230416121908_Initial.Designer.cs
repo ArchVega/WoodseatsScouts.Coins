@@ -11,7 +11,7 @@ using WoodseatsScouts.Coins.App.Data;
 namespace WoodseatsScouts.Coins.App.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220326175018_Initial")]
+    [Migration("20230416121908_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,15 @@ namespace WoodseatsScouts.Coins.App.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Clue1State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Clue2State")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Clue3State")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
