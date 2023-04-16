@@ -18,10 +18,9 @@ body {
 }
 
 img#site-image {
-    width:240px;
-    margin:0 auto;
+    width: 180px;
+    margin: 0 auto;
     display: block;
-    margin-top: 1em;
     border-bottom: 1px solid lightgray;
 }
 
@@ -42,7 +41,7 @@ h3 {
 h4 {
     text-align: center;
 }
-    
+
 input {
     text-align: center;
 }
@@ -54,22 +53,26 @@ input {
     margin: 0 .1em;
     background-color: dodgerblue;
     color: white;
-    display:inline-block;
+    display: inline-block;
     margin-bottom: 1em;
 }
-.tag span#remove-score {    
+
+.tag span#remove-score {
     cursor: pointer;
     opacity: 0.6;
 }
+
 .tag span#remove-score:hover {
     opacity: 1.0
 }
+
 .tag .remove {
     vertical-align: bottom;
     top: 0;
     color: red;
     font-style: normal;
 }
+
 .tag span#remove-score {
     margin: 0 0 0 .3em;
 }
@@ -163,6 +166,27 @@ input {
     top: 0;
 }
 
+#scout-code-textbox {
+    background-color: white;
+}
+
+#scoutTroopNumberAndSection {
+    display: block;
+    text-align: center;
+}
+
+#coin-textbox {
+    background-color: white;
+}
+
+#scanned-coins-div {
+    margin-bottom: 2em;
+    min-height: 10em;
+    text-align: center;
+    border: 1px solid lightgray;
+    padding: 1em;
+}
+
 #interactive.viewport {
     position: relative;
 }
@@ -184,28 +208,34 @@ canvas.drawing, canvas.drawingBuffer {
     margin: 0;
     padding: 0;
 }
+
 /* line 19, ../sass/_viewport.scss */
 .controls .input-group {
     float: left;
 }
+
 /* line 21, ../sass/_viewport.scss */
 .controls .input-group input, .controls .input-group button {
     display: block;
 }
+
 /* line 25, ../sass/_viewport.scss */
 .controls .reader-config-group {
     float: right;
 }
+
 /* line 28, ../sass/_viewport.scss */
 .controls .reader-config-group label {
     display: block;
 }
+
 /* line 30, ../sass/_viewport.scss */
 .controls .reader-config-group label span {
     width: 9rem;
     display: inline-block;
     text-align: right;
 }
+
 /* line 37, ../sass/_viewport.scss */
 .controls:after {
     content: '';
@@ -220,6 +250,7 @@ canvas.drawing, canvas.drawingBuffer {
     border-bottom: 1px solid #EEE;
     padding: 10px 0;
 }
+
 /* line 28, ../sass/_viewport.scss */
 #result_strip ul.thumbnails {
     padding: 0;
@@ -230,26 +261,31 @@ canvas.drawing, canvas.drawingBuffer {
     overflow-y: hidden;
     white-space: nowrap;
 }
+
 /* line 37, ../sass/_viewport.scss */
 #result_strip ul.thumbnails > li {
     display: inline-block;
     vertical-align: middle;
     width: 160px;
 }
+
 /* line 41, ../sass/_viewport.scss */
 #result_strip ul.thumbnails > li .thumbnail {
     padding: 5px;
     margin: 4px;
     border: 1px dashed #CCC;
 }
+
 /* line 46, ../sass/_viewport.scss */
 #result_strip ul.thumbnails > li .thumbnail img {
     max-width: 140px;
 }
+
 /* line 49, ../sass/_viewport.scss */
 #result_strip ul.thumbnails > li .thumbnail .caption {
     white-space: normal;
 }
+
 /* line 51, ../sass/_viewport.scss */
 #result_strip ul.thumbnails > li .thumbnail .caption h4 {
     text-align: center;
@@ -257,6 +293,7 @@ canvas.drawing, canvas.drawingBuffer {
     height: 40px;
     margin: 0px;
 }
+
 /* line 61, ../sass/_viewport.scss */
 #result_strip ul.thumbnails:after {
     content: "";
@@ -273,6 +310,7 @@ canvas.drawing, canvas.drawingBuffer {
         box-shadow: none;
     }
 }
+
 @media (max-width: 603px) {
     /* line 5, ../sass/phone/_viewport.scss */
     .reader-config-group {
@@ -308,12 +346,14 @@ canvas.drawing, canvas.drawingBuffer {
     #result_strip ul.thumbnails > li {
         width: 150px;
     }
+
     /* line 27, ../sass/phone/_viewport.scss */
     #result_strip ul.thumbnails > li .thumbnail .imgWrapper {
         width: 130px;
         height: 130px;
         overflow: hidden;
     }
+
     /* line 31, ../sass/phone/_viewport.scss */
     #result_strip ul.thumbnails > li .thumbnail .imgWrapper img {
         margin-top: -25px;
