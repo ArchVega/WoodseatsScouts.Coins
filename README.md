@@ -1,1 +1,0 @@
-# Woodseats.Coins
