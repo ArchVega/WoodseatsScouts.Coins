@@ -1,18 +1,30 @@
-import React from "react";
+import React, {useState} from "react";
 import ScannedCoin from "./coinScanner/scannedCoin";
 
-const CoinScanner = () => {
-    const coins = [
-        {
-            id: 1,
-            points: 20
-        },
-        {
-            id: 2,
-            points: 10
-        }
-    ];
+const coinsArray = [
+    {
+        id: 1,
+        points: 20
+    },
+    {
+        id: 2,
+        points: 10
+    }
+];
 
+const CoinScanner = () => {
+    const [coins, setCoins] = useState(coinsArray);    
+    
+    const addCoins = () => {
+        setCoins([
+            ...coins,
+            {
+                id: 3,
+                points: 25
+            }
+        ])
+    }
+    
     return <>
         <h4>Scan</h4>
 
@@ -29,16 +41,14 @@ const CoinScanner = () => {
                 Or
             </div>
             <div className="col-2">
-                <button className="btn btn-primary">&#128247;</button>
+                <button className="btn btn-primary" onClick={addCoins}>&#128247;</button>
             </div>
 
         </div>
 
         <div id="scanned-coins-div">
-            {coins.map(function (coin, index)
-                {
-                    return <ScannedCoin key={index} coin={coin}></ScannedCoin>
-                }
+            {coins.map((coin, index) => 
+                <ScannedCoin key={index} coin={coin}></ScannedCoin>
             )}
         </div>
 
