@@ -1,7 +1,7 @@
 ﻿<img id="site-image" src="images/cropped-Linear-Black-2.png"/>
 <h3>COINS</h3>
 <div class="row">
-    <div class="col-12" style="margin-bottom: 2em">
+    <div class="col-6 offset-3" style="margin-bottom: 2em">
         <input id="scout-code-textbox"
                type="text"
                data-bind="textInput: scoutCode, valueUpdate: 'keyup', event: { keypress: onScoutCodeFieldKepPressed }"
@@ -10,6 +10,17 @@
                autocomplete="off"
                style="background-color: white"/>
     </div>
+    <div class="col-3">
+        <button class="btn btn-primary">&#128247;</button>
+    </div>
+    
+    <button id="opener">Barcode scanner</button>
+    
+    <div id="modal" title="Barcode scanner">
+        <span class="found"></span>
+        <div id="interactive" class="viewport"></div>
+    </div>
+
 
     <!-- ko if:showUserSection -->
     <hr/>

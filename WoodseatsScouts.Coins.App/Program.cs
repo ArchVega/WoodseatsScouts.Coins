@@ -4,11 +4,15 @@ using WoodseatsScouts.Coins.App.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .AddJsonFile("appSettings.json")
+    .AddJsonFile($"appSettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+builder.Services.AddDbContext<AppDbContext>((_, options) =>
 {
-    options.UseSqlServer("Server=DESKTOP-APO7M33;Database=WoodseatsScouts.Coins;User Id=DistrictCamp;Password=DistrictCamp");
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WoodseatsScouts.Coins"));
 });
 
 var app = builder.Build();
