@@ -6,11 +6,11 @@ const user = {
 }
 
 const UserDetails = () => {
-    return  <div className="col-6">
+    return  <>
         <h4>{user.name}</h4>
         <span id="scoutTroopNumberAndSection"></span>
         <img id="scout-photo" src={user.image} alt="Scout Photo"/>
-    </div>
+    </>
 }
 
 export default UserDetails;

@@ -5,20 +5,26 @@ import CoinScanner from "./coins/coinScanner";
 
 export class Home extends Component {
     static displayName = Home.name;
-
     render() {
+        let showUserDetailsAndCoinScanner = "visible";
+
         return (
             <div>
                 <h3>COINS</h3>
 
-                <UserScanner></UserScanner>
+                <div className="row">
+                    <UserScanner></UserScanner>                    
+                </div>
 
                 <hr/>
 
-                <div className="row">
-                    <UserDetails></UserDetails>
-
-                    <CoinScanner></CoinScanner>     
+                <div className="row" style={{display: showUserDetailsAndCoinScanner}}>
+                    <div className="col-6">
+                        <UserDetails></UserDetails>                        
+                    </div>
+                    <div className="col-6">
+                        <CoinScanner></CoinScanner>
+                    </div>
                 </div>               
             </div>
         );
