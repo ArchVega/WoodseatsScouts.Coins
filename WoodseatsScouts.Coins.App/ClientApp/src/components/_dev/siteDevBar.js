@@ -1,10 +1,15 @@
 ﻿import {
     Form, FormGroup, Input, Label, Navbar, NavbarText
 } from "reactstrap";
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
+import {AppCameraAvailableContext} from "../../App";
 
-const SiteDevBar = ({direction, ...args}) => {
-    const [state, setState] = useState(true);
+const SiteDevBar = () => {
+    const [state, setState] = useState(false);
+    const [appCameraAvailable, setAppCameraAvailable] = useContext(AppCameraAvailableContext)
+    useEffect(() => {
+        setAppCameraAvailable(state)
+    }, [state])
     return <>
         <header className="site-dev-bar">
             <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 bg-info" container
@@ -16,7 +21,12 @@ const SiteDevBar = ({direction, ...args}) => {
                     <li>
                         <Form>
                             <FormGroup switch>
-                                <Input type="switch" role="switch"/>
+                                <Input type="switch" 
+                                       role="switch" 
+                                       checked={state}
+                                       onChange={() => {
+                                           setState(!state);
+                                       }}/>
                                 <Label check>Camera</Label>
                             </FormGroup>
                         </Form>

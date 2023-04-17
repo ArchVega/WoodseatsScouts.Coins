@@ -8,22 +8,23 @@ import hasCamera from "./js/CameraUtilities";
 const AppCameraAvailableContext = React.createContext(false);
 const App = () => {
     const [appCameraAvailable, setAppCameraAvailable] = useState(false);
-    useEffect(() => {
-        hasCamera(exists => {
-            setAppCameraAvailable(true);
-        })    
+    useCallback(() => {
+        hasCamera(exists => {           
+            console.log("once")
+            setAppCameraAvailable(exists);
+        }, [])
     })
-    
-    return <Layout>
-        <AppCameraAvailableContext.Provider value={appCameraAvailable}>
+
+    return <AppCameraAvailableContext.Provider value={[appCameraAvailable, setAppCameraAvailable]}>
+        <Layout>
             <Routes>
                 {AppRoutes.map((route, index) => {
                     const {element, ...rest} = route;
                     return <Route key={index} {...rest} element={element}/>;
                 })}
             </Routes>
-        </AppCameraAvailableContext.Provider>
-    </Layout>
+        </Layout>                
+    </AppCameraAvailableContext.Provider>
 }
 
 export {AppCameraAvailableContext};

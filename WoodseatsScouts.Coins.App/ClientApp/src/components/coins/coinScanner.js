@@ -16,7 +16,7 @@ const coinsArray = [
 
 const CoinScanner = () => {
     const [coins, setCoins] = useState(coinsArray);
-    const appCameraAvailable = useContext(AppCameraAvailableContext)
+    const [appCameraAvailable] = useContext(AppCameraAvailableContext)
     const addCoins = () => {
         setCoins([
             ...coins,
@@ -27,7 +27,6 @@ const CoinScanner = () => {
         ])
     }
     
-    console.log(appCameraAvailable)
     return <>
         <h4>Scan</h4>
 
