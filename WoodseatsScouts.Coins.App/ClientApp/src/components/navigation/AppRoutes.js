@@ -1,19 +1,14 @@
-import { Counter } from "./components/Counter";
-import { CoinsPage } from "./components/coins/coinsPage";
-import UsersPage from "./components/users/users";
-import NewUserPage from "./components/users/newUserPage";
+import { CoinsPage } from "../coins/coinsPage";
+import UsersPage from "../users/users";
+import NewUserPage from "../users/NewUserPage";
 import React from "react";
-import MembersRankingPage from "./components/rankings/membersRankingPage";
-import BasesRankingPage from "./components/rankings/basesRankingPage";
+import MembersRankingPage from "../rankings/membersRankingPage";
+import BasesRankingPage from "../rankings/basesRankingPage";
 
 const AppRoutes = [
   {
     index: true,
     element: <CoinsPage />
-  },
-  {
-    path: '/counter',
-    element: <Counter />
   },
   {
     path: '/members-ranking',

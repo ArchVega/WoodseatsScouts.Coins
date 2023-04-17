@@ -1,41 +1,29 @@
 ﻿import React from "react";
-import {Button, Input, InputGroup} from "reactstrap";
+import {Button, Form, Input, InputGroup} from "reactstrap";
+import QRCodeComponent from "../common/images/QRCodeComponent";
+import PhotoComponent from "../common/images/PhotoComponent";
 
 const NewUserPage = () => {
     return <>
         <h3>New User</h3>
-        <div className="row mb-5">
-            <div className="col-12">
-                <div className="row g-3 align-items-center">
-                    <div className="col-auto mb-3">
-                        <label htmlFor="" className="col-form-label">QR Code</label>
+        <Form className="col-6 offset-3">
+            <div className="row mb-5">
+                <div className="col-12">
+                    <div className="row g-3 align-items-center mb-3">
+                        <QRCodeComponent></QRCodeComponent>
                     </div>
-                    <div className="col-5">
-                        <input type="text" id="newUserQrCode" className="form-control"
-                               aria-describedby="" />
+                    <div className="row g-3 align-items-center">
+                        <PhotoComponent></PhotoComponent>                                               
                     </div>
                 </div>
-                <div className="row g-3 align-items-center">
-                    <div className="col-auto mb-3">
-                        <label htmlFor="newUserName" className="col-form-label">Name</label>
-                    </div>
-                    
-                    <div className="col-5">
-                        <input type="text" id="newUserName" className="form-control"
-                               aria-describedby="" />
-                    </div>
-                    <div className="col-auto">
-                        <button className="btn btn-primary">&#128247;</button>
-                    </div>
-                    <div className="col-auto">
-                        <img src="/images/unknown-scout-image.jpg" style={{width: "100px"}}/>
-                    </div>
-                    <div className="col-lg">
-                        <button className="btn btn-success float-end">Add user</button>
-                    </div>                    
+            </div>
+            <hr/>
+            <div className="row">
+                <div className="col-lg">
+                    <button className="btn btn-success float-end">Add user</button>
                 </div>
-            </div>    
-        </div>
+            </div>
+        </Form>        
     </>
 }
 

@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>WoodseatsScouts.Coins.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

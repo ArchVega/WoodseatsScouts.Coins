@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Container} from 'reactstrap';
-import {NavMenu} from './NavMenu';
+import {NavMenu} from '../navigation/NavMenu';
 import SiteDevBar from "../_dev/siteDevBar";
 
 export class Layout extends Component {
