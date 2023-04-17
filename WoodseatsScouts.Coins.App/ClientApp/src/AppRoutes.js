@@ -1,10 +1,10 @@
 import { Counter } from "./components/Counter";
 import { CoinsPage } from "./components/coins/coinsPage";
 import UsersPage from "./components/users/users";
-import MemberRankingDashboardPage from "./components/dashboard/memberRankingDashboardPage";
-import BasesDashboardPage from "./components/dashboard/basesDashboardPage";
 import NewUserPage from "./components/users/newUserPage";
 import React from "react";
+import MembersRankingPage from "./components/rankings/membersRankingPage";
+import BasesRankingPage from "./components/rankings/basesRankingPage";
 
 const AppRoutes = [
   {
@@ -16,12 +16,12 @@ const AppRoutes = [
     element: <Counter />
   },
   {
-    path: '/member-ranking',
-    element: <MemberRankingDashboardPage></MemberRankingDashboardPage>
+    path: '/members-ranking',
+    element: <MembersRankingPage></MembersRankingPage>
   },
   {
-    path: '/bases',
-    element: <BasesDashboardPage></BasesDashboardPage>
+    path: '/bases-ranking',
+    element: <BasesRankingPage></BasesRankingPage>
   },
   {
     path: '/new-user',

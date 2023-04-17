@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Collapse,
-  Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
+  DropdownItem, DropdownMenu, DropdownToggle,
   Navbar,
   NavbarBrand,
   NavbarToggler,
@@ -45,14 +45,14 @@ export class NavMenu extends Component {
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret className="text-dark">
-                  Dashboards
+                  Rankings
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    <NavLink tag={Link} className="text-dark" to="/member-ranking">Member Ranking</NavLink>
+                    <NavLink tag={Link} className="text-dark" to="/members-ranking">Members</NavLink>
                   </DropdownItem>
                   <DropdownItem>
-                    <NavLink tag={Link} className="text-dark" to="/bases">Bases</NavLink>
+                    <NavLink tag={Link} className="text-dark" to="/bases-ranking">Bases</NavLink>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
