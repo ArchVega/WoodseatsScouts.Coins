@@ -2,7 +2,7 @@
     Collapse, Dropdown,
     DropdownItem,
     DropdownMenu,
-    DropdownToggle,
+    DropdownToggle, Form, FormGroup, Input, Label,
     Navbar,
     NavbarBrand, NavbarText,
     NavLink,
@@ -12,25 +12,31 @@ import {Link} from "react-router-dom";
 import React, {useState} from "react";
 
 const SiteDevBar = ({ direction, ...args }) => {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-
-    const toggle = () => setDropdownOpen((prevState) => !prevState);
-    
+    const [state, setState] = useState(true);
     return <>
-        <header>
+        <header className="site-dev-bar">
             <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 bg-info" container
                     dark>
                 <NavbarText className="text-dark">
-                    Developer Bar
+                    <strong>Developer Bar</strong>
                 </NavbarText>
                 <ul className="navbar-nav flex-grow">
-                    <Dropdown isOpen={dropdownOpen} toggle={toggle} direction={direction}>
-                        <DropdownToggle caret>Mode</DropdownToggle>
-                        <DropdownMenu {...args}>
-                            <DropdownItem>Dev</DropdownItem>
-                            <DropdownItem>Release</DropdownItem>                            
-                        </DropdownMenu>
-                    </Dropdown>
+                    <li>
+                        <Form>
+                            <FormGroup switch>
+                                <Input type="switch" role="switch" />
+                                <Label check>Camera</Label>
+                            </FormGroup>
+                        </Form>
+                    </li>
+                    <li>
+                        <Form>
+                            <FormGroup switch>
+                                <Input type="switch" role="switch" />
+                                <Label check>Test mode</Label>
+                            </FormGroup>
+                        </Form>
+                    </li>
                 </ul>
             </Navbar>
         </header>

@@ -1,33 +1,32 @@
 import React, {useEffect, useState} from "react";
+import {Button, Card, CardBody, CardHeader, Input, InputGroup} from "reactstrap";
 
 const UserScanner = () => {
-    const [user, setUser] = useState({
-        
-    })
-    
+    const [user, setUser] = useState({})
+
     useEffect(() => {
-        const fetchUser = async() => {
+        const fetchUser = async () => {
             const response = await fetch("home/GetScoutInfoFromCode?code=M013B004");
             const user = await response.json();
             setUser(user);
         }
         fetchUser().then();
     }, [])
-    
+
     return <>
-        <div className="col-6 offset-3">
-            <input id="scout-code-textbox"
-                   type="text"
-                   className="form-control"
-                   placeholder="Click here and scan scout code"
-                   autoComplete="off" 
-                   defaultValue={user.scoutName}/>
-        </div>
-        <div className="col-1" style={{textAlign: "center", paddingTop:"0.5em"}}>
-            Or
-        </div>
-        <div className="col-2">
-            <button className="btn btn-primary">&#128247;</button>
+        <div className="col-6 offset-3 mb-2">
+            <Card>
+                <CardHeader>
+                    Scan using a barcode reader or click the camera icon to take a picture using the camera
+                </CardHeader>
+                <CardBody>
+                    <InputGroup>
+                        <Input id="scout-code-textbox" autoComplete="off" placeholder="Click here and scan scout code" defaultValue={user.scoutName}/>
+                        <Button className="btn btn-primary">&#128247;</Button>
+                    </InputGroup>        
+                </CardBody>
+            </Card>
+            
         </div>
 
         <div id="modal" title="Barcode scanner">

@@ -361,3 +361,8 @@ canvas.drawing, canvas.drawingBuffer {
         height: 180px;
     }
 }
+
+/* dev bar */
+.site-dev-bar li {
+    margin-right: 1em;
+}
