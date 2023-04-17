@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import ScannedCoin from "./coinScanner/scannedCoin";
 import {Button, Card, CardBody, CardHeader, Input, InputGroup} from "reactstrap";
+import app, {AppCameraAvailableContext} from "../../App";
 
 const coinsArray = [
     {
@@ -15,7 +16,7 @@ const coinsArray = [
 
 const CoinScanner = () => {
     const [coins, setCoins] = useState(coinsArray);
-
+    const appCameraAvailable = useContext(AppCameraAvailableContext)
     const addCoins = () => {
         setCoins([
             ...coins,
@@ -25,7 +26,8 @@ const CoinScanner = () => {
             }
         ])
     }
-
+    
+    console.log(appCameraAvailable)
     return <>
         <h4>Scan</h4>
 
@@ -38,7 +40,7 @@ const CoinScanner = () => {
                     <Input id="scout-code-textbox" autoComplete="off" placeholder="Click here and scan a new coin"
                            data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { keypress: onCoinCodeFieldKepPressed }, enable: scanCoinFieldEnabled"
                            defaultValue=""/>
-                    <Button onClick={addCoins} className="btn btn-primary">&#128247;</Button>
+                    {appCameraAvailable ? <Button onClick={addCoins} className="btn btn-primary">&#128247;</Button> : null }                    
                 </InputGroup>
             </CardBody>
         </Card>

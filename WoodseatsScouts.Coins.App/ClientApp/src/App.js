@@ -1,22 +1,30 @@
-import React, { Component } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, {Component, useCallback, useEffect, useState} from 'react';
+import {Route, Routes} from 'react-router-dom';
 import AppRoutes from './components/navigation/AppRoutes';
-import { Layout } from './components/common/Layout';
+import {Layout} from './components/common/Layout';
 import './css/site.css';
+import hasCamera from "./js/CameraUtilities";
 
-export default class App extends Component {
-  static displayName = App.name;
-
-  render() {
-    return (
-      <Layout>
-        <Routes>
-          {AppRoutes.map((route, index) => {
-            const { element, ...rest } = route;
-            return <Route key={index} {...rest} element={element} />;
-          })}
-        </Routes>
-      </Layout>
-    );
-  }
+const AppCameraAvailableContext = React.createContext(false);
+const App = () => {
+    const [appCameraAvailable, setAppCameraAvailable] = useState(false);
+    useEffect(() => {
+        hasCamera(exists => {
+            setAppCameraAvailable(true);
+        })    
+    })
+    
+    return <Layout>
+        <AppCameraAvailableContext.Provider value={appCameraAvailable}>
+            <Routes>
+                {AppRoutes.map((route, index) => {
+                    const {element, ...rest} = route;
+                    return <Route key={index} {...rest} element={element}/>;
+                })}
+            </Routes>
+        </AppCameraAvailableContext.Provider>
+    </Layout>
 }
+
+export {AppCameraAvailableContext};
+export default App;

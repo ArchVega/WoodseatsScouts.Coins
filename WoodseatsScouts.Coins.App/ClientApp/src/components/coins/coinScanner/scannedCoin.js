@@ -1,5 +1,3 @@
-import React from "react";
-
 const ScannedCoin = ({coin}) => {
     return <>
      <span className="tag label label-info">
