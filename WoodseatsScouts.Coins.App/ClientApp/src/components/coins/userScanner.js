@@ -15,9 +15,9 @@ const UserScanner = () => {
 
     return <>
         <div className="col-6 offset-3 mb-2">
-            <Card>
+            <Card className="text-center">
                 <CardHeader>
-                    Scan using a barcode reader or click the camera icon to take a picture using the camera
+                    Scan scout's wristband using a barcode reader or click the camera icon to take a picture using the camera
                 </CardHeader>
                 <CardBody>
                     <InputGroup>
@@ -25,8 +25,7 @@ const UserScanner = () => {
                         <Button className="btn btn-primary">&#128247;</Button>
                     </InputGroup>        
                 </CardBody>
-            </Card>
-            
+            </Card>            
         </div>
 
         <div id="modal" title="Barcode scanner">

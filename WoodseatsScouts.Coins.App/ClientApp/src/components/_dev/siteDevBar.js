@@ -1,17 +1,9 @@
 ﻿import {
-    Collapse, Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle, Form, FormGroup, Input, Label,
-    Navbar,
-    NavbarBrand, NavbarText,
-    NavLink,
-    UncontrolledDropdown
+    Form, FormGroup, Input, Label, Navbar, NavbarText
 } from "reactstrap";
-import {Link} from "react-router-dom";
 import React, {useState} from "react";
 
-const SiteDevBar = ({ direction, ...args }) => {
+const SiteDevBar = ({direction, ...args}) => {
     const [state, setState] = useState(true);
     return <>
         <header className="site-dev-bar">
@@ -24,7 +16,7 @@ const SiteDevBar = ({ direction, ...args }) => {
                     <li>
                         <Form>
                             <FormGroup switch>
-                                <Input type="switch" role="switch" />
+                                <Input type="switch" role="switch"/>
                                 <Label check>Camera</Label>
                             </FormGroup>
                         </Form>
@@ -32,7 +24,7 @@ const SiteDevBar = ({ direction, ...args }) => {
                     <li>
                         <Form>
                             <FormGroup switch>
-                                <Input type="switch" role="switch" />
+                                <Input type="switch" role="switch"/>
                                 <Label check>Test mode</Label>
                             </FormGroup>
                         </Form>

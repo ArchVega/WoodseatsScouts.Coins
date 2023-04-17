@@ -55,13 +55,20 @@ export class NavMenu extends Component {
                     <NavLink tag={Link} className="text-dark" to="/bases">Bases</NavLink>
                   </DropdownItem>
                 </DropdownMenu>
+              </UncontrolledDropdown>
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret className="text-dark">
+                  Users
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>
+                    <NavLink tag={Link} className="text-dark" to="/new-user">New</NavLink>
+                  </DropdownItem>
+                  <DropdownItem>
+                    <NavLink tag={Link} className="text-dark" to="/users">List</NavLink>
+                  </DropdownItem>
+                </DropdownMenu>
               </UncontrolledDropdown>              
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/users">Users</NavLink>
-              </NavItem>
-              {/*<NavItem>*/}
-              {/*  <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>*/}
-              {/*</NavItem>*/}
             </ul>
           </Collapse>
         </Navbar>

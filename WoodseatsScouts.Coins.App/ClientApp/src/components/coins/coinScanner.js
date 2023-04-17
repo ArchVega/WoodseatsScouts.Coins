@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import ScannedCoin from "./coinScanner/scannedCoin";
+import {Button, Card, CardBody, CardHeader, Input, InputGroup} from "reactstrap";
 
 const coinsArray = [
     {
@@ -13,8 +14,8 @@ const coinsArray = [
 ];
 
 const CoinScanner = () => {
-    const [coins, setCoins] = useState(coinsArray);    
-    
+    const [coins, setCoins] = useState(coinsArray);
+
     const addCoins = () => {
         setCoins([
             ...coins,
@@ -24,43 +25,57 @@ const CoinScanner = () => {
             }
         ])
     }
-    
+
     return <>
         <h4>Scan</h4>
 
-        <div className="row" style={{marginBottom: "1em"}}>
-            <div className="col-9">
-                <input id="coin-textbox"
-                       type="text"
-                       data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { keypress: onCoinCodeFieldKepPressed }, enable: scanCoinFieldEnabled"
-                       className="form-control"
-                       placeholder="Click here and scan a new coin"
-                       autoComplete="off"/>
-            </div>
-            <div className="col-1" style={{textAlign: "center", paddingTop:"0.5em"}}>
-                Or
-            </div>
-            <div className="col-2">
-                <button className="btn btn-primary" onClick={addCoins}>&#128247;</button>
-            </div>
+        <Card className="mb-3">
+            <CardHeader className="text-center">
+                Scan coins using a barcode reader or click the camera icon to take a series of pictures using the camera
+            </CardHeader>
+            <CardBody>
+                <InputGroup>
+                    <Input id="scout-code-textbox" autoComplete="off" placeholder="Click here and scan a new coin"
+                           data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { keypress: onCoinCodeFieldKepPressed }, enable: scanCoinFieldEnabled"
+                           defaultValue=""/>
+                    <Button onClick={addCoins} className="btn btn-primary">&#128247;</Button>
+                </InputGroup>
+            </CardBody>
+        </Card>
 
-        </div>
-
-        <div id="scanned-coins-div">
-            {coins.map((coin, index) => 
-                <ScannedCoin key={index} coin={coin}></ScannedCoin>
-            )}
-        </div>
-
-        <span>
-            <b>Total:&nbsp;</b>
-            <span data-bind="text: totalPoints"></span>
-        </span>
-        <hr/>
-
-        <button className="btn btn-success float-end"
-                data-bind="click: function() { confirmSubmit() }">Finished
-        </button>
+        <Card className="mb-3">
+            <CardHeader className="text-center">
+                Coins scanned
+            </CardHeader>
+            <CardBody>
+                <div className="row">
+                    <div className="col-6">
+                        <div id="scanned-coins-div">
+                            {coins.map((coin, index) =>
+                                <ScannedCoin key={index} coin={coin}></ScannedCoin>
+                            )}
+                        </div>
+                    </div>
+                    <div className="col-6">
+                        <ul>
+                            <li>20 x</li>
+                            <li>10 x</li>
+                            <li>Other x</li>
+                        </ul>
+                    </div>
+                </div>
+                <div className="row">
+                    <span>
+                        <b>Total:&nbsp;</b>
+                        <span data-bind="text: totalPoints"></span>
+                    </span>
+                    <hr/>
+                    <button className="btn btn-success float-end"
+                            data-bind="click: function() { confirmSubmit() }">Finished
+                    </button>
+                </div>
+            </CardBody>
+        </Card>
     </>
 }
 
