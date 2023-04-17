@@ -26,20 +26,28 @@ const CoinScanner = () => {
             }
         ])
     }
-    
+
     return <>
         <h4>Scan</h4>
 
         <Card className="mb-3">
             <CardHeader className="text-center">
-                Scan coins using a barcode reader or click the camera icon to take a series of pictures using the camera
+                {
+                    appCameraAvailable
+                        ? <span>Scan coins using a barcode reader or click the camera icon to take a series of pictures using the camera.</span>
+                        : <span>Scan coins using a barcode reader</span>
+                }
             </CardHeader>
             <CardBody>
                 <InputGroup>
                     <Input id="scout-code-textbox" autoComplete="off" placeholder="Click here and scan a new coin"
                            data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { keypress: onCoinCodeFieldKepPressed }, enable: scanCoinFieldEnabled"
                            defaultValue=""/>
-                    {appCameraAvailable ? <Button onClick={addCoins} className="btn btn-primary">&#128247;</Button> : null }                    
+                    {
+                        appCameraAvailable
+                            ? <Button onClick={addCoins} className="btn btn-primary">&#128247;</Button>
+                            : null
+                    }
                 </InputGroup>
             </CardBody>
         </Card>

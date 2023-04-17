@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Button, Card, CardBody, CardHeader, Input, InputGroup} from "reactstrap";
+import {AppCameraAvailableContext} from "../../App";
 
 const UserScanner = () => {
     const [user, setUser] = useState({})
+    const [appCameraAvailable] = useContext(AppCameraAvailableContext)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -17,15 +19,23 @@ const UserScanner = () => {
         <div className="col-6 offset-3 mb-2">
             <Card className="text-center">
                 <CardHeader>
-                    Scan scout's wristband using a barcode reader or click the camera icon to take a picture using the camera
+                    {appCameraAvailable
+                        ? <span>Scan scout's wristband using a barcode reader or click the camera icon to take a picture using the camera.</span>
+                        : <span>Scan scout's wristband using a barcode reader.</span>
+                    }
                 </CardHeader>
                 <CardBody>
                     <InputGroup>
-                        <Input id="scout-code-textbox" autoComplete="off" placeholder="Click here and scan scout code" defaultValue={user.scoutName}/>
-                        <Button className="btn btn-primary">&#128247;</Button>
-                    </InputGroup>        
+                        <Input id="scout-code-textbox" autoComplete="off" placeholder="Click here and scan scout code"
+                               defaultValue={user.scoutName}/>
+                        {
+                            appCameraAvailable
+                                ? <Button className="btn btn-primary">&#128247;</Button>
+                                : null
+                        }
+                    </InputGroup>
                 </CardBody>
-            </Card>            
+            </Card>
         </div>
 
         <div id="modal" title="Barcode scanner">

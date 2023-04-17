@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import UserScanner from "./userScanner";
+import UserScanner from "./UserScanner";
 import UserDetails from "./userDetails";
 import CoinScanner from "./coinScanner";
 
