@@ -1,6 +1,5 @@
 ﻿import React from "react";
 import {Button, Col, Input, InputGroup, Row} from "reactstrap";
-
 const UsersPage = () => {
     return <>
         <h3>Users</h3>

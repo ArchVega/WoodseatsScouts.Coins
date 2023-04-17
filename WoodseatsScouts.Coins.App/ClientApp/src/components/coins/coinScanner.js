@@ -1,7 +1,7 @@
 import React, {useContext, useState} from "react";
 import ScannedCoin from "./coinScanner/scannedCoin";
 import {Button, Card, CardBody, CardHeader, Input, InputGroup} from "reactstrap";
-import app, {AppCameraAvailableContext} from "../../App";
+import app, {AppCameraAvailableContext, AppTestModeContext} from "../../App";
 
 const coinsArray = [
     {
@@ -17,6 +17,7 @@ const coinsArray = [
 const CoinScanner = () => {
     const [coins, setCoins] = useState(coinsArray);
     const [appCameraAvailable] = useContext(AppCameraAvailableContext)
+    const [appTestMode, setAppTestMode] = useContext(AppTestModeContext);
     const addCoins = () => {
         setCoins([
             ...coins,
@@ -35,12 +36,17 @@ const CoinScanner = () => {
                 {
                     appCameraAvailable
                         ? <span>Scan coins using a barcode reader or click the camera icon to take a series of pictures using the camera.</span>
-                        : <span>Scan coins using a barcode reader</span>
+                        : <span>Scan coins using a barcode reader.</span>
                 }
             </CardHeader>
             <CardBody>
                 <InputGroup>
-                    <Input id="scout-code-textbox" autoComplete="off" placeholder="Click here and scan a new coin"
+                    <Input id="scout-code-textbox" 
+                           autoComplete="off"
+                           placeholder={
+                               appTestMode
+                                   ? "Test mode: click here to select test coins"
+                                   : "To scan a coin with a USB scanner, click here and then scan"}
                            data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { keypress: onCoinCodeFieldKepPressed }, enable: scanCoinFieldEnabled"
                            defaultValue=""/>
                     {

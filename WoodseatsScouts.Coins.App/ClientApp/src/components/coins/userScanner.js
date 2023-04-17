@@ -1,16 +1,17 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Button, Card, CardBody, CardHeader, Input, InputGroup} from "reactstrap";
-import {AppCameraAvailableContext} from "../../App";
+import {AppCameraAvailableContext, AppTestModeContext} from "../../App";
 
 const UserScanner = () => {
     const [user, setUser] = useState({})
     const [appCameraAvailable] = useContext(AppCameraAvailableContext)
+    const [appTestMode, setAppTestMode] = useContext(AppTestModeContext);
 
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await fetch("home/GetScoutInfoFromCode?code=M013B004");
-            const user = await response.json();
-            setUser(user);
+            // const response = await fetch("home/GetScoutInfoFromCode?code=M013B004");
+            // const user = await response.json();
+            // setUser(user);
         }
         fetchUser().then();
     }, [])
@@ -20,13 +21,18 @@ const UserScanner = () => {
             <Card className="text-center">
                 <CardHeader>
                     {appCameraAvailable
-                        ? <span>Scan scout's wristband using a barcode reader or click the camera icon to take a picture using the camera.</span>
-                        : <span>Scan scout's wristband using a barcode reader.</span>
+                        ? <span>Scan a scout's wristband using a barcode reader or click the camera icon to take a picture using the camera.</span>
+                        : <span>Scan a scout's wristband using a barcode reader.</span>
                     }
                 </CardHeader>
                 <CardBody>
                     <InputGroup>
-                        <Input id="scout-code-textbox" autoComplete="off" placeholder="Click here and scan scout code"
+                        <Input id="scout-code-textbox"
+                               autoComplete="off"
+                               placeholder={
+                                   appTestMode
+                                       ? "Test mode: click here to select test users" 
+                                       : "To scan a members QR code with a USB scanner, click here and then scan"}
                                defaultValue={user.scoutName}/>
                         {
                             appCameraAvailable

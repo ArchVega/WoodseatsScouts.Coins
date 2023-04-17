@@ -2,14 +2,22 @@
     Form, FormGroup, Input, Label, Navbar, NavbarText
 } from "reactstrap";
 import React, {useContext, useEffect, useState} from "react";
-import {AppCameraAvailableContext} from "../../App";
+import {AppCameraAvailableContext, AppTestModeContext} from "../../App";
 
 const SiteDevBar = () => {
     const [state, setState] = useState(false);
+    const [testModeState, setTestModeState] = useState(false);
+
     const [appCameraAvailable, setAppCameraAvailable] = useContext(AppCameraAvailableContext)
+    const [appTestMode, setAppTestMode] = useContext(AppTestModeContext);
+
     useEffect(() => {
         setAppCameraAvailable(state)
     }, [state])
+
+    useEffect(() => {
+        setAppTestMode(testModeState)
+    }, [testModeState])
     return <>
         <header className="site-dev-bar">
             <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 bg-info" container
@@ -21,8 +29,8 @@ const SiteDevBar = () => {
                     <li>
                         <Form>
                             <FormGroup switch>
-                                <Input type="switch" 
-                                       role="switch" 
+                                <Input type="switch"
+                                       role="switch"
                                        checked={state}
                                        onChange={() => {
                                            setState(!state);
@@ -34,7 +42,12 @@ const SiteDevBar = () => {
                     <li>
                         <Form>
                             <FormGroup switch>
-                                <Input type="switch" role="switch"/>
+                                <Input type="switch"
+                                       role="switch"
+                                       checked={testModeState}
+                                       onChange={() => {
+                                           setTestModeState(!testModeState);
+                                       }}/> 
                                 <Label check>Test mode</Label>
                             </FormGroup>
                         </Form>
