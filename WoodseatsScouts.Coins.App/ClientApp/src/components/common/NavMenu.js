@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import {
+  Collapse,
+  Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
+  Navbar,
+  NavbarBrand,
+  NavbarToggler,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown
+} from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 
@@ -34,9 +43,19 @@ export class NavMenu extends Component {
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/">Coins</NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/dashboard">Dashboard</NavLink>
-              </NavItem>
+              <UncontrolledDropdown nav inNavbar>
+                <DropdownToggle nav caret className="text-dark">
+                  Dashboards
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>
+                    <NavLink tag={Link} className="text-dark" to="/member-ranking">Member Ranking</NavLink>
+                  </DropdownItem>
+                  <DropdownItem>
+                    <NavLink tag={Link} className="text-dark" to="/bases">Bases</NavLink>
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>              
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/users">Users</NavLink>
               </NavItem>
