@@ -1,19 +1,24 @@
 import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
-import { Home } from "./components/Home";
+import { CoinsPage } from "./components/coins/coinsPage";
+import UsersPage from "./components/users/users";
+import DashboardPage from "./components/dashboard/dashboardPage";
 
 const AppRoutes = [
   {
     index: true,
-    element: <Home />
+    element: <CoinsPage />
   },
   {
     path: '/counter',
     element: <Counter />
   },
   {
-    path: '/fetch-data',
-    element: <FetchData />
+    path: '/dashboard',
+    element: <DashboardPage></DashboardPage>
+  },
+  {
+    path: '/users',
+    element: <UsersPage></UsersPage>
   }
 ];
 

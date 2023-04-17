@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import UserScanner from "./coins/userScanner";
-import UserDetails from "./coins/userDetails";
-import CoinScanner from "./coins/coinScanner";
+import UserScanner from "./userScanner";
+import UserDetails from "./userDetails";
+import CoinScanner from "./coinScanner";
 
-export class Home extends Component {
-    static displayName = Home.name;
+export class CoinsPage extends Component {
+    static displayName = CoinsPage.name;
     render() {
         let showUserDetailsAndCoinScanner = "visible";
 
