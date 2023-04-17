@@ -1,5 +1,5 @@
 import { CoinsPage } from "../coins/coinsPage";
-import UsersPage from "../users/users";
+import UsersPage from "../users/UsersPage";
 import NewUserPage from "../users/NewUserPage";
 import React from "react";
 import MembersRankingPage from "../rankings/membersRankingPage";

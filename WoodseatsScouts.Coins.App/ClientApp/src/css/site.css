@@ -366,3 +366,9 @@ canvas.drawing, canvas.drawingBuffer {
 .site-dev-bar li {
     margin-right: 1em;
 }
+
+.table td.fit,
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
