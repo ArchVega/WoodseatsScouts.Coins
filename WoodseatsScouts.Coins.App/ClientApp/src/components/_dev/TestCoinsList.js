@@ -1,7 +1,7 @@
 ﻿const TestUsersList = ({onSelected}) => {
     const testUsers = [
-        { points: 20 },
-        { points: 10 }
+        { code: "B00320", points: 20 },
+        { code: "B00110", points: 10 }
     ]
     return <>
         <ul className="list-group list-unstyled">

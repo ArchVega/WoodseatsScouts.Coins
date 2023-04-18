@@ -1,4 +1,4 @@
-const ScannedCoin = ({coin, removeCoin}) => {
+const ScannedCoin1 = ({coin, removeCoin}) => {
     return <>
      <span className="tag label label-info">
             <span>{coin.points}</span>
@@ -9,4 +9,4 @@ const ScannedCoin = ({coin, removeCoin}) => {
     </>
 }
 
-export  default ScannedCoin;
+export  default ScannedCoin1;

@@ -20,6 +20,20 @@ const CoinsPage1 = () => {
         fetchUser().then();
     }, [userQRCode])
 
+    function onFinished(coins) {
+        const payload = {
+            scoutId: user.scoutID,
+            coinCodes: coins.map(x => x.code)
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        };
+        fetch('home/AddPointsToScout', requestOptions);
+    }
+
     return (
         <CoinPageCurrentUserContext.Provider value={[userQRCode, setUserQRCode, user, setUser]}>
             <div>
@@ -38,7 +52,7 @@ const CoinsPage1 = () => {
                                 <UserDetails1></UserDetails1>
                             </div>
                             <div className="col-6">
-                                <CoinScanner1></CoinScanner1>
+                                <CoinScanner1 onFinished={onFinished}></CoinScanner1>
                             </div>
                         </div>
                     </>

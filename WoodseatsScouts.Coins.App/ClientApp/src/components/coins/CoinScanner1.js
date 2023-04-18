@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
-import ScannedCoin from "./coinScanner/scannedCoin";
+import ScannedCoin1 from "./coinScanner/ScannedCoin1";
 import {Button, Card, CardBody, CardHeader, Input, InputGroup} from "reactstrap";
 import app, {AppCameraAvailableContext, AppTestModeContext} from "../../App";
 import TestCoinsModal from "../_dev/TestCoinsModal";
 import TestCoinsList from "../_dev/TestCoinsList";
 
-const CoinScanner1 = () => {
+const CoinScanner1 = ({onFinished}) => {
     const [coins, setCoins] = useState([]);
     const [appCameraAvailable] = useContext(AppCameraAvailableContext)
     const [appTestMode, setAppTestMode] = useContext(AppTestModeContext);
@@ -57,7 +57,6 @@ const CoinScanner1 = () => {
     }, [coin20TallyTotal, coin10TallyTotal, coinOtherTallyTotal])
 
     function removeCoin(coin) {
-        console.log(coin)
         setCoins((current) =>
             current.filter((c) => c !== coin)
         );
@@ -102,7 +101,7 @@ const CoinScanner1 = () => {
                     <div className="col-6">
                         <div id="scanned-coins-div">
                             {coins.map((coin, index) =>
-                                <ScannedCoin key={index} coin={coin} removeCoin={removeCoin}></ScannedCoin>
+                                <ScannedCoin1 key={index} coin={coin} removeCoin={removeCoin}></ScannedCoin1>
                             )}
                         </div>
                     </div>
@@ -146,8 +145,7 @@ const CoinScanner1 = () => {
                 </div>
                 <div className="row">
                     <hr/>
-                    <button className="btn btn-success float-end"
-                            data-bind="click: function() { confirmSubmit() }">Finished
+                    <button onClick={() => onFinished(coins)} className="btn btn-success float-end">Finished
                     </button>
                 </div>
             </CardBody>

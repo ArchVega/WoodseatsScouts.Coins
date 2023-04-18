@@ -2,7 +2,7 @@
 
 public class PointsForScoutViewModel
 {
-    public string ScoutCode { get; set; }
+    public int ScoutId { get; set; }
 
     public List<string> CoinCodes { get; set; }
 }

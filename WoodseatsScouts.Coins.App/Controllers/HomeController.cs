@@ -57,14 +57,9 @@ public class HomeController : ControllerBase
 
     [HttpPost]
     [Route("AddPointsToScout")]
-    public void AddPointsToScout(PointsForScoutViewModel viewModel)
+    public ActionResult AddPointsToScout([FromBody] PointsForScoutViewModel viewModel)
     {
-        var translationResult = CodeTranslator.TranslateScoutCode(viewModel.ScoutCode);
-
-        var scout = context.Scouts!
-            .Single(x => x.ScoutNumber == translationResult.ScoutNumber
-                      && x.TroopNumber == translationResult.TroopNumber
-                      && x.Section == translationResult.Section);
+        var scout = context.Scouts!.Single(x => x.Id == viewModel.ScoutId);
 
         foreach (var coinCode in viewModel.CoinCodes)
         {
@@ -80,37 +75,39 @@ public class HomeController : ControllerBase
         }
 
         context.SaveChanges();
+
+        return CreatedAtAction(nameof(AddPointsToScout), null, null);
     }
 
     [HttpPost]
     [Route("CreateMember")]
-    public object CreateMember(String Name, int TroopNumber, String Section)
+    public object CreateMember(string name, int troopNumber, string section)
     {
-        var SectionMembers = context.Scouts!
-            .Where(x => x.TroopNumber == TroopNumber
-                      && x.Section == Section);
+        var sectionMembers = context.Scouts!
+            .Where(x => x.TroopNumber == troopNumber
+                      && x.Section == section);
 
-        var NextSectionMemberNumber = 1;
+        var nextSectionMemberNumber = 1;
 
-        if (SectionMembers.FirstOrDefault() != null)
+        if (sectionMembers.FirstOrDefault() != null)
         {
-            NextSectionMemberNumber = SectionMembers.Max(m => m.ScoutNumber) + 1;
+            nextSectionMemberNumber = sectionMembers.Max(m => m.ScoutNumber) + 1;
         }
        
         context.Scouts?.Add(new Scout
         {
-            ScoutNumber = NextSectionMemberNumber,
-            Name = Name,
-            TroopNumber = TroopNumber,
-            Section = Section
+            ScoutNumber = nextSectionMemberNumber,
+            Name = name,
+            TroopNumber = troopNumber,
+            Section = section
         });
 
         context.SaveChanges();
 
         var scout = context.Scouts!
-            .Single(x => x.ScoutNumber == NextSectionMemberNumber
-                      && x.TroopNumber == TroopNumber
-                      && x.Section == Section);
+            .Single(x => x.ScoutNumber == nextSectionMemberNumber
+                      && x.TroopNumber == troopNumber
+                      && x.Section == section);
 
         return new
         {
@@ -122,12 +119,12 @@ public class HomeController : ControllerBase
 
     [HttpPut]
     [Route("UpdateMemberName")]
-    public object UpdateMemberName(int ScoutID, String Name)
+    public object UpdateMemberName(int scoutId, string name)
     {
-        var entityOrNull = context.Scouts!.SingleOrDefault(x => x.Id == ScoutID);
+        var entityOrNull = context.Scouts!.SingleOrDefault(x => x.Id == scoutId);
 
         if(entityOrNull != null) {
-            entityOrNull.Name = Name;
+            entityOrNull.Name = name;
             // other updates here it there are any
             context.SaveChanges();
         } else
@@ -136,7 +133,7 @@ public class HomeController : ControllerBase
         }
 
         var scout = context.Scouts!
-            .Single(x => x.Id == ScoutID);
+            .Single(x => x.Id == scoutId);
 
         return new
         {
@@ -148,34 +145,17 @@ public class HomeController : ControllerBase
 
     [HttpGet]
     [Route("GetClueStatus")]
-    public object GetClueStatus(int ScoutID)
+    public object GetClueStatus(int scoutId)
     {
        var scout = context.Scouts!
-            .Single(x => x.Id == ScoutID);
+            .Single(x => x.Id == scoutId);
 
         return new
         {
-            ScoutID,
+            ScoutID = scoutId,
             scout.Clue1State,
             scout.Clue2State,
             scout.Clue3State
         };
-    }
-    
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
-    {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
     }
 }
