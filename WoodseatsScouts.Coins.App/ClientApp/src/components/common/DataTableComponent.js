@@ -1,35 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
 import {useTable, useSortBy} from 'react-table'
-
-const Styles = styled.div`
-  padding: 1rem;
-
-  table {
-    border-spacing: 0;
-    border: 1px solid black;
-
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
 
 function DataTableComponent({columns, data}) {
     const {
@@ -46,13 +16,9 @@ function DataTableComponent({columns, data}) {
         useSortBy
     )
 
-    // We don't want to render all 2000 rows for this example, so cap
-    // it at 20 for this use case
-    const firstPageRows = rows.slice(0, 20)
-
     return (
         <>
-            <table {...getTableProps()}>
+            <table className="table" {...getTableProps()}>
                 <thead>
                 {headerGroups.map(headerGroup => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
@@ -75,7 +41,7 @@ function DataTableComponent({columns, data}) {
                 ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                {firstPageRows.map(
+                {rows.map(
                     (row, i) => {
                         prepareRow(row);
                         return (
@@ -90,12 +56,10 @@ function DataTableComponent({columns, data}) {
                     }
                 )}
                 </tbody>
-            </table>
-            <br/>
-            <div>Showing the first 20 results of {rows.length} rows</div>
+            </table>            
         </>
     )
 }
 
-export {Styles}
+// export {Styles}
 export default DataTableComponent

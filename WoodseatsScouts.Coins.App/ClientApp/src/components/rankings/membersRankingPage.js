@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import DataTableComponent, {Styles} from "../common/DataTableComponent";
+import DataTableComponent from "../common/DataTableComponent";
 
 const MembersRankingPage = () => {
     const columns = React.useMemo(
@@ -51,17 +51,22 @@ const MembersRankingPage = () => {
                 visits: 3,
                 progress: 93,
                 status: 'relationship is complicated'
+            },
+            {
+                firstName: "Omega",
+                lastName: "Gremlin",
+                age: 100,
+                visits: 3,
+                progress: 93,
+                status: 'relationship is complicated'
             }
         ]
-        
     }
 
     const data = React.useMemo(() => makeData(2000), [])
     return <>
         <h3>Member rankings</h3>
-        <Styles>
-            <DataTableComponent columns={columns} data={data}/>
-        </Styles>
+        <DataTableComponent columns={columns} data={data}/>
     </>
 }
 
