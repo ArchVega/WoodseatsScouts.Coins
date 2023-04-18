@@ -6,8 +6,6 @@ import CoinScanner from "./coinScanner";
 const CoinPageCurrentUserContext = React.createContext(null);
 
 const CoinsPage1 = () => {
-    let showUserDetailsAndCoinScanner = "visible";
-
     const [userQRCode, setUserQRCode] = useState(null)
     const [user, setUser] = useState(null)
 
@@ -21,27 +19,31 @@ const CoinsPage1 = () => {
         }
         fetchUser().then();
     }, [userQRCode])
-    
+
     return (
         <CoinPageCurrentUserContext.Provider value={[userQRCode, setUserQRCode, user, setUser]}>
-        <div>
-            <h3>COINS</h3>
+            <div>
+                <h3>COINS</h3>
 
-            <div className="row">
-                <UserScanner setUserQRCode={{user, setUserQRCode}}></UserScanner>
-            </div>
-
-            <hr/>
-
-            <div className="row" style={{display: showUserDetailsAndCoinScanner}}>
-                <div className="col-6">
-                    <UserDetails></UserDetails>
+                <div className="row">
+                    <UserScanner setUserQRCode={{user, setUserQRCode}}></UserScanner>
                 </div>
-                <div className="col-6">
-                    <CoinScanner></CoinScanner>
-                </div>
+
+                {user != null ? (
+                    <>
+                        <hr/>
+
+                        <div className="row">
+                            <div className="col-6">
+                                <UserDetails></UserDetails>
+                            </div>
+                            <div className="col-6">
+                                <CoinScanner></CoinScanner>
+                            </div>
+                        </div>
+                    </>
+                ) : null}
             </div>
-        </div>
         </CoinPageCurrentUserContext.Provider>
     );
 }

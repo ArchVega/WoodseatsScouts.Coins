@@ -6,7 +6,7 @@ const UserDetails = () => {
 
     let userName = user == null
         ? ""
-        : user.name;
+        : user.scoutName;
     let scoutPhotoPath = user == null
         ? "/images/unknown-scout-image.jpg"
         : user.scoutPhotoPath;
