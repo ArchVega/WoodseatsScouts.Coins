@@ -1,4 +1,4 @@
-import { CoinsPage } from "../coins/coinsPage";
+import { CoinsPage1 } from "../coins/coinsPage1";
 import UsersPage from "../users/UsersPage";
 import NewUserPage from "../users/NewUserPage";
 import React from "react";
@@ -8,7 +8,7 @@ import BasesRankingPage from "../rankings/basesRankingPage";
 const AppRoutes = [
   {
     index: true,
-    element: <CoinsPage />
+    element: <CoinsPage1 />
   },
   {
     path: '/members-ranking',

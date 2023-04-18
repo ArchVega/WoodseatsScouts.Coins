@@ -3,8 +3,8 @@ import UserScanner from "./UserScanner";
 import UserDetails from "./userDetails";
 import CoinScanner from "./coinScanner";
 
-export class CoinsPage extends Component {
-    static displayName = CoinsPage.name;
+export class CoinsPage1 extends Component {
+    static displayName = CoinsPage1.name;
     render() {
         let showUserDetailsAndCoinScanner = "visible";
 
