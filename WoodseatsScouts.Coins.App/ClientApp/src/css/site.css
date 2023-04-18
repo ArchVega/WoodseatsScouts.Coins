@@ -179,12 +179,20 @@ input {
     background-color: white;
 }
 
-#scanned-coins-div {
+#scanned-coins-div, #scanned-coins-tally-div {
     margin-bottom: 2em;
     min-height: 10em;
     text-align: center;
     border: 1px solid lightgray;
     padding: 1em;
+}
+
+#scanned-coins-tally-div tr td:first-child {
+    text-align: left;
+}
+
+#scanned-coins-tally-div tr:last-child td {
+    border-top: 1px solid grey;
 }
 
 #interactive.viewport {
