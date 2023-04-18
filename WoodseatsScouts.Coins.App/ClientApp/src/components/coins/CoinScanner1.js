@@ -56,7 +56,13 @@ const CoinScanner1 = () => {
         setCoinTotal(coin20TallyTotal + coin10TallyTotal + coinOtherTallyTotal);
     }, [coin20TallyTotal, coin10TallyTotal, coinOtherTallyTotal])
 
-
+    function removeCoin(coin) {
+        console.log(coin)
+        setCoins((current) =>
+            current.filter((c) => c !== coin)
+        );
+    }
+    
     return <>
         <h4>Scan</h4>
 
@@ -75,8 +81,7 @@ const CoinScanner1 = () => {
                            placeholder={
                                appTestMode
                                    ? "Test mode: click here to select test coins"
-                                   : "To scan a coin with a USB scanner, click here and then scan"}
-                           data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { keypress: onCoinCodeFieldKepPressed }, enable: scanCoinFieldEnabled"
+                                   : "To scan a coin with a USB scanner, click here and then scan"}                           
                            onClick={onCoinCodeTextBoxClicked}
                            defaultValue=""/>
                     {
@@ -97,7 +102,7 @@ const CoinScanner1 = () => {
                     <div className="col-6">
                         <div id="scanned-coins-div">
                             {coins.map((coin, index) =>
-                                <ScannedCoin key={index} coin={coin}></ScannedCoin>
+                                <ScannedCoin key={index} coin={coin} removeCoin={removeCoin}></ScannedCoin>
                             )}
                         </div>
                     </div>
