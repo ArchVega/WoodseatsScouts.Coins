@@ -5,10 +5,10 @@ const TestUsersModal = ({testUsersModal, setTestUsersModal, children}) => {
 
     return <>
         <Modal isOpen={testUsersModal} toggle={toggleTestUsersModal}>
-            <ModalHeader toggle={toggleTestUsersModal}>Test data</ModalHeader>
+            <ModalHeader toggle={toggleTestUsersModal}>Test Users</ModalHeader>
             <ModalBody>
                 <Row className="mb-3">
-                    <Col><strong>Select an item</strong></Col>
+                    <Col><strong>Select a user</strong></Col>
                 </Row>
                 <Row>
                     <Col>

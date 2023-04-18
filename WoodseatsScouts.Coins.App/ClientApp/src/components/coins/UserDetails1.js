@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import {CoinPageCurrentUserContext} from "./CoinsPage1";
 
-const UserDetails = () => {
+const UserDetails1 = () => {
     const [userQRCode, setUserQRCode, user, setUser] = useContext(CoinPageCurrentUserContext);
 
     let userName = user == null
@@ -18,4 +18,4 @@ const UserDetails = () => {
     </>
 }
 
-export default UserDetails;
+export default UserDetails1;

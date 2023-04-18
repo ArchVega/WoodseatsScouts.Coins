@@ -1,7 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import UserScanner from "./UserScanner";
-import UserDetails from "./userDetails";
-import CoinScanner from "./coinScanner";
+import UserDetails1 from "./UserDetails1";
+import CoinScanner1 from "./CoinScanner1";
 
 const CoinPageCurrentUserContext = React.createContext(null);
 
@@ -26,7 +26,7 @@ const CoinsPage1 = () => {
                 <h3>COINS</h3>
 
                 <div className="row">
-                    <UserScanner setUserQRCode={{user, setUserQRCode}}></UserScanner>
+                    <UserScanner></UserScanner>
                 </div>
 
                 {user != null ? (
@@ -35,10 +35,10 @@ const CoinsPage1 = () => {
 
                         <div className="row">
                             <div className="col-6">
-                                <UserDetails></UserDetails>
+                                <UserDetails1></UserDetails1>
                             </div>
                             <div className="col-6">
-                                <CoinScanner></CoinScanner>
+                                <CoinScanner1></CoinScanner1>
                             </div>
                         </div>
                     </>

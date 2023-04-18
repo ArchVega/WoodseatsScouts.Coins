@@ -62,7 +62,6 @@ const UserScanner = () => {
         <TestUsersModal testUsersModal={testUsersModal} setTestUsersModal={setTestUsersModal}>
             <TestUsersList onSelected={(code) => setUserAndCloseModal(code)}></TestUsersList>
         </TestUsersModal>
-
     </>
 }
 export default UserScanner;

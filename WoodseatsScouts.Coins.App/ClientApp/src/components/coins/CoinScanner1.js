@@ -2,29 +2,29 @@ import React, {useContext, useState} from "react";
 import ScannedCoin from "./coinScanner/scannedCoin";
 import {Button, Card, CardBody, CardHeader, Input, InputGroup} from "reactstrap";
 import app, {AppCameraAvailableContext, AppTestModeContext} from "../../App";
+import TestCoinsModal from "../_dev/TestCoinsModal";
+import TestCoinsList from "../_dev/TestCoinsList";
 
-const coinsArray = [
-    {
-        id: 1,
-        points: 20
-    },
-    {
-        id: 2,
-        points: 10
-    }
-];
-
-const CoinScanner = () => {
-    const [coins, setCoins] = useState(coinsArray);
+const CoinScanner1 = () => {
+    const [coins, setCoins] = useState([]);
     const [appCameraAvailable] = useContext(AppCameraAvailableContext)
     const [appTestMode, setAppTestMode] = useContext(AppTestModeContext);
-    const addCoins = () => {
+
+    const [testCoinsModal, setTestCoinsModal] = useState(false);
+
+    function onCoinCodeTextBoxClicked() {
+        if (appTestMode) {
+            setTestCoinsModal(true);
+        }
+    }
+    function setCoinAndCloseModal(coin) {
+        addCoin(coin);
+        setTestCoinsModal(false);
+    }
+    const addCoin = (coin) => {
         setCoins([
             ...coins,
-            {
-                id: 3,
-                points: 25
-            }
+            coin          
         ])
     }
 
@@ -48,10 +48,11 @@ const CoinScanner = () => {
                                    ? "Test mode: click here to select test coins"
                                    : "To scan a coin with a USB scanner, click here and then scan"}
                            data-bind="textInput: lastScannedCoinCode, valueUpdate: 'keyup', event: { keypress: onCoinCodeFieldKepPressed }, enable: scanCoinFieldEnabled"
+                           onClick={onCoinCodeTextBoxClicked}
                            defaultValue=""/>
                     {
                         appCameraAvailable
-                            ? <Button onClick={addCoins} className="btn btn-primary">&#128247;</Button>
+                            ? <Button className="btn btn-primary">&#128247;</Button>
                             : null
                     }
                 </InputGroup>
@@ -91,7 +92,10 @@ const CoinScanner = () => {
                 </div>
             </CardBody>
         </Card>
+        <TestCoinsModal testCoinsModal={testCoinsModal} setTestCoinsModal={setTestCoinsModal}>
+            <TestCoinsList onSelected={(coin) => setCoinAndCloseModal(coin)}></TestCoinsList>
+        </TestCoinsModal>
     </>
 }
 
-export default CoinScanner;
+export default CoinScanner1;
