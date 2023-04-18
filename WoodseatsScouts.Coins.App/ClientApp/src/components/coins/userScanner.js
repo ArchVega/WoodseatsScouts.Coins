@@ -5,7 +5,7 @@ import TestUsersModal from "../_dev/TestUsersModal";
 import TestUsersList from "../_dev/TestUsersList";
 
 const UserScanner = () => {
-    const [userQRCode, setUserQRCode] = useState("")
+    const [userQRCode, setUserQRCode] = useState(null)
     const [user, setUser] = useState({})
     const [appCameraAvailable] = useContext(AppCameraAvailableContext)
     const [appTestMode, setAppTestMode] = useContext(AppTestModeContext);
@@ -13,9 +13,11 @@ const UserScanner = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await fetch("home/GetScoutInfoFromCode?code=" + userQRCode);
-            const user = await response.json();
-            setUser(user);
+            if (userQRCode != null) {
+                const response = await fetch("home/GetScoutInfoFromCode?code=" + userQRCode);
+                const user = await response.json();
+                setUser(user);    
+            }            
         }
         fetchUser().then();
     }, [userQRCode])
@@ -24,6 +26,11 @@ const UserScanner = () => {
         if (appTestMode) {
             setTestUsersModal(true);
         }
+    }
+
+    function setUserAndCloseModal(code) {
+        setUserQRCode(code);
+        setTestUsersModal(false);
     }
 
     return <>
@@ -63,7 +70,7 @@ const UserScanner = () => {
         </div>
 
         <TestUsersModal testUsersModal={testUsersModal} setTestUsersModal={setTestUsersModal}>
-            <TestUsersList onSelected={(code) => setUserQRCode(code)}></TestUsersList>
+            <TestUsersList onSelected={(code) => setUserAndCloseModal(code)}></TestUsersList>
         </TestUsersModal>
     </>
 }
