@@ -6,8 +6,8 @@
     ]
     return <>
         <ul className="list-group list-unstyled">
-            {testUsers.map(testUser => (
-                <li className="list-group-item" style={{cursor: "pointer"}} onClick={() => onSelected(testUser.code)}>
+            {testUsers.map((testUser, index) => (
+                <li key={index} className="list-group-item" style={{cursor: "pointer"}} onClick={() => onSelected(testUser.code)}>
                         {testUser.name + " - " + testUser.code}
                 </li>                
             ))}

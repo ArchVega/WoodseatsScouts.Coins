@@ -3,24 +3,14 @@ import {Button, Card, CardBody, CardHeader, Input, InputGroup} from "reactstrap"
 import {AppCameraAvailableContext, AppTestModeContext} from "../../App";
 import TestUsersModal from "../_dev/TestUsersModal";
 import TestUsersList from "../_dev/TestUsersList";
+import {CoinPageCurrentUserContext} from "./CoinsPage1";
 
 const UserScanner = () => {
-    const [userQRCode, setUserQRCode] = useState(null)
-    const [user, setUser] = useState({})
     const [appCameraAvailable] = useContext(AppCameraAvailableContext)
     const [appTestMode, setAppTestMode] = useContext(AppTestModeContext);
+    const [userQRCode, setUserQRCode, user, setUser] = useContext(CoinPageCurrentUserContext);
+    
     const [testUsersModal, setTestUsersModal] = useState(false);
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            if (userQRCode != null) {
-                const response = await fetch("home/GetScoutInfoFromCode?code=" + userQRCode);
-                const user = await response.json();
-                setUser(user);    
-            }            
-        }
-        fetchUser().then();
-    }, [userQRCode])
 
     function onScoutCodeTextBoxClicked() {
         if (appTestMode) {
@@ -51,7 +41,7 @@ const UserScanner = () => {
                                    appTestMode
                                        ? "Test mode: click here to select test users"
                                        : "To scan a members QR code with a USB scanner, click here and then scan"}
-                               defaultValue={user.scoutName}
+                               defaultValue={user != null ? user.scoutName : null}
                                onClick={onScoutCodeTextBoxClicked}
                         />
                         {
@@ -72,7 +62,7 @@ const UserScanner = () => {
         <TestUsersModal testUsersModal={testUsersModal} setTestUsersModal={setTestUsersModal}>
             <TestUsersList onSelected={(code) => setUserAndCloseModal(code)}></TestUsersList>
         </TestUsersModal>
+
     </>
 }
-
 export default UserScanner;

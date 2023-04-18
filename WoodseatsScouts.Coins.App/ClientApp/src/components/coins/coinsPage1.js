@@ -1,32 +1,51 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import UserScanner from "./UserScanner";
 import UserDetails from "./userDetails";
 import CoinScanner from "./coinScanner";
 
-export class CoinsPage1 extends Component {
-    static displayName = CoinsPage1.name;
-    render() {
-        let showUserDetailsAndCoinScanner = "visible";
+const CoinPageCurrentUserContext = React.createContext(null);
 
-        return (
-            <div>
-                <h3>COINS</h3>
+const CoinsPage1 = () => {
+    let showUserDetailsAndCoinScanner = "visible";
 
-                <div className="row">
-                    <UserScanner></UserScanner>                    
-                </div>
+    const [userQRCode, setUserQRCode] = useState(null)
+    const [user, setUser] = useState(null)
 
-                <hr/>
+    useEffect(() => {
+        const fetchUser = async () => {
+            if (userQRCode != null) {
+                const response = await fetch("home/GetScoutInfoFromCode?code=" + userQRCode);
+                const user = await response.json();
+                setUser(user);
+            }
+        }
+        fetchUser().then();
+    }, [userQRCode])
+    
+    return (
+        <CoinPageCurrentUserContext.Provider value={[userQRCode, setUserQRCode, user, setUser]}>
+        <div>
+            <h3>COINS</h3>
 
-                <div className="row" style={{display: showUserDetailsAndCoinScanner}}>
-                    <div className="col-6">
-                        <UserDetails></UserDetails>                        
-                    </div>
-                    <div className="col-6">
-                        <CoinScanner></CoinScanner>
-                    </div>
-                </div>               
+            <div className="row">
+                <UserScanner setUserQRCode={{user, setUserQRCode}}></UserScanner>
             </div>
-        );
-    }
+
+            <hr/>
+
+            <div className="row" style={{display: showUserDetailsAndCoinScanner}}>
+                <div className="col-6">
+                    <UserDetails></UserDetails>
+                </div>
+                <div className="col-6">
+                    <CoinScanner></CoinScanner>
+                </div>
+            </div>
+        </div>
+        </CoinPageCurrentUserContext.Provider>
+    );
 }
+
+export {CoinPageCurrentUserContext};
+
+export default CoinsPage1;
