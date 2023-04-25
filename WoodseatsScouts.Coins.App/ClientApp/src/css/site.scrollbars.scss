@@ -1,0 +1,16 @@
+﻿@use 'site.variables' as variables;
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(200,200,200,1);
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0px;
+  background-color: variables.$colour-scouts-purple;
+  -webkit-box-shadow: inset 0 0 6px variables.$colour-scouts-purple;
+}

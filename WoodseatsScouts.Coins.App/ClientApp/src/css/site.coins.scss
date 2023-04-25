@@ -1,0 +1,87 @@
+﻿@use 'site.variables' as variables;
+
+/* adapted from http://maxwells.github.io/bootstrap-tags.html */
+.coin {
+  max-width: 128px;
+  min-width: 128px;
+  width: 128px;
+  font-size: 3em;
+  padding: .3em .4em .4em;
+  margin: 0.1em;  
+  border: 0.05em solid black;  
+  display: inline-block;
+  position: relative;
+  -webkit-border-radius: 20px !important;
+  -moz-border-radius: 20px !important;
+  border-radius: 20px !important;
+}
+
+.coin-last-added {
+  animation: border-pulsate 2s infinite;
+}
+
+.coin-20 {
+  background-color: variables.$colour-coins-20;
+  span {
+    color: black !important;
+  }
+  
+  .remove div {
+    color: black !important;
+  }
+}
+
+.coin-10 {
+  background-color: variables.$colour-coins-10;
+  span {
+    color: black !important;
+  }
+
+  .remove div {
+    color: black !important;
+  }
+}
+
+.coin-5 {
+  background-color: variables.$colour-coins-5;
+  span {
+    color: white !important;
+  }
+
+  .remove div {
+    color: white !important;
+  }
+}
+
+.coin span.remove-score {
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+}
+
+.coin .remove {
+  position: absolute;
+  top: -5px;
+  right: 10px;
+  color: white;
+  font-style: normal;
+  font-size:10px !important;
+}
+
+.total-points-so-far {
+  & .col.text-end {
+    background-color: #7413dc !important;
+    font-size: 3em
+  } 
+}
+
+.total-points-saved {
+  font-size: 8em;
+  color: white;
+  padding: 0.2em;
+  margin: 0.3em;
+  background-color: variables.$colour-scouts-teal;
+  -webkit-border-radius: 20px !important;
+  -moz-border-radius: 20px !important;
+  border-radius: 20px !important;
+  box-shadow: 2px 2px rgba(0,0,0,0.3);
+}

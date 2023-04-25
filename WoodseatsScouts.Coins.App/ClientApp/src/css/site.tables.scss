@@ -1,0 +1,52 @@
+﻿@use 'site.mixins' as mixins;
+@use 'site.variables' as variables;
+
+
+table.members-table {
+  border-collapse: separate;
+  border-spacing: 0 15px;  
+
+  th {
+    width: 150px;
+    text-align: left;
+    padding: 5px;
+    border: none;
+  }
+
+  td {
+    width: 150px;
+    text-align: left;
+    border-top: 1px solid variables.$colour-scouts-purple;
+    border-bottom: 1px solid variables.$colour-scouts-purple;
+    padding: 5px;    
+  }
+
+  td:first-child {
+    border-left: 1px solid black;
+    -webkit-border-top-left-radius: 0.5em !important;
+    -moz-border-radius-topleft: 0.5em !important;
+    border-top-left-radius: 0.5em !important;
+
+    -webkit-border-bottom-left-radius: 0.5em !important;
+    -moz-border-radius-bottomleft: 0.5em !important;
+    border-bottom-left-radius: 0.5em !important;
+  }
+
+  td:last-child {
+    border-right: 1px solid black;
+
+    -webkit-border-top-right-radius: 0.5em !important;
+    -moz-border-radius-topright: 0.5em !important;
+    border-top-right-radius: 0.5em !important;
+
+    -webkit-border-bottom-right-radius: 0.5em !important;
+    -moz-border-radius-bottomright: 0.5em !important;
+    border-bottom-right-radius: 0.5em !important;
+  }
+
+  th:first-child {
+      white-space: nowrap;
+      width: 1%;
+  }
+}
+

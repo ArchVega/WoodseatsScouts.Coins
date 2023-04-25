@@ -12,15 +12,23 @@
             };
         }
 
-        public static ScoutCodeTranslationResult TranslateScoutCode(string code)
+        public static MemberCodeTranslationResult TranslateMemberCode(string code)
         {
-            return new ScoutCodeTranslationResult
+            try
             {
-                TokenIdentifier = code[..1],
-                Section = code.Substring(4, 1),
-                TroopNumber = Convert.ToInt32(code.Substring(1, 3)),
-                ScoutNumber = Convert.ToInt32(code[5..])
-            };
+                return new MemberCodeTranslationResult
+                {
+                    TokenIdentifier = code[..1],
+                    Section = code.Substring(4, 1),
+                    TroopNumber = Convert.ToInt32(code.Substring(1, 3)),
+                    MemberNumber = Convert.ToInt32(code[5..])
+                };
+
+            }
+            catch (Exception e)
+            {
+                throw new CodeTranslationException($"Could not translate Member Code '{code}'", e);
+            }
         }
     }
 }

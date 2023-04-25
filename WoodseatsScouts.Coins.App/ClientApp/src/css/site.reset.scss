@@ -1,0 +1,11 @@
+﻿@use 'site.variables' as variables;
+
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: Nunito, serif;
+  color: variables.$colour-scouts-purple;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+}

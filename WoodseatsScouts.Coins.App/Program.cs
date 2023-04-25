@@ -1,14 +1,29 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using WoodseatsScouts.Coins.App.Config;
 using WoodseatsScouts.Coins.App.Data;
+using WoodseatsScouts.Coins.App.Models.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .AddJsonFile("appSettings.json")
+    .AddJsonFile($"appSettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+builder.Services.AddDbContext<AppDbContext>((_, options) =>
 {
-    options.UseSqlServer("Server=DESKTOP-APO7M33;Database=WoodseatsScouts.Coins;User Id=DistrictCamp;Password=DistrictCamp");
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WoodseatsScouts.Coins"));
+});
+
+builder.Services.AddTransient<IAppDbContext, AppDbContext>();
+builder.Services.AddSingleton<AppConfig>();
+
+// Add services to the container.
+
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new ErrorHandlingFilter());
 });
 
 var app = builder.Build();
@@ -16,20 +31,18 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-// app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller}/{action=Index}/{id?}");
+
+app.MapFallbackToFile("index.html");
 
 app.Run();

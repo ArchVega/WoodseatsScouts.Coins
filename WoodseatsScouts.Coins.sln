@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32126.317
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.Tests", "WoodseatsScouts.Coins.Tests\WoodseatsScouts.Coins.Tests.csproj", "{F8B61405-BFA4-476B-8040-0DDBEF11BF94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.App", "WoodseatsScouts.Coins.App\WoodseatsScouts.Coins.App.csproj", "{2AAE402B-F281-41C4-98E3-65C94EFE1887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.App", "WoodseatsScouts.Coins.App\WoodseatsScouts.Coins.App.csproj", "{8ECFDB5E-FC4D-4AB2-AFD9-8DEC042D3ACE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.Tests.Unit", "WoodseatsScouts.Coins.Tests.Unit\WoodseatsScouts.Coins.Tests.Unit.csproj", "{9446F256-25B7-4D4C-844C-00E93263A6F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{F5D5B81C-CF85-4AC0-A8A1-797B401F5CBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C14BA076-73AB-4E58-84BB-61837025175E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.Tests.Integration", "WoodseatsScouts.Coins.Tests.Integration\WoodseatsScouts.Coins.Tests.Integration.csproj", "{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,21 +16,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F8B61405-BFA4-476B-8040-0DDBEF11BF94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8B61405-BFA4-476B-8040-0DDBEF11BF94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8B61405-BFA4-476B-8040-0DDBEF11BF94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8B61405-BFA4-476B-8040-0DDBEF11BF94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8ECFDB5E-FC4D-4AB2-AFD9-8DEC042D3ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8ECFDB5E-FC4D-4AB2-AFD9-8DEC042D3ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8ECFDB5E-FC4D-4AB2-AFD9-8DEC042D3ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8ECFDB5E-FC4D-4AB2-AFD9-8DEC042D3ACE}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+		{2AAE402B-F281-41C4-98E3-65C94EFE1887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AAE402B-F281-41C4-98E3-65C94EFE1887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AAE402B-F281-41C4-98E3-65C94EFE1887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AAE402B-F281-41C4-98E3-65C94EFE1887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9446F256-25B7-4D4C-844C-00E93263A6F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9446F256-25B7-4D4C-844C-00E93263A6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9446F256-25B7-4D4C-844C-00E93263A6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9446F256-25B7-4D4C-844C-00E93263A6F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C36727F3-8E04-4CA7-B0FB-AF84E275977B}
+		{2AAE402B-F281-41C4-98E3-65C94EFE1887} = {F5D5B81C-CF85-4AC0-A8A1-797B401F5CBA}
+		{9446F256-25B7-4D4C-844C-00E93263A6F0} = {C14BA076-73AB-4E58-84BB-61837025175E}
+		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE} = {C14BA076-73AB-4E58-84BB-61837025175E}
 	EndGlobalSection
 EndGlobal

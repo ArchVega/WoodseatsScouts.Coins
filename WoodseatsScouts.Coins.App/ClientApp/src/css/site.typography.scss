@@ -1,0 +1,151 @@
+﻿@use 'site.mixins' as mixins;
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+  url('fonts/Nunito/WebfontKit/nunitosans-regular-webfont.woff2') format('woff2'),
+  url('fonts/Nunito/WebfontKit/nunitosans-regular-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''),
+  url('fonts/Nunito/WebfontKit/nunitosans-bold-webfont.woff2') format('woff2'),
+  url('fonts/Nunito/WebfontKit/nunitosans-bold-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 800;
+  src: local(''),
+  url('fonts/Nunito/WebfontKit/nunitosans-extrabold-webfont.woff2') format('woff2'),
+  url('fonts/Nunito/WebfontKit/nunitosans-extrabold-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 900;
+  src: local(''),
+  url('fonts/Nunito/WebfontKit/nunitosans-black-webfont.woff2') format('woff2'),
+  url('fonts/Nunito/WebfontKit/nunitosans-black-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: italic;
+  font-weight: 400;
+  src: local(''),
+  url('fonts/Nunito/WebfontKit/nunitosans-italic-webfont.woff2') format('woff2'),
+  url('fonts/Nunito/WebfontKit/nunitosans-italic-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: italic;
+  font-weight: 600;
+  src: local(''),
+  url('fonts/Nunito/WebfontKit/nunitosans-semibolditalic-webfont.woff2') format('woff2'),
+  url('fonts/Nunito/WebfontKit/nunitosans-semibolditalic-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: italic;
+  font-weight: 700;
+  src: local(''),
+  url('fonts/Nunito/WebfontKit/nunitosans-bolditalic-webfont.woff2') format('woff2'),
+  url('fonts/Nunito/WebfontKit/nunitosans-bolditalic-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: italic;
+  font-weight: 800;
+  src: local(''),
+  url('fonts/Nunito/WebfontKit/nunitosans-extrabolditalic-webfont.woff2') format('woff2'),
+  url('fonts/Nunito/WebfontKit/nunitosans-extrabolditalic-webfont.woff') format('woff');
+  font-display: swap;
+}
+
+strong {
+  font-family: Nunito, serif;
+  font-style: normal;
+  font-weight: 700;
+}
+
+em {
+  font-family: Nunito, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.font-extra-bold {
+  font-style: normal;
+  font-weight: 800; 
+}
+
+.font-black {
+  font-style: normal;
+  font-weight: 900;
+}
+
+.font-semi-bold-italic {
+  font-style: italic;
+  font-weight: 600;
+}
+
+.font-bold-italic {
+  font-style: italic;
+  font-weight: 700;
+}
+
+.font-extra-bold-italic {
+  font-style: italic;
+  font-weight: 800; 
+}
+
+.label-section {
+  font-size: 0.8em;
+  padding: 0.2em 0.4em;
+  @include mixins.rounded-borders-soft;
+  box-shadow: 2px 2px rgba(0,0,0,0.3);
+  text-transform: uppercase;
+  
+  &.label-section-beavers {
+    color: white !important;
+    background-color: #00afee;
+  }
+
+  &.label-section-cubs {
+    color: white !important;
+    background-color: #538135;    
+  }
+
+  &.label-section-scouts {
+    color: white !important;
+    background-color: #088385;
+  }
+
+  &.label-section-explorers {
+    color: black !important;
+    background-color: #fdd765;
+  }
+
+  &.label-section-adults {
+    color: white !important;
+    background-color: #5a488b;
+  }
+}

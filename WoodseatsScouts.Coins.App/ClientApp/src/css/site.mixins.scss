@@ -1,0 +1,11 @@
+﻿@mixin rounded-borders {
+  -webkit-border-radius: 0.5em !important;
+  -moz-border-radius: 0.5em !important;
+  border-radius: 0.5em !important;
+}
+
+@mixin rounded-borders-soft {
+  -webkit-border-radius: 0.2em !important;
+  -moz-border-radius: 0.2em !important;
+  border-radius: 0.2em !important;
+}
