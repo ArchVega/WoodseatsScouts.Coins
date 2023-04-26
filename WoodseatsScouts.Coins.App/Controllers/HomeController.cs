@@ -303,6 +303,8 @@ public class HomeController : ControllerBase
         var photoFileName = $"{saveMemberPhotoViewModel.MemberId}.jpg";
         var photoFullPath = Path.Join(rootPath, photoFileName);
         System.IO.File.WriteAllBytes(photoFullPath, Convert.FromBase64String(convert));
+        context.Members!.Single(x => x.Id == saveMemberPhotoViewModel.MemberId).HasImage = true;
+        context.SaveChanges();
 
         return Ok();
     }

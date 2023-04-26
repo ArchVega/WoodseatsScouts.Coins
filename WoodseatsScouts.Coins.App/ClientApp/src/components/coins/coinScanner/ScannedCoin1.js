@@ -8,7 +8,7 @@ const ScannedCoin1 = ({coin, removeCoin, isLast}) => {
         executeScroll()
     }, [])
     
-    let tagClass = "coin-5"
+    let tagClass = "coin-random-odd"
 
     if (coin !== undefined) {
         if (coin.pointValue === 20) {

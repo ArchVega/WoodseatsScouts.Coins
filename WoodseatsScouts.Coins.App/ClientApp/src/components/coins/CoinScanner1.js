@@ -14,19 +14,9 @@ const CoinScanner1 = ({onFinished, coinTotal, setCoinTotal}) => {
     const [appCameraAvailable] = useContext(AppCameraAvailableContext)
     const [useAppCamera] = useContext(UseAppCameraContext)
     const [appTestMode, setAppTestMode] = useContext(AppTestModeContext);
-    const [testCoinsModal, setTestCoinsModal] = useState(false);
-    const [coin20Tally, setCoin20Tally] = useState(0);
-    const [coin10Tally, setCoin10Tally] = useState(0);
-    const [coin5Tally, setCoin5Tally] = useState(0);
+    const [testCoinsModal, setTestCoinsModal] = useState(false);    
+    const [usbScannerValue, setUsbScannerValue] = useState("");   
     
-    const [usbScannerValue, setUsbScannerValue] = useState("");
-    
-    const [coin20TallyTotal, setCoin20TallyTotal] = useState(0);
-    const [coin10TallyTotal, setCoin10TallyTotal] = useState(0);
-    const [coin5TallyTotal, setCoin5TallyTotal] = useState(0);
-
-    const [coinTallyTotal, setCoinTallyTotal] = useState(0);
-
     const [userQRCode, setUserQRCode, user, setUser] = useContext(CoinPageCurrentUserContext);
     const [coinScannerCamera, setCoinScannerCamera] = useState(false);
     const [coinQRCode, setCoinQRCode] = useState("")
@@ -63,25 +53,9 @@ const CoinScanner1 = ({onFinished, coinTotal, setCoinTotal}) => {
             ...coins,
             coin
         ])
+        setCoinTotal(coinTotal + coin.pointValue)
         setCoinQRCode("")
     }
-
-    useEffect(() => {
-        setCoin20Tally(coins.filter(x => x.pointValue === 20).length);
-        setCoin10Tally(coins.filter(x => x.pointValue === 10).length);
-        setCoin5Tally(coins.filter(x => x.pointValue === 5).length);
-    }, [coins])
-
-    useEffect(() => {
-        setCoin20TallyTotal(coin20Tally * 20);
-        setCoin10TallyTotal(coin10Tally * 10);
-        setCoin5TallyTotal(coin5Tally * 5);
-    }, [coin20Tally, coin10Tally, coin5Tally])
-
-    useEffect(() => {
-        setCoinTallyTotal(coin20Tally + coin10Tally + coin5Tally);
-        setCoinTotal(coin20TallyTotal + coin10TallyTotal + coin5TallyTotal);
-    }, [coin20TallyTotal, coin10TallyTotal, coin5TallyTotal])
 
     useEffect(() => {
         const fetchCoin = async () => {
@@ -104,6 +78,7 @@ const CoinScanner1 = ({onFinished, coinTotal, setCoinTotal}) => {
     }, [coinQRCode])
 
     function removeCoin(coin) {
+        setCoinTotal(coinTotal - coin.pointValue)
         setCoins((current) =>
             current.filter((c) => c !== coin)
         );
