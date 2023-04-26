@@ -127,7 +127,7 @@ const CoinScanner1 = ({onFinished, coinTotal, setCoinTotal}) => {
                 {useAppCamera ? <Row>
                         <Col>
                             <Row>
-                                <Col><QRCodeScanner videoSizeEm={10} qrCode={coinQRCode} setQRCode={setCoinQRCode} type="coin"/></Col>
+                                <Col><QRCodeScanner videoSizeEm={14} qrCode={coinQRCode} setQRCode={setCoinQRCode} type="coin"/></Col>
                             </Row>                            
                         </Col>
                     </Row>

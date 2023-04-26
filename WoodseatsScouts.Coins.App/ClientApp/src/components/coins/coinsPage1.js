@@ -145,7 +145,7 @@ const CoinsPage1 = () => {
                                 ) : (
                                     <>
                                         {useAppCamera
-                                            ? <QRCodeScanner videoSizeEm={10} qrCode={userQRCode}
+                                            ? <QRCodeScanner videoSizeEm={20} qrCode={userQRCode}
                                                              setQRCode={setUserQRCode}
                                                              type={"user"}/>
                                             : <Input id="member-code-textbox"

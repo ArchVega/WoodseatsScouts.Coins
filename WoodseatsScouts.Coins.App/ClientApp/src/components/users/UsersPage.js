@@ -79,7 +79,7 @@ const UsersPage = () => {
                                 style={{marginLeft: '2px'}}/>
                         </th>
                         <th className="fit">SECTION</th>
-                        <th className="fit">WRIST CODE</th>                        
+                        <th className="fit">WRIST CODE</th>
                         <th className="fit">EDIT PHOTO</th>
                     </tr>
                     </thead>
@@ -87,27 +87,36 @@ const UsersPage = () => {
                     {members
                         .filter(member => {
                             if (filterStr === null) {
+                                // console.log(member, "filterStr === null")
                                 return true;
                             }
 
                             if (filterStr != null && filterStr.trim().length === 0) {
+                                // console.log(member, "filterStr != null && filterStr.trim().length === 0")
                                 return true;
                             }
 
-                            return member.firstName.toLowerCase().includes(filterStr.toLowerCase())
-                                || member.lastName.toLowerCase().includes(filterStr.toLowerCase())
-                                || member.troopName.toString().toLowerCase().includes(filterStr.toLowerCase())
-                                || member.section.toString().toLowerCase().includes(filterStr.toLowerCase())
-                                || member.memberCode.toLowerCase().includes(filterStr.toLowerCase());
-
-                        })                      
+                            const firstNameMatch = member.firstName.toLowerCase().includes(filterStr.toLowerCase());
+                            const lastNameMatch = (member.lastName !== null && member.lastName.toLowerCase().includes(filterStr.toLowerCase()));
+                            const troopNameMatch = member.troopName.toString().toLowerCase().includes(filterStr.toLowerCase());
+                            const sectionMatch = member.section.toString().toLowerCase().includes(filterStr.toLowerCase())
+                            const memberCodeMatch = member.memberCode.toLowerCase().includes(filterStr.toLowerCase());
+                            
+                            // console.log(member, firstNameMatch, lastNameMatch, troopNameMatch, sectionMatch, memberCodeMatch);
+                            
+                            return firstNameMatch
+                                || lastNameMatch
+                                || troopNameMatch 
+                                || sectionMatch
+                                || memberCodeMatch
+                        })
                         .map(x => (
-                            <tr key={x.memberNumber}>
+                            <tr key={x.memberCode}>
                                 <td>
                                 <span className="show-user-photo-icon"
                                       onClick={() => showUserModal(x)}>
                                     <img key={Date.now()}
-                                        src={x.hasImage ? `member-images/${x.id}.jpg?x=${new Date().getTime()}` : "images/unknown-member-image.png"}/>
+                                         src={x.hasImage ? `member-images/${x.id}.jpg?x=${new Date().getTime()}` : "images/unknown-member-image.png"}/>
                                 </span>
                                 </td>
                                 <td><strong>{x.firstName + " " + x.lastName}</strong></td>
@@ -118,7 +127,7 @@ const UsersPage = () => {
                                     </span>
                                 </td>
                                 <td><strong className={getSectionClassName(x.section)}>{x.section}</strong></td>
-                                <td><span>{x.memberCode}</span></td>                                
+                                <td><span>{x.memberCode}</span></td>
                                 <td>
                                 <span className="edit-user-photo-icon" onClick={() => showEditUserModal(x)}>
                                     ✎
