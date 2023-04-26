@@ -6,12 +6,29 @@
     background-color: variables.$colour-scouts-purple;
   }
 
-  img {
-    height: 6em;
-    width: 6em;
-    object-fit: cover;
+  //img {
+  //  height: 6em;
+  //  width: 6em;
+  //  object-fit: cover;
+  //}
+
+  .rect-img-container {    
+    position: relative;
   }
 
+  .rect-img-container::after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  .rect-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
   .white-background {
     color: black !important;
     background-color: white;

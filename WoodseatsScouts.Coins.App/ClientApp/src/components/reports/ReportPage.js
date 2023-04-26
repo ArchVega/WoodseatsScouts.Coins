@@ -32,13 +32,13 @@ const ReportPage = () => {
     useEffect(() => {
         const t = +(Date.now() + (reportData.secondsUntilDeadline * 1000)).toFixed(0);
         setDeadlineMilliseconds(t);
-        
-        if (!(reportData instanceof Array) ) {            
+
+        if (!(reportData instanceof Array)) {
             setTimeout(() => {
                 if (window.location.pathname === "/report-page") {
                     window.location.reload()
                 }
-            }, reportData.reportRefreshSeconds * 1000)   
+            }, reportData.reportRefreshSeconds * 1000)
         }
     }, [reportData])
 
@@ -73,17 +73,22 @@ const ReportPage = () => {
                 </Row>
             </Col>
         </Row>
-        <Row style={{height: "3em"}}></Row>
-
+        <Row style={{height: "1em"}}></Row>
         <Row>
             <Col className="col-6">
                 <h3>LAST THREE TO SCAN POINTS</h3>
                 <Row className="mb-5">
                     {reportData.lastThreeUsersToScanPoints !== undefined && reportData.lastThreeUsersToScanPoints.map((x, index) => (
                         <Col key={index} className="col-4">
-                            <Row><Col><img
-                                src={x.hasImage ? `member-images/${x.id}.jpg?x=${new Date().getTime()}` : "images/unknown-member-image.png"}
-                                style={{maxWidth: "100%"}}/></Col>
+                            <Row>
+                                <Col>
+                                    <div className="rect-img-container">
+                                        <img
+                                            className="rect-img"
+                                            src={x.hasImage ? `member-images/${x.id}.jpg?x=${new Date().getTime()}` : "images/unknown-member-image.png"}
+                                            style={{maxWidth: "100%"}}/>
+                                    </div>
+                                </Col>
                             </Row>
                             <Row><Col><span className="bold">{x.firstName + " " + x.lastName}</span></Col></Row>
                             <Row><Col>{x.troopName}</Col></Row>
@@ -114,7 +119,7 @@ const ReportPage = () => {
                                     <td>
                                         <div>{x.name}</div>
                                     </td>
-                                    <td>                                        
+                                    <td>
                                         <div>{x.averagePoints.toFixed(2)}</div>
                                     </td>
                                 </tr>
