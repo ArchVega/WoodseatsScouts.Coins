@@ -79,7 +79,7 @@ const UsersPage = () => {
                                 style={{marginLeft: '2px'}}/>
                         </th>
                         <th className="fit">SECTION</th>
-                        <th className="fit">WRIST CODE</th>
+                        <th className="fit">WRIST CODE</th>                        
                         <th className="fit">EDIT PHOTO</th>
                     </tr>
                     </thead>
@@ -106,9 +106,8 @@ const UsersPage = () => {
                                 <td>
                                 <span className="show-user-photo-icon"
                                       onClick={() => showUserModal(x)}>
-                                    <img
-                                        src={x.hasImage ? `member-images/${x.id}.jpg?x=${new Date().getTime()}` : "images/unknown-member-image.png"}
-                                        style={{maxWidth: "3em"}}/>
+                                    <img key={Date.now()}
+                                        src={x.hasImage ? `member-images/${x.id}.jpg?x=${new Date().getTime()}` : "images/unknown-member-image.png"}/>
                                 </span>
                                 </td>
                                 <td><strong>{x.firstName + " " + x.lastName}</strong></td>
@@ -119,7 +118,7 @@ const UsersPage = () => {
                                     </span>
                                 </td>
                                 <td><strong className={getSectionClassName(x.section)}>{x.section}</strong></td>
-                                <td><span>{x.memberCode}</span></td>
+                                <td><span>{x.memberCode}</span></td>                                
                                 <td>
                                 <span className="edit-user-photo-icon" onClick={() => showEditUserModal(x)}>
                                     ✎

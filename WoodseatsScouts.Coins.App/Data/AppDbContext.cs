@@ -60,19 +60,19 @@ namespace WoodseatsScouts.Coins.App.Data
                 .ToList();
         }
 
-        public List<GroupTotalPoints> GetTopThreeGroupsInLastHour()
+        public List<GroupPoints> GetTopThreeGroupsInLastHour()
         {
             var startDateTime = DateTime.Now.AddHours(-1);
             return TopXTroopsSinceY(3, startDateTime);
         }
 
-        public List<GroupTotalPoints> GetGroupsWithMostPointsThisWeekend()
+        public List<GroupPoints> GetGroupsWithMostPointsThisWeekend()
         {
             var startDateTime = GetPreviousFriday();
             return TopXTroopsSinceY(10, startDateTime);
         }
 
-        private List<GroupTotalPoints> TopXTroopsSinceY(int count, DateTime startDateTime)
+        private List<GroupPoints> TopXTroopsSinceY(int count, DateTime startDateTime)
         {
             var memberIds = ScavengeResults!
                 .Include(x => x.Member)
@@ -89,16 +89,24 @@ namespace WoodseatsScouts.Coins.App.Data
                 .GroupBy(x => x.TroopId)
                 .ToList();
 
-            var topThreeGroupsInLastHour = (
+            var topXGroupsInLastYHours = (
                 from grouping in memberGroupedByTroop
                 let sum =
                     grouping.SelectMany(x => x.ScavengeResults).SelectMany(x => x.ScavengedCoins).Sum(x => x.PointValue)
-                select new GroupTotalPoints { Name = grouping.First().Troop.Name, TotalPoints = sum }).ToList();
+                select new GroupPoints
+                {
+                    Id = grouping.First().Troop.Id,
+                    Name = grouping.First().Troop.Name, 
+                    TotalPoints = sum
+                }).ToList();
 
-            topThreeGroupsInLastHour =
-                topThreeGroupsInLastHour.OrderByDescending(x => x.TotalPoints).Take(count).ToList();
+            var allTroopsWithMembers = Troops!.Include(x => x.Members).ToList();
+            topXGroupsInLastYHours.ForEach(x => x.MemberCount = allTroopsWithMembers.Single(y => y.Id == x.Id).Members.Count);
+            
+            topXGroupsInLastYHours 
+                = topXGroupsInLastYHours.OrderByDescending(x => x.AveragePoints).Take(count).ToList();
 
-            return topThreeGroupsInLastHour;
+            return topXGroupsInLastYHours;
         }
 
         private DateTime GetPreviousFriday()

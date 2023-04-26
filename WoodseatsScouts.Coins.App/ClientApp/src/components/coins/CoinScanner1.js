@@ -18,7 +18,9 @@ const CoinScanner1 = ({onFinished, coinTotal, setCoinTotal}) => {
     const [coin20Tally, setCoin20Tally] = useState(0);
     const [coin10Tally, setCoin10Tally] = useState(0);
     const [coin5Tally, setCoin5Tally] = useState(0);
-
+    
+    const [usbScannerValue, setUsbScannerValue] = useState("");
+    
     const [coin20TallyTotal, setCoin20TallyTotal] = useState(0);
     const [coin10TallyTotal, setCoin10TallyTotal] = useState(0);
     const [coin5TallyTotal, setCoin5TallyTotal] = useState(0);
@@ -42,12 +44,21 @@ const CoinScanner1 = ({onFinished, coinTotal, setCoinTotal}) => {
         }
     }
 
+    useEffect(() => {
+        setUsbScannerValue(usbScannerValue)
+    }, [usbScannerValue])
+    
     function setCoinAndCloseModal(coin) {
         addCoin(coin);
         setTestCoinsModal(false);
     }
 
-    const addCoin = (coin) => {
+    const addCoin = (coin) => { 
+        if (coin.pointValue >= 50) {
+            toast("An invalid code has been scanned!")
+            return
+        }
+        
         setCoins([
             ...coins,
             coin
@@ -97,7 +108,15 @@ const CoinScanner1 = ({onFinished, coinTotal, setCoinTotal}) => {
             current.filter((c) => c !== coin)
         );
     }
-    
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            // 👇 Get input value
+            setCoinQRCode(event.target.value)
+            setUsbScannerValue("")
+        }
+    };
+
     return <>
         <Row className="mb-3" style={{maxHeight: '50vh'}}>
             <Col className="col-6">
@@ -123,8 +142,10 @@ const CoinScanner1 = ({onFinished, coinTotal, setCoinTotal}) => {
                                         : <Input id="member-code-textbox"
                                                  autoComplete="off"
                                                  autoFocus={true}
+                                                 onChange={(e) => setUsbScannerValue(e.target.value)}
                                                  onClick={onCoinCodeTextBoxClicked}
-                                                 defaultValue=""/>
+                                                 value={usbScannerValue}
+                                                 onKeyDown={handleKeyDown}/>
                                 }
                             </Col>
                         </Row>
@@ -156,7 +177,7 @@ const CoinScanner1 = ({onFinished, coinTotal, setCoinTotal}) => {
                     <Col className="col-6">
                         <h4 className="text-end">Points added:</h4>
                     </Col>
-                    <Col className="text-end">
+                    <Col className=" text-end">
                         <span style={{color: "white !important"}}>+</span>
                         <strong className="font-black"
                                 style={{color: "white"}}>{coinTotal}</strong>

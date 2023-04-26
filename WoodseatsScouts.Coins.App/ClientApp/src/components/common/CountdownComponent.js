@@ -4,9 +4,9 @@ import Countdown, {zeroPad} from "react-countdown";
 const CountdownComponent = ({deadlineMilliseconds}) => {
      return  (isNaN(deadlineMilliseconds)) ? <></> : <Countdown
         date={deadlineMilliseconds}
-        renderer={({hours, minutes, seconds}) => (
+        renderer={({days, hours, minutes, seconds}) => (
             <div className="countdown">
-                <span className="hours font-extra-bold-italic">{zeroPad(hours)}</span>
+                <span className="hours font-extra-bold-italic">{zeroPad(hours + (days * 24))}</span>
                 :
                 <span className="minutes font-extra-bold-italic">{zeroPad(minutes)}</span>
                 :

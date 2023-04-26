@@ -93,7 +93,7 @@ public class AppDbContextTestsReports
     }
     
     [Fact]
-    public void GetTopThreeGroupsInLastHour_MultipleUsersInSameGroup_TotalPointsIsCorrectlyCalculated()
+    public void GetTopThreeGroupsInLastHour_MultipleUsersInSameGroup_AveragePointsIsCorrectlyCalculated()
     {
         var differentGroupMembers = new List<Member>()
         {
@@ -113,7 +113,8 @@ public class AppDbContextTestsReports
         
         var topThreeGroupsInLastHour = fixture.AppDbContext.GetTopThreeGroupsInLastHour();
         topThreeGroupsInLastHour.Count.ShouldBe(1);
-        topThreeGroupsInLastHour.First().TotalPoints.ShouldBe(eachMemberPoint * differentGroupMembers.Count);
+        topThreeGroupsInLastHour.First().TotalPoints.ShouldBe(60);
+        topThreeGroupsInLastHour.First().AveragePoints.ShouldBe(20);
     }
     
     #endregion
@@ -199,14 +200,11 @@ public class AppDbContextTestsReports
             TestDataFactory.Troop1Member4,
         };
         
-        var expectedSums = new Dictionary<int, int>();
-
         var dateTime = DateTime.Now;
         for (int i = 0; i < members.Count; i++)
         {
             var now = dateTime.AddMinutes(i);
             var points = new List<int> { 20, 10 * i };
-            expectedSums.Add(i, points.Sum());
             CreateScavengedResult(members[i], now, points);
         }
         
@@ -218,6 +216,7 @@ public class AppDbContextTestsReports
     }
     
     #endregion
+    
     private void CreateScavengedResult(Member member, DateTime completedAt, List<int> points)
     {
         var scavengeResults = new ScavengeResult

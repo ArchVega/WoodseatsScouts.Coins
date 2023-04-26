@@ -22,7 +22,7 @@ public interface IAppDbContext
     
     List<Member> GetLastThreeUsersToScanPoints();
     
-    List<GroupTotalPoints> GetTopThreeGroupsInLastHour();
+    List<GroupPoints> GetTopThreeGroupsInLastHour();
     
-    List<GroupTotalPoints> GetGroupsWithMostPointsThisWeekend();
+    List<GroupPoints> GetGroupsWithMostPointsThisWeekend();
 }

@@ -80,14 +80,25 @@ public class HomeController : ControllerBase
         {
             return BadRequest("Expected coin code but received user code.");
         }
-        
-        var result = CodeTranslator.TranslateCoinPointCode(code);
-        return Ok(new
+
+        try
         {
-            result.PointValue,
-            result.BaseNumber,
-            Code = code
-        });
+            var result = CodeTranslator.TranslateCoinPointCode(code);
+            return Ok(new
+            {
+                result.PointValue,
+                result.BaseNumber,
+                Code = code
+            });   
+        }
+        catch (CodeTranslationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (InvalidOperationException)
+        {
+            return NotFound($"A coin with the code '{code}' was not found.");
+        }
     }
 
     [HttpPost]
@@ -108,22 +119,33 @@ public class HomeController : ControllerBase
 
         foreach (var coinCode in viewModel.CoinCodes)
         {
-            var result = CodeTranslator.TranslateCoinPointCode(coinCode);
-
-            context.ScavengedCoins?.Add(new ScavengedCoin
+            try
             {
-                ScavengeResultId = tallyHistoryItem.Id,
-                BaseNumber = result.BaseNumber,
-                PointValue = result.PointValue,
-                Code = coinCode
-            });
+                var result = CodeTranslator.TranslateCoinPointCode(coinCode);
+
+                context.ScavengedCoins?.Add(new ScavengedCoin
+                {
+                    ScavengeResultId = tallyHistoryItem.Id,
+                    BaseNumber = result.BaseNumber,
+                    PointValue = result.PointValue,
+                    Code = coinCode
+                });
+            }
+            catch (CodeTranslationException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound($"A coin with the code '{coinCode}' was not found.");
+            }
         }
 
         context.SaveChanges();
 
         return CreatedAtAction(nameof(AddPointsToMember), null, null);
     }
-
+    
     [HttpPost]
     [Route("CreateMember")]
     public object CreateMember([FromBody] CreateMemberViewModel createMemberViewModel)
@@ -134,9 +156,11 @@ public class HomeController : ControllerBase
         context.Members?.Add(new Member
         {
             Number = memberNumber,
-            FirstName = createMemberViewModel.Name,
+            FirstName = createMemberViewModel.FirstName,
+            LastName = createMemberViewModel.LastName,
             TroopId = createMemberViewModel.TroopId,
-            Section = createMemberViewModel.Section
+            Section = createMemberViewModel.Section,
+            IsDayVisitor = createMemberViewModel.IsDayVisitor
         });
 
         context.SaveChanges();
@@ -259,6 +283,7 @@ public class HomeController : ControllerBase
         {
             Title = appConfig.ReportTitle,
             SecondsUntilDeadline = secondsUntilDeadline,
+            ReportRefreshSeconds = appConfig.ReportRefreshSeconds,
             LastThreeUsersToScanPoints = top3MembersWithPointsAttached,
             TopThreeGroupsInLastHour = context.GetTopThreeGroupsInLastHour(),
             GroupsWithMostPointsThisWeekend = context.GetGroupsWithMostPointsThisWeekend()
@@ -272,10 +297,11 @@ public class HomeController : ControllerBase
     public ActionResult SaveMemberPhoto([FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
     {
         var convert = saveMemberPhotoViewModel.Photo.Replace("data:image/jpeg;base64,", string.Empty);
-        var rootPath = webHostEnvironment.ContentRootPath;
-        var memberImagesDirectoryPath = Path.Join(rootPath, "ClientApp", "public", "member-images");
+        var rootPath = 
+            appConfig.ContentRootDirectory 
+            ?? Path.Join(webHostEnvironment.ContentRootPath, "ClientApp", "public", "member-images");
         var photoFileName = $"{saveMemberPhotoViewModel.MemberId}.jpg";
-        var photoFullPath = Path.Join(memberImagesDirectoryPath, photoFileName);
+        var photoFullPath = Path.Join(rootPath, photoFileName);
         System.IO.File.WriteAllBytes(photoFullPath, Convert.FromBase64String(convert));
 
         return Ok();

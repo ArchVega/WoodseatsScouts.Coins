@@ -48,5 +48,11 @@ table.members-table {
       white-space: nowrap;
       width: 1%;
   }
+
+  img {
+    height: 3em;
+    width: 3em;
+    object-fit: cover;
+  }
 }
 

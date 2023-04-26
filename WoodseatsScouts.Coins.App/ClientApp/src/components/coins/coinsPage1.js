@@ -46,6 +46,7 @@ const CoinsPage1 = () => {
         if (event.key === 'Enter') {
             // 👇 Get input value
             setUserQRCode(event.target.value)
+            setUsbScannerValue("")
         }
     };
 
@@ -189,16 +190,18 @@ const CoinsPage1 = () => {
                             </h1>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="mb-3">
                         <Col className="text-center">
                             <h4>You've just added some more points to your score.</h4>
                         </Col>
                     </Row>
                     <Row className="mb-3">
                         <Col className="text-center">
+                            <div>
                             <span className="font-black total-points-saved">
                                 {coinTotal}
-                            </span>
+                            </span>    
+                            </div>                            
                         </Col>
                     </Row>
                     <Row className="mb-4">

@@ -4,12 +4,19 @@
     {
         public static CoinPointTranslationResult TranslateCoinPointCode(string code)
         {
-            return new CoinPointTranslationResult
+            try
             {
-                TokenIdentifier = code[..1],
-                BaseNumber = Convert.ToInt32(code.Substring(1, 3)),
-                PointValue = Convert.ToInt32(code[4..])
-            };
+                return new CoinPointTranslationResult
+                {
+                    TokenIdentifier = code[..1],
+                    BaseNumber = Convert.ToInt32(code.Substring(1, 3)),
+                    PointValue = Convert.ToInt32(code[4..])
+                };
+            }
+            catch (Exception e)
+            {
+                throw new CodeTranslationException($"Could not translate Coin Code '{code}'", e);
+            }
         }
 
         public static MemberCodeTranslationResult TranslateMemberCode(string code)

@@ -8,6 +8,8 @@
 
   img {
     height: 6em;
+    width: 6em;
+    object-fit: cover;
   }
 
   .white-background {
@@ -32,10 +34,6 @@
 
     tr {
       background-color: variables.$colour-scouts-purple;
-    }
-
-    tr {
-      height: 1px
     }
 
     td {

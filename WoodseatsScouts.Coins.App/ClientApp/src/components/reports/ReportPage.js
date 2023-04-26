@@ -27,17 +27,19 @@ const ReportPage = () => {
         }
 
         fetchUser().then();
-        
-        setTimeout(() => {
-            if (window.location.pathname === "/report-page") {
-                window.location.reload()                
-            }
-        }, 60 * 1000)
     }, [])
 
     useEffect(() => {
         const t = +(Date.now() + (reportData.secondsUntilDeadline * 1000)).toFixed(0);
         setDeadlineMilliseconds(t);
+        
+        if (!(reportData instanceof Array) ) {            
+            setTimeout(() => {
+                if (window.location.pathname === "/report-page") {
+                    window.location.reload()
+                }
+            }, reportData.reportRefreshSeconds * 1000)   
+        }
     }, [reportData])
 
     function lookupSectionName(code) {
@@ -112,8 +114,8 @@ const ReportPage = () => {
                                     <td>
                                         <div>{x.name}</div>
                                     </td>
-                                    <td>
-                                        <div>{x.totalPoints}</div>
+                                    <td>                                        
+                                        <div>{x.averagePoints.toFixed(2)}</div>
                                     </td>
                                 </tr>
                             ))}
@@ -141,7 +143,7 @@ const ReportPage = () => {
                                 <div className="font-extra-bold">{x.name}</div>
                             </td>
                             <td>
-                                <div>{x.totalPoints}</div>
+                                <div>{x.averagePoints.toFixed(2)}</div>
                             </td>
                         </tr>
                     ))}
