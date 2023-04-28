@@ -17,7 +17,7 @@ namespace WoodseatsScouts.Coins.App.Data
         public DbSet<ScavengedCoin>? ScavengedCoins { get; set; }
 
         public DbSet<ScavengeResult>? ScavengeResults { get; set; }
-        
+
         public DbSet<ErrorLog>? ErrorLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -44,17 +44,18 @@ namespace WoodseatsScouts.Coins.App.Data
 
         public List<Member> GetLastThreeUsersToScanPoints()
         {
-            var f = Members!
+            return Members!
                 .Include(x => x.ScavengeResults)
                 .ThenInclude(x => x.ScavengedCoins)
                 .Where(x => x.ScavengeResults.Count > 0)
                 .Select(member => new
                 {
                     Member = member,
-                    LatestScavengeResult = ScavengeResults!.Where(y => y.MemberId == member.Id).Max(y => y.CompletedAt)
-                }).ToList();
-
-            return f.OrderByDescending(x => x.LatestScavengeResult)
+                    LatestScavengeResult = ScavengeResults!
+                        .Where(y => y.MemberId == member.Id)
+                        .OrderByDescending(x => x.CompletedAt)
+                        .First()
+                })
                 .Take(3)
                 .Select(x => x.Member)
                 .ToList();
@@ -96,14 +97,15 @@ namespace WoodseatsScouts.Coins.App.Data
                 select new GroupPoints
                 {
                     Id = grouping.First().Troop.Id,
-                    Name = grouping.First().Troop.Name, 
+                    Name = grouping.First().Troop.Name,
                     TotalPoints = sum
                 }).ToList();
 
             var allTroopsWithMembers = Troops!.Include(x => x.Members).ToList();
-            topXGroupsInLastYHours.ForEach(x => x.MemberCount = allTroopsWithMembers.Single(y => y.Id == x.Id).Members.Count);
-            
-            topXGroupsInLastYHours 
+            topXGroupsInLastYHours.ForEach(x =>
+                x.MemberCount = allTroopsWithMembers.Single(y => y.Id == x.Id).Members.Count);
+
+            topXGroupsInLastYHours
                 = topXGroupsInLastYHours.OrderByDescending(x => x.AveragePoints).Take(count).ToList();
 
             return topXGroupsInLastYHours;

@@ -16,11 +16,11 @@ namespace WoodseatsScouts.Coins.App.Controllers;
 public class HomeController : ControllerBase
 {
     private readonly IAppDbContext context;
-    
+
     private readonly IWebHostEnvironment webHostEnvironment;
 
     private readonly AppConfig appConfig;
-    
+
     private readonly ILogger<HomeController> logger;
 
     public HomeController(
@@ -49,7 +49,7 @@ public class HomeController : ControllerBase
 
             // The QRScanner for coins becomes active after 500ms after a member has logged in. Slight delay to allow the admin to shift focus away.
             Thread.Sleep(2000);
-            
+
             return Ok(new
             {
                 member.FirstName,
@@ -89,7 +89,7 @@ public class HomeController : ControllerBase
                 result.PointValue,
                 result.BaseNumber,
                 Code = code
-            });   
+            });
         }
         catch (CodeTranslationException e)
         {
@@ -145,14 +145,14 @@ public class HomeController : ControllerBase
 
         return CreatedAtAction(nameof(AddPointsToMember), null, null);
     }
-    
+
     [HttpPost]
     [Route("CreateMember")]
     public object CreateMember([FromBody] CreateMemberViewModel createMemberViewModel)
     {
         var memberNumber =
             context.GenerateNextMemberCode(createMemberViewModel.TroopId, createMemberViewModel.Section);
-   
+
         context.Members?.Add(new Member
         {
             Number = memberNumber,
@@ -226,7 +226,7 @@ public class HomeController : ControllerBase
     {
         return context.Members!.ToList();
     }
-    
+
     [HttpGet]
     [Route("GetMembersWithPoints")]
     public OkObjectResult GetMembersWithPoints()
@@ -255,30 +255,24 @@ public class HomeController : ControllerBase
     [Route("Report")]
     public ReportViewModel Report()
     {
-        var top3Members = context.GetLastThreeUsersToScanPoints();
-        var top3MemberIds = top3Members.Select(x => x.Id).ToList();
-        var top3MembersWithPointsAttached
-            = context.Members!
-                .Where(x =>  top3MemberIds.Contains(x.Id))
-                .Include(x => x.ScavengeResults)
-                .ThenInclude(x => x.ScavengedCoins)
-                .Include(x => x.Troop)
-                .Select(x => new
-                {
-                    x.Id,
-                    MemberCode = x.Code,
-                    x.HasImage,
-                    MemberNumber = x.Number,
-                    x.FirstName,
-                    x.LastName,
-                    TroopName = x.Troop.Name,
-                    x.Section,
-                    TotalPoints = x.ScavengeResults.SelectMany(x => x.ScavengedCoins.Select(y => y.PointValue)).Sum()
-                }).ToList();
+        var top3MembersWithPointsAttached = context.GetLastThreeUsersToScanPoints()
+            .Select(x => new
+            {
+                x.Id,
+                MemberCode = x.Code,
+                x.HasImage,
+                MemberNumber = x.Number,
+                x.FirstName,
+                x.LastName,
+                TroopName = x.Troop.Name,
+                x.Section,
+                TotalPoints = x.ScavengeResults.Last().ScavengedCoins.Sum(y => y.PointValue)
+            });
 
-        
-        var secondsUntilDeadline = appConfig.ReportDeadline > DateTime.Now ? (appConfig.ReportDeadline - DateTime.Now).TotalSeconds : 0;
-        
+        var secondsUntilDeadline = appConfig.ReportDeadline > DateTime.Now
+            ? (appConfig.ReportDeadline - DateTime.Now).TotalSeconds
+            : 0;
+
         var reportViewModel = new ReportViewModel
         {
             Title = appConfig.ReportTitle,
@@ -297,8 +291,8 @@ public class HomeController : ControllerBase
     public ActionResult SaveMemberPhoto([FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
     {
         var convert = saveMemberPhotoViewModel.Photo.Replace("data:image/jpeg;base64,", string.Empty);
-        var rootPath = 
-            appConfig.ContentRootDirectory 
+        var rootPath =
+            appConfig.ContentRootDirectory
             ?? Path.Join(webHostEnvironment.ContentRootPath, "ClientApp", "public", "member-images");
         var photoFileName = $"{saveMemberPhotoViewModel.MemberId}.jpg";
         var photoFullPath = Path.Join(rootPath, photoFileName);
