@@ -12,7 +12,7 @@ using WoodseatsScouts.Coins.App.Data;
 namespace WoodseatsScouts.Coins.App.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230428052200_Initial")]
+    [Migration("20230428060401_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
