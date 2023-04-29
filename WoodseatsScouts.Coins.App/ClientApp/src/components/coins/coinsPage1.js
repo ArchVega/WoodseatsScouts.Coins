@@ -93,6 +93,7 @@ const CoinsPage1 = () => {
         console.log('reload')
         setUser(null)
         setUserQRCode("")
+        setCoinTotal(0)
         setCompletedScanning(false)
     }
 
