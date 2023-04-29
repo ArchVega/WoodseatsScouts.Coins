@@ -56,6 +56,7 @@ namespace WoodseatsScouts.Coins.App.Data
                         .OrderByDescending(x => x.CompletedAt)
                         .First()
                 })
+                .OrderByDescending(x => x.LatestScavengeResult.CompletedAt)
                 .Take(3)
                 .Select(x => x.Member)
                 .ToList();
