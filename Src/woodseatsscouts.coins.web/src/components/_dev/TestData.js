@@ -4,7 +4,7 @@ import axios from "axios";
 function TestData() {
     return {
         async getUnscavengedCoins() {
-            const uri = "http://localhost:7167/Coins/Get"
+            const uri = "http://localhost:7167/Sut/Coins"
             logApi(uri)
             const response = await axios.get(uri);
 

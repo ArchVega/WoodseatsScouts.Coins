@@ -160,6 +160,7 @@ test(serialStep("Invalid coin code for Asparagus Royal shows an error toast mess
 //     // expect(errorMessage).toBe("Could not translate Coin Code 'coin-code-does-not-exist'")
 // });
 
+// todo: bug - significant one. After about 8 or so, scan continues, but coins are not registered.
 test(serialStep("Asparagus Royal completes a scavenger haul"), async ({page}) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.asparagusRoyal, [10, 3, 20])
     await validScavengerHaulSteps(users.asparagusRoyal, coins, 33, page)

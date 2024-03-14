@@ -4,18 +4,18 @@ const Uris = {
     appState: `${baseUri}/AppState`,
 
     pointValueFromCode: function (coinQrCode, memberQrCode) {
-        return `${baseUri}/home/GetPointValueFromCode?code=${coinQrCode}&memberCode=${memberQrCode}`
+        return `${baseUri}/Coin/GetPointValueFromCode?code=${coinQrCode}&memberCode=${memberQrCode}`
     },
 
-    addPointsToMember: `${baseUri}/home/AddPointsToMember`,
+    addPointsToMember: `${baseUri}/Member/AddPointsToMember`,
 
-    leaderboard: `${baseUri}/home/Report`,
+    leaderboard: `${baseUri}/Leaderboard/Report`,
 
     member: function (memberQrCode) {
-        return `${baseUri}/home/GetMemberInfoFromCode?code=${memberQrCode}`
+        return `${baseUri}/Member/GetMemberInfoFromCode?code=${memberQrCode}`
     },
 
-    members: `${baseUri}/home/GetMembersWithPoints`
+    members: `${baseUri}/Member/GetMembersWithPoints`
 }
 
 export default Uris

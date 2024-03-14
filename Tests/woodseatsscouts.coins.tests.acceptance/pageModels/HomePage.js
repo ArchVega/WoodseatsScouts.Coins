@@ -1,6 +1,7 @@
 import {expect} from "@playwright/test";
 import axios from "axios";
 import CoinCodeScanPage from "./CoinCodeScanPage";
+import Uris from "./Uris";
 
 const HomePage = (page) => {
     return {
@@ -11,7 +12,7 @@ const HomePage = (page) => {
         },
 
         simulateValidUserWristbandScan: async (userName) => {
-            const membersResponse = await axios.get('http://localhost:7167/Home/GetMembers')
+            const membersResponse = await axios.get(Uris.sutMembers)
             const userData = membersResponse.data.filter(member => (member.firstName + " " + member.lastName) === userName)[0]
             const memberCodeTextbox = page.getByTestId("textbox-usb-scanner-code")
             await memberCodeTextbox.fill(userData.code);

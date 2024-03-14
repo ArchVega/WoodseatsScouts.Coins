@@ -10,31 +10,110 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [Route("[controller]")]
 public class AdminController : ControllerBase
 {
-    private readonly AppDbContext context;
-
-    public AdminController(AppDbContext context)
+    private static readonly object Locker = new object();
+    
+    private readonly AppDbContext appDbContext;
+    
+    public AdminController(AppDbContext appDbContext)
     {
-        this.context = context;
+        this.appDbContext = appDbContext;
     }
 
     [HttpPost]
     [Route("CreateTroop")]
     public ActionResult CreateTroop([FromBody] CreateTroopViewModel createTroopViewModel)
     {
-        using var transaction = context.Database.BeginTransaction();
-        context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops ON");
+        using var transaction = appDbContext.Database.BeginTransaction();
+        appDbContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops ON");
         
-        context.Troops?.Add(new Troop
+        appDbContext.Troops?.Add(new Troop
         {
             Id = createTroopViewModel.Id,
             Name = createTroopViewModel.Name
         });
 
-        context.SaveChanges();
+        appDbContext.SaveChanges();
         
-        context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops OFF");
+        appDbContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops OFF");
         transaction.Commit();
         
         return Ok($"Troop {createTroopViewModel.Name} added");
+    }
+    
+    [HttpPost]
+    [Route("CreateMember")]
+    public object CreateMember([FromBody] CreateMemberViewModel createMemberViewModel)
+    {
+        lock (Locker)
+        {
+            var memberNumber =
+                appDbContext.GenerateNextMemberCode(createMemberViewModel.TroopId, createMemberViewModel.Section);
+
+            appDbContext.Members?.Add(new Member
+            {
+                Number = memberNumber,
+                FirstName = createMemberViewModel.FirstName,
+                LastName = createMemberViewModel.LastName,
+                TroopId = createMemberViewModel.TroopId,
+                SectionId = createMemberViewModel.Section,
+                IsDayVisitor = createMemberViewModel.IsDayVisitor
+            });
+
+            appDbContext.SaveChanges();
+
+            var member = appDbContext.Members!
+                .Single(x => x.Number == memberNumber
+                             && x.TroopId == createMemberViewModel.TroopId
+                             && x.SectionId == createMemberViewModel.Section);
+
+            return new
+            {
+                MemberNumber = member.Number,
+                MemberID = member.Id,
+            };   
+        }
+    }
+    
+    [HttpPut]
+    [Route("UpdateMemberName")]
+    public object UpdateMemberName(int memberId, string name)
+    {
+        var entityOrNull = appDbContext.Members!.SingleOrDefault(x => x.Id == memberId);
+
+        if (entityOrNull != null)
+        {
+            entityOrNull.FirstName = name;
+            // other updates here it there are any
+            appDbContext.SaveChanges();
+        }
+        else
+        {
+            throw new ArgumentException("Member id not found");
+        }
+
+        var member = appDbContext.Members!
+            .Single(x => x.Id == memberId);
+
+        return new
+        {
+            MemberNumber = member.Number,
+            MemberID = member.Id,
+        };
+    }
+    
+    [HttpGet]
+    [Route("GetClueStatus")]
+    public object GetClueStatus(int memberId)
+    {
+        var member = appDbContext.Members!
+            .Single(x => x.Id == memberId);
+
+        return new
+        {
+            MemberId = memberId,
+            member.Clue1State,
+            member.Clue2State,
+            member.Clue3State
+        };
     }
 }
