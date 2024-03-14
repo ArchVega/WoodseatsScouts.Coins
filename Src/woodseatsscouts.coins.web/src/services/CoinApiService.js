@@ -1,10 +1,11 @@
 import axios from "axios";
 import {logApi} from "../components/logging/Logger";
+import Uris, {addPointsToMemberUri, BaseUri, getPointValueFromCodeUri} from "./Uris";
 
 function CoinApiService() {
     return {
         async fetchCoin(coinQrCode, memberQrCode) {
-            const uri = `http://localhost:7167/home/GetPointValueFromCode?code=${coinQrCode}&memberCode=${memberQrCode}`
+            const uri = Uris.pointValueFromCode(coinQrCode, memberQrCode)
             logApi(uri)
             return await axios.get(uri);
         },
@@ -15,7 +16,7 @@ function CoinApiService() {
                 coinCodes: coins.map(x => x.code)
             }
 
-            return await axios.post('http://localhost:7167/home/AddPointsToMember', payload)
+            return await axios.post(Uris.addPointsToMember, payload)
                 .catch(reason => {
                     console.error(reason)
                 })

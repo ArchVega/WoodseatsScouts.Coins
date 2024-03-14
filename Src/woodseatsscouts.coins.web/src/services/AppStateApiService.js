@@ -1,11 +1,11 @@
 import axios from "axios";
-import {BaseUri} from "./ApiService";
+import Uris from "./Uris";
 
 const AppStateApiService = () => {
     return {
         getAppSate: (responseFunc) => {
             async function fetch() {
-                const response = await axios.get(`${BaseUri}/AppState`);
+                const response = await axios.get(Uris.appState);
                 return response.data
             }
 

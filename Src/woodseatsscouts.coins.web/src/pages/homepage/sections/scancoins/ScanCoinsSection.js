@@ -36,7 +36,6 @@ function ScanCoinsSection({member, setHaulResult}) {
                     toastError(reason)
                 })
         }
-
     }, [coinQrCode]);
 
     useEffect(() => {
