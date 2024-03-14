@@ -116,7 +116,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet]
-    [Route("GetClueStatus")]
+    [Route("ClueStatus")]
     public object GetClueStatus(int memberId)
     {
         var member = appDbContext.Members!

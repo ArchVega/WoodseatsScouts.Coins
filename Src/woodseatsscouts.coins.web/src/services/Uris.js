@@ -7,7 +7,7 @@ const Uris = {
     leaderboard: `${baseUri}/Leaderboard/Report`,
 
     pointValueFromCode: function (coinQrCode, memberQrCode) {
-        return `${baseUri}/Coin/GetPointValueFromCode?code=${coinQrCode}&memberCode=${memberQrCode}`
+        return `${baseUri}/Coin/${coinQrCode}/Scan/${memberQrCode}`
     },
     member: function (memberQrCode) {
         return `${baseUri}/Member/GetMemberInfoFromCode?code=${memberQrCode}`

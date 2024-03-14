@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Data;
@@ -17,8 +18,8 @@ public class CoinController : ControllerBase
     }
 
     [HttpGet]
-    [Route("GetPointValueFromCode")]
-    public IActionResult GetPointValueFromCode(string code, string memberCode)
+    [Route("{code}/Scan/{memberCode}")]
+    public IActionResult GetCoin(string code, string memberCode)
     {
         
         if (appDbContext.Members!.Any(x => x.Code == code))
