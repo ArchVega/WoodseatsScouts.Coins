@@ -10,7 +10,7 @@ import AudioFx from "../../../../fx/AudioFx";
 import QRScanCodeType from "../../../../components/qrscanners/QRScanCodeType";
 import {toastError} from "../../../../components/toaster/toaster";
 
-function ScanCoinsSection({member, setHaulResult, setLoading}) {
+function ScanCoinsSection({member, setHaulResult}) {
     const [coinQrCode, setCoinQrCode] = useState("");
     const [coins, setCoins] = useState([]);
     const [coinTotal, setCoinTotal] = useState(0);
@@ -18,8 +18,6 @@ function ScanCoinsSection({member, setHaulResult, setLoading}) {
     useEffect(() => {
         if (coinQrCode != null && coinQrCode.trim().length > 0) {
             logDebug(`Fetching coin data for code ${coinQrCode}`)
-
-            setLoading(true)
 
             async function fetchData() {
                 return await CoinApiService().fetchCoin(coinQrCode, member.memberCode)
@@ -36,9 +34,6 @@ function ScanCoinsSection({member, setHaulResult, setLoading}) {
                     AudioFx().playCoinScannedErrorAudio()
                     logError("Adding coin")
                     toastError(reason)
-                })
-                .finally(() => {
-                    setLoading(false)
                 })
         }
 

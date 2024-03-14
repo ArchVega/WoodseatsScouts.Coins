@@ -76,7 +76,7 @@ export function CoinsPage() {
                     return (<ScanMemberSection qrCode={memberQrCode} setQrCode={setMemberQrCode}/>)
                 }
                 case SectionNames.ScanCoins: {
-                    return (<ScanCoinsSection member={member} setHaulResult={setHaulResult} setLoading={setLoading()}/>)
+                    return (<ScanCoinsSection member={member} setHaulResult={setHaulResult}/>)
                 }
                 case SectionNames.HaulSummary: {
                     return (<HaulResultsSection member={member} haulResult={haulResult}/>)
