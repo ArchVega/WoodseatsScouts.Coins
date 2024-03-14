@@ -14,7 +14,7 @@ const Uris = {
         return `${baseUri}/Coins/${coinQrCode}/Scan/${memberQrCode}`
     },
     member: function (memberQrCode) {
-        return `${baseUri}/Members/GetMemberInfoFromCode?code=${memberQrCode}`
+        return `${baseUri}/Members/${memberQrCode}`
     },
 }
 

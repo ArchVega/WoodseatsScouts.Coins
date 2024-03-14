@@ -15,7 +15,7 @@ function CoinApiService() {
                 coinCodes: coins.map(x => x.code)
             }
 
-            return await axios.put(Uris.addPointsToMember(member.id), payload)
+            return await axios.put(Uris.addPointsToMember(member.memberId), payload)
                 .catch(reason => {
                     console.error(reason)
                 })
