@@ -1,5 +1,6 @@
 ﻿namespace WoodseatsScouts.Coins.Api.Models.Domain;
 
+// dotcover disable
 public class ErrorLog
 {
     public int Id { get; set; }

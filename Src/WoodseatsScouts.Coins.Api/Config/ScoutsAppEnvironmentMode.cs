@@ -8,7 +8,7 @@ public class ScoutsAppEnvironmentMode : IScoutsAppEnvironment
     {
         get
         {
-            const string key = StringConsts.EnvironmentVariables.ScoutsApiAppMode;
+            const string key = AppConsts.EnvironmentVariables.ScoutsApiAppMode;
             var envVariableValue = Environment.GetEnvironmentVariable(key);
 
             if (string.IsNullOrEmpty(envVariableValue))

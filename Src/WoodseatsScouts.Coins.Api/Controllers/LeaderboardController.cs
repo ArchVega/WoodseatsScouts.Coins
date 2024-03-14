@@ -20,7 +20,7 @@ public class LeaderboardController : ControllerBase
     
     [HttpGet]
     [Route("Report")]
-    public ReportViewModel Report()
+    public LeaderboardViewModel Report()
     {
         var top3MembersWithPointsAttached = appDbContext.GetLastThreeUsersToScanPoints()
             .Select(x => new
@@ -41,7 +41,7 @@ public class LeaderboardController : ControllerBase
             ? (appConfig.ReportDeadline - DateTime.Now).TotalSeconds
             : 0;
 
-        var reportViewModel = new ReportViewModel
+        var reportViewModel = new LeaderboardViewModel
         {
             Title = appConfig.ReportTitle,
             SecondsUntilDeadline = secondsUntilDeadline,

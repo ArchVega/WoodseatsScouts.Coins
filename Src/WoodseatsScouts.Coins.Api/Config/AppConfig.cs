@@ -2,6 +2,7 @@
 
 namespace WoodseatsScouts.Coins.Api.Config;
 
+// dotcover disable
 public class AppConfig
 {
     public AppConfig(IConfiguration configuration)

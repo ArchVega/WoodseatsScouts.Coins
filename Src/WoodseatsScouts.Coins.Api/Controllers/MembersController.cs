@@ -42,7 +42,7 @@ public class MembersController : ControllerBase
                 TroopName = x.Troop.Name,
                 Section = x.SectionId,
                 SectionName = x.Section.Name,
-                TotalPoints = x.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(y => y.PointValue)).Sum()
+                TotalPoints = x.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.PointValue)).Sum()
             })
             .OrderBy(x => x.FirstName)
             .ThenBy(x => x.LastName));

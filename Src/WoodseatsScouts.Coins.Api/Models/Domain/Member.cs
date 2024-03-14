@@ -2,6 +2,7 @@
 
 namespace WoodseatsScouts.Coins.Api.Models.Domain
 {
+    // dotcover disable
     /// <summary>
     /// Member photos are stored on disk in the ClientApp/public/member-images directory and the files must be a jpg file whose name
     /// matches the Number field

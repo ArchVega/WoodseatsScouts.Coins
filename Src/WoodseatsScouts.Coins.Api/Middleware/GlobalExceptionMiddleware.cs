@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WoodseatsScouts.Coins.Api.Middleware;
 
+// dotcover disable
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate next;

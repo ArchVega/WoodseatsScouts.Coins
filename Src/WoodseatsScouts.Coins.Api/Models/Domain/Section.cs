@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WoodseatsScouts.Coins.Api.Models.Domain;
 
+// dotcover disable
 public class Section
 {
     [Key]

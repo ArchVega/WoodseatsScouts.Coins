@@ -1,6 +1,8 @@
-﻿namespace WoodseatsScouts.Coins.Api.Models.View;
+﻿using WoodseatsScouts.Coins.Api.Models.Domain;
 
-public class ReportViewModel
+namespace WoodseatsScouts.Coins.Api.Models.View;
+
+public class LeaderboardViewModel
 {
     public dynamic LastThreeUsersToScanPoints { get; set; }
     
@@ -14,6 +16,7 @@ public class ReportViewModel
     
     public int ReportRefreshSeconds { get; set; }
 
+    // dotcover disable
     private static readonly long DatetimeMinTimeTicks =
         new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).Ticks;
 

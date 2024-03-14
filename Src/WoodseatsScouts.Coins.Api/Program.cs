@@ -1,3 +1,4 @@
+// dotcover disable
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Middleware;
 

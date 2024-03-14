@@ -16,7 +16,7 @@ public class ScoutsAppEnvironmentModeTests
     {
         try
         {
-            Environment.SetEnvironmentVariable(StringConsts.EnvironmentVariables.ScoutsApiAppMode, value);
+            Environment.SetEnvironmentVariable(AppConsts.EnvironmentVariables.ScoutsApiAppMode, value);
 
             var cut = new ScoutsAppEnvironmentMode();
             var result = cut.ScoutsAppMode;
@@ -25,7 +25,7 @@ public class ScoutsAppEnvironmentModeTests
         }
         finally
         {
-            Environment.SetEnvironmentVariable(StringConsts.EnvironmentVariables.ScoutsApiAppMode, null);
+            Environment.SetEnvironmentVariable(AppConsts.EnvironmentVariables.ScoutsApiAppMode, null);
         }
     }
     
@@ -34,7 +34,7 @@ public class ScoutsAppEnvironmentModeTests
     [InlineData("acceptance-testing")]
     public void EnvironmentVariableSetToInvalidValue_ExceptionThrown(string value)
     {
-        Environment.SetEnvironmentVariable(StringConsts.EnvironmentVariables.ScoutsApiAppMode, value);
+        Environment.SetEnvironmentVariable(AppConsts.EnvironmentVariables.ScoutsApiAppMode, value);
         
         var cut = new ScoutsAppEnvironmentMode();
         
@@ -46,7 +46,7 @@ public class ScoutsAppEnvironmentModeTests
     [Fact]
     public void NoValueProvided_DefaultsToProduction()
     {
-        Environment.SetEnvironmentVariable(StringConsts.EnvironmentVariables.ScoutsApiAppMode, null);
+        Environment.SetEnvironmentVariable(AppConsts.EnvironmentVariables.ScoutsApiAppMode, null);
         
         var cut = new ScoutsAppEnvironmentMode();
 

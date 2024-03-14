@@ -6,6 +6,20 @@ namespace WoodseatsScouts.Coins.Tests;
 
 public class CodeTranslatorTests
 {
+    [Fact]
+    public void TranslateCoinPointCode_InvalidCode_ThrowsException()
+    {
+        var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateCoinPointCode("does-not-exist"));
+        exception.Message.ShouldBe("Could not translate Coin Code 'does-not-exist'");
+    }
+    
+    [Fact]
+    public void TranslateMemberCode_InvalidCode_ThrowsException()
+    {
+        var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateMemberCode("does-not-exist"));
+        exception.Message.ShouldBe("Could not translate Member Code 'does-not-exist'");
+    }
+    
     [Theory]
     [InlineData("B0001001010",  1, "B", 1, 10)]
     [InlineData("B0047010020", 47, "B", 10, 20)]

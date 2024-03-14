@@ -3,6 +3,7 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Data;
 
+// dotcover disable
 public static class DbContextSeedFactory
 {
     public static void CreateSections(ModelBuilder modelBuilder)
