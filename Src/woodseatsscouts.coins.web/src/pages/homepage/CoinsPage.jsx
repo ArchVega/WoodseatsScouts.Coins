@@ -70,5 +70,3 @@ export function CoinsPage() {
 }
 
 export default CoinsPage
-{/*<div>{process.env.REACT_APP_VERSION}</div>*/
-}

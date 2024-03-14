@@ -1,4 +1,4 @@
-const baseUri = 'http://localhost:7167';
+const baseUri = process.env.REACT_APP_WEB_API_URI
 
 const Uris = {
     appState: `${baseUri}/AppState`,
@@ -11,7 +11,7 @@ const Uris = {
 
     leaderboard: `${baseUri}/home/Report`,
 
-    member: function(memberQrCode) {
+    member: function (memberQrCode) {
         return `${baseUri}/home/GetMemberInfoFromCode?code=${memberQrCode}`
     },
 
