@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as fs from "fs";
+import Uris from "./pageModels/Uris";
 
 const Helpers = () => {
     return {
@@ -19,7 +20,7 @@ const Helpers = () => {
 
         setDeadlineTime: async (daysToAdd) => {
             await axios({
-                url: `http://localhost:7167/Sut/SetReportDeadline/${daysToAdd}`,
+                url: Uris.sutScavengerHuntDeadline(daysToAdd),
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -32,7 +33,7 @@ const Helpers = () => {
         },
 
         copyTestMemberImages: async () => {
-            const membersResponse = await axios.get('http://localhost:7167/Home/GetMembers')
+            const membersResponse = await axios.get(Uris.sutMembers)
 
             membersResponse.data.forEach(member => {
                 const source = member.lastName + "-" + member.firstName + ".png";
@@ -46,7 +47,7 @@ const Helpers = () => {
             })
 
             await axios({
-                url: "http://localhost:7167/Sut/SetAllMemberHasImagePropertyToTrue",
+                url: Uris.sutSetMemberPropertyHasImageToTrue,
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -63,7 +64,7 @@ const Helpers = () => {
             users.forEach(user => {
                 user.firstNames.forEach(async firstName => {
                     await axios({
-                        url: "http://localhost:7167/Home/CreateMember",
+                        url: Uris.adminCreateMember,
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -87,7 +88,7 @@ const Helpers = () => {
         createTroopsViaApi: async (troops) => {
             for (const troop of troops) {
                 await axios({
-                    url: "http://localhost:7167/Admin/CreateTroop",
+                    url: Uris.adminCreateTroop,
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

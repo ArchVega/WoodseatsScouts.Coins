@@ -1,8 +1,9 @@
 // Gets all the coins from the DB.
 import axios from "axios";
+import Uris from "../pageModels/Uris";
 
 const ScavengerHunt = async () => {
-    const coinsResponse = await axios.get('http://localhost:7167/Coins/Get')
+    const coinsResponse = await axios.get(Uris.coinsGet)
     const _coins = coinsResponse.data.map(x => {
         return {
             code: x.code,

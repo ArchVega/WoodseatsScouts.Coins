@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -10,26 +11,33 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [Route("[controller]")]
 public class SutController : ControllerBase
 {
-    private readonly IAppDbContext context;
+    private readonly IAppDbContext appDbContext;
     private readonly AppConfig appConfig;
 
-    public SutController(IAppDbContext context, AppConfig appConfig)
+    public SutController(IAppDbContext appDbContext, AppConfig appConfig)
     {
-        this.context = context;
+        this.appDbContext = appDbContext;
         this.appConfig = appConfig;
+    }
+
+    [HttpGet]
+    [Route("GetMembers")]
+    public List<Member> GetMembers()
+    {
+        return appDbContext.Members!.ToList();
     }
 
     [HttpPut]
     [Route("SetAllMemberHasImagePropertyToTrue")]
     public IActionResult SetAllMemberHasImagePropertyToTrue()
     {
-        var members = context.Members!.ToList();
+        var members = appDbContext.Members!.ToList();
         foreach (var member in members)
         {
             member.HasImage = true;
         }
 
-        context.SaveChanges();
+        appDbContext.SaveChanges();
 
         return Ok("Updated all members HasImage property to true");
     }
@@ -42,5 +50,20 @@ public class SutController : ControllerBase
 
         return Ok($"Report deadline datetime set to '{appConfig.ReportDeadline}'");
     }
+    
+#if (DEBUG || ACCEPTANCETEST)
+    [HttpGet]
+    [Route("Coins")]
+    public ActionResult GetAll()
+    {
+        return Ok(appDbContext.Coins!.Include(x => x.Member).Select(x => new
+        {
+            x.Code,
+            x.Value,
+            x.Member!.FullName,
+            IsAlreadyScavenged = x.MemberId != null
+        }));
+    }
+#endif
 }
 #endif
