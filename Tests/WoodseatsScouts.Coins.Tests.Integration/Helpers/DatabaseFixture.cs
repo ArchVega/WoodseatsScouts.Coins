@@ -1,0 +1,56 @@
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Management.Automation;
+using System.Management.Automation.Host;
+using System.Management.Automation.Runspaces;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.PowerShell;
+using Microsoft.PowerShell.Commands;
+using WoodseatsScouts.Coins.Api.Data;
+
+namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
+
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
+public class DatabaseFixture
+{
+    public AppDbContext AppDbContext { get; private set; }
+
+    private const string SourceDatabaseConnectionString 
+        = "Server=(local);Database=WoodseatsScouts.Coins.Tests.Source;Trusted_Connection=true;TrustServerCertificate=true";
+
+    private const string TestDatabaseConnectionString 
+        = "Server=(local);Database=WoodseatsScouts.Coins.Tests.Integration;Trusted_Connection=true;TrustServerCertificate=true ";
+
+    public DatabaseFixture()
+    {
+        RecreateDbViaPowerShell();
+
+        var contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
+
+        AppDbContext = new AppDbContext(contextOptions);
+    }
+
+    private static void RecreateDbViaPowerShell()
+    {
+        var initialSessionState = InitialSessionState.CreateDefault();
+        initialSessionState.ExecutionPolicy = ExecutionPolicy.Unrestricted;
+        
+        using var runspace = RunspaceFactory.CreateRunspace(initialSessionState);
+        Console.WriteLine(runspace.Version);
+        runspace.Open();
+        runspace.SessionStateProxy.Path.SetLocation(@"..\..\..\..\..");
+
+        using (var instance = PowerShell.Create(runspace))
+        {
+            instance.AddCommand("./Utilities/Database/RecreateDbs-IntegrationTests.ps1");
+            /* Examples of how to hook into the powershell streams. */
+            // instance.Streams.Verbose.DataAdded += ConsumeStreamOutput;
+            // instance.Streams.Information.DataAdded += ConsumeStreamOutput;
+            var results = instance.Invoke();
+            Console.WriteLine(results);
+        }
+
+        runspace.Close();
+    }
+}
