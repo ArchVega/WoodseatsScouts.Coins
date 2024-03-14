@@ -4,8 +4,8 @@ const Uris = {
     sutMembers: `${baseUri}/Sut/GetMembers`,
     coinsGet: `${baseUri}/Sut/Coins`,
     sutSetMemberPropertyHasImageToTrue: `${baseUri}/Sut/SetAllMemberHasImagePropertyToTrue`,
-    adminCreateMember: `${baseUri}/Admin/CreateMember`,
-    adminCreateTroop: `${baseUri}/Admin/CreateTroop`,
+    adminCreateMember: `${baseUri}/Admin/Member`,
+    adminCreateTroop: `${baseUri}/Admin/Troop`,
     sutScavengerHuntDeadline: (daysToAdd) => `${baseUri}/Sut/SetReportDeadline/${daysToAdd}`
 }
 

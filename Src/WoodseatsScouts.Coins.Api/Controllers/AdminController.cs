@@ -11,21 +11,21 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 public class AdminController : ControllerBase
 {
     private static readonly object Locker = new object();
-    
+
     private readonly AppDbContext appDbContext;
-    
+
     public AdminController(AppDbContext appDbContext)
     {
         this.appDbContext = appDbContext;
     }
 
     [HttpPost]
-    [Route("CreateTroop")]
+    [Route("Troop")]
     public ActionResult CreateTroop([FromBody] CreateTroopViewModel createTroopViewModel)
     {
         using var transaction = appDbContext.Database.BeginTransaction();
         appDbContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops ON");
-        
+
         appDbContext.Troops?.Add(new Troop
         {
             Id = createTroopViewModel.Id,
@@ -33,15 +33,15 @@ public class AdminController : ControllerBase
         });
 
         appDbContext.SaveChanges();
-        
+
         appDbContext.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops OFF");
         transaction.Commit();
-        
+
         return Ok($"Troop {createTroopViewModel.Name} added");
     }
-    
+
     [HttpPost]
-    [Route("CreateMember")]
+    [Route("Member")]
     public object CreateMember([FromBody] CreateMemberViewModel createMemberViewModel)
     {
         lock (Locker)
@@ -70,20 +70,34 @@ public class AdminController : ControllerBase
             {
                 MemberNumber = member.Number,
                 MemberID = member.Id,
-            };   
+            };
         }
     }
-    
+
+    [HttpGet]
+    [Route("Member/{memberId:int}")]
+    public object UpdateMemberName(int memberId)
+    {
+        var member = appDbContext.Members!.SingleOrDefault(x => x.Id == memberId);
+
+        if (member == null)
+        {
+            return NotFound(memberId);
+        }
+
+        return Ok(member);
+    }
+
     [HttpPut]
-    [Route("UpdateMemberName")]
-    public object UpdateMemberName(int memberId, string name)
+    [Route("Member/{memberId:int}")]
+    public object UpdateMemberName(int memberId, [FromBody] UpdateMemberViewModel updateMemberViewModel)
     {
         var entityOrNull = appDbContext.Members!.SingleOrDefault(x => x.Id == memberId);
 
         if (entityOrNull != null)
         {
-            entityOrNull.FirstName = name;
-            // other updates here it there are any
+            entityOrNull.FirstName = updateMemberViewModel.FirstName;
+            entityOrNull.LastName = updateMemberViewModel.LastName;
             appDbContext.SaveChanges();
         }
         else
@@ -100,7 +114,7 @@ public class AdminController : ControllerBase
             MemberID = member.Id,
         };
     }
-    
+
     [HttpGet]
     [Route("GetClueStatus")]
     public object GetClueStatus(int memberId)
