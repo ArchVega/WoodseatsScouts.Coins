@@ -21,14 +21,14 @@ public class SutController : ControllerBase
     }
 
     [HttpGet]
-    [Route("GetMembers")]
+    [Route("Members")]
     public List<Member> GetMembers()
     {
         return appDbContext.Members!.ToList();
     }
 
     [HttpPut]
-    [Route("SetAllMemberHasImagePropertyToTrue")]
+    [Route("Members/HasImage/True")]
     public IActionResult SetAllMemberHasImagePropertyToTrue()
     {
         var members = appDbContext.Members!.ToList();
@@ -43,7 +43,7 @@ public class SutController : ControllerBase
     }
     
     [HttpPut]
-    [Route("SetReportDeadline/{daysToAdd:int}")]
+    [Route("Leaderboard/Deadline/{daysToAdd:int}")]
     public IActionResult SetReportDeadline(int daysToAdd)
     {
         appConfig.ReportDeadline = DateTime.Now.AddDays(daysToAdd);
