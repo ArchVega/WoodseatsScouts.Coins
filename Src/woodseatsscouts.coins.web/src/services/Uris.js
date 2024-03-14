@@ -2,15 +2,19 @@ const baseUri = process.env.REACT_APP_WEB_API_URI
 
 const Uris = {
     appState: `${baseUri}/AppState`,
-    members: `${baseUri}/Member/GetMembersWithPoints`,
-    addPointsToMember: `${baseUri}/Member/AddPointsToMember`,
+    members: `${baseUri}/Members`,
     leaderboard: `${baseUri}/Leaderboard/Report`,
-
+    memberPhoto: function(id) {
+        return `${baseUri}/Members/${id}/Photo'`
+    },
+    addPointsToMember: function(id) {
+        return `${baseUri}/Members/${id}/Coins`
+    },
     pointValueFromCode: function (coinQrCode, memberQrCode) {
-        return `${baseUri}/Coin/${coinQrCode}/Scan/${memberQrCode}`
+        return `${baseUri}/Coins/${coinQrCode}/Scan/${memberQrCode}`
     },
     member: function (memberQrCode) {
-        return `${baseUri}/Member/GetMemberInfoFromCode?code=${memberQrCode}`
+        return `${baseUri}/Members/GetMemberInfoFromCode?code=${memberQrCode}`
     },
 }
 

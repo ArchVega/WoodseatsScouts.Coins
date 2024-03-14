@@ -10,13 +10,13 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class MemberController : ControllerBase
+public class MembersController : ControllerBase
 {
     private readonly IAppDbContext appDbContext;
     private readonly AppConfig appConfig;
     private readonly IWebHostEnvironment webHostEnvironment;
 
-    public MemberController(IAppDbContext appDbContext, AppConfig appConfig, IWebHostEnvironment webHostEnvironment)
+    public MembersController(IAppDbContext appDbContext, AppConfig appConfig, IWebHostEnvironment webHostEnvironment)
     {
         this.appDbContext = appDbContext;
         this.appConfig = appConfig;
@@ -24,7 +24,6 @@ public class MemberController : ControllerBase
     }
     
     [HttpGet]
-    [Route("GetMembersWithPoints")]
     public OkObjectResult GetMembersWithPoints()
     {
         return Ok(appDbContext.Members!
@@ -50,7 +49,7 @@ public class MemberController : ControllerBase
     }
 
     [HttpGet]
-    [Route("GetMemberInfoFromCode")]
+    [Route("{code}")]
     public IActionResult GetMemberInfoFromCode(string code)
     {
         try
@@ -86,11 +85,11 @@ public class MemberController : ControllerBase
         }
     }
 
-    [HttpPost]
-    [Route("AddPointsToMember")]
-    public ActionResult AddPointsToMember([FromBody] PointsForMemberViewModel viewModel)
+    [HttpPut]
+    [Route("{id:int}/Coins")]
+    public ActionResult AddPointsToMember(int id, [FromBody] PointsForMemberViewModel viewModel)
     {
-        var member = appDbContext.Members!.Single(x => x.Id == viewModel.MemberId);
+        var member = appDbContext.Members!.Single(x => x.Id == id);
 
         var tallyHistoryItem = new ScavengeResult()
         {
@@ -132,17 +131,17 @@ public class MemberController : ControllerBase
     }
 
     [HttpPost]
-    [Route("SaveMemberPhoto")]
-    public ActionResult SaveMemberPhoto([FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
+    [Route("{id:int}/Photo")]
+    public ActionResult SaveMemberPhoto(int id, [FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
     {
         var convert = saveMemberPhotoViewModel.Photo.Replace("data:image/jpeg;base64,", string.Empty);
         var rootPath =
             appConfig.ContentRootDirectory
             ?? Path.Join(webHostEnvironment.ContentRootPath, "..", "woodseatsscouts.coins.web", "public", "member-images");
-        var photoFileName = $"{saveMemberPhotoViewModel.MemberId}.jpg";
+        var photoFileName = $"{id}.jpg";
         var photoFullPath = Path.Join(rootPath, photoFileName);
         System.IO.File.WriteAllBytes(photoFullPath, Convert.FromBase64String(convert));
-        appDbContext.Members!.Single(x => x.Id == saveMemberPhotoViewModel.MemberId).HasImage = true;
+        appDbContext.Members!.Single(x => x.Id == id).HasImage = true;
         appDbContext.SaveChanges();
 
         return Ok();

@@ -2,6 +2,7 @@
 import Webcam from "react-webcam";
 import {useContext, useRef} from "react";
 import {AppModeContext} from "../../App";
+import Uris from "../../services/Uris";
 
 const EditMemberPhotoModal = ({editUsersModal, setEditUsersModal, selectedUser}) => {
     const toggleEditUserModal = () => setEditUsersModal(!editUsersModal);
@@ -10,7 +11,6 @@ const EditMemberPhotoModal = ({editUsersModal, setEditUsersModal, selectedUser})
         console.log(base64Image, selectedUser.id)
 
         const payload = {
-            memberId: selectedUser.id,
             photo: base64Image
         }
 
@@ -19,7 +19,8 @@ const EditMemberPhotoModal = ({editUsersModal, setEditUsersModal, selectedUser})
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
         };
-        fetch('http://localhost:7167/home/SaveMemberPhoto', requestOptions);
+        // todo
+        fetch( Uris.memberPhoto(selectedUser.id), requestOptions);
         setEditUsersModal(false);
     }
 

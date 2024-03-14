@@ -12,11 +12,10 @@ function CoinApiService() {
 
         async addPointsToMember(member, coins) {
             const payload = {
-                memberId: member.memberId,
                 coinCodes: coins.map(x => x.code)
             }
 
-            return await axios.post(Uris.addPointsToMember, payload)
+            return await axios.put(Uris.addPointsToMember(member.id), payload)
                 .catch(reason => {
                     console.error(reason)
                 })

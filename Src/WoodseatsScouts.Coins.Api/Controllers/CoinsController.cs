@@ -8,11 +8,11 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CoinController : ControllerBase
+public class CoinsController : ControllerBase
 {
     private readonly IAppDbContext appDbContext;
 
-    public CoinController(IAppDbContext appDbContext)
+    public CoinsController(IAppDbContext appDbContext)
     {
         this.appDbContext = appDbContext;
     }
