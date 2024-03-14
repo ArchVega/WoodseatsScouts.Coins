@@ -113,6 +113,16 @@ test(serialStep("Invalid wrist code shows an error toast message"), async ({page
     expect(errorMessage).toBe("Could not translate Member Code 'member-code-does-not-exist'")
 });
 
+// test(serialStep("Scanning a coin instead of a wristband for logging in a member shows an error toast message"), async ({page}) => {
+//     // Todo
+//     // const homePage = HomePage(page);
+//     // await homePage.goTo()
+//     // await homePage.simulateInvalidUserWristbandScan("member-code-does-not-exist")
+//     //
+//     // const errorMessage = await ToastMessageModel(page).getMessage()
+//     // expect(errorMessage).toBe("Could not translate Member Code 'member-code-does-not-exist'")
+// });
+
 test(serialStep("User presses the Finished Scanning button for Asparagus Royal without any coins added"), async ({page}) => {
     const homePage = HomePage(page);
     await homePage.goTo()
@@ -136,6 +146,19 @@ test(serialStep("Invalid coin code for Asparagus Royal shows an error toast mess
     const errorMessage = await ToastMessageModel(page).getMessage()
     expect(errorMessage).toBe("Could not translate Coin Code 'coin-code-does-not-exist'")
 });
+
+// test(serialStep("Scanning a wristband instead of a coin when logging coins shows an error toast message"), async ({page}) => {
+//     // Todo
+//     // const homePage = HomePage(page);
+//     // await homePage.goTo()
+//     //
+//     // const coinCodeScanPage = await homePage.simulateValidUserWristbandScan(users.asparagusRoyal)
+//     //
+//     // await coinCodeScanPage.enterCoinCode("coin-code-does-not-exist")
+//     //
+//     // const errorMessage = await ToastMessageModel(page).getMessage()
+//     // expect(errorMessage).toBe("Could not translate Coin Code 'coin-code-does-not-exist'")
+// });
 
 test(serialStep("Asparagus Royal completes a scavenger haul"), async ({page}) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.asparagusRoyal, [10, 3, 20])
@@ -179,6 +202,12 @@ test(serialStep("Viewing the report page"), async ({page}) => {
         ]
     )
 });
+
+// test(serialStep("(user) cancels a haul returns the assigned scavenged coins back into circulation"), async ({page}) => {
+//     // Todo: hold the coins in memory so they're not added at all until done? or create an admin page?
+//     // const coins = await scavengerHunt.getUnscavengedCoinByValue(users.icterineCrimson, [20, 20])
+//     // await validScavengerHaulSteps(users.icterineCrimson, coins, 40, page)
+// });
 
 test(serialStep("Cerise Royal completes a scavenger haul"), async ({page}) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.ceriseRoyal, [10, 20])

@@ -1,10 +1,47 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import wave from "../../../images/wave.png";
 import QRCodeInputDevices from "../../../components/qrinputdevices/QRCodeInputDevices";
 import {Row} from "reactstrap";
 import QRScanCodeType from "../../../components/qrscanners/QRScanCodeType";
+import SiteSpinner from "../../../components/spinner/SiteSpinner";
+import {logDebug, logError, logReactSet} from "../../../components/logging/Logger";
+import AudioFx from "../../../fx/AudioFx";
+import MemberApiService from "../../../services/MemberApiService";
+import {toastError} from "../../../components/toaster/toaster";
 
-function ScanMemberSection({qrCode, setQrCode}) {
+function ScanMemberSection({setMember}) {
+    const [loading, setLoading] = useState(false)
+    const [memberQrCode, setMemberQrCode] = useState("")
+
+    useEffect(() => {
+        if (memberQrCode != null && memberQrCode.trim().length > 0) {
+            logDebug(`Fetching member data for code ${memberQrCode}`)
+
+            setLoading(true)
+
+            async function fetchData() {
+                AudioFx().playMemberScannedAudio()
+                return await MemberApiService().fetchMember(memberQrCode)
+            }
+
+            fetchData()
+                .then(async value => {
+                    const data = (await value.data)
+                    logReactSet("Setting member", data)
+                    setMember(data);
+                })
+                .catch(async reason => {
+                    logError("Setting member", reason)
+                    toastError(reason)
+                    setMember(null)
+                })
+                .finally(() => {
+                    setLoading(false)
+                })
+        }
+
+    }, [memberQrCode]);
+
     return (
         <>
             <Row id="scan-member-section">
@@ -15,7 +52,10 @@ function ScanMemberSection({qrCode, setQrCode}) {
                     </strong>
                 </h1>
 
-                <QRCodeInputDevices qrCode={qrCode} setQrCode={setQrCode} qrScanCodeType={QRScanCodeType.Member}/>
+                {loading
+                    ? <SiteSpinner/>
+                    : <QRCodeInputDevices qrCode={memberQrCode} setQrCode={setMemberQrCode} qrScanCodeType={QRScanCodeType.Member}/>
+                }
             </Row>
         </>
     )

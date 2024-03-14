@@ -12,41 +12,10 @@ import HaulResultsSection from "./sections/HaulSummary";
 import {toastError} from "../../components/toaster/toaster";
 
 export function CoinsPage() {
-    const [loading, setLoading] = useState(false)
     const [sectionName, setSectionName] = useState(SectionNames.ScanMember)
     const [section, setSection] = useState(null);
-    const [memberQrCode, setMemberQrCode] = useState("")
     const [member, setMember] = useState(null)
     const [haulResult, setHaulResult] = useState(null)
-
-    useEffect(() => {
-        if (memberQrCode != null && memberQrCode.trim().length > 0) {
-            logDebug(`Fetching member data for code ${memberQrCode}`)
-
-            setLoading(true)
-
-            async function fetchData() {
-                AudioFx().playMemberScannedAudio()
-                return await MemberApiService().fetchMember(memberQrCode)
-            }
-
-            fetchData()
-                .then(async value => {
-                    const data = (await value.data)
-                    logReactSet("Setting member", data)
-                    setMember(data);
-                })
-                .catch(async reason => {
-                    logError("Setting member", reason)
-                    toastError(reason)
-                    setMember(null)
-                })
-                .finally(() => {
-                    setLoading(false)
-                })
-        }
-
-    }, [memberQrCode]);
 
     useEffect(() => {
         logReactUseEffect("member", member)
@@ -64,16 +33,11 @@ export function CoinsPage() {
 
     useEffect(() => {
         logReactUseEffect("sectionName", sectionName)
-        logAttention(loading)
-
-        if (loading) {
-            return setSection(<SiteSpinner/>)
-        }
 
         function getSection() {
             switch (sectionName) {
                 case SectionNames.ScanMember: {
-                    return (<ScanMemberSection qrCode={memberQrCode} setQrCode={setMemberQrCode}/>)
+                    return (<ScanMemberSection setMember={setMember}/>)
                 }
                 case SectionNames.ScanCoins: {
                     return (<ScanCoinsSection member={member} setHaulResult={setHaulResult}/>)
@@ -95,9 +59,9 @@ export function CoinsPage() {
             <Col className="mb-2">
                 <Row>
                     <Col>
-                        {loading
-                            ? (<SiteSpinner/>)
-                            : (<section>{section}</section>)}
+                        <section>
+                            {section}
+                        </section>
                     </Col>
                 </Row>
             </Col>
