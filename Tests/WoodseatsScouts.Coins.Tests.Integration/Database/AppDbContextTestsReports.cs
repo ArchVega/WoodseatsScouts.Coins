@@ -3,7 +3,7 @@ using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Tests.Integration.Helpers;
 
-namespace WoodseatsScouts.Coins.Tests.Integration;
+namespace WoodseatsScouts.Coins.Tests.Integration.Database;
 
 [Collection("Database collection")]
 public class AppDbContextTestsReports

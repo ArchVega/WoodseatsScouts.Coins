@@ -39,18 +39,4 @@ public class DatabaseDataHelper
 
         return troop;
     }
-    
-    public void ResetAll()
-    {
-        appDbContext.Sections!.RemoveRange(appDbContext.Sections.ToList());
-        appDbContext.SaveChanges();
-        appDbContext.Troops!.RemoveRange(appDbContext.Troops.ToList());
-        appDbContext.SaveChanges();
-        appDbContext.Members!.RemoveRange(appDbContext.Members.ToList());
-        appDbContext.SaveChanges();
-        appDbContext.ScavengedCoins!.RemoveRange(appDbContext.ScavengedCoins.ToList());
-        appDbContext.SaveChanges();
-        appDbContext.ScavengeResults!.RemoveRange(appDbContext.ScavengeResults.ToList());
-        appDbContext.SaveChanges();
-    }
 }

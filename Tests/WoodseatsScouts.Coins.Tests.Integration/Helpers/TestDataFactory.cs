@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.TagHelpers;
-using Microsoft.AspNetCore.Routing.Tree;
-using WoodseatsScouts.Coins.Api.Models.Domain;
+﻿using WoodseatsScouts.Coins.Api.Models.Domain;
 
-namespace WoodseatsScouts.Coins.Tests.Integration;
+namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
 
 public static class TestDataFactory
 {

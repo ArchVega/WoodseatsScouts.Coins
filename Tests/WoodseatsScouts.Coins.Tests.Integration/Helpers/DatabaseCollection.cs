@@ -1,6 +1,4 @@
-﻿using WoodseatsScouts.Coins.Tests.Integration.Helpers;
-
-namespace WoodseatsScouts.Coins.Tests.Integration;
+﻿namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
 
 [CollectionDefinition("Database collection")]
 public class DatabaseCollection : ICollectionFixture<DatabaseFixture>

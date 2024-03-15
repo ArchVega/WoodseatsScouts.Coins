@@ -1,46 +1,54 @@
-$script:testDataCsvFilePath = Join-Path (Get-Location) "Utilities\Database\TestData\TestData.xlsx"
+$script:csvTestDataRootDirectory = Join-Path (Get-Location) "Utilities\Database\TestData"
 
-function InsertTestData {
+function RestoreBaseTestData {
     param(
         [Parameter(Mandatory)]    
         [string] $DatabaseName,
-        [ValidateSet("_cfg_dev", "_cfg_int", "_cfg_accept")]
         [Parameter(Mandatory)]    
-        [string] $Configuration
+        [string] $Path
     )
 
-    $worksheets = Get-ExcelSheetInfo $script:testDataCsvFilePath
+    Write-Host "Inserting data from '$Path' into '$DatabaseName'..."
+
+    $csvFilePath = Join-Path $script:csvTestDataRootDirectory -ChildPath $Path
+    $worksheets = Get-ExcelSheetInfo $csvFilePath
     $dataSets = $worksheets | ForEach-Object { 
         @{
             Table = $_.Name
-            Data  = Import-Excel $script:testDataCsvFilePath -WorksheetName $_.Name 
+            Data  = Import-Excel $csvFilePath -WorksheetName $_.Name 
         }        
     }
     
-    
+    $tables = @("Sections", "Troops", "Members", "ScavengedCoins", "ScavengeResults")
+    $tables | ForEach-Object { Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query "DELETE FROM $_" -TrustServerCertificate }
+
+    $tablesWithoutIdentities = @("Sections")
+
     foreach ($dataSet in $dataSets) {
         $tableName = $dataSet.Table
-        $dataSetForSelectedConfiguration = $dataSet.Data | Where-Object { $_.$configuration }
+                
+        $query = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$tableName'"
+        $tableSchema = Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query $query -TrustServerCertificate
+
+        $insertQueryStringBuilder = [System.Text.StringBuilder]::new()
         
-        if ($null -ne $dataSetForSelectedConfiguration) {
-            $query = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$tableName'"
-            $tableSchema = Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query $query -TrustServerCertificate
-
-            $insertQueryStringBuilder = [System.Text.StringBuilder]::new()
-            
+        if (!$tablesWithoutIdentities.Contains($tableName)) {
             $insertQueryStringBuilder.AppendLine("SET IDENTITY_INSERT $tableName ON;")
-            $dataSetForSelectedConfiguration | ForEach-Object { $insertQueryStringBuilder.AppendLine((CreateSqlQuery $tableSchema $tableName $_)) }
-            $insertQueryStringBuilder.AppendLine("SET IDENTITY_INSERT $tableName OFF;")
-
-            $insertQuery = $insertQueryStringBuilder.ToString();
-            Write-Host $insertQuery            
-            Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query $insertQuery -TrustServerCertificate
         }
+        $dataSet.Data | ForEach-Object { $insertQueryStringBuilder.AppendLine((CreateSqlQuery $tableSchema $tableName $_)) }
+        if (!$tablesWithoutIdentities.Contains($tableName)) {
+            $insertQueryStringBuilder.AppendLine("SET IDENTITY_INSERT $tableName OFF;")
+        }        
+
+        $insertQuery = $insertQueryStringBuilder.ToString();
+        Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query $insertQuery -TrustServerCertificate
     }    
+
+    Write-Host "Finished inserting data from '$Path' into '$DatabaseName'"
 }
 
 function CreateSqlQuery($tableSchema, $tableName, $row) {
-    $columnsAndValues = $row.psobject.Properties | Where-Object { -Not $_.Name.StartsWith("_cfg_") }
+    $columnsAndValues = $row.psobject.Properties
     $columns = ($columnsAndValues | ForEach-Object { $_.Name }) -join ","
 
     $formattedValues = $columnsAndValues | ForEach-Object {

@@ -40,8 +40,6 @@ namespace WoodseatsScouts.Coins.Api.Data
             modelBuilder.Entity<Section>()
                 .HasIndex(u => u.Code)
                 .IsUnique();
-            
-            DbContextSeedFactory.CreateSections(modelBuilder);
         }
 
         public int GenerateNextMemberCode(int troopId, string section)

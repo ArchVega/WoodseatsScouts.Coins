@@ -37,16 +37,35 @@ public class DatabaseFixture
         initialSessionState.ExecutionPolicy = ExecutionPolicy.Unrestricted;
         
         using var runspace = RunspaceFactory.CreateRunspace(initialSessionState);
-        Console.WriteLine(runspace.Version);
         runspace.Open();
         runspace.SessionStateProxy.Path.SetLocation(@"..\..\..\..\..");
 
         using (var instance = PowerShell.Create(runspace))
         {
-            instance.AddCommand("./Utilities/Database/RecreateDbs-IntegrationTests.ps1");
+            instance.AddCommand("./Utilities/Database/RecreateDbs-2-IntegrationTests.ps1");
             /* Examples of how to hook into the powershell streams. */
             // instance.Streams.Verbose.DataAdded += ConsumeStreamOutput;
             // instance.Streams.Information.DataAdded += ConsumeStreamOutput;
+            var results = instance.Invoke();
+            Console.WriteLine(results);
+        }
+
+        runspace.Close();
+    }
+    
+    // Todo: instead of having a dedicated "scriptrunner" file, replace with code that can construct powershell statements.
+    public void RestoreBaseTestData()
+    {
+        var initialSessionState = InitialSessionState.CreateDefault();
+        initialSessionState.ExecutionPolicy = ExecutionPolicy.Unrestricted;
+        
+        using var runspace = RunspaceFactory.CreateRunspace(initialSessionState);
+        runspace.Open();
+        runspace.SessionStateProxy.Path.SetLocation(@"..\..\..\..\..");
+
+        using (var instance = PowerShell.Create(runspace))
+        {
+            instance.AddCommand(@"./Utilities/Database/RestoreBaseTestDataScriptRunner.ps1");
             var results = instance.Invoke();
             Console.WriteLine(results);
         }
