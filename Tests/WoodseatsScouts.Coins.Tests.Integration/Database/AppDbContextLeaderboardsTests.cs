@@ -18,6 +18,10 @@ public class AppDbContextLeaderboardsTests
         this.databaseFixture = databaseFixture;
         appDbContext = databaseFixture!.AppDbContext;
         testDataFactory = new TestDataFactory(appDbContext);
+        
+        /* Setting arbitrary start and end dates*/
+        databaseFixture.LeaderboardSettings.ScavengerHuntStartTime = DateTime.Now.AddDays(-1);
+        databaseFixture.LeaderboardSettings.ScavengerHuntDeadline = DateTime.Now.AddDays(1);
     }
 
     #region GetTopThreeGroupsInLastHour
@@ -142,9 +146,6 @@ public class AppDbContextLeaderboardsTests
     {
         databaseFixture.RestoreBaseTestData();
         
-        var fakeTimeProvider = new FakeTimeProvider();
-        appDbContext.TimeProvider = fakeTimeProvider;
-        
         var differentGroupMembers = new List<Member>()
         {
             testDataFactory.Members.AsparagusRoyal,
@@ -152,13 +153,9 @@ public class AppDbContextLeaderboardsTests
             testDataFactory.Members.CharcoalCrimson,
             testDataFactory.Members.HunterSaffron,
         };
-
-        databaseFixture.LeaderboardSettings.ScavengerHuntStartTime = DateTime.Now.AddDays(-1);
-        databaseFixture.LeaderboardSettings.ScavengerHuntDeadline = DateTime.Now;
         
-        var deadline = databaseFixture.LeaderboardSettings.ScavengerHuntDeadline;
-        var onTime = deadline.AddHours(-1);
-        var tooLate = deadline.AddHours(1);
+        var onTime = databaseFixture.LeaderboardSettings.ScavengerHuntDeadline.AddHours(-1);
+        var tooLate = databaseFixture.LeaderboardSettings.ScavengerHuntDeadline.AddHours(1);
         
         for (var i = 0; i < differentGroupMembers.Count; i++)
         {
@@ -172,12 +169,11 @@ public class AppDbContextLeaderboardsTests
         topGroupsThisWeekend.Count.ShouldBe(2);
     }
     
-    // todo test nameis wrong
     [Fact]
-    public void GetGroupsWithMostPointsThisWeekend_FourScavengeResultsThatStartsAt1AMFriday_ResultsShouldBe2()
+    public void GetGroupsWithMostPointsThisWeekend_FourScavengeResultsButTwoOccuredBeforeStartTime_ResultsShouldBe2()
     {
         databaseFixture.RestoreBaseTestData();
-        
+      
         var differentGroupMembers = new List<Member>()
         {
             testDataFactory.Members.AsparagusRoyal,
@@ -186,11 +182,40 @@ public class AppDbContextLeaderboardsTests
             testDataFactory.Members.HunterSaffron,
         };
 
-        var saturday = DateTime.Parse("22/04/2023");
-        var friday = DateTime.Parse("21/04/2023 01:00:00");
+        var onTime = databaseFixture.LeaderboardSettings.ScavengerHuntDeadline.AddHours(-1);
+        var tooEarly = databaseFixture.LeaderboardSettings.ScavengerHuntStartTime.AddHours(-1);
+        
         for (int i = 0; i < differentGroupMembers.Count; i++)
         {
-            var now = i % 2 == 0 ? saturday : friday; // 
+            var now = i % 2 == 0 ? tooEarly : onTime; 
+            
+            var points = new List<int> { 10 };
+            CreateScavengedResult(differentGroupMembers[i], now, points);
+        }
+        
+        var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPoints();
+        topGroupsThisWeekend.Count.ShouldBe(2);
+    }
+    
+    [Fact]
+    public void GetGroupsWithMostPointsThisWeekend_FourScavengeResultsAllWithinStartAndEndTimes_ResultsShouldBe4()
+    {
+        databaseFixture.RestoreBaseTestData();
+      
+        var differentGroupMembers = new List<Member>()
+        {
+            testDataFactory.Members.AsparagusRoyal,
+            testDataFactory.Members.GlaucousJet,
+            testDataFactory.Members.CharcoalCrimson,
+            testDataFactory.Members.HunterSaffron,
+        };
+
+        var early = databaseFixture.LeaderboardSettings.ScavengerHuntStartTime.AddHours(1);
+        var late = databaseFixture.LeaderboardSettings.ScavengerHuntDeadline.AddHours(-1);
+        
+        for (var i = 0; i < differentGroupMembers.Count; i++)
+        {
+            var now = i % 2 == 0 ? late : early; 
             
             var points = new List<int> { 10 };
             CreateScavengedResult(differentGroupMembers[i], now, points);
