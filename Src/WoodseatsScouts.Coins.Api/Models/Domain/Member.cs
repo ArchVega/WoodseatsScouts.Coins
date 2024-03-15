@@ -45,5 +45,10 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
         public List<ScavengeResult> ScavengeResults { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
+
+        public override string ToString()
+        {
+            return $"{nameof(Id)}: {Id}, {nameof(Code)}: {Code}, {nameof(FullName)}: {FullName}";
+        }
     }
 }

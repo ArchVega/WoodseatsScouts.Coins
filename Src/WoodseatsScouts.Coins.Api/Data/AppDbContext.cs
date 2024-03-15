@@ -79,8 +79,9 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public List<GroupPoints> GetTopThreeGroupsInLastHour()
         {
-            var startDateTime = TimeProvider.GetLocalNow().DateTime.AddHours(-1);
-            return TopXTroopsSinceY(3, startDateTime, DateTime.Now);
+            var now = TimeProvider.GetLocalNow().DateTime;
+            var startDateTime = now.AddHours(-1);
+            return TopXTroopsSinceY(3, startDateTime, now);
         }
 
         public List<GroupPoints> GetGroupsWithMostPoints()

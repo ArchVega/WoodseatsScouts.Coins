@@ -13,5 +13,10 @@
         public int BaseNumber { get; set; }
         
         public int PointValue { get; set; }
+
+        public override string ToString()
+        {
+            return $"{nameof(Code)}: {Code}, {nameof(PointValue)}: {PointValue}";
+        }
     }
 }

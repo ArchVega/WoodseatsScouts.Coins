@@ -12,9 +12,12 @@ namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class DatabaseFixture
 {
-    public LeaderboardSettings LeaderboardSettings { get; }
+    private readonly DbContextOptions<AppDbContext> contextOptions;
     
-    public AppDbContext AppDbContext { get; private set; }
+    private readonly IOptions<LeaderboardSettings> leaderboardSettingsOptions;
+    public LeaderboardSettings LeaderboardSettings { get; }
+
+    public AppDbContext AppDbContext => new(contextOptions, leaderboardSettingsOptions);
 
     private const string SourceDatabaseConnectionString 
         = "Server=(local);Database=WoodseatsScouts.Coins.Tests.Source;Trusted_Connection=true;TrustServerCertificate=true";
@@ -26,12 +29,9 @@ public class DatabaseFixture
     {
         RecreateDbViaPowerShell();
 
-        var contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
-
+        contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
         LeaderboardSettings = new LeaderboardSettings();
-        var leaderboardSettingsOptions = Options.Create(LeaderboardSettings);
-        
-        AppDbContext = new AppDbContext(contextOptions, leaderboardSettingsOptions);
+        leaderboardSettingsOptions = Options.Create(LeaderboardSettings);
     }
 
     private static void RecreateDbViaPowerShell()
@@ -68,11 +68,17 @@ public class DatabaseFixture
 
         using (var instance = PowerShell.Create(runspace))
         {
+            instance.Streams.Error.DataAdded += ConsumeErrorStreamOutput;
             instance.AddCommand(@"./Utilities/Database/RestoreBaseTestDataScriptRunner.ps1");
             var results = instance.Invoke();
             Console.WriteLine(results);
         }
 
         runspace.Close();
+    }
+
+    private void ConsumeErrorStreamOutput(object? sender, DataAddedEventArgs e)
+    {
+        throw new Exception(sender.ToString());
     }
 }
