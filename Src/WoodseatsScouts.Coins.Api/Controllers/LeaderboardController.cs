@@ -43,7 +43,7 @@ public class LeaderboardController(IAppDbContext appDbContext, IOptions<Leaderbo
             ReportRefreshSeconds = leaderboardSettings.LeaderboardRefreshSeconds,
             LastThreeUsersToScanPoints = top3MembersWithPointsAttached,
             TopThreeGroupsInLastHour = appDbContext.GetTopThreeGroupsInLastHour(),
-            GroupsWithMostPointsThisWeekend = appDbContext.GetGroupsWithMostPointsThisWeekend()
+            GroupsWithMostPointsThisWeekend = appDbContext.GetGroupsWithMostPoints()
         };
 
         return reportViewModel;

@@ -1,12 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
-using System.Management.Automation.Host;
 using System.Management.Automation.Runspaces;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.PowerShell;
-using Microsoft.PowerShell.Commands;
+using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 
 namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
@@ -14,6 +12,8 @@ namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public class DatabaseFixture
 {
+    public LeaderboardSettings LeaderboardSettings { get; }
+    
     public AppDbContext AppDbContext { get; private set; }
 
     private const string SourceDatabaseConnectionString 
@@ -28,7 +28,10 @@ public class DatabaseFixture
 
         var contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
 
-        AppDbContext = new AppDbContext(contextOptions);
+        LeaderboardSettings = new LeaderboardSettings();
+        var leaderboardSettingsOptions = Options.Create(LeaderboardSettings);
+        
+        AppDbContext = new AppDbContext(contextOptions, leaderboardSettingsOptions);
     }
 
     private static void RecreateDbViaPowerShell()

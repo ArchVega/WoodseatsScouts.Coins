@@ -28,5 +28,5 @@ public interface IAppDbContext
     
     List<GroupPoints> GetTopThreeGroupsInLastHour();
     
-    List<GroupPoints> GetGroupsWithMostPointsThisWeekend();
+    List<GroupPoints> GetGroupsWithMostPoints();
 }

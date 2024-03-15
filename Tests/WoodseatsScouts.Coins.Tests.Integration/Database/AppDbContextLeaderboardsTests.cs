@@ -130,7 +130,7 @@ public class AppDbContextLeaderboardsTests
     [Fact]
     public void GetGroupsWithMostPointsThisWeekend_NoScavengedResults_ResultsShouldBeEmpty()
     {
-        var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPointsThisWeekend();
+        var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPoints();
         topGroupsThisWeekend.Count.ShouldBe(0);
     }
 
@@ -138,7 +138,7 @@ public class AppDbContextLeaderboardsTests
     /// To prevent coins from being scanned after the deadline
     /// </summary>
     [Fact]
-    public void GetGroupsWithMostPointsThisWeekend_FourScavengeResultsButOnlyTwoOnTheWeekend_ResultsShouldBe2()
+    public void GetGroupsWithMostPoints_FourScavengeResultsButOnlyTwoBeforeDeadline_ResultsShouldBe2()
     {
         databaseFixture.RestoreBaseTestData();
         
@@ -153,19 +153,22 @@ public class AppDbContextLeaderboardsTests
             testDataFactory.Members.HunterSaffron,
         };
 
+        databaseFixture.LeaderboardSettings.ScavengerHuntStartTime = DateTime.Now.AddDays(-1);
+        databaseFixture.LeaderboardSettings.ScavengerHuntDeadline = DateTime.Now;
         
-        var tomorrow = fakeTimeProvider.GetLocalNow().AddDays(1).DateTime;
-        var yesterday = fakeTimeProvider.GetLocalNow().AddDays(-1).DateTime;
+        var deadline = databaseFixture.LeaderboardSettings.ScavengerHuntDeadline;
+        var onTime = deadline.AddHours(-1);
+        var tooLate = deadline.AddHours(1);
         
         for (var i = 0; i < differentGroupMembers.Count; i++)
         {
-            var scavengedAt = i % 2 == 0 ? tomorrow : yesterday;
+            var scavengedAt = i % 2 == 0 ? tooLate : onTime;
             
             var points = new List<int> { 10 };
             CreateScavengedResult(differentGroupMembers[i], scavengedAt, points);
         }
         
-        var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPointsThisWeekend();
+        var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPoints();
         topGroupsThisWeekend.Count.ShouldBe(2);
     }
     
@@ -193,7 +196,7 @@ public class AppDbContextLeaderboardsTests
             CreateScavengedResult(differentGroupMembers[i], now, points);
         }
         
-        var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPointsThisWeekend();
+        var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPoints();
         topGroupsThisWeekend.Count.ShouldBe(4);
     }
     

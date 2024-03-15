@@ -1,16 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WoodseatsScouts.Coins.Api.Models;
+using Microsoft.Extensions.Options;
+using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Data
 {
-    public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext, IAppDbContext
+    public class AppDbContext(DbContextOptions<AppDbContext> options, IOptions<LeaderboardSettings> leaderboardSettings)
+        : DbContext(options), IAppDbContext
     {
+        private readonly LeaderboardSettings leaderboardSettings = leaderboardSettings.Value;
         public TimeProvider TimeProvider { get; set; } = TimeProvider.System;
-
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
 
         public DbSet<Member>? Members { get; set; }
 
@@ -81,20 +80,19 @@ namespace WoodseatsScouts.Coins.Api.Data
         public List<GroupPoints> GetTopThreeGroupsInLastHour()
         {
             var startDateTime = TimeProvider.GetLocalNow().DateTime.AddHours(-1);
-            return TopXTroopsSinceY(3, startDateTime);
+            return TopXTroopsSinceY(3, startDateTime, DateTime.Now);
         }
 
-        public List<GroupPoints> GetGroupsWithMostPointsThisWeekend()
+        public List<GroupPoints> GetGroupsWithMostPoints()
         {
-            var startDateTime = GetPreviousFriday();
-            return TopXTroopsSinceY(10, startDateTime);
+            return TopXTroopsSinceY(10, leaderboardSettings.ScavengerHuntStartTime, leaderboardSettings.ScavengerHuntDeadline);
         }
 
-        private List<GroupPoints> TopXTroopsSinceY(int count, DateTime startDateTime)
+        private List<GroupPoints> TopXTroopsSinceY(int count, DateTime startDateTime, DateTime endDateTime)
         {
             var memberIds = ScavengeResults!
                 .Include(x => x.Member)
-                .Where(x => x.CompletedAt > startDateTime)
+                .Where(x => x.CompletedAt >= startDateTime && x.CompletedAt < endDateTime)
                 .Select(x => x.MemberId)
                 .ToList();
 
@@ -126,21 +124,6 @@ namespace WoodseatsScouts.Coins.Api.Data
                 = topXGroupsInLastYHours.OrderByDescending(x => x.AveragePoints).Take(count).ToList();
 
             return topXGroupsInLastYHours;
-        }
-
-        private DateTime GetPreviousFriday()
-        {
-            var i = 0;
-            while (true)
-            {
-                var testDate = TimeProvider.GetLocalNow().Date.AddDays(-1 * i);
-                if (testDate.DayOfWeek == DayOfWeek.Friday)
-                {
-                    return testDate;
-                }
-
-                i--;
-            }
         }
     }
 }
