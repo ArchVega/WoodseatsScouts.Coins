@@ -9,7 +9,7 @@ const Helpers = () => {
 
             try {
                 process.chdir("..\\..");
-                const child = require("child_process").execSync("pwsh.exe .\\Utilities\\Database\\RecreateDbs-AcceptanceTests.ps1");
+                const child = require("child_process").execSync("pwsh.exe .\\Utilities\\Database\\RecreateDbs-3-AcceptanceTests.ps1");
                 console.info(child.toString('utf8'))
 
 
