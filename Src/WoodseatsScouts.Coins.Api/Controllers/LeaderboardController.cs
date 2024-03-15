@@ -38,9 +38,9 @@ public class LeaderboardController(IAppDbContext appDbContext, IOptions<Leaderbo
 
         var reportViewModel = new LeaderboardViewModel
         {
-            Title = leaderboardSettings.LeaderboardTitle,
+            Title = leaderboardSettings.PageTitle,
             SecondsUntilDeadline = secondsUntilDeadline,
-            ReportRefreshSeconds = leaderboardSettings.LeaderboardRefreshSeconds,
+            ReportRefreshSeconds = leaderboardSettings.PageRefreshSeconds,
             LastThreeUsersToScanPoints = top3MembersWithPointsAttached,
             TopThreeGroupsInLastHour = appDbContext.GetTopThreeGroupsInLastHour(),
             GroupsWithMostPointsThisWeekend = appDbContext.GetGroupsWithMostPoints()

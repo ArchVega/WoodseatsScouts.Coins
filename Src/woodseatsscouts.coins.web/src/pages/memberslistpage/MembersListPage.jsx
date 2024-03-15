@@ -48,7 +48,7 @@ function MembersListPage() {
             <Col>
                 <Input
                     className="filter-members"
-                    data-testId="textbox-search-members"
+                    data-testid="textbox-search-members"
                     autoFocus={true}
                     placeholder="Search to filter members, groups or section"
                     onChange={x => setFilterText(x.target.value)}
