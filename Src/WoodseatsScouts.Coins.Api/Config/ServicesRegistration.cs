@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Abstractions;
+using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.Data;
 
 namespace WoodseatsScouts.Coins.Api.Config;
@@ -26,6 +27,7 @@ public static class ServicesRegistration
     private static void RegisterTransients(IServiceCollection serviceCollection)
     {
         serviceCollection.AddTransient<IAppDbContext, AppDbContext>();
+        serviceCollection.AddTransient<IImagePersister, ImagePersister>();
     }
 
     private static void RegisterScoped(IServiceCollection serviceCollection, IConfiguration configuration, IHostEnvironment environment)

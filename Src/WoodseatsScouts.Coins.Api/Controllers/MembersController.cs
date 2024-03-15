@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
-using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.View;
@@ -10,7 +10,9 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class MembersController(IAppDbContext appDbContext, AppSettings appSettings, IHostEnvironment webHostEnvironment) : ControllerBase
+public class MembersController(
+    IAppDbContext appDbContext, 
+    IImagePersister imagePersister) : ControllerBase
 {
     [HttpGet]
     public ActionResult GetMembersWithPoints()
@@ -20,19 +22,8 @@ public class MembersController(IAppDbContext appDbContext, AppSettings appSettin
             .ThenInclude(x => x.ScavengedCoins)
             .Include(x => x.Troop)
             .Include(x => x.Section)
-            .Select(x => new
-            {
-                x.Id,
-                MemberCode = x.Code,
-                x.HasImage,
-                MemberNumber = x.Number,
-                x.FirstName,
-                x.LastName,
-                TroopName = x.Troop.Name,
-                Section = x.SectionId,
-                SectionName = x.Section.Name,
-                TotalPoints = x.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.PointValue)).Sum()
-            })
+            .ToList()
+            .Select(x => new MembersWithPointsViewModel(x))
             .OrderBy(x => x.FirstName)
             .ThenBy(x => x.LastName));
     }
@@ -41,43 +32,33 @@ public class MembersController(IAppDbContext appDbContext, AppSettings appSettin
     [Route("{code}")]
     public IActionResult GetMemberInfoFromCode(string code)
     {
+        MemberCodeTranslationResult translationResult;
         try
         {
-            var translationResult = CodeTranslator.TranslateMemberCode(code);
-            var member = appDbContext.Members!
-                .Single(x => x.Number == translationResult.MemberNumber
-                             && x.TroopId == translationResult.TroopNumber
-                             && x.SectionId == translationResult.Section);
-
-            // The QRScanner for coins becomes active after 500ms after a member has logged in. Slight delay to allow the admin to shift focus away.
-            Thread.Sleep(2000);
-
-            return Ok(new
-            {
-                member.FirstName,
-                member.LastName,
-                MemberPhotoPath = $"/member-images/{member.Id}.jpg",
-                MemberTroopNumber = member.TroopId,
-                MemberSection = member.SectionId,
-                MemberId = member.Id,
-                MemberCode = code,
-                MemberNumber = member.Number
-            });
+            translationResult = CodeTranslator.TranslateMemberCode(code);
         }
         catch (CodeTranslationException e)
         {
             return BadRequest(e.Message);
         }
-        catch (InvalidOperationException)
-        {
-            return NotFound($"A member with the code '{code}' was not found.");
-        }
+        
+        var member = appDbContext.Members!
+            .Single(x => x.Number == translationResult.MemberNumber
+                         && x.TroopId == translationResult.TroopNumber
+                         && x.SectionId == translationResult.Section);
+
+        /* The QRScanner for coins becomes active after 500ms after a member has logged in.
+           Slight delay to allow the admin to shift focus away.*/
+        Thread.Sleep(2000);
+
+        return Ok(new MemberViewModel(member));
     }
 
     [HttpPut]
     [Route("{id:int}/Coins")]
     public ActionResult AddPointsToMember(int id, [FromBody] PointsForMemberViewModel viewModel)
     {
+        // Todo: wrap in a transaction
         var member = appDbContext.Members!.Single(x => x.Id == id);
 
         var tallyHistoryItem = new ScavengeResult()
@@ -123,13 +104,7 @@ public class MembersController(IAppDbContext appDbContext, AppSettings appSettin
     [Route("{id:int}/Photo")]
     public ActionResult SaveMemberPhoto(int id, [FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
     {
-        var convert = saveMemberPhotoViewModel.Photo.Replace("data:image/jpeg;base64,", string.Empty);
-        var rootPath =
-            appSettings.ContentRootDirectory
-            ?? Path.Join(webHostEnvironment.ContentRootPath, "..", "woodseatsscouts.coins.web", "public", "member-images");
-        var photoFileName = $"{id}.jpg";
-        var photoFullPath = Path.Join(rootPath, photoFileName);
-        System.IO.File.WriteAllBytes(photoFullPath, Convert.FromBase64String(convert));
+        imagePersister.Persist(id.ToString(), saveMemberPhotoViewModel.Photo);
         appDbContext.Members!.Single(x => x.Id == id).HasImage = true;
         appDbContext.SaveChanges();
 
