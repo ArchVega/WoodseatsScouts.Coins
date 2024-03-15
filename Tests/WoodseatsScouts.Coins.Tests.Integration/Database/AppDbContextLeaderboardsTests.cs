@@ -29,6 +29,8 @@ public class AppDbContextLeaderboardsTests
     [Fact]
     public void GetTopThreeGroupsInLastHour_NoScavengedResults_ResultsShouldBeEmpty()
     {
+        databaseFixture.RestoreBaseTestData();
+
         var topThreeGroupsInLastHour = appDbContext.GetTopThreeGroupsInLastHour();
         topThreeGroupsInLastHour.Count.ShouldBe(0);
     }
@@ -36,6 +38,8 @@ public class AppDbContextLeaderboardsTests
     [Fact]
     public void GetTopThreeGroupsInLastHour_OneScavengeResults_ResultsShouldBe1()
     {
+        databaseFixture.RestoreBaseTestData();
+        
         var now = DateTime.Now;
         var points = new List<int> { 20 };
         var expectedSum = points.Sum();
@@ -49,6 +53,8 @@ public class AppDbContextLeaderboardsTests
     [Fact]
     public void GetTopThreeGroupsInLastHour_FourScavengeResults_ResultsShouldBe3()
     {
+        databaseFixture.RestoreBaseTestData();
+
         var differentGroupMembers = new List<Member>()
         {
             testDataFactory.Members.AsparagusRoyal,
@@ -105,6 +111,8 @@ public class AppDbContextLeaderboardsTests
     [Fact]
     public void GetTopThreeGroupsInLastHour_MultipleUsersInSameGroup_AveragePointsIsCorrectlyCalculated()
     {
+        databaseFixture.RestoreBaseTestData();
+
         var differentGroupMembers = new List<Member>()
         {
             testDataFactory.Members.AsparagusRoyal,
@@ -124,7 +132,7 @@ public class AppDbContextLeaderboardsTests
         var topThreeGroupsInLastHour = appDbContext.GetTopThreeGroupsInLastHour();
         topThreeGroupsInLastHour.Count.ShouldBe(1);
         topThreeGroupsInLastHour.First().TotalPoints.ShouldBe(60);
-        topThreeGroupsInLastHour.First().AveragePoints.ShouldBe(20);
+        topThreeGroupsInLastHour.First().AveragePoints.ShouldBe(15); // There are 4 members in the group.
     }
     
     #endregion
@@ -134,6 +142,8 @@ public class AppDbContextLeaderboardsTests
     [Fact]
     public void GetGroupsWithMostPointsThisWeekend_NoScavengedResults_ResultsShouldBeEmpty()
     {
+        databaseFixture.RestoreBaseTestData();
+
         var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPoints();
         topGroupsThisWeekend.Count.ShouldBe(0);
     }
@@ -232,6 +242,8 @@ public class AppDbContextLeaderboardsTests
     [Fact]
     public void GetLastThreeUsersToScanPoints_NoScavengedResults_ResultsShouldBeEmpty()
     {
+        databaseFixture.RestoreBaseTestData();
+
         var lastThreeUsersToScanPoints = appDbContext.GetLastThreeUsersToScanPoints();
         lastThreeUsersToScanPoints.Count.ShouldBe(0);
     }
@@ -239,6 +251,8 @@ public class AppDbContextLeaderboardsTests
     [Fact]
     public void GetLastThreeUsersToScanPoints_4MembersScan_OnlyLatestThreeShown()
     {
+        databaseFixture.RestoreBaseTestData();
+
         var members = new List<Member>
         {
             testDataFactory.Members.AsparagusRoyal,
@@ -257,9 +271,9 @@ public class AppDbContextLeaderboardsTests
         
         var lastThreeUsersToScanPoints = appDbContext.GetLastThreeUsersToScanPoints();
         lastThreeUsersToScanPoints.Count.ShouldBe(3);
-        lastThreeUsersToScanPoints.ElementAt(0).FirstName.ShouldBe("Member4");
-        lastThreeUsersToScanPoints.ElementAt(1).FirstName.ShouldBe("Member3");
-        lastThreeUsersToScanPoints.ElementAt(2).FirstName.ShouldBe("Member2");
+        lastThreeUsersToScanPoints.ElementAt(0).FirstName.ShouldBe(testDataFactory.Members.JasperRoyal.FirstName);
+        lastThreeUsersToScanPoints.ElementAt(1).FirstName.ShouldBe(testDataFactory.Members.GhostRoyal.FirstName);
+        lastThreeUsersToScanPoints.ElementAt(2).FirstName.ShouldBe(testDataFactory.Members.CeriseRoyal.FirstName);
     }
     
     #endregion
