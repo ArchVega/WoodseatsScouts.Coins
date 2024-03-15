@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Data;
 
@@ -14,7 +12,6 @@ public class CoinsController(IAppDbContext appDbContext) : ControllerBase
     [Route("{code}/Scan/{memberCode}")]
     public IActionResult GetCoin(string code, string memberCode)
     {
-        
         if (appDbContext.Members!.Any(x => x.Code == code))
         {
             return BadRequest("Expected coin code but received user code.");
@@ -30,10 +27,6 @@ public class CoinsController(IAppDbContext appDbContext) : ControllerBase
         {
             return BadRequest(e.Message);
         }
-        catch (InvalidOperationException)
-        {
-            return NotFound($"A coin with the code '{code}' could not be parsed.");
-        }
 
         var dbCoin = appDbContext.Coins!.SingleOrDefault(x => x.Code == code);
 
@@ -42,7 +35,12 @@ public class CoinsController(IAppDbContext appDbContext) : ControllerBase
             return NotFound($"A coin with the code '{code}' was not found in the database.");
         }
 
-        var member = appDbContext.Members!.Single(x => x.Code == memberCode);
+        var member = appDbContext.Members!.SingleOrDefault(x => x.Code == memberCode);
+        
+        if (member == null)
+        {
+            return NotFound($"A member with the code '{code}' was not found in the database.");
+        }
         
         if (member.Id == dbCoin.MemberId)
         {
