@@ -1,3 +1,4 @@
+// dotcover disable
 using Microsoft.AspNetCore.Mvc;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.View;
@@ -34,40 +35,12 @@ public class AdminController(AppDbContext appDbContext) : ControllerBase
         }
     }
 
-    [HttpGet]
-    [Route("Member/{memberId:int}")]
-    public object UpdateMemberName(int memberId)
-    {
-        var member = appDbContext.Members!.Single(x => x.Id == memberId);
-
-        // if (member == null)
-        // {
-        //     return NotFound(memberId);
-        // }
-
-        return Ok(member);
-    }
-
     [HttpPut]
     [Route("Member/{memberId:int}")]
     public object UpdateMemberName(int memberId, [FromBody] UpdateMemberViewModel updateMemberViewModel)
     {
-        var entityOrNull = appDbContext.Members!.SingleOrDefault(x => x.Id == memberId);
-
-        if (entityOrNull != null)
-        {
-            entityOrNull.FirstName = updateMemberViewModel.FirstName;
-            entityOrNull.LastName = updateMemberViewModel.LastName;
-            appDbContext.SaveChanges();
-        }
-        else
-        {
-            throw new ArgumentException("Member id not found");
-        }
-
-        var member = appDbContext.Members!
-            .Single(x => x.Id == memberId);
-
+        var member = appDbContext.UpdateMemberName(memberId, updateMemberViewModel.FirstName, updateMemberViewModel.LastName);
+        
         return new
         {
             MemberNumber = member.Number,
@@ -79,8 +52,7 @@ public class AdminController(AppDbContext appDbContext) : ControllerBase
     [Route("ClueStatus")]
     public object GetClueStatus(int memberId)
     {
-        var member = appDbContext.Members!
-            .Single(x => x.Id == memberId);
+        var member = appDbContext.Members!.Single(x => x.Id == memberId);
 
         return new
         {

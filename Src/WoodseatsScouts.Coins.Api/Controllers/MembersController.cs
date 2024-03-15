@@ -10,21 +10,10 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class MembersController : ControllerBase
+public class MembersController(IAppDbContext appDbContext, AppSettings appSettings, IHostEnvironment webHostEnvironment) : ControllerBase
 {
-    private readonly IAppDbContext appDbContext;
-    private readonly AppSettings appSettings;
-    private readonly IWebHostEnvironment webHostEnvironment;
-
-    public MembersController(IAppDbContext appDbContext, AppSettings appSettings, IWebHostEnvironment webHostEnvironment)
-    {
-        this.appDbContext = appDbContext;
-        this.appSettings = appSettings;
-        this.webHostEnvironment = webHostEnvironment;
-    }
-    
     [HttpGet]
-    public OkObjectResult GetMembersWithPoints()
+    public ActionResult GetMembersWithPoints()
     {
         return Ok(appDbContext.Members!
             .Include(x => x.ScavengeResults)

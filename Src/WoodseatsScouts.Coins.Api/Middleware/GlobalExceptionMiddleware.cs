@@ -40,6 +40,18 @@ public class ExceptionHandlingMiddleware
         
         switch (exception)
         {
+            case InvalidOperationException invalidOperationException:
+                if (invalidOperationException.Message.Contains("Sequence contains no elements"))
+                {
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
+                    errorResponse.Message = "Could not find the requested resource";
+                }
+                else
+                {
+                    response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    errorResponse.Message = $"Error of type {invalidOperationException.GetType().Name} not handled";
+                }
+                break;
             case DbUpdateException dbUpdateException:
                 response.StatusCode = (int) HttpStatusCode.BadRequest;
                 errorResponse.Message = dbUpdateException.InnerException!.Message;

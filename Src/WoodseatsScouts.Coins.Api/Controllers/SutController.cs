@@ -1,3 +1,4 @@
+// dotcover disable
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -45,7 +46,6 @@ public class SutController(IAppDbContext appDbContext, IOptions<LeaderboardSetti
         return Ok($"Report deadline datetime set to '{leaderboardSettings.ScavengerHuntDeadline}'");
     }
     
-#if (DEBUG || ACCEPTANCETEST)
     [HttpGet]
     [Route("Coins")]
     public ActionResult GetAll()
@@ -58,6 +58,5 @@ public class SutController(IAppDbContext appDbContext, IOptions<LeaderboardSetti
             IsAlreadyScavenged = x.MemberId != null
         }));
     }
-#endif
 }
 #endif

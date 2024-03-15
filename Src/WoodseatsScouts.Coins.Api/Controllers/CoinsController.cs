@@ -8,15 +8,8 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CoinsController : ControllerBase
+public class CoinsController(IAppDbContext appDbContext) : ControllerBase
 {
-    private readonly IAppDbContext appDbContext;
-
-    public CoinsController(IAppDbContext appDbContext)
-    {
-        this.appDbContext = appDbContext;
-    }
-
     [HttpGet]
     [Route("{code}/Scan/{memberCode}")]
     public IActionResult GetCoin(string code, string memberCode)

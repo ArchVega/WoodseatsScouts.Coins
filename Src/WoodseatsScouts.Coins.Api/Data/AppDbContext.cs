@@ -165,5 +165,16 @@ namespace WoodseatsScouts.Coins.Api.Data
             
             return member;
         }
+        
+        public Member UpdateMemberName(int memberId, string firstName, string lastName)
+        {
+            var member = Members!.Single(x => x.Id == memberId);
+
+            member.FirstName = firstName;
+            member.LastName = lastName;
+            SaveChanges();
+
+            return member;
+        }
     }
 }

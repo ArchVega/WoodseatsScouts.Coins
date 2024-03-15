@@ -71,4 +71,13 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
         var member = appDbContext.Members!.Include(x => x.Section).First();
         member.Section.ShouldNotBeNull();
     }
+
+    [Fact]
+    public void UpdateMemberName()
+    {
+        databaseFixture.RestoreBaseTestData();
+
+        var member = appDbContext.Members!.First();
+        Should.NotThrow(() => appDbContext.UpdateMemberName(member.Id, "test-first-name", "test-last-name"));
+    }
 }

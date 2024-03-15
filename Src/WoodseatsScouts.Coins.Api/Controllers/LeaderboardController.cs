@@ -1,3 +1,4 @@
+// dotcover disable
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.Config;
@@ -18,20 +19,9 @@ public class LeaderboardController(IAppDbContext appDbContext, IOptions<Leaderbo
     public LeaderboardViewModel Report()
     {
         var top3MembersWithPointsAttached = appDbContext.GetLastThreeUsersToScanPoints()
-            .Select(x => new
-            {
-                x.Id,
-                MemberCode = x.Code,
-                x.HasImage,
-                MemberNumber = x.Number,
-                x.FirstName,
-                x.LastName,
-                TroopName = x.Troop.Name,
-                Section = x.SectionId,
-                SectionName = x.Section.Name,
-                TotalPoints = x.ScavengeResults.Last().ScavengedCoins.Sum(y => y.PointValue)
-            });
+            .Select(x => new LeaderboardLatestScavengerViewModel(x));
 
+        // Todo: DateTime.Now
         var secondsUntilDeadline = leaderboardSettings.ScavengerHuntDeadline > DateTime.Now
             ? (leaderboardSettings.ScavengerHuntDeadline - DateTime.Now).TotalSeconds
             : 0;
