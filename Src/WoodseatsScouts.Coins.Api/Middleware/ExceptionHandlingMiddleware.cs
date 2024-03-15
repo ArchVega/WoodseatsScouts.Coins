@@ -67,9 +67,3 @@ public class ExceptionHandlingMiddleware
         await context.Response.WriteAsync(result);
     }
 }
-
-internal class ErrorResponse
-{
-    public bool Success { get; set; }
-    public string Message { get; set; }
-}
