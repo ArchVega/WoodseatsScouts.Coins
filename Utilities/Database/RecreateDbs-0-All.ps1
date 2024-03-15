@@ -1,6 +1,6 @@
 $location = Get-Location
-. .\Utilities\Database\RecreateDbs-Development.ps1
+. .\Utilities\Database\RecreateDbs-1-Development.ps1
 Set-Location $location
-# . .\Utilities\Database\RecreateDbs-IntegrationTests.ps1
+. .\Utilities\Database\RecreateDbs-2-IntegrationTests.ps1
 Set-Location $location
-. .\Utilities\Database\RecreateDbs-AcceptanceTests.ps1
+. .\Utilities\Database\RecreateDbs-3-AcceptanceTests.ps1
