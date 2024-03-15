@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.View;
@@ -7,17 +8,11 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class LeaderboardController : ControllerBase
+public class LeaderboardController(IAppDbContext appDbContext, IOptions<LeaderboardSettings> leaderboardSettingsOptions)
+    : ControllerBase
 {
-    private readonly IAppDbContext appDbContext;
-    private readonly AppConfig appConfig;
+    private readonly LeaderboardSettings leaderboardSettings = leaderboardSettingsOptions.Value;
 
-    public LeaderboardController(IAppDbContext appDbContext, AppConfig appConfig)
-    {
-        this.appDbContext = appDbContext;
-        this.appConfig = appConfig;
-    }
-    
     [HttpGet]
     [Route("Report")]
     public LeaderboardViewModel Report()
@@ -37,15 +32,15 @@ public class LeaderboardController : ControllerBase
                 TotalPoints = x.ScavengeResults.Last().ScavengedCoins.Sum(y => y.PointValue)
             });
 
-        var secondsUntilDeadline = appConfig.ReportDeadline > DateTime.Now
-            ? (appConfig.ReportDeadline - DateTime.Now).TotalSeconds
+        var secondsUntilDeadline = leaderboardSettings.ScavengerHuntDeadline > DateTime.Now
+            ? (leaderboardSettings.ScavengerHuntDeadline - DateTime.Now).TotalSeconds
             : 0;
 
         var reportViewModel = new LeaderboardViewModel
         {
-            Title = appConfig.ReportTitle,
+            Title = leaderboardSettings.LeaderboardTitle,
             SecondsUntilDeadline = secondsUntilDeadline,
-            ReportRefreshSeconds = appConfig.ReportRefreshSeconds,
+            ReportRefreshSeconds = leaderboardSettings.LeaderboardRefreshSeconds,
             LastThreeUsersToScanPoints = top3MembersWithPointsAttached,
             TopThreeGroupsInLastHour = appDbContext.GetTopThreeGroupsInLastHour(),
             GroupsWithMostPointsThisWeekend = appDbContext.GetGroupsWithMostPointsThisWeekend()

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
@@ -9,16 +10,9 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 #if ACCEPTANCETEST
 [ApiController]
 [Route("[controller]")]
-public class SutController : ControllerBase
+public class SutController(IAppDbContext appDbContext, IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase
 {
-    private readonly IAppDbContext appDbContext;
-    private readonly AppConfig appConfig;
-
-    public SutController(IAppDbContext appDbContext, AppConfig appConfig)
-    {
-        this.appDbContext = appDbContext;
-        this.appConfig = appConfig;
-    }
+    private readonly LeaderboardSettings leaderboardSettings = leaderboardSettingsOptions.Value;
 
     [HttpGet]
     [Route("Members")]
@@ -46,9 +40,9 @@ public class SutController : ControllerBase
     [Route("Leaderboard/Deadline/{daysToAdd:int}")]
     public IActionResult SetReportDeadline(int daysToAdd)
     {
-        appConfig.ReportDeadline = DateTime.Now.AddDays(daysToAdd);
+        leaderboardSettings.ScavengerHuntDeadline = DateTime.Now.AddDays(daysToAdd);
 
-        return Ok($"Report deadline datetime set to '{appConfig.ReportDeadline}'");
+        return Ok($"Report deadline datetime set to '{leaderboardSettings.ScavengerHuntDeadline}'");
     }
     
 #if (DEBUG || ACCEPTANCETEST)

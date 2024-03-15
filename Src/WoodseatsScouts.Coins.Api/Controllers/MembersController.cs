@@ -13,13 +13,13 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 public class MembersController : ControllerBase
 {
     private readonly IAppDbContext appDbContext;
-    private readonly AppConfig appConfig;
+    private readonly AppSettings appSettings;
     private readonly IWebHostEnvironment webHostEnvironment;
 
-    public MembersController(IAppDbContext appDbContext, AppConfig appConfig, IWebHostEnvironment webHostEnvironment)
+    public MembersController(IAppDbContext appDbContext, AppSettings appSettings, IWebHostEnvironment webHostEnvironment)
     {
         this.appDbContext = appDbContext;
-        this.appConfig = appConfig;
+        this.appSettings = appSettings;
         this.webHostEnvironment = webHostEnvironment;
     }
     
@@ -136,7 +136,7 @@ public class MembersController : ControllerBase
     {
         var convert = saveMemberPhotoViewModel.Photo.Replace("data:image/jpeg;base64,", string.Empty);
         var rootPath =
-            appConfig.ContentRootDirectory
+            appSettings.ContentRootDirectory
             ?? Path.Join(webHostEnvironment.ContentRootPath, "..", "woodseatsscouts.coins.web", "public", "member-images");
         var photoFileName = $"{id}.jpg";
         var photoFullPath = Path.Join(rootPath, photoFileName);

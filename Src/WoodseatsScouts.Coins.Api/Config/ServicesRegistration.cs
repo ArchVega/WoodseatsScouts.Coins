@@ -9,9 +9,18 @@ public static class ServicesRegistration
 {
     public static void RegisterAll(IServiceCollection serviceCollection, IConfiguration configuration, IWebHostEnvironment environment)
     {
+        RegisterOptions(serviceCollection, configuration);
         RegisterTransients(serviceCollection);
         RegisterScoped(serviceCollection, configuration, environment);
         RegisterSingletons(serviceCollection);
+    }
+
+    private static void RegisterOptions(IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        serviceCollection.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
+        serviceCollection.Configure<LeaderboardSettings>(configuration.GetSection(nameof(LeaderboardSettings)));
+        serviceCollection.AddSingleton<AppSettings>();
+        serviceCollection.AddSingleton<LeaderboardSettings>();
     }
 
     private static void RegisterTransients(IServiceCollection serviceCollection)
@@ -36,7 +45,6 @@ public static class ServicesRegistration
     
     private static void RegisterSingletons(IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<AppConfig>();
         serviceCollection.AddSingleton<IScoutsAppEnvironment, ScoutsAppEnvironmentMode>();
     }
 }

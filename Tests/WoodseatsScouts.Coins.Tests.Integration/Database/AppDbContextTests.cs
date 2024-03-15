@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Time.Testing;
 using Shouldly;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
@@ -25,7 +26,7 @@ public class AppDbContextTests
     public void GenerateNextMemberCode(int troopNumber, string sectionCode, int expectedStartingMemberNumber)
     {
         fixture.RestoreBaseTestData();
-        
+
         var memberNumber = appDbContext.GenerateNextMemberCode(troopNumber, sectionCode);
         memberNumber.ShouldBe(expectedStartingMemberNumber);
         

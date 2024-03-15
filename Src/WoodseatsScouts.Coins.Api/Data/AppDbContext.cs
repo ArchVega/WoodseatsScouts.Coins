@@ -6,6 +6,8 @@ namespace WoodseatsScouts.Coins.Api.Data
 {
     public class AppDbContext : Microsoft.EntityFrameworkCore.DbContext, IAppDbContext
     {
+        public TimeProvider TimeProvider { get; set; } = TimeProvider.System;
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
@@ -78,7 +80,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public List<GroupPoints> GetTopThreeGroupsInLastHour()
         {
-            var startDateTime = DateTime.Now.AddHours(-1);
+            var startDateTime = TimeProvider.GetLocalNow().DateTime.AddHours(-1);
             return TopXTroopsSinceY(3, startDateTime);
         }
 
@@ -126,13 +128,12 @@ namespace WoodseatsScouts.Coins.Api.Data
             return topXGroupsInLastYHours;
         }
 
-        // Todo: implement datetime provider from .net 8
-        private static DateTime GetPreviousFriday()
+        private DateTime GetPreviousFriday()
         {
             var i = 0;
             while (true)
             {
-                var testDate = DateTime.Today.AddDays(-1 * i);
+                var testDate = TimeProvider.GetLocalNow().Date.AddDays(-1 * i);
                 if (testDate.DayOfWeek == DayOfWeek.Friday)
                 {
                     return testDate;

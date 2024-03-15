@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Microsoft.Extensions.Time.Testing;
+using Shouldly;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Tests.Integration.Helpers;
@@ -6,17 +7,19 @@ using WoodseatsScouts.Coins.Tests.Integration.Helpers;
 namespace WoodseatsScouts.Coins.Tests.Integration.Database;
 
 [Collection("Database collection")]
-public class AppDbContextTestsReports
+public class AppDbContextLeaderboardsTests
 {
     private readonly AppDbContext appDbContext;
-    private readonly DatabaseDataHelper databaseDataHelper;
+    private readonly TestDataFactory testDataFactory;
+    private readonly DatabaseFixture databaseFixture;
 
-    public AppDbContextTestsReports(DatabaseFixture fixture)
+    public AppDbContextLeaderboardsTests(DatabaseFixture databaseFixture)
     {
-        this.appDbContext = fixture!.AppDbContext;
-        databaseDataHelper = new DatabaseDataHelper(fixture.AppDbContext);
+        this.databaseFixture = databaseFixture;
+        appDbContext = databaseFixture!.AppDbContext;
+        testDataFactory = new TestDataFactory(appDbContext);
     }
-    
+
     #region GetTopThreeGroupsInLastHour
     
     [Fact]
@@ -32,7 +35,7 @@ public class AppDbContextTestsReports
         var now = DateTime.Now;
         var points = new List<int> { 20 };
         var expectedSum = points.Sum();
-        CreateScavengedResult(TestDataFactory.Troop1Member1, now, points);
+        CreateScavengedResult(testDataFactory.Members.AsparagusRoyal, now, points);
 
         var topThreeGroupsInLastHour = appDbContext.GetTopThreeGroupsInLastHour();
         topThreeGroupsInLastHour.Count.ShouldBe(1);
@@ -44,15 +47,15 @@ public class AppDbContextTestsReports
     {
         var differentGroupMembers = new List<Member>()
         {
-            TestDataFactory.Troop1Member1,
-            TestDataFactory.Troop2Member1,
-            TestDataFactory.Troop3Member1,
-            TestDataFactory.Troop4Member1,
+            testDataFactory.Members.AsparagusRoyal,
+            testDataFactory.Members.GlaucousJet,
+            testDataFactory.Members.CharcoalCrimson,
+            testDataFactory.Members.HunterSaffron,
         };
         
         var expectedSums = new Dictionary<int, int>();
         
-        for (int i = 0; i < differentGroupMembers.Count; i++)
+        for (var i = 0; i < differentGroupMembers.Count; i++)
         {
             var now = DateTime.Now;
             var points = new List<int> { 20, 10 * i };
@@ -77,10 +80,10 @@ public class AppDbContextTestsReports
     {
         var differentGroupMembers = new List<Member>()
         {
-            TestDataFactory.Troop1Member1,
-            TestDataFactory.Troop2Member1,
-            TestDataFactory.Troop3Member1,
-            TestDataFactory.Troop4Member1,
+            testDataFactory.Members.AsparagusRoyal,
+            testDataFactory.Members.GlaucousJet,
+            testDataFactory.Members.CharcoalCrimson,
+            testDataFactory.Members.HunterSaffron,
         };
         
         for (int i = 0; i < differentGroupMembers.Count; i++)
@@ -100,14 +103,14 @@ public class AppDbContextTestsReports
     {
         var differentGroupMembers = new List<Member>()
         {
-            TestDataFactory.Troop1Member1,
-            TestDataFactory.Troop1Member2,
-            TestDataFactory.Troop1Member3
+            testDataFactory.Members.AsparagusRoyal,
+            testDataFactory.Members.CeriseRoyal,
+            testDataFactory.Members.GhostRoyal
         };
 
-        var eachMemberPoint = 20;
+        const int eachMemberPoint = 20;
         
-        for (int i = 0; i < differentGroupMembers.Count; i++)
+        for (var i = 0; i < differentGroupMembers.Count; i++)
         {
             var now = DateTime.Now;
             var points = new List<int> { eachMemberPoint };
@@ -131,40 +134,53 @@ public class AppDbContextTestsReports
         topGroupsThisWeekend.Count.ShouldBe(0);
     }
 
+    /// <summary>
+    /// To prevent coins from being scanned after the deadline
+    /// </summary>
     [Fact]
-    public void GetGroupsWithMostPointsThisWeekend_FourScavengeResultsButOnly2OnTheWeekend_ResultsShouldBe2()
+    public void GetGroupsWithMostPointsThisWeekend_FourScavengeResultsButOnlyTwoOnTheWeekend_ResultsShouldBe2()
     {
+        databaseFixture.RestoreBaseTestData();
+        
+        var fakeTimeProvider = new FakeTimeProvider();
+        appDbContext.TimeProvider = fakeTimeProvider;
+        
         var differentGroupMembers = new List<Member>()
         {
-            TestDataFactory.Troop1Member1,
-            TestDataFactory.Troop2Member1,
-            TestDataFactory.Troop3Member1,
-            TestDataFactory.Troop4Member1,
+            testDataFactory.Members.AsparagusRoyal,
+            testDataFactory.Members.GlaucousJet,
+            testDataFactory.Members.CharcoalCrimson,
+            testDataFactory.Members.HunterSaffron,
         };
 
-        var saturday = DateTime.Parse("22/04/2023");
-        var thursday = DateTime.Parse("20/04/2023 23:59:59");
-        for (int i = 0; i < differentGroupMembers.Count; i++)
+        
+        var tomorrow = fakeTimeProvider.GetLocalNow().AddDays(1).DateTime;
+        var yesterday = fakeTimeProvider.GetLocalNow().AddDays(-1).DateTime;
+        
+        for (var i = 0; i < differentGroupMembers.Count; i++)
         {
-            var now = i % 2 == 0 ? saturday : thursday; // 
+            var scavengedAt = i % 2 == 0 ? tomorrow : yesterday;
             
             var points = new List<int> { 10 };
-            CreateScavengedResult(differentGroupMembers[i], now, points);
+            CreateScavengedResult(differentGroupMembers[i], scavengedAt, points);
         }
         
         var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPointsThisWeekend();
         topGroupsThisWeekend.Count.ShouldBe(2);
     }
     
+    // todo test nameis wrong
     [Fact]
     public void GetGroupsWithMostPointsThisWeekend_FourScavengeResultsThatStartsAt1AMFriday_ResultsShouldBe2()
     {
+        databaseFixture.RestoreBaseTestData();
+        
         var differentGroupMembers = new List<Member>()
         {
-            TestDataFactory.Troop1Member1,
-            TestDataFactory.Troop2Member1,
-            TestDataFactory.Troop3Member1,
-            TestDataFactory.Troop4Member1,
+            testDataFactory.Members.AsparagusRoyal,
+            testDataFactory.Members.GlaucousJet,
+            testDataFactory.Members.CharcoalCrimson,
+            testDataFactory.Members.HunterSaffron,
         };
 
         var saturday = DateTime.Parse("22/04/2023");
@@ -197,10 +213,10 @@ public class AppDbContextTestsReports
     {
         var members = new List<Member>
         {
-            TestDataFactory.Troop1Member1,
-            TestDataFactory.Troop1Member2,
-            TestDataFactory.Troop1Member3,
-            TestDataFactory.Troop1Member4,
+            testDataFactory.Members.AsparagusRoyal,
+            testDataFactory.Members.CeriseRoyal,
+            testDataFactory.Members.GhostRoyal,
+            testDataFactory.Members.JasperRoyal,
         };
         
         var dateTime = DateTime.Now;

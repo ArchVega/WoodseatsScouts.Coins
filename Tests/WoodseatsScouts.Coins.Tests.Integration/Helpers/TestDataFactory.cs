@@ -1,65 +1,76 @@
-﻿using WoodseatsScouts.Coins.Api.Models.Domain;
+﻿using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
 
-public static class TestDataFactory
+public class TestDataFactory(IAppDbContext appDbContext)
 {
-    public static Troop Troop1 ;
-    public static Troop Troop2 ;
-    public static Troop Troop3 ;
-    public static Troop Troop4 ;
-
-    public static Member Troop1Member1;
-    public static Member Troop1Member2;
-    public static Member Troop1Member3;
-    public static Member Troop1Member4;
-
-    public static Member Troop2Member1;
-    public static Member Troop2Member2;
-    public static Member Troop2Member3;
-    public static Member Troop2Member4;
-
-    public static Member Troop3Member1;
-    public static Member Troop3Member2;
-    public static Member Troop3Member3;
-    public static Member Troop3Member4;
-
-    public static Member Troop4Member1;
-    public static Member Troop4Member2;
-    public static Member Troop4Member3;
-    public static Member Troop4Member4;
-
-    static TestDataFactory()
+    public TroopsCollection Troops => new TroopsCollection(appDbContext);
+    
+    public MembersCollection Members => new MembersCollection(appDbContext);
+    
+    public class TroopsCollection(IAppDbContext appDbContext)
     {
-        Troop1 = CreateTroop(1);
-        Troop2 = CreateTroop(2);
-        Troop3 = CreateTroop(3);
-        Troop4 = CreateTroop(4);
-
-        Troop1Member1 = CreateTroopMember(1, Troop1, 'A');
-        Troop1Member2 = CreateTroopMember(2, Troop1, 'A');
-        Troop1Member3 = CreateTroopMember(3, Troop1, 'A');
-        Troop1Member4 = CreateTroopMember(4, Troop1, 'A');
-        Troop2Member1 = CreateTroopMember(5, Troop2, 'A');
-        Troop2Member2 = CreateTroopMember(6, Troop2, 'A');
-        Troop2Member3 = CreateTroopMember(7, Troop2, 'A');
-        Troop2Member4 = CreateTroopMember(8, Troop2, 'A');
-        Troop3Member1 = CreateTroopMember(9, Troop3, 'A');
-        Troop3Member2 = CreateTroopMember(10, Troop3, 'A');
-        Troop3Member3 = CreateTroopMember(11, Troop3, 'A');
-        Troop3Member4 = CreateTroopMember(12, Troop3, 'A');
-        Troop4Member1 = CreateTroopMember(13, Troop4, 'A');
-        Troop4Member2 = CreateTroopMember(14, Troop4, 'A');
-        Troop4Member3 = CreateTroopMember(15, Troop4, 'A');
-        Troop4Member4 = CreateTroopMember(16, Troop4, 'A');
+        public Troop Crimson => appDbContext.Troops!.Single(x => x.Name == "Crimson");
+        public Troop Jet => appDbContext.Troops!.Single(x => x.Name == "Jet");
+        public Troop Royal => appDbContext.Troops!.Single(x => x.Name == "Royal");
+        public Troop Saffron => appDbContext.Troops!.Single(x => x.Name == "Saffron");
+        
+        public  List<Troop> GetKnownTroops()
+        {
+            return
+            [
+                Crimson,
+                Jet,
+                Royal,
+                Saffron
+            ];
+        }
     }
 
-    public static Troop CreateTroop(int number)
+    public class MembersCollection(IAppDbContext appDbContext)
     {
-        return new Troop
+        public Member CharcoalCrimson => appDbContext.Members!.Single(x => x.FirstName == "Charcoal" && x.LastName == "Crimson");
+        public Member OlivineCrimson=> appDbContext.Members!.Single(x => x.FirstName == "Olivine" && x.LastName == "Crimson");
+        public Member IcterineCrimson=> appDbContext.Members!.Single(x => x.FirstName == "Icterine" && x.LastName == "Crimson");
+        public Member TurquoiseCrimson=> appDbContext.Members!.Single(x => x.FirstName == "Turquoise" && x.LastName == "Crimson");
+        public Member PumpkinJet=> appDbContext.Members!.Single(x => x.FirstName == "Pumpkin" && x.LastName == "Jet");
+        public Member GlaucousJet=> appDbContext.Members!.Single(x => x.FirstName == "Glaucous" && x.LastName == "Jet");
+        public Member PistachioJet=> appDbContext.Members!.Single(x => x.FirstName == "Pistachio" && x.LastName == "Jet");
+        public Member RedJet=> appDbContext.Members!.Single(x => x.FirstName == "Red" && x.LastName == "Jet");
+        public Member AsparagusRoyal=> appDbContext.Members!.Single(x => x.FirstName == "Asparagus" && x.LastName == "Royal");
+        public Member JasperRoyal=> appDbContext.Members!.Single(x => x.FirstName == "Jasper" && x.LastName == "Royal");
+        public Member GhostRoyal=> appDbContext.Members!.Single(x => x.FirstName == "Ghost" && x.LastName == "Royal");
+        public Member CeriseRoyal=> appDbContext.Members!.Single(x => x.FirstName == "Cerise" && x.LastName == "Royal");
+        public Member HunterSaffron=> appDbContext.Members!.Single(x => x.FirstName == "Hunter" && x.LastName == "Saffron");
+        public Member OxfordSaffron=> appDbContext.Members!.Single(x => x.FirstName == "Oxford" && x.LastName == "Saffron");
+        public Member RosewoodSaffron=> appDbContext.Members!.Single(x => x.FirstName == "Rosewood" && x.LastName == "Saffron");
+        public Member VioletSaffron=> appDbContext.Members!.Single(x => x.FirstName == "Violet" && x.LastName == "Saffron");
+        
+        public List<Member> GetKnownMembers()
         {
-            Name = "Troop" + number
-        };
+            var members = new List<Member>
+            {
+                CharcoalCrimson,
+                OlivineCrimson,
+                IcterineCrimson,
+                TurquoiseCrimson,
+                PumpkinJet,
+                GlaucousJet,
+                PistachioJet,
+                RedJet,
+                AsparagusRoyal,
+                JasperRoyal,
+                GhostRoyal,
+                CeriseRoyal,
+                HunterSaffron,
+                OxfordSaffron,
+                RosewoodSaffron,
+                VioletSaffron
+            };
+
+            return members;
+        }
     }
 
     public static Member CreateTroopMember(int number, Troop troop, char section) =>
@@ -71,40 +82,4 @@ public static class TestDataFactory
             Troop = troop,
             SectionId = section.ToString()
         };
-
-    public static List<Troop> GetKnownTroops()
-    {
-        return new List<Troop>
-        {
-            Troop1,
-            Troop2,
-            Troop3,
-            Troop4
-        };
-    }
-
-    public static List<Member> GetKnownMembers()
-    {
-        var members = new List<Member>
-        {
-            Troop1Member1,
-            Troop1Member2,
-            Troop1Member3,
-            Troop1Member4,
-            Troop2Member1,
-            Troop2Member2,
-            Troop2Member3,
-            Troop2Member4,
-            Troop3Member1,
-            Troop3Member2,
-            Troop3Member3,
-            Troop3Member4,
-            Troop4Member1,
-            Troop4Member2,
-            Troop4Member3,
-            Troop4Member4,
-        };
-
-        return members;
-    }
 }
