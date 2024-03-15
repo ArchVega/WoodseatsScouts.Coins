@@ -57,7 +57,12 @@ public class AppDbContextTests
     {
         fixture.RestoreBaseTestData();
         
-        var sections = appDbContext.Sections!.Add(new Section("A", "Duplicate"));
+        appDbContext.Sections!.Add(new Section("X", "Duplicate"));
+        appDbContext.SaveChanges();
+        
+        appDbContext.ChangeTracker.Clear();
+        
+        appDbContext.Sections!.Add(new Section("X", "Duplicate"));
         var exception = Should.Throw<Exception>(() => appDbContext.SaveChanges());
 
         const string expectedErrorMessage = "Violation of PRIMARY KEY constraint 'PK_Sections'. Cannot insert duplicate key in object 'dbo.Sections'";

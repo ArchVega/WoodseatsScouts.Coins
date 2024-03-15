@@ -126,18 +126,20 @@ namespace WoodseatsScouts.Coins.Api.Data
             return topXGroupsInLastYHours;
         }
 
+        // Todo: implement datetime provider from .net 8
         private static DateTime GetPreviousFriday()
         {
-            for (var i = 0; i < 7; i++)
+            var i = 0;
+            while (true)
             {
                 var testDate = DateTime.Today.AddDays(-1 * i);
                 if (testDate.DayOfWeek == DayOfWeek.Friday)
                 {
                     return testDate;
                 }
-            }
 
-            throw new InvalidOperationException("Could not find the last Friday of the current week");
+                i--;
+            }
         }
     }
 }
