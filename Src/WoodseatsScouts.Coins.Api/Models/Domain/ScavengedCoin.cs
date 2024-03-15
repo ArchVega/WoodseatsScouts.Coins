@@ -1,5 +1,6 @@
 ﻿namespace WoodseatsScouts.Coins.Api.Models.Domain
 {
+    // dotcover disable
     public class ScavengedCoin
     {
         public int Id { get; set; }

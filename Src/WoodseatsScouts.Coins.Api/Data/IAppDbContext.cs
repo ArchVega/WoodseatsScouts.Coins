@@ -29,4 +29,6 @@ public interface IAppDbContext
     List<GroupPoints> GetTopThreeGroupsInLastHour();
     
     List<GroupPoints> GetGroupsWithMostPoints();
+
+    Troop CreateTroop(int id, string name);
 }

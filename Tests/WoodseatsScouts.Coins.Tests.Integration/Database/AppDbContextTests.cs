@@ -8,35 +8,25 @@ using WoodseatsScouts.Coins.Tests.Integration.Helpers;
 namespace WoodseatsScouts.Coins.Tests.Integration.Database;
 
 [Collection("Database collection")]
-public class AppDbContextTests
+public class AppDbContextTests(DatabaseFixture databaseFixture)
 {
-    private readonly DatabaseDataHelper databaseDataHelper;
-    private readonly AppDbContext appDbContext;
-    private readonly DatabaseFixture fixture;
-
-    public AppDbContextTests(DatabaseFixture fixture)
-    {
-        this.fixture = fixture!;
-        appDbContext = fixture.AppDbContext;
-        databaseDataHelper = new DatabaseDataHelper(fixture.AppDbContext);
-    }
+    private readonly DatabaseDataHelper databaseDataHelper = new(databaseFixture.AppDbContext);
+    private readonly AppDbContext appDbContext = databaseFixture.AppDbContext;
 
     [Theory]
     [InlineData(1, "A", 5)]
     public void GenerateNextMemberCode(int troopNumber, string sectionCode, int expectedStartingMemberNumber)
     {
-        fixture.RestoreBaseTestData();
+        databaseFixture.RestoreBaseTestData();
+        
+        var member = appDbContext.CreateMember("any", "any", troopNumber, sectionCode, false);
+        member.Number.ShouldBe(expectedStartingMemberNumber);
 
-        var memberNumber = appDbContext.GenerateNextMemberCode(troopNumber, sectionCode);
-        memberNumber.ShouldBe(expectedStartingMemberNumber);
+        member = appDbContext.CreateMember("any", "any", troopNumber, sectionCode, false);
+        member.Number.ShouldBe(expectedStartingMemberNumber + 1);
         
-        databaseDataHelper.CreateMember(memberNumber, troopNumber, sectionCode);
-        memberNumber = appDbContext.GenerateNextMemberCode(troopNumber, sectionCode);
-        memberNumber.ShouldBe(expectedStartingMemberNumber + 1);
-        
-        databaseDataHelper.CreateMember(memberNumber, troopNumber, sectionCode);
-        memberNumber = appDbContext.GenerateNextMemberCode(troopNumber, sectionCode);
-        memberNumber.ShouldBe(expectedStartingMemberNumber + 2);
+        member = appDbContext.CreateMember("any", "any", troopNumber, sectionCode, false);
+        member.Number.ShouldBe(expectedStartingMemberNumber + 2);
 
         var codes = appDbContext.Members!.Select(x => x.Code).ToList();
         var distinctCodes = codes.Distinct().ToList();
@@ -47,7 +37,7 @@ public class AppDbContextTests
     [Fact]
     public void RetrievingSections()
     {
-        fixture.RestoreBaseTestData();
+        databaseFixture.RestoreBaseTestData();
         
         var sections = appDbContext.Sections!.ToList();
         sections.Count.ShouldBe(5);
@@ -56,7 +46,7 @@ public class AppDbContextTests
     [Fact]
     public void Sections_InputtingSameCode_ThrowsException()
     {
-        fixture.RestoreBaseTestData();
+        databaseFixture.RestoreBaseTestData();
         
         appDbContext.Sections!.Add(new Section("X", "Duplicate"));
         appDbContext.SaveChanges();
@@ -73,9 +63,10 @@ public class AppDbContextTests
     [Fact]
     public void Sections_MembersSectionPropertyIsMappedAsExpected()
     {
-        // databaseDataHelper.ResetAll();
-        var troop = databaseDataHelper.CreateTroop("Troop 1");
-        databaseDataHelper.CreateMember(1, troop.Id, "A");
+        databaseFixture.RestoreBaseTestData();
+        
+        var troop = appDbContext.CreateTroop(int.MaxValue,"Troop 1");
+        appDbContext.CreateMember("any", "any", troop.Id, "A", false);
         
         var member = appDbContext.Members!.Include(x => x.Section).First();
         member.Section.ShouldNotBeNull();

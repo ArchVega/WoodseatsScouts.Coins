@@ -14,15 +14,15 @@ namespace WoodseatsScouts.Coins.Api.Data
         public DbSet<Member>? Members { get; set; }
 
         public DbSet<Troop>? Troops { get; set; }
-        
+
         public DbSet<Section>? Sections { get; set; }
-        
+
         public DbSet<Coin>? Coins { get; set; }
 
         public DbSet<ScavengedCoin>? ScavengedCoins { get; set; }
 
         public DbSet<ScavengeResult>? ScavengeResults { get; set; }
-        
+
 
         public DbSet<ErrorLog>? ErrorLogs { get; set; }
 
@@ -30,9 +30,9 @@ namespace WoodseatsScouts.Coins.Api.Data
         {
             /* As of the v2024, Coins data is generated externally and the Id value is predetermined and inserted. */
             modelBuilder.Entity<Coin>()
-                .Property( et => et.Id )
+                .Property(et => et.Id)
                 .ValueGeneratedNever();
-            
+
             /* See property notes */
             modelBuilder.Entity<Member>()
                 .Property(p => p.Code)
@@ -125,6 +125,45 @@ namespace WoodseatsScouts.Coins.Api.Data
                 = topXGroupsInLastYHours.OrderByDescending(x => x.AveragePoints).Take(count).ToList();
 
             return topXGroupsInLastYHours;
+        }
+
+        public Troop CreateTroop(int id, string name)
+        {
+            using var transaction = Database.BeginTransaction();
+            Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops ON");
+
+            var troop = new Troop
+            {
+                Id = id,
+                Name = name
+            };
+            Troops?.Add(troop);
+
+            SaveChanges();
+
+            Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops OFF");
+            transaction.Commit();
+
+            return troop;
+        }
+
+        public Member CreateMember(string firstName, string lastName, int troopId, string sectionId, bool isDayVisitor)
+        {
+            var member = new Member
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                TroopId = troopId,
+                SectionId = sectionId,
+                IsDayVisitor = isDayVisitor,
+                Number = GenerateNextMemberCode(troopId, sectionId)
+            };
+
+            Members?.Add(member);
+
+            SaveChanges();
+            
+            return member;
         }
     }
 }
