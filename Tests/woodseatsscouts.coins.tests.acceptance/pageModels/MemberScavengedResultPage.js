@@ -9,7 +9,7 @@ const MemberScavengedResultPage = (page) => {
         },
 
         async getAdditionalMessage() {
-            const spanTotalPointsSaved = page.getByTestId("p-additional-message");
+            const spanTotalPointsSaved = page.getByTestId("div-additional-message");
 
             return await spanTotalPointsSaved.textContent()
         }

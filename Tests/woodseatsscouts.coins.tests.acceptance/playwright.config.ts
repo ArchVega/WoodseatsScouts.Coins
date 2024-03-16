@@ -20,6 +20,7 @@ export default defineConfig({
     workers: process.env.CI ? 1 : 1,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter: 'html',
+    timeout: 10 * 60 * 1000,
     expect: {
         timeout: 5000
     },
@@ -44,7 +45,7 @@ export default defineConfig({
         {
             name: 'firefox',
             use: {...devices['Desktop Firefox']},
-            dependencies: [ 'restoreDb']
+            dependencies: ['restoreDb']
         },
         // {
         //   name: 'chromium',

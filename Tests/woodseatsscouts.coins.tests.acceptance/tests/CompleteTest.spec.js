@@ -382,7 +382,8 @@ test(
         const oxfordScavengedResultPage
             = await clicksFinishButtonWithExpectation(oxfordCoinPage, 13)
         const additionalMessage = await oxfordScavengedResultPage.getAdditionalMessage();
-        await expect(additionalMessage).toContainText("Nope!")
+        expect(additionalMessage)
+            . toEqual(`Unfortunately, there was an issue with at least one of your coins.${specificCoinToBeShared.code} scanned by Jasper Royal`)
     });
 
 test(serialStep("Turquoise Crimson completes an enormous haul"), async ({page}) => {
