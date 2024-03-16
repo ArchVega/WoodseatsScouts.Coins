@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,28 +21,76 @@ namespace WoodseatsScouts.Coins.Tests;
 public class MembersControllerTests
 {
     [Fact]
-    public void GetCoin_MemberCodeSuppliedInsteadOfCoinCode_ThrowsException()
+    public void GetMembersWithPoints_ReturnsValidViewModel()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var imagePersisterMock = new Mock<IImagePersister>();
-        var coinsController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
 
-        SetupDbMock(appDbContextMock, x => x.Members, [new Member { }]);
-        SetupDbMock(appDbContextMock, x => x.ScavengeResults, [new ScavengeResult { }]);
-        SetupDbMock(appDbContextMock, x => x.ScavengedCoins, [new ScavengedCoin { }]);
-        SetupDbMock(appDbContextMock, x => x.Troops, [new Troop { }]);
-        SetupDbMock(appDbContextMock, x => x.Sections, [new Section { }]);
-        
-        var results = coinsController.GetMembersWithPoints();
+        var troop = new Troop { Id = 1 };
+        var section = new Section { Code = "A" };
+        var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
+        var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };
+
+        SetupDbMock(appDbContextMock, x => x.Troops!, [troop]);
+        SetupDbMock(appDbContextMock, x => x.Sections!, [section]);
+        SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
+        SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);
+        SetupDbMock(appDbContextMock, x => x.Members!, [
+            new Member { TroopId = 1, Troop = troop, SectionId = "A", Section = section, ScavengeResults = scavengeResults }
+        ]);
+
+        var results = membersController.GetMembersWithPoints();
 
         results.ShouldNotBeNull();
         results.ShouldBeOfType<OkObjectResult>();
         var viewModels = (List<MembersWithPointsViewModel>)((OkObjectResult)results).Value!;
-        viewModels.Count.ShouldBe(2);
+        viewModels.Count.ShouldBe(1);
+
+        var membersWithPointsViewModel = viewModels[0];
+
+        membersWithPointsViewModel.TotalPoints.ShouldBe(19);
     }
 
-    private void SetupDbMock<T>(Mock<IAppDbContext> appDbContextMock, Func<IAppDbContext, DbSet<T>?> func, List<T> members) where T : class
+    [Fact]
+    public void GetMemberInfoFromCode_InvalidCode_ThrowsException()
     {
-        throw new NotImplementedException();
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var imagePersisterMock = new Mock<IImagePersister>();
+        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+
+        var result = membersController.GetMemberInfoFromCode("invalid");
+        result.ShouldBeOfType<BadRequestObjectResult>();
+        ((BadRequestObjectResult)result).Value.ShouldBe("Could not translate Member Code 'invalid'");
+    }
+    
+    [Fact]
+    public void GetMemberInfoFromCode_ValidCode_OkResult()
+    {
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var imagePersisterMock = new Mock<IImagePersister>();
+        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+        
+        var troop = new Troop { Id = 1 };
+        var section = new Section { Code = "A" };
+        
+        SetupDbMock(appDbContextMock, x => x.Troops!, [troop]);
+        SetupDbMock(appDbContextMock, x => x.Sections!, [section]);
+        SetupDbMock(appDbContextMock, x => x.Members!, [
+            new Member { TroopId = 1, Troop = troop, SectionId = "A", Section = section, Number = 3}
+        ]);
+        
+        var result = membersController.GetMemberInfoFromCode("M001A003");
+        result.ShouldBeOfType<OkObjectResult>();
+        var viewModel = (MemberViewModel)((OkObjectResult)result).Value!;
+    }
+    
+    private static void SetupDbMock<T>(
+        Mock<IAppDbContext> appDbContextMock,
+        Expression<Func<IAppDbContext, DbSet<T>>> expression,
+        IEnumerable<T> entities)
+        where T : class
+    {
+        appDbContextMock.Setup(expression).ReturnsDbSet((entities));
     }
 }
