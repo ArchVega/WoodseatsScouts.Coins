@@ -10,6 +10,7 @@ using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
 using WoodseatsScouts.Coins.Api.Abstractions;
+using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
@@ -105,6 +106,51 @@ public class MembersControllerTests
         result.ShouldBeOfType<OkResult>();
     }
 
+    [Fact]
+    public void AddPointsToMember_ValidCoinCodes_Success()
+    {
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var imagePersisterMock = new Mock<IImagePersister>();
+        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+
+        var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
+        var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };
+        SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
+        SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);
+        SetupDbMock(appDbContextMock, x => x.Members!, [
+            new Member { Id = 9 }
+        ]);
+        
+        var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["B0001001010", "B0001001020"] };
+        var result = Should.NotThrow(() => membersController.AddPointsToMember(9, pointsForMemberViewModel));
+        
+        appDbContextMock.Verify(x => x.SaveChanges(), Times.Exactly(2));
+
+        result.ShouldBeOfType<CreatedAtActionResult>();
+    }
+    
+    [Fact]
+    public void AddPointsToMember_AnIncorrectCoinCode_ThrowsException()
+    {
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var imagePersisterMock = new Mock<IImagePersister>();
+        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+
+        var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
+        var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };
+        SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
+        SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);
+        SetupDbMock(appDbContextMock, x => x.Members!, [
+            new Member { Id = 9 }
+        ]);
+        
+        var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["B0001001010", "test-invalid-coin-code"] };
+        var result = membersController.AddPointsToMember(9, pointsForMemberViewModel);
+        
+        result.ShouldBeOfType<BadRequestObjectResult>();
+        ((BadRequestObjectResult)result).Value.ShouldBe("Could not translate Coin Code 'test-invalid-coin-code'");
+    }
+   
     private static void SetupDbMock<T>(
         Mock<IAppDbContext> appDbContextMock,
         Expression<Func<IAppDbContext, DbSet<T>>> expression,

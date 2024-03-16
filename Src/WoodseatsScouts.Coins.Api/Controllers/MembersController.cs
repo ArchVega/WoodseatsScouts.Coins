@@ -79,7 +79,7 @@ public class MembersController(
             {
                 var result = CodeTranslator.TranslateCoinPointCode(coinCode);
 
-                appDbContext.ScavengedCoins?.Add(new ScavengedCoin
+                appDbContext.ScavengedCoins!.Add(new ScavengedCoin
                 {
                     ScavengeResultId = tallyHistoryItem.Id,
                     BaseNumber = result.BaseNumber,
@@ -90,10 +90,6 @@ public class MembersController(
             catch (CodeTranslationException e)
             {
                 return BadRequest(e.Message);
-            }
-            catch (InvalidOperationException)
-            {
-                return NotFound($"A coin with the code '{coinCode}' was not found.");
             }
         }
 
