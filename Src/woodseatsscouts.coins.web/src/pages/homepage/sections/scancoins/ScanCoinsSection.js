@@ -52,9 +52,17 @@ function ScanCoinsSection({member, setHaulResult}) {
             return
         }
 
-        await CoinApiService().addPointsToMember(member, coins).then(response => {
+        await CoinApiService().addPointsToMember(member, coins).then(async response => {
+            const additionalData = await response.data
+
+            let finalTotal = coinTotal;
+            if (additionalData.hasAnomalyOccurred) {
+                finalTotal = finalTotal - additionalData.anomalousCoinsTotalValue
+            }
+
             setHaulResult({
-                coinTotal: coinTotal
+                coinTotal: finalTotal,
+                additionalData: additionalData
             })
         })
     }

@@ -7,6 +7,7 @@ import SectionNames from "./sections/SectionNames";
 import ScanCoinsSection from "./sections/scancoins/ScanCoinsSection";
 import HaulResultsSection from "./sections/HaulSummary";
 
+// Todo: rename paths and functions to either homepage or coinpage, not both
 export function CoinsPage() {
     const [sectionName, setSectionName] = useState(SectionNames.ScanMember)
     const [section, setSection] = useState(null);

@@ -1,5 +1,6 @@
 import {Button, Col, Row} from "reactstrap";
 
+// todo: change extensions to jsx
 function HaulResultsSection({member, haulResult}) {
     const phrases = [
         "Awesome job, ",
@@ -13,6 +14,7 @@ function HaulResultsSection({member, haulResult}) {
     const congratsPhrase = phrases[Math.floor(Math.random() * phrases.length)];
 
     function reloadPage() {
+        // Todo: get rid of location.reload mechanism
         global.location.reload()
         // console.log('reload')
         // setUser(null)
@@ -44,6 +46,21 @@ function HaulResultsSection({member, haulResult}) {
                     </div>
                 </Col>
             </Row>
+            {haulResult.additionalData !== undefined && haulResult.additionalData.hasAnomalyOccurred
+                ? (
+                    <Row>
+                        <Col xs={{size: 6, offset: 3}} className="text-center alert alert-danger" data-testid="div-additional-message" role="alert">
+                            <p>Unfortunately, there was an issue with at least one of your coins.</p>
+                            <ul className="list-group list-group-flush">
+                                {haulResult.additionalData.affectedCoins.map(affectedCoin => (
+                                    <li className="list-group-item bg-danger text-white">
+                                        {affectedCoin.coinCode} scanned by {affectedCoin.memberName}
+                                    </li>
+                                ))}
+                            </ul>
+                        </Col>
+                    </Row>)
+                : (<></>)}
             <Row className="mb-4">
                 <Col className="text-center">
                     <h4>Head back out there and get some more points...</h4>

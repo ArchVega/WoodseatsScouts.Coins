@@ -8,3 +8,5 @@ Clear coin code when scanned
 DB - Sections.Code = Members.SectionId. Rename Members.SectionId to SectionCode
 Write test - "two users scan the same coin, first user finishes and records the coin, second user finishes and receives an error (second user has unscavenged coins recorded and error coins logged"
 need to track scanned-coins-for-current-user so that they don't scan a coin twice! total coins screen needs to be adjusted accordingly
+test modal selectedCount not updating
+sideBySide screenshot utility - make sure the "anamolous coins" div doesn't show up, and other UI fixes

@@ -1,23 +1,28 @@
 // dotcover disable
+
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Models.View;
 
+// Rename to ScavengerHaulResponseViewModel
 public class AddPointsToMemberViewModel
 {
-    public AddPointsToMemberViewModel(List<Coin> alreadyScavengedCoins)
+    public bool HasAnomalyOccurred { get; set; }
+
+    public dynamic AffectedCoins { get; set; }
+    
+    public int AnomalousCoinsTotalValue { get; set; }
+
+    public AddPointsToMemberViewModel(IReadOnlyCollection<Coin> alreadyScavengedCoins)
     {
-        Result = new Dictionary<string, object>();
+        HasAnomalyOccurred = alreadyScavengedCoins.Count != 0;
 
-        if (alreadyScavengedCoins.Count == 0) return;
-
-        Result.Add("Message", "Coins already scavenged!");
-        Result.Add("Coins", alreadyScavengedCoins.Select(x => new
+        AffectedCoins = alreadyScavengedCoins.Select(x => new
         {
             CoinCode = x.Code,
             MemberName = x.Member!.FullName
-        }));
-    }
+        }).ToList();
 
-    public Dictionary<string, object> Result { get; set; }
+        AnomalousCoinsTotalValue = alreadyScavengedCoins.Sum(x => x.Value);
+    }
 }

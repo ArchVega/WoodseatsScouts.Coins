@@ -200,7 +200,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
             if (alreadyScavengedCoins.Count > 0)
             {
-                alreadyScavengedCoins.ForEach(coin => coin.Member = Members!.Single(x => x.Id == member.Id));
+                alreadyScavengedCoins.ForEach(coin => coin.Member = Members!.Single(x => x.Id == coin.MemberId));
             }
             
             return alreadyScavengedCoins;
