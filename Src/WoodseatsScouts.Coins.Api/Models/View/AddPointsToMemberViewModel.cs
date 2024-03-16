@@ -1,3 +1,4 @@
+// dotcover disable
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Models.View;
