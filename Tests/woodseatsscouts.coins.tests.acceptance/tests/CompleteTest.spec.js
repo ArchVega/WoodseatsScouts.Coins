@@ -1,3 +1,4 @@
+// todo: There are several more test cases in Todo.txt to implement.
 import {test, expect} from '@playwright/test';
 import MembersPage from "../pageModels/MembersPage";
 import Helpers from "../Helpers";
@@ -114,7 +115,6 @@ test(serialStep("Invalid wrist code shows an error toast message"), async ({page
 });
 
 // test(serialStep("Scanning a coin instead of a wristband for logging in a member shows an error toast message"), async ({page}) => {
-//     // Todo
 //     // const homePage = HomePage(page);
 //     // await homePage.goTo()
 //     // await homePage.simulateInvalidUserWristbandScan("member-code-does-not-exist")

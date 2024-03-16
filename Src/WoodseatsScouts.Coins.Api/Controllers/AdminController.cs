@@ -30,7 +30,7 @@ public class AdminController(AppDbContext appDbContext) : ControllerBase
                 createMemberViewModel.FirstName,
                 createMemberViewModel.LastName,
                 createMemberViewModel.TroopId,
-                createMemberViewModel.Section, // Todo: rename in client?
+                createMemberViewModel.Section, // Todo: Client sends "section" but this is really "sectionId"
                 createMemberViewModel.IsDayVisitor));
         }
     }

@@ -56,7 +56,7 @@ public class DatabaseFixture
         runspace.Close();
     }
     
-    // Todo: instead of having a dedicated "scriptrunner" file, replace with code that can construct powershell statements.
+    // Todo: Instead of having a dedicated "scriptrunner" file, replace with code that can construct powershell statements.
     public void RestoreBaseTestData()
     {
         var initialSessionState = InitialSessionState.CreateDefault();

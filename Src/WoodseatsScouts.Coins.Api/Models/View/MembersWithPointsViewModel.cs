@@ -34,7 +34,7 @@ public class MembersWithPointsViewModel
 
     public string TroopName { get; set; }
 
-    public string Section { get; set; } // Todo rename?
+    public string Section { get; set; } // Todo Section is now "SectionId". Rename
     public string SectionName { get; set; }
 
     public int TotalPoints { get; set; }

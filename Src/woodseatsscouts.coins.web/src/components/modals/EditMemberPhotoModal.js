@@ -8,8 +8,6 @@ const EditMemberPhotoModal = ({editUsersModal, setEditUsersModal, selectedUser})
     const toggleEditUserModal = () => setEditUsersModal(!editUsersModal);
 
     function saveImage(base64Image) {
-        console.log(base64Image, selectedUser.id)
-
         const payload = {
             photo: base64Image
         }
@@ -19,7 +17,7 @@ const EditMemberPhotoModal = ({editUsersModal, setEditUsersModal, selectedUser})
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
         };
-        // todo
+
         fetch( Uris.memberPhoto(selectedUser.id), requestOptions);
         setEditUsersModal(false);
     }

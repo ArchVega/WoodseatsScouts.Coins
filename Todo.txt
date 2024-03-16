@@ -1,6 +1,7 @@
-test for member code in coin and vice versa
-what happens if someone cancels a haul?? those coins will already be assigned!!!
-user not found image is missing
-the enormous scavenger haul test isn't completing
-found a code B00100 (coin, 0 value?) might be nothing as its in the scavengedcoins table (test data, GetTopThreeGroupsInLastHour_FourScavengeResults_ResultsShouldBe3)
-clear coin code when scanned
+CreateTodoReport may not be capturing all todos. Sense check by doing a string token search for all "todos"; regex matches should equal this number.
+Write acceptance test for "member code in coin" and vice versa
+What happens if someone cancels a haul? The coins are already assigned on scan.
+"User not found image" is not displaying when no image is found for a member.
+The "enormous scavenger haul" test isn't completing sometimes. 
+Found a code B00100 (coin, 0 value?) might be nothing as its in the scavengedcoins table (test data, GetTopThreeGroupsInLastHour_FourScavengeResults_ResultsShouldBe3)
+Clear coin code when scanned

@@ -5,7 +5,7 @@ const cameraAvailable = 'mediaDevices' in navigator && 'getUserMedia' in navigat
 
 export const AppCameraAvailableContext = createContext(cameraAvailable);
 export const UseAppCameraContext = createContext(cameraAvailable);
-export const AppTestModeContext = createContext(false); // Todo: if this is still needed, env variable?
+export const AppTestModeContext = createContext(false); // Todo: if AppTestModeContext is still needed, refactor into an env variable to remove the React Context
 export const AppModeContext = createContext("");
 
 export const AppContext = ({children}) => {

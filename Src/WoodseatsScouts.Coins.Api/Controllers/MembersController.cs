@@ -50,7 +50,7 @@ public class MembersController(
 
         /* The QRScanner for coins becomes active after 500ms after a member has logged in.
            Slight delay to allow the admin to shift focus away.*/
-        // Todo: turn on in production, off otherwise?
+        // Todo: We don't need to wait between member code QR calls unless we're running in release. Either turn off or reduce.
         Thread.Sleep(2000);
 
         return Ok(new MemberViewModel(member));
