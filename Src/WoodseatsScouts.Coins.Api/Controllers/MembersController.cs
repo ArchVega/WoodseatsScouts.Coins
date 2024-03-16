@@ -25,7 +25,8 @@ public class MembersController(
             .ToList()
             .Select(x => new MembersWithPointsViewModel(x))
             .OrderBy(x => x.FirstName)
-            .ThenBy(x => x.LastName));
+            .ThenBy(x => x.LastName)
+            .ToList());
     }
 
     [HttpGet]

@@ -2,5 +2,5 @@ namespace WoodseatsScouts.Coins.Api.Abstractions;
 
 public interface IImagePersister
 {
-    void Persist(string jpegFileNameWithoutExtension, string base64PhotoData);
+    FileInfo Persist(string jpegFileNameWithoutExtension, string base64PhotoData);
 }

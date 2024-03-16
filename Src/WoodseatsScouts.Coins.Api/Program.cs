@@ -32,4 +32,6 @@ app.UseCors(allOrigins);
 app.MapControllers();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+AppStartupValidator.Validate(app);
+
 app.Run();

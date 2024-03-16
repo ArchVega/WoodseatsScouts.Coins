@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
@@ -18,11 +15,11 @@ public class CoinsControllerTests
     [Fact]
     public void GetCoin_MemberCodeSuppliedInsteadOfCoinCode_ThrowsException()
     {
-        var mock = new Mock<IAppDbContext>();
-        var coinsController = new CoinsController(mock.Object);
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var coinsController = new CoinsController(appDbContextMock.Object);
         const string memberCode = "test-member-code";
 
-        mock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
+        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
 
         var result = coinsController.GetCoin(memberCode, It.IsAny<string>());
 
@@ -33,12 +30,12 @@ public class CoinsControllerTests
     [Fact]
     public void GetCoin_InvalidCoinCode_ThrowsException()
     {
-        var mock = new Mock<IAppDbContext>();
-        var coinsController = new CoinsController(mock.Object);
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var coinsController = new CoinsController(appDbContextMock.Object);
         const string memberCode = "test-valid-member-code";
         const string coinCode = "test-invalid-coin-code";
 
-        mock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
+        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
 
         var result = coinsController.GetCoin(coinCode, memberCode);
 
@@ -49,13 +46,13 @@ public class CoinsControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeButNotFound_ThrowsException()
     {
-        var mock = new Mock<IAppDbContext>();
-        var coinsController = new CoinsController(mock.Object);
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var coinsController = new CoinsController(appDbContextMock.Object);
         const string memberCode = "test-valid-member-code";
         const string coinCode = "B9999999999";
 
-        mock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
-        mock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>()));
+        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
+        appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>()));
 
         var result = coinsController.GetCoin(coinCode, memberCode);
 
@@ -66,13 +63,13 @@ public class CoinsControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeButSuppliedMemberCodeDoesNotMatchAnyMember_ThrowsException()
     {
-        var mock = new Mock<IAppDbContext>();
-        var coinsController = new CoinsController(mock.Object);
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var coinsController = new CoinsController(appDbContextMock.Object);
         const string memberCode = "M001A001";
         const string coinCode = "B0001010020";
 
-        mock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member() }));
-        mock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin() { Code = coinCode } }));
+        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member() }));
+        appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin() { Code = coinCode } }));
 
         var result = coinsController.GetCoin(coinCode, memberCode);
 
@@ -83,14 +80,14 @@ public class CoinsControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeButAlreadyRecordedByTheCurrentMember_ThrowsException()
     {
-        var mock = new Mock<IAppDbContext>();
-        var coinsController = new CoinsController(mock.Object);
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var coinsController = new CoinsController(appDbContextMock.Object);
         const string memberCode = "M001A001";
         const string coinCode = "B0001010020";
         const int memberId = 1;
         var member = new Member { Code = memberCode, Id = memberId, FirstName = "test-first-name" };
-        mock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { member }));
-        mock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin() { Code = coinCode, MemberId = memberId } }));
+        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { member }));
+        appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin() { Code = coinCode, MemberId = memberId } }));
 
         var result = coinsController.GetCoin(coinCode, memberCode);
 
@@ -101,8 +98,8 @@ public class CoinsControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeButAlreadyScavengedByAnotherMember_ThrowsException()
     {
-        var mock = new Mock<IAppDbContext>();
-        var coinsController = new CoinsController(mock.Object);
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var coinsController = new CoinsController(appDbContextMock.Object);
         const string memberCode = "M001A001";
         const string coinCode = "B0001010020";
         const int memberId = 1;
@@ -111,8 +108,8 @@ public class CoinsControllerTests
         const int otherMemberId = 2;
         var otherMember = new Member { Id = otherMemberId, FirstName = "test-other-first-name", LastName = "test-other-last-name" };
 
-        mock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { currentMember, otherMember }));
-        mock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin() { Code = coinCode, MemberId = otherMemberId } }));
+        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { currentMember, otherMember }));
+        appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin() { Code = coinCode, MemberId = otherMemberId } }));
 
         var result = coinsController.GetCoin(coinCode, memberCode);
 
@@ -124,19 +121,19 @@ public class CoinsControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeAndNotAlreadyScavengedByAnotherMember_CallsSave()
     {
-        var mock = new Mock<IAppDbContext>();
-        var coinsController = new CoinsController(mock.Object);
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var coinsController = new CoinsController(appDbContextMock.Object);
         const string memberCode = "M001A001";
         const string coinCode = "B0001010020";
         const int memberId = 1;
         var currentMember = new Member { Code = memberCode, Id = memberId, FirstName = "test-first-name" };
 
-        mock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { currentMember }));
-        mock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new() { Code = coinCode } }));
+        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { currentMember }));
+        appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new() { Code = coinCode } }));
 
         var result = Should.NotThrow(() => coinsController.GetCoin(coinCode, memberCode));
         
-        mock.Verify(x => x.SaveChanges(), Times.Once);
+        appDbContextMock.Verify(x => x.SaveChanges(), Times.Once);
         
         result.ShouldBeOfType<OkObjectResult>();
 
