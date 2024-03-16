@@ -56,6 +56,7 @@ public class AppDbContextMembersTests
         var alreadyScavengedCoins = appDbContext.RecordMemberAgainstUnscavengedCoins(member, coins.Select(x => x.Code).ToList());
     }
     
+    //// PREVIOUS UNIT TESTS FOR CONTROLLER, NOW FOR INTEGRATION TESTS
     //  [Fact]
     // public void AddPointsToMember_ValidCoinCodes_Success()
     // {

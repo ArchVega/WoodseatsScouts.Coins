@@ -27,6 +27,11 @@ const ScavengerHunt = async () => {
             return coins;
         },
 
+        /* Does not assign a member to an unscavenged coin.*/
+        peekUnscavengedCoin: async (value) => {
+            return _coins.filter(x => !x.isAlreadyScavenged && x.value === value)[0]
+        },
+
         getAnAlreadyScavengedCoin: async (userFullName) => {
             return _coins.filter(x => x.isAlreadyScavenged && x.fullName !== userFullName)[0]
         }

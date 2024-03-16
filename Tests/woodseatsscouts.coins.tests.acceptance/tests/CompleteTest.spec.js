@@ -5,7 +5,11 @@ import Helpers from "../Helpers";
 import ScavengerHunt from "../models/ScavengerHunt";
 import Users from "../models/Users";
 import {assertReportsPageIs} from "../assertionHelpers/ReportsPageAssertionHelpers";
-import {validScavengerHaulSteps} from "../steps/scavengerHaulSteps";
+import {
+    clicksFinishButtonWithExpectation,
+    scansAllCoinsButDoesNotClickFinish,
+    validScavengerHaulSteps
+} from "../steps/scavengerHaulSteps";
 import HomePage from "../pageModels/HomePage";
 import ToastMessageModel from "../uiModels/ToastMessageModel";
 import {assertMembersPageContains} from "../assertionHelpers/MembersPageAssertionHelpers";
@@ -39,10 +43,34 @@ test(serialStep("Creating users"), async ({page}) => {
     ])
 
     await Helpers().createMembersViaApi([
-        {firstNames: ["Charcoal", "Icterine", "Olivine", "Turquoise"], lastName: "Crimson", troopId: 1, section: "A", isDayVisitor: false},
-        {firstNames: ["Glaucous", "Pistachio", "Pumpkin", "Red"], lastName: "Jet", troopId: 2, section: "B", isDayVisitor: false},
-        {firstNames: ["Asparagus", "Cerise", "Ghost", "Jasper"], lastName: "Royal", troopId: 3, section: "C", isDayVisitor: false},
-        {firstNames: ["Hunter", "Oxford", "Rosewood", "Violet"], lastName: "Saffron", troopId: 4, section: "E", isDayVisitor: false},
+        {
+            firstNames: ["Charcoal", "Icterine", "Olivine", "Turquoise"],
+            lastName: "Crimson",
+            troopId: 1,
+            section: "A",
+            isDayVisitor: false
+        },
+        {
+            firstNames: ["Glaucous", "Pistachio", "Pumpkin", "Red"],
+            lastName: "Jet",
+            troopId: 2,
+            section: "B",
+            isDayVisitor: false
+        },
+        {
+            firstNames: ["Asparagus", "Cerise", "Ghost", "Jasper"],
+            lastName: "Royal",
+            troopId: 3,
+            section: "C",
+            isDayVisitor: false
+        },
+        {
+            firstNames: ["Hunter", "Oxford", "Rosewood", "Violet"],
+            lastName: "Saffron",
+            troopId: 4,
+            section: "E",
+            isDayVisitor: false
+        },
     ]);
 
     // Page loads too fast for the data?
@@ -316,6 +344,46 @@ test(serialStep("Olivine Crimson tries to use someone else's coin"), async ({pag
     await coinCodeScanPage.enterCoinCode(coin3.code)
     expect(await coinCodeScanPage.getTotalCoinValue()).toBe(40)
 });
+
+test(
+    serialStep("Jasper Royal and Oxford Saffron try to scan the same coin for each of their hauls"),
+    async ({context, page}) => {
+        const jasperPage = {
+            member: users.jasperRoyal,
+            page: page,
+            coins: []
+        };
+        const oxfordPage = {
+            member: users.oxfordSaffron,
+            page: await context.newPage(),
+            coins: []
+        }
+
+        const memberPages = [jasperPage, oxfordPage];
+
+        const specificCoinToBeShared = await scavengerHunt.peekUnscavengedCoin(20);
+
+        for (const memberPage of memberPages) {
+            const coins = await scavengerHunt.getUnscavengedCoinByValue(memberPage.member, [3, 10])
+            coins.push(specificCoinToBeShared)
+            memberPage.coins = coins;
+        }
+
+        // First Jasper scans his coins
+        const jasperCoinPage = await scansAllCoinsButDoesNotClickFinish(jasperPage.member, jasperPage.coins, 33, jasperPage.page)
+
+        // Next Oxford scans his coins, including the shared coin
+        const oxfordCoinPage = await scansAllCoinsButDoesNotClickFinish(oxfordPage.member, oxfordPage.coins, 33, oxfordPage.page)
+
+        // Now Jasper clicks Next
+        await clicksFinishButtonWithExpectation(jasperCoinPage, 33)
+
+        // Now Oxford tries, only two coins are recorded, and the results page should show an additional message
+        const oxfordScavengedResultPage
+            = await clicksFinishButtonWithExpectation(oxfordCoinPage, 13)
+        const additionalMessage = await oxfordScavengedResultPage.getAdditionalMessage();
+        await expect(additionalMessage).toContainText("Nope!")
+    });
 
 test(serialStep("Turquoise Crimson completes an enormous haul"), async ({page}) => {
     const coinValues = [20, 10, 3, 9, 11, 20, 10, 20, 10, 3, 9, 11, 20, 10, 20, 10, 3, 9, 11, 20, 10]

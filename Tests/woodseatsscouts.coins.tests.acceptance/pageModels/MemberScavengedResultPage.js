@@ -6,6 +6,12 @@ const MemberScavengedResultPage = (page) => {
             const result = await spanTotalPointsSaved.textContent()
 
             return Number(result);
+        },
+
+        async getAdditionalMessage() {
+            const spanTotalPointsSaved = page.getByTestId("p-additional-message");
+
+            return await spanTotalPointsSaved.textContent()
         }
     }
 }

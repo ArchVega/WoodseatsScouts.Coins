@@ -1,3 +1,4 @@
+// Todo: rename to Members
 const Users = () => {
     return {
         asparagusRoyal: "Asparagus Royal",
@@ -7,7 +8,9 @@ const Users = () => {
         glaucousJet: "Glaucous Jet",
         charcoalCrimson: "Charcoal Crimson",
         olivineCrimson: "Olivine Crimson",
-        turquoiseCrimson: "Turquoise Crimson"
+        turquoiseCrimson: "Turquoise Crimson",
+        jasperRoyal: "Jasper Royal",
+        oxfordSaffron: "Oxford Saffron"
     }
 }
 
