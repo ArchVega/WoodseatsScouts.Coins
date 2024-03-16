@@ -8,7 +8,7 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
-#if ACCEPTANCETEST
+#if (DEBUG || ACCEPTANCETEST)
 [ApiController]
 [Route("[controller]")]
 public class SutController(IAppDbContext appDbContext, IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase

@@ -110,10 +110,15 @@ function CopyDbData {
 
 }
 
-function CreateCoinData() {
+function CreateCoinData {
+    param(
+        [Parameter(Mandatory)]    
+        [string] $DatabaseName
+    )
+
     Push-Location "D:\Dev\Archvega\WoodseatsScouts\Utilities\QRCodes\WoodseatsScouts.QRCodes\WoodseatsScouts.QRCodes\bin\Debug"
     try {
-        .\WoodseatsScouts.QRCodes.exe "WoodseatsScouts.Coins.Tests.Acceptance" "D:\Temp\WoodseatsScouts.QRCodes"
+        .\WoodseatsScouts.QRCodes.exe $DatabaseName "D:\Temp\WoodseatsScouts.QRCodes"
     } finally {
         Pop-Location
     }   

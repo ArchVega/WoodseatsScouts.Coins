@@ -13,11 +13,14 @@ public class MembersWithPointsViewModel
         MemberNumber = member.Number;
         FirstName = member.FirstName;
         LastName = member.LastName;
+        FullName = member.FullName;
         TroopName = member.Troop.Name;
         Section = member.SectionId;
         SectionName = member.Section.Name;
         TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.PointValue)).Sum();
     }
+
+    public string FullName { get; set; }
 
     public string MemberCode { get; set; }
 
