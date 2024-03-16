@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Dynamic;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Moq.EntityFrameworkCore;
@@ -119,7 +120,7 @@ public class CoinsControllerTests
     }
 
     [Fact]
-    public void GetCoin_ValidCoinCodeAndNotAlreadyScavengedByAnotherMember_CallsSave()
+    public void GetCoin_ValidCoinCodeAndNotAlreadyScavengedByAnotherMember_ReturnsCode()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var coinsController = new CoinsController(appDbContextMock.Object);
@@ -133,9 +134,10 @@ public class CoinsControllerTests
 
         var result = Should.NotThrow(() => coinsController.GetCoin(coinCode, memberCode));
         
-        appDbContextMock.Verify(x => x.SaveChanges(), Times.Once);
-        
         result.ShouldBeOfType<OkObjectResult>();
-
+        var coin = (CoinViewModel)((OkObjectResult)result).Value!;
+        coin.PointValue.ShouldBe(20);
+        coin.BaseNumber.ShouldBe(10);
+        coin.Code.ShouldBe("B0001010020");
     }
 }

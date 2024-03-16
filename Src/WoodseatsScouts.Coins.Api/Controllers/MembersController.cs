@@ -1,9 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Data;
-using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.View;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
@@ -11,7 +11,7 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
 public class MembersController(
-    IAppDbContext appDbContext, 
+    IAppDbContext appDbContext,
     IImagePersister imagePersister) : ControllerBase
 {
     [HttpGet]
@@ -42,7 +42,7 @@ public class MembersController(
         {
             return BadRequest(e.Message);
         }
-        
+
         var member = appDbContext.Members!
             .Single(x => x.Number == translationResult.MemberNumber
                          && x.TroopId == translationResult.TroopNumber
@@ -63,39 +63,15 @@ public class MembersController(
         // Todo: wrap in a transaction
         var member = appDbContext.Members!.Single(x => x.Id == id);
 
-        var tallyHistoryItem = new ScavengeResult()
-        {
-            MemberId = member.Id,
-            CompletedAt = DateTime.Now
-        };
+        var tallyHistoryItem = appDbContext.CreateScavengeResult(member);
 
-        appDbContext.ScavengeResults!.Add(tallyHistoryItem);
+        appDbContext.CreateScavengedCoins(tallyHistoryItem, viewModel.CoinCodes);
 
-        appDbContext.SaveChanges();
+        var alreadyScavengedCoins = appDbContext.RecordMemberAgainstUnscavengedCoins(member, viewModel.CoinCodes);
 
-        foreach (var coinCode in viewModel.CoinCodes)
-        {
-            try
-            {
-                var result = CodeTranslator.TranslateCoinPointCode(coinCode);
+        var responseViewModel = new AddPointsToMemberViewModel(alreadyScavengedCoins);
 
-                appDbContext.ScavengedCoins!.Add(new ScavengedCoin
-                {
-                    ScavengeResultId = tallyHistoryItem.Id,
-                    BaseNumber = result.BaseNumber,
-                    PointValue = result.PointValue,
-                    Code = coinCode
-                });
-            }
-            catch (CodeTranslationException e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        appDbContext.SaveChanges();
-
-        return CreatedAtAction(nameof(AddPointsToMember), null, null);
+        return CreatedAtAction(nameof(AddPointsToMember), null, responseViewModel);
     }
 
     [HttpPost]

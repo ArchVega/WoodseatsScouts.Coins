@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 
 namespace WoodseatsScouts.Coins.Api.Middleware;
 
@@ -51,6 +52,10 @@ public class ExceptionHandlingMiddleware
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     errorResponse.Message = $"Error of type {invalidOperationException.GetType().Name} not handled";
                 }
+                break;
+            case CodeTranslationException codeTranslationException:
+                response.StatusCode = (int) HttpStatusCode.BadRequest;
+                errorResponse.Message = codeTranslationException.Message;
                 break;
             case DbUpdateException dbUpdateException:
                 response.StatusCode = (int) HttpStatusCode.BadRequest;

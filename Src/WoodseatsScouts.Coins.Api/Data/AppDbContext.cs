@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
@@ -147,6 +148,64 @@ namespace WoodseatsScouts.Coins.Api.Data
             return troop;
         }
 
+        public ScavengeResult CreateScavengeResult(Member member)
+        {
+            var scavengeResult = new ScavengeResult
+            {
+                MemberId = member.Id,
+                CompletedAt = DateTime.Now
+            };
+
+            ScavengeResults!.Add(scavengeResult);
+
+            SaveChanges();
+
+            return scavengeResult;
+        }
+
+        public void CreateScavengedCoins(ScavengeResult scavengeResult, List<string> coinCodes)
+        {
+            foreach (var coinCode in coinCodes)
+            {
+                var result = CodeTranslator.TranslateCoinPointCode(coinCode);
+
+                ScavengedCoins!.Add(new ScavengedCoin
+                {
+                    ScavengeResultId = scavengeResult.Id,
+                    BaseNumber = result.BaseNumber,
+                    PointValue = result.PointValue,
+                    Code = coinCode
+                });
+            }
+        }
+
+        public List<Coin> RecordMemberAgainstUnscavengedCoins(Member member, List<string> coinCodes)
+        {
+            var alreadyScavengedCoins = new List<Coin>();
+            
+            foreach (var coinCode in coinCodes)
+            {
+                var coinToAdd = Coins!.Single(x => x.Code == coinCode);
+                if (coinToAdd.MemberId == null)
+                {
+                    coinToAdd.MemberId = member.Id;
+                }
+                else
+                {
+                    alreadyScavengedCoins.Add(coinToAdd);
+                }
+            }
+
+            SaveChanges();
+
+            if (alreadyScavengedCoins.Count > 0)
+            {
+                alreadyScavengedCoins.ForEach(coin => coin.Member = Members!.Single(x => x.Id == member.Id));
+            }
+            
+            return alreadyScavengedCoins;
+        }
+
         public Member CreateMember(string firstName, string lastName, int troopId, string sectionId, bool isDayVisitor)
         {
             var member = new Member
@@ -162,10 +221,10 @@ namespace WoodseatsScouts.Coins.Api.Data
             Members?.Add(member);
 
             SaveChanges();
-            
+
             return member;
         }
-        
+
         public Member UpdateMemberName(int memberId, string firstName, string lastName)
         {
             var member = Members!.Single(x => x.Id == memberId);

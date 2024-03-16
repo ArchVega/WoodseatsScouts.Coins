@@ -6,3 +6,5 @@ The "enormous scavenger haul" test isn't completing sometimes.
 Found a code B00100 (coin, 0 value?) might be nothing as its in the scavengedcoins table (test data, GetTopThreeGroupsInLastHour_FourScavengeResults_ResultsShouldBe3)
 Clear coin code when scanned
 DB - Sections.Code = Members.SectionId. Rename Members.SectionId to SectionCode
+Write test - "two users scan the same coin, first user finishes and records the coin, second user finishes and receives an error (second user has unscavenged coins recorded and error coins logged"
+need to track scanned-coins-for-current-user so that they don't scan a coin twice! total coins screen needs to be adjusted accordingly

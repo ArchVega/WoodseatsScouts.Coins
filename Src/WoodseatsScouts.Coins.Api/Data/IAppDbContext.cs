@@ -31,4 +31,10 @@ public interface IAppDbContext
     List<GroupPoints> GetGroupsWithMostPoints();
 
     Troop CreateTroop(int id, string name);
+    
+    ScavengeResult CreateScavengeResult(Member member);
+    
+    void CreateScavengedCoins(ScavengeResult scavengeResult, List<string> coinCodes);
+    
+    List<Coin> RecordMemberAgainstUnscavengedCoins(Member member, List<string> coinCodes);
 }

@@ -18,7 +18,7 @@ public class CoinsController(IAppDbContext appDbContext) : ControllerBase
         }
 
         CoinPointTranslationResult result;
-        
+
         try
         {
             result = CodeTranslator.TranslateCoinPointCode(code);
@@ -36,31 +36,24 @@ public class CoinsController(IAppDbContext appDbContext) : ControllerBase
         }
 
         var member = appDbContext.Members!.SingleOrDefault(x => x.Code == memberCode);
-        
+
         if (member == null)
         {
             return NotFound($"A member with the code '{code}' was not found in the database.");
         }
-        
+
         if (member.Id == dbCoin.MemberId)
         {
             return base.Conflict($"The coin has already been scavenged by {member.FirstName}");
         }
 
+        // ReSharper disable once InvertIf
         if (dbCoin.MemberId.HasValue)
         {
             var memberWhoScavengedCoin = appDbContext.Members!.Single(x => x.Id == dbCoin.MemberId);
             return base.Conflict($"The coin with code '{code}' has already been scavenged by {memberWhoScavengedCoin.FullName}!");
         }
 
-        dbCoin.MemberId = member.Id;
-        appDbContext.SaveChanges();
-
-        return Ok(new
-        {
-            result.PointValue,
-            result.BaseNumber,
-            Code = code
-        });
+        return Ok(new CoinViewModel(result.PointValue, result.BaseNumber, code));
     }
 }
