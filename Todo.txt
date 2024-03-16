@@ -1,3 +1,4 @@
+try turning off audio, see if that fixes the missing coin scans
 CreateTodoReport may not be capturing all todos. Sense check by doing a string token search for all "todos"; regex matches should equal this number.
 Write acceptance test for "member code in coin" and vice versa
 What happens if someone cancels a haul? The coins are already assigned on scan.
