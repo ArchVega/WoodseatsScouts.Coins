@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import TestQRBarcodeDataModal from "../../_dev/TestQRBarcodeDataModal";
 import {AppModeContext, AppTestModeContext} from "../../../contexts/AppContext";
 import QRScanCodeType from "../QRScanCodeType";
+import {logAttention} from "../../logging/Logger";
 
 function QRBarcodeScanner({qrCode, setQrCode, qrScanCodeType = {qrScanCodeType}}) {
     const [appModeContext, setAppModeContext] = useContext(AppModeContext);
@@ -19,6 +20,7 @@ function QRBarcodeScanner({qrCode, setQrCode, qrScanCodeType = {qrScanCodeType}}
     }
 
     function setUserAndCloseModal(code) {
+        logAttention('setUserAndCloseModal', code)
         setTestUsersModal(false);
         setQrCode(code)
         setUsbScannerValue(code)

@@ -1,6 +1,6 @@
 ﻿import {Col, Modal, ModalBody, ModalHeader, Row} from "reactstrap";
 import QRScanCodeType from "../qrscanners/QRScanCodeType";
-import TestData from "./TestData";
+import TestDataApiService from "./TestDataApiService";
 import {useEffect, useState} from "react";
 
 const TestQRBarcodeDataModal = ({testUsersModal, qrScanCodeType, setTestUsersModal, onSelected}) => {
@@ -10,16 +10,19 @@ const TestQRBarcodeDataModal = ({testUsersModal, qrScanCodeType, setTestUsersMod
     useEffect(() => {
         switch (qrScanCodeType) {
             case QRScanCodeType.Member: {
-                setTestData([
-                    {name: "Crimson Charcoal", code: "M001A000", selectedCount: 0},
-                    {name: "Glaucous Jet", code: "M002B000", selectedCount: 0},
-                    {name: "Saffron Hunter", code: "M003C000", selectedCount: 0}
-                ])
+                async function fetchData() {
+                    return await TestDataApiService().getMembers()
+                }
+
+                fetchData().then(data => {
+                    data.forEach(x => x.selectedCount = 0);
+                    setTestData(data)
+                })
                 return
             }
             case QRScanCodeType.Coin: {
                 async function fetchData() {
-                    return await TestData().getUnscavengedCoins()
+                    return await TestDataApiService().getUnscavengedCoins()
                 }
 
                 fetchData().then(data => {
@@ -37,31 +40,33 @@ const TestQRBarcodeDataModal = ({testUsersModal, qrScanCodeType, setTestUsersMod
         let data = {}
         switch (qrScanCodeType) {
             case QRScanCodeType.Member: {
-                data.name = item.name
-                data.value = item.code
+                data.name = item.fullName
+                data.value = item.memberCode
+                data.selectedCount = item.selectedCount
                 break
             }
             case QRScanCodeType.Coin: {
                 data.name = `${item.value} points`
                 data.value = item.code
+                data.selectedCount = item.selectedCount
                 break
             }
             default:
                 throw `No handler for ${qrScanCodeType}`
         }
 
-        const bgClass = item.selectedCount > 0 ? "bg-warning" : "bg-primary"
+        const bgClass = data.selectedCount > 0 ? "bg-warning" : "bg-primary"
 
         return (
             <tr key={index} style={{cursor: "pointer"}}
                 onClick={() => {
-                    item.selectedCount++;
-                    onSelected(item.code)
+                    data.selectedCount++;
+                    onSelected(data.value)
                 }}>
                 <td>{data.name}</td>
                 <td>{data.value}</td>
                 <td className="text-center">
-                    <span className={`badge rounded-pill ${bgClass}`}>{item.selectedCount}
+                    <span className={`badge rounded-pill ${bgClass}`}>{data.selectedCount}
                     </span>
                 </td>
             </tr>

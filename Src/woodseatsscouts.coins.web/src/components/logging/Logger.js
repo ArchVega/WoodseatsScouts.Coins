@@ -1,8 +1,8 @@
 function logAttention(message, ...optionalParams) {
     if (message !== undefined) {
-        console.log(`!!!${message.toString().toUpperCase()}!!!`, ...optionalParams)
+        console.log(`%c‼️ ${message}‼️`, 'color: red', ...optionalParams);
     } else {
-        console.log(`!!!message is undefined!!!`, ...optionalParams)
+        console.log("%c‼️ message is undefined‼️", 'color: red', ...optionalParams);
     }
 }
 

@@ -4,6 +4,7 @@ const Uris = {
     appState: `${baseUri}/AppState`,
     members: `${baseUri}/Members`,
     leaderboard: `${baseUri}/Leaderboard/Report`,
+    testDataCoins: `${baseUri}/Sut/Coins`,
     memberPhoto: function(id) {
         return `${baseUri}/Members/${id}/Photo'`
     },
