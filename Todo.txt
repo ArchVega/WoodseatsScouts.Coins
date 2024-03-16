@@ -1,0 +1,6 @@
+test for member code in coin and vice versa
+what happens if someone cancels a haul?? those coins will already be assigned!!!
+user not found image is missing
+the enormous scavenger haul test isn't completing
+found a code B00100 (coin, 0 value?) might be nothing as its in the scavengedcoins table (test data, GetTopThreeGroupsInLastHour_FourScavengeResults_ResultsShouldBe3)
+clear coin code when scanned
