@@ -5,3 +5,4 @@ What happens if someone cancels a haul? The coins are already assigned on scan.
 The "enormous scavenger haul" test isn't completing sometimes. 
 Found a code B00100 (coin, 0 value?) might be nothing as its in the scavengedcoins table (test data, GetTopThreeGroupsInLastHour_FourScavengeResults_ResultsShouldBe3)
 Clear coin code when scanned
+DB - Sections.Code = Members.SectionId. Rename Members.SectionId to SectionCode

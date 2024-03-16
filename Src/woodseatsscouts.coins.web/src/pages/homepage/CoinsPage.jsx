@@ -1,15 +1,11 @@
 import {Col, Row} from "reactstrap";
 import React, {useEffect, useState} from "react";
-import SiteSpinner from "../../components/spinner/SiteSpinner";
-import MemberApiService from "../../services/MemberApiService";
-import {toast} from "react-toastify";
 import AudioFx from "../../fx/AudioFx";
-import {logError, logReactSet, logDebug, logReactUseEffect, logAttention} from "../../components/logging/Logger";
+import {logReactUseEffect} from "../../components/logging/Logger";
 import ScanMemberSection from "./sections/ScanMemberSection";
 import SectionNames from "./sections/SectionNames";
 import ScanCoinsSection from "./sections/scancoins/ScanCoinsSection";
 import HaulResultsSection from "./sections/HaulSummary";
-import {toastError} from "../../components/toaster/toaster";
 
 export function CoinsPage() {
     const [sectionName, setSectionName] = useState(SectionNames.ScanMember)

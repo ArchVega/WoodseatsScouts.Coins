@@ -123,3 +123,45 @@ function CreateCoinData {
         Pop-Location
     }   
 }
+
+function CreateAdditionalDbObjects {
+    param(        
+        [Parameter(Mandatory)]
+        $DatabaseName
+    )
+
+    Write-Host "Creating Views"
+    
+    try {
+        $viewQuery = "
+        CREATE VIEW [MembersScavengedCoins] AS
+        SELECT 
+            Members.FirstName as 'Member First Name',
+            Members.LastName as 'Member Last Name', 
+            Members.Code as 'Member Code',
+            Members.Number as 'Member Number',
+            Members.HasImage as 'Member Image Exists?',
+            Troops.Name as 'Troop',
+            Sections.Name as 'Section',
+            Coins.Code as 'Coin Code',
+            Coins.Value as 'Coin Value'
+        FROM Members
+        join ScavengeResults
+        on ScavengeResults.MemberId = Members.Id
+        join ScavengedCoins
+        on ScavengedCoins.ScavengeResultId = ScavengeResults.Id
+        join Troops
+        on Troops.Id = Members.TroopId
+        join Sections
+        on Sections.Code = Members.SectionId
+        join Coins
+        on Coins.Code = ScavengedCoins.Code
+        "
+        
+        Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query $viewQuery -TrustServerCertificate
+    }
+    catch {
+        Write-Warning "Could not create Views"
+        Write-Warning $_
+    }    
+}
