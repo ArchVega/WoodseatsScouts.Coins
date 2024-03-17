@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from "react";
 import {QrReader} from "react-qr-reader";
 import {AppCameraAvailableContext} from "../../../contexts/AppContext";
 
-export const QRWebcamScanner = ({videoSizeEm, qrCode, setQRCode, type, qrScanCodeType={qrScanCodeType}}) => {
+export const QRWebcamScanner = ({videoSizeEm, qrCode, setQrCode, type, qrScanCodeType={qrScanCodeType}}) => {
     const [currentQRCode, setCurrentQRCode] = useState("");
     const [previousQRCode, setPreviousQRCode] = useState("");
     const [timeoutHandle, setTimeoutHandle] = useState(0);
@@ -13,7 +13,7 @@ export const QRWebcamScanner = ({videoSizeEm, qrCode, setQRCode, type, qrScanCod
             setCurrentQRCode(currentQRCode);
         } else {
             setPreviousQRCode(currentQRCode);
-            setQRCode(currentQRCode)
+            setQrCode(currentQRCode)
 
             clearTimeout(timeoutHandle);
             let t = setTimeout(() => {
