@@ -1,37 +1,44 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.App", "WoodseatsScouts.Coins.App\WoodseatsScouts.Coins.App.csproj", "{2AAE402B-F281-41C4-98E3-65C94EFE1887}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.Tests.Unit", "WoodseatsScouts.Coins.Tests.Unit\WoodseatsScouts.Coins.Tests.Unit.csproj", "{9446F256-25B7-4D4C-844C-00E93263A6F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.Tests.Unit", "Tests\WoodseatsScouts.Coins.Tests.Unit\WoodseatsScouts.Coins.Tests.Unit.csproj", "{9446F256-25B7-4D4C-844C-00E93263A6F0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{F5D5B81C-CF85-4AC0-A8A1-797B401F5CBA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C14BA076-73AB-4E58-84BB-61837025175E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.Tests.Integration", "WoodseatsScouts.Coins.Tests.Integration\WoodseatsScouts.Coins.Tests.Integration.csproj", "{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.Tests.Integration", "Tests\WoodseatsScouts.Coins.Tests.Integration\WoodseatsScouts.Coins.Tests.Integration.csproj", "{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.Api", "Src\WoodseatsScouts.Coins.Api\WoodseatsScouts.Coins.Api.csproj", "{5A475C70-CF54-46FB-83D0-C2F3E05DDD7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		AcceptanceTest|Any CPU = AcceptanceTest|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2AAE402B-F281-41C4-98E3-65C94EFE1887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AAE402B-F281-41C4-98E3-65C94EFE1887}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AAE402B-F281-41C4-98E3-65C94EFE1887}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AAE402B-F281-41C4-98E3-65C94EFE1887}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9446F256-25B7-4D4C-844C-00E93263A6F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9446F256-25B7-4D4C-844C-00E93263A6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9446F256-25B7-4D4C-844C-00E93263A6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9446F256-25B7-4D4C-844C-00E93263A6F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9446F256-25B7-4D4C-844C-00E93263A6F0}.AcceptanceTest|Any CPU.ActiveCfg = AcceptanceTest|Any CPU
+		{9446F256-25B7-4D4C-844C-00E93263A6F0}.AcceptanceTest|Any CPU.Build.0 = AcceptanceTest|Any CPU
 		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.AcceptanceTest|Any CPU.ActiveCfg = AcceptanceTest|Any CPU
+		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE}.AcceptanceTest|Any CPU.Build.0 = AcceptanceTest|Any CPU
+		{5A475C70-CF54-46FB-83D0-C2F3E05DDD7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A475C70-CF54-46FB-83D0-C2F3E05DDD7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A475C70-CF54-46FB-83D0-C2F3E05DDD7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A475C70-CF54-46FB-83D0-C2F3E05DDD7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A475C70-CF54-46FB-83D0-C2F3E05DDD7B}.AcceptanceTest|Any CPU.ActiveCfg = AcceptanceTest|Any CPU
+		{5A475C70-CF54-46FB-83D0-C2F3E05DDD7B}.AcceptanceTest|Any CPU.Build.0 = AcceptanceTest|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{2AAE402B-F281-41C4-98E3-65C94EFE1887} = {F5D5B81C-CF85-4AC0-A8A1-797B401F5CBA}
 		{9446F256-25B7-4D4C-844C-00E93263A6F0} = {C14BA076-73AB-4E58-84BB-61837025175E}
 		{F78B36B6-C259-44C0-AB39-8B15F5ACBCBE} = {C14BA076-73AB-4E58-84BB-61837025175E}
+		{5A475C70-CF54-46FB-83D0-C2F3E05DDD7B} = {F5D5B81C-CF85-4AC0-A8A1-797B401F5CBA}
 	EndGlobalSection
 EndGlobal

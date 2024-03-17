@@ -1,0 +1,105 @@
+@use 'site.variables' as variables;
+@use 'site.reset' as reset;
+
+@use 'site.spinner' as spinner;
+@use 'site.controls' as controls;
+@use 'site.coins' as coins;
+@use 'site.scrollbars' as scrollbars;
+@use 'site.tables' as tables;
+@use 'site.report' as report;
+@use 'site.typography' as typography;
+
+@use './pages/homepage';
+
+#site-header {
+  img {
+    width: 256px;
+  }
+
+  nav {
+    color: white;
+    background-color: variables.$colour-scouts-purple;
+  }
+
+  li a {
+    color: white !important;
+  }
+
+  div {
+    background-color: variables.$colour-scouts-purple;
+    color: white;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
+h1 {
+  font-size: calc(2.75rem + 1.5vw);
+}
+
+#site-container {
+  padding-top:3em;
+}
+
+.menu-item-active {
+  text-decoration: underline;
+}
+
+.show-user-photo-icon, .edit-user-photo-icon {
+  cursor: pointer;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.qr-code-scanner-container video {
+  border: 0.2em solid black;
+  background-color: #2d2d2d;
+}
+
+.photo-webcam {
+  video {
+    width: 100% !important;
+  }
+}
+
+.btn-next-member {
+  border: none;
+}
+
+.scouts-sitebar-appmode-development {
+  strong {
+    color: white;
+  }
+  color: white;
+  text-align: center;
+  background-color: variables.$colour-scouts-green;
+}
+
+.scouts-sitebar-appmode-acceptancetesting {
+  strong {
+    color: black;
+  }
+
+  .show-test-ids {
+    font-weight: bold;
+    color:  variables.$colour-scouts-purple;
+  }
+
+  color: black;
+  text-align: center;
+  background-color: variables.$colour-scouts-orange;
+}
+
+#scan-coins-section-wave-image {
+  width: 64px;
+}
+
+#scan-coins-section-h1 {
+  span {
+    margin-top:-1em;
+  }
+}

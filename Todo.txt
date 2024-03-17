@@ -1,0 +1,8 @@
+get a usb scanner gun online
+
+Found a code B00100 (coin, 0 value?) might be nothing as its in the scavengedcoins table (test data, GetTopThreeGroupsInLastHour_FourScavengeResults_ResultsShouldBe3)
+DB - Sections.Code = Members.SectionId. Rename Members.SectionId to SectionCode
+
+change B to C for coin codes
+
+server side duplicate coins check hasn't been added. currently only client side checks. good enough?
