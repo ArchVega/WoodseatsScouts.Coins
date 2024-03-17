@@ -14,7 +14,9 @@ import HomePage from "../pageModels/HomePage";
 import ToastMessageModel from "../uiModels/ToastMessageModel";
 import {assertMembersPageContains} from "../assertionHelpers/MembersPageAssertionHelpers";
 import ReportPage from "../pageModels/ReportPage";
+import ScreenshotsComparer from "../utilities/ScreenshotsComparer";
 
+let screenshotsComparer =null;
 let users = Users();
 let scavengerHunt;
 (async () => {
@@ -27,7 +29,9 @@ function serialStep(name) {
     return `Step ${counter}: ${name}`
 }
 
-test(serialStep("Creating users"), async ({page}) => {
+test(serialStep("Creating users"), async ({page}, testInfo) => {
+    screenshotsComparer =  ScreenshotsComparer("screenshots\\master");
+
     await Helpers().setDeadlineTime(2)
 
     Helpers().restoreDb()
@@ -83,9 +87,11 @@ test(serialStep("Creating users"), async ({page}) => {
     expect(members[15].name).toBe("Violet Saffron")
 
     await Helpers().copyTestMemberImages()
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Testing search"), async ({page}) => {
+test(serialStep("Testing search"), async ({page}, testInfo) => {
     const membersPage = MembersPage(page);
     await membersPage.goTo()
 
@@ -103,6 +109,8 @@ test(serialStep("Testing search"), async ({page}) => {
 
     results = await membersPage.searchMembers("M003C003")
     expect(results.length).toBe(1)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Testing navigation"), async ({page}) => {
@@ -121,6 +129,8 @@ test(serialStep("Testing navigation"), async ({page}) => {
     await page.getByTestId("nav-settings-modal").click();
     const useCameraSwitch = page.getByTestId("switch-use-camera");
     await expect(useCameraSwitch).toBeVisible()
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Edit photo modal appears for a user"), async ({page}) => {
@@ -131,6 +141,8 @@ test(serialStep("Edit photo modal appears for a user"), async ({page}) => {
     await page.getByTestId(anyMember.editPhotoTestId).click()
     const button = await page.getByText("Capture photo");
     await expect(button).toBeVisible();
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Invalid wrist code shows an error toast message"), async ({page}) => {
@@ -140,6 +152,8 @@ test(serialStep("Invalid wrist code shows an error toast message"), async ({page
 
     const errorMessage = await ToastMessageModel(page).getMessage()
     expect(errorMessage).toBe("Could not translate Member Code 'member-code-does-not-exist'")
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Scanning a coin instead of a wristband for logging in a member shows an error toast message"), async ({page}) => {
@@ -150,6 +164,8 @@ test(serialStep("Scanning a coin instead of a wristband for logging in a member 
 
     const errorMessage = await ToastMessageModel(page).getMessage()
     expect(errorMessage).toBe(`The code '${anyCoinCode.code}' is a Coin code`)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("User presses the Finished Scanning button for Asparagus Royal without any coins added"), async ({page}) => {
@@ -162,6 +178,8 @@ test(serialStep("User presses the Finished Scanning button for Asparagus Royal w
 
     const errorMessage = await ToastMessageModel(page).getMessage()
     expect(errorMessage).toBe("Add at least one coin for this member")
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Invalid coin code for Asparagus Royal shows an error toast message"), async ({page}) => {
@@ -174,6 +192,8 @@ test(serialStep("Invalid coin code for Asparagus Royal shows an error toast mess
 
     const errorMessage = await ToastMessageModel(page).getMessage()
     expect(errorMessage).toBe("Could not translate Coin Code 'coin-code-does-not-exist'")
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Scanning a wristband instead of a coin when logging coins shows an error toast message"), async ({page}) => {
@@ -187,11 +207,15 @@ test(serialStep("Scanning a wristband instead of a coin when logging coins shows
 
     const errorMessage = await ToastMessageModel(page).getMessage()
     expect(errorMessage).toBe(`The code '${anyMemberCode}' is a Member code`)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Asparagus Royal completes a scavenger haul"), async ({page}) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.asparagusRoyal, [10, 3, 20])
     await validScavengerHaulSteps(users.asparagusRoyal, coins, 33, page)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Viewing the report page"), async ({page}) => {
@@ -207,11 +231,15 @@ test(serialStep("Viewing the report page"), async ({page}) => {
             {groupName: "Royal", averagePoints: 8.25}
         ]
     )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Icterine Crimson completes a scavenger haul"), async ({page}) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.icterineCrimson, [20, 20])
     await validScavengerHaulSteps(users.icterineCrimson, coins, 40, page)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Viewing the report page"), async ({page}) => {
@@ -230,11 +258,15 @@ test(serialStep("Viewing the report page"), async ({page}) => {
             {groupName: "Royal", averagePoints: 8.25}
         ]
     )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Cerise Royal completes a scavenger haul"), async ({page}) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.ceriseRoyal, [10, 20])
     await validScavengerHaulSteps(users.ceriseRoyal, coins, 30, page)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Viewing the report page"), async ({page}) => {
@@ -254,11 +286,15 @@ test(serialStep("Viewing the report page"), async ({page}) => {
             {groupName: "Crimson", averagePoints: 10}
         ]
     )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Glaucous Jet completes a scavenger haul"), async ({page}) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.glaucousJet, [20, 10, 9, 10])
     await validScavengerHaulSteps(users.glaucousJet, coins, 49, page)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Violet Saffron attempts to scan the same coin twice"), async ({page}) => {
@@ -279,6 +315,8 @@ test(serialStep("Violet Saffron attempts to scan the same coin twice"), async ({
     expect(errorMessage).toBe(`That coin has already been scanned for Violet`)
 
     expect(await coinCodeScanPage.getTotalCoinValue()).toBe(30)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Viewing the report page"), async ({page}) => {
@@ -300,6 +338,8 @@ test(serialStep("Viewing the report page"), async ({page}) => {
             {groupName: "Crimson", averagePoints: 10},
         ]
     )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Viewing the members page"), async ({page}) => {
@@ -313,6 +353,8 @@ test(serialStep("Viewing the members page"), async ({page}) => {
             {name: users.icterineCrimson, group: "Crimson", totalPoints: 40, section: "Adults"},
         ]
     )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Olivine Crimson tries to use someone else's coin"), async ({page}) => {
@@ -336,6 +378,8 @@ test(serialStep("Olivine Crimson tries to use someone else's coin"), async ({pag
 
     await coinCodeScanPage.enterCoinCode(coin3.code)
     expect(await coinCodeScanPage.getTotalCoinValue()).toBe(40)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(
@@ -378,6 +422,8 @@ test(
         const additionalMessage = await oxfordScavengedResultPage.getAdditionalMessage();
         expect(additionalMessage)
             . toEqual(`Unfortunately, there was an issue with at least one of your coins.${specificCoinToBeShared.code} scanned by Jasper Royal`)
+
+        await screenshotsComparer.takeScreenshot(page, testInfo, "End");
     });
 
 test(serialStep("Time's up"), async ({page}) => {
@@ -392,4 +438,6 @@ test(serialStep("Time's up"), async ({page}) => {
 
     hoursLeft = await reportPage.getHoursLeft()
     expect(hoursLeft).toBe(0)
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
