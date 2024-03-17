@@ -232,12 +232,6 @@ test(serialStep("Viewing the report page"), async ({page}) => {
     )
 });
 
-// test(serialStep("(user) cancels a haul returns the assigned scavenged coins back into circulation"), async ({page}) => {
-//     // Todo: hold the coins in memory so they're not added at all until done? or create an admin page?
-//     // const coins = await scavengerHunt.getUnscavengedCoinByValue(users.icterineCrimson, [20, 20])
-//     // await validScavengerHaulSteps(users.icterineCrimson, coins, 40, page)
-// });
-
 test(serialStep("Cerise Royal completes a scavenger haul"), async ({page}) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.ceriseRoyal, [10, 20])
     await validScavengerHaulSteps(users.ceriseRoyal, coins, 30, page)
@@ -267,6 +261,24 @@ test(serialStep("Glaucous Jet completes a scavenger haul"), async ({page}) => {
     await validScavengerHaulSteps(users.glaucousJet, coins, 49, page)
 });
 
+test(serialStep("Violet Saffron attempts to scan the same coin twice"), async ({page}) => {
+    const homePage = HomePage(page);
+    await homePage.goTo()
+
+    const coinCodeScanPage = await homePage.simulateValidUserWristbandScan(users.violetSaffron)
+
+    const coinToBeEnteredTwice = await scavengerHunt.peekUnscavengedCoin(20);
+    // Todo: the UI won't allow "triggering" the usb scanner value if the same code is used successively (because the text field isn't cleared after a scan and so no change event is fired). This may not be a practical bug as we don't allow duplicates anyway.
+    const otherCoin = (await scavengerHunt.getUnscavengedCoinByValue(users.glaucousJet, [10]))[0]
+
+    await coinCodeScanPage.enterCoinCode(coinToBeEnteredTwice.code);
+    await coinCodeScanPage.enterCoinCode(otherCoin.code);
+    await coinCodeScanPage.enterCoinCode(coinToBeEnteredTwice.code);
+
+    const errorMessage = await ToastMessageModel(   page).getMessage()
+    expect(errorMessage).toBe(`That coin has already been scanned for Violet`)
+});
+
 test(serialStep("Viewing the report page"), async ({page}) => {
     await assertReportsPageIs(
         page,
@@ -287,27 +299,6 @@ test(serialStep("Viewing the report page"), async ({page}) => {
         ]
     )
 });
-
-// test(serialStep("Viewing the report page"), async ({page}) => {
-//     await assertReportsPageIs(
-//         page,
-//         [
-//             {userName: users.glaucousJet, troopName: "Jet", sectionName: "Beavers", userPoints: 49},
-//             {userName: users.ceriseRoyal, troopName: "Royal", sectionName: "Cubs", userPoints: 30},
-//             {userName: users.icterineCrimson, troopName: "Crimson", sectionName: "Adults", userPoints: 40},
-//         ],
-//         [
-//             {groupName: "Royal", averagePoints: 15.75},
-//             {groupName: "Jet", averagePoints: 12.25},
-//             {groupName: "Crimson", averagePoints: 10},
-//         ],
-//         [
-//             {groupName: "Royal", averagePoints: 15.75},
-//             {groupName: "Jet", averagePoints: 12.25},
-//             {groupName: "Crimson", averagePoints: 10},
-//         ]
-//     )
-// });
 
 test(serialStep("Viewing the members page"), async ({page}) => {
     await assertMembersPageContains(

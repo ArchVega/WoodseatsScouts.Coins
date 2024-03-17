@@ -24,12 +24,22 @@ function ScanCoinsSection({member, setHaulResult}) {
                 return await CoinApiService().fetchCoin(coinQrCode, member.memberCode)
             }
 
+            function isDuplicateCoin(coin) {
+                return coins.filter(x => x.code === coin.code).length > 0
+            }
+
             fetchData()
                 .then(async value => {
-                    const data = (await value.data)
-                    logReactSet("Set Coins", data)
-                    setCoins([...coins, data])
-                    audioFx.playCoinScannedSuccessAudio()
+                    const coin = (await value.data)
+                    logReactSet("Set Coins", coin)
+
+                    if (!isDuplicateCoin((coin))) {
+                        setCoins([...coins, coin])
+                        audioFx.playCoinScannedSuccessAudio()
+                    } else {
+                        audioFx.playCoinScannedErrorAudio()
+                        toastError(`That coin has already been scanned for ${member.firstName}`)
+                    }
                 })
                 .catch(async axiosReason => {
                     audioFx.playCoinScannedErrorAudio()
