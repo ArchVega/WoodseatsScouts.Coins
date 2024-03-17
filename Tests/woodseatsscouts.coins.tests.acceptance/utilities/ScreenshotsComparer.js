@@ -1,4 +1,5 @@
 import path from "node:path";
+import joinImages from "join-images";
 
 const fs = require('node:fs');
 
@@ -26,10 +27,17 @@ function ScreenshotsComparer(screenshotsDirectory, runName) {
     // Creates the directory for the first time if it doesn't exist. This directory should NOT be deleted afterwards.
     createDirectoryIfNotExists(screenshotsDirectory);
 
-    // "Run Directories" should be deleted before each test run.
-    const runDirectory = path.join(screenshotsDirectory, runName);
-    deleteDirectoryIfExists(runDirectory)
-    createDirectoryIfNotExists(runDirectory);
+    // Todo: this is some bad logic.
+    let runDirectory = path.join(screenshotsDirectory, "comparisons");
+
+    if (runName !== undefined) {
+        // "Run Directories" should be deleted before each test run.
+        runDirectory = path.join(screenshotsDirectory, runName);
+        deleteDirectoryIfExists(runDirectory)
+        createDirectoryIfNotExists(runDirectory);
+    }
+
+    const names = []
 
     return {
         takeScreenshot: async (page, testInfo, description) => {
@@ -46,9 +54,33 @@ function ScreenshotsComparer(screenshotsDirectory, runName) {
             }
 
             let name = testInfo.titlePath[1].replace(/:/g,'-').replace(/\./g, '_');
-            name = name + ".png"
+            const stepNameIndex = names.filter(x => x === name).length
+            names.push(name)
+            name = `${name}-${stepNameIndex}-${description}.png`
             const filePath = path.join(directory, name);
             await page.screenshot({ path: filePath, fullPage: true });
+        },
+
+        createComparisons: function(runName, testInfo) {
+            if (runName.toLowerCase() === "master") {
+                throw "RunName is master, change to feature"
+            }
+
+            const comparisonsDirectory = path.join(screenshotsDirectory, "comparisons");
+            deleteDirectoryIfExists(comparisonsDirectory)
+            createDirectoryIfNotExists(comparisonsDirectory);
+
+            let directory = testInfo.titlePath[0].replace(/\.spec\.js/g, '').replace(/\./g, '_');
+            const masterFiles =fs.readdirSync(`screenshots/master/${directory}`)
+
+            masterFiles.forEach(masterFile => {
+                const before = `screenshots/master/SerialWalkthrough/${masterFile}`
+                const after = `screenshots/feature/SerialWalkthrough/${masterFile}`
+                joinImages([before, after], { direction: "horizontal"}).then((img) => {
+                    const outFile = path.join(comparisonsDirectory, masterFile)
+                    img.toFile(outFile).then(r => {});
+                });
+            })
         }
     }
 }

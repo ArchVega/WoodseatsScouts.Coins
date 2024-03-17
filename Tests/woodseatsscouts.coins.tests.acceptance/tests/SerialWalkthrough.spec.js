@@ -15,9 +15,10 @@ import ToastMessageModel from "../uiModels/ToastMessageModel";
 import {assertMembersPageContains} from "../assertionHelpers/MembersPageAssertionHelpers";
 import ReportPage from "../pageModels/ReportPage";
 import ScreenshotsComparer from "../utilities/ScreenshotsComparer";
+import joinImages from "join-images";
 
 let runName = "master"
-runName = "comparison"
+runName = "feature"
 
 let screenshotsComparer =null;
 let users = Users();
@@ -443,4 +444,11 @@ test(serialStep("Time's up"), async ({page}, testInfo) => {
     expect(hoursLeft).toBe(0)
 
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
+});
+
+test(serialStep("Create screenshot comparisons"), async ({page}, testInfo) => {
+    if (runName === "feature") {
+        screenshotsComparer =  ScreenshotsComparer("screenshots");
+        screenshotsComparer.createComparisons(runName, testInfo);
+    }
 });
