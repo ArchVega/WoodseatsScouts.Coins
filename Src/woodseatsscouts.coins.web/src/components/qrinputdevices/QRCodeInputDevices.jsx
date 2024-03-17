@@ -10,7 +10,7 @@ function QRCodeInputDevices({qrCode, setQrCode, qrScanCodeType}) {
     return (
         <>
             <Row>
-                <Col className="col-8 offset-2">
+                <Col>
                     {useAppCamera
                         ? (<QRWebcamScanner qrCode={qrCode} setQrCode={setQrCode} qrScanCodeType={qrScanCodeType} videoSizeEm={20} type={"user"}/>)
                         : (<QRBarcodeScanner qrCode={qrCode} setQrCode={setQrCode} qrScanCodeType={qrScanCodeType}></QRBarcodeScanner>)}

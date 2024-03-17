@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import wave from "../../../images/wave.png";
 import QRCodeInputDevices from "../../../components/qrinputdevices/QRCodeInputDevices";
-import {Row} from "reactstrap";
+import {Col, Row} from "reactstrap";
 import QRScanCodeType from "../../../components/qrscanners/QRScanCodeType";
 import SiteSpinner from "../../../components/spinner/SiteSpinner";
 import {logDebug, logError, logReactSet} from "../../../components/logging/Logger";
@@ -55,7 +55,13 @@ function ScanMemberSection({setMember}) {
 
                 {loading
                     ? <SiteSpinner/>
-                    : <QRCodeInputDevices qrCode={memberQrCode} setQrCode={setMemberQrCode} qrScanCodeType={QRScanCodeType.Member}/>
+                    : (
+                        <Row>
+                            <Col xs={{size: 8, offset: 2}}>
+                                <QRCodeInputDevices qrCode={memberQrCode} setQrCode={setMemberQrCode} qrScanCodeType={QRScanCodeType.Member}/>
+                            </Col>
+                        </Row>
+                    )
                 }
             </Row>
         </>
