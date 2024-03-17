@@ -277,6 +277,8 @@ test(serialStep("Violet Saffron attempts to scan the same coin twice"), async ({
 
     const errorMessage = await ToastMessageModel(   page).getMessage()
     expect(errorMessage).toBe(`That coin has already been scanned for Violet`)
+
+    expect(await coinCodeScanPage.getTotalCoinValue()).toBe(30)
 });
 
 test(serialStep("Viewing the report page"), async ({page}) => {
