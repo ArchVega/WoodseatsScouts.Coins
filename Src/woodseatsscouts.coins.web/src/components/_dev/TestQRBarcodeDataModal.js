@@ -15,7 +15,11 @@ const TestQRBarcodeDataModal = ({testUsersModal, qrScanCodeType, setTestUsersMod
                 }
 
                 fetchData().then(data => {
-                    data.forEach(x => x.selectedCount = 0);
+                    data.forEach(x => {
+                        x.name = x.fullName
+                        x.value = x.memberCode
+                        x.selectedCount = 0
+                    });
                     setTestData(data)
                 })
                 return
@@ -26,7 +30,11 @@ const TestQRBarcodeDataModal = ({testUsersModal, qrScanCodeType, setTestUsersMod
                 }
 
                 fetchData().then(data => {
-                    data.forEach(x => x.selectedCount = 0);
+                    data.forEach(x => {
+                        x.name = `${x.value} points`
+                        x.value = x.code
+                        x.selectedCount = 0
+                    });
                     setTestData(data)
                 })
                 return
@@ -37,36 +45,18 @@ const TestQRBarcodeDataModal = ({testUsersModal, qrScanCodeType, setTestUsersMod
     }, []);
 
     function renderRow(item, index) {
-        let data = {}
-        switch (qrScanCodeType) {
-            case QRScanCodeType.Member: {
-                data.name = item.fullName
-                data.value = item.memberCode
-                data.selectedCount = item.selectedCount
-                break
-            }
-            case QRScanCodeType.Coin: {
-                data.name = `${item.value} points`
-                data.value = item.code
-                data.selectedCount = item.selectedCount
-                break
-            }
-            default:
-                throw `No handler for ${qrScanCodeType}`
-        }
-
-        const bgClass = data.selectedCount > 0 ? "bg-warning" : "bg-primary"
+        const bgClass = item.selectedCount > 0 ? "bg-warning" : "bg-primary"
 
         return (
             <tr key={index} style={{cursor: "pointer"}}
                 onClick={() => {
-                    data.selectedCount++;
-                    onSelected(data.value)
+                    item.selectedCount++;
+                    onSelected(item.value)
                 }}>
-                <td>{data.name}</td>
-                <td>{data.value}</td>
+                <td>{item.name}</td>
+                <td>{item.value}</td>
                 <td className="text-center">
-                    <span className={`badge rounded-pill ${bgClass}`}>{data.selectedCount}
+                    <span className={`badge rounded-pill ${bgClass}`}>{item.selectedCount}
                     </span>
                 </td>
             </tr>

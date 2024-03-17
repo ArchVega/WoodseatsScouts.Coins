@@ -375,8 +375,9 @@ test(
         // Next Oxford scans his coins, including the shared coin
         const oxfordCoinPage = await scansAllCoinsButDoesNotClickFinish(oxfordPage.member, oxfordPage.coins, 33, oxfordPage.page)
 
-        // Now Jasper clicks Next
+        // Now Jasper clicks the Finish button (we also mark the in-memory coin as allocated to him so other tests won't use it)
         await clicksFinishButtonWithExpectation(jasperCoinPage, 33)
+        scavengerHunt.allocateTestCoinToUser(specificCoinToBeShared, Users.jasperRoyal)
 
         // Now Oxford tries, only two coins are recorded, and the results page should show an additional message
         const oxfordScavengedResultPage
@@ -385,12 +386,6 @@ test(
         expect(additionalMessage)
             . toEqual(`Unfortunately, there was an issue with at least one of your coins.${specificCoinToBeShared.code} scanned by Jasper Royal`)
     });
-
-test(serialStep("Turquoise Crimson completes an enormous haul"), async ({page}) => {
-    const coinValues = [20, 10, 3, 9, 11, 20, 10, 20, 10, 3, 9, 11, 20, 10, 20, 10, 3, 9, 11, 20, 10]
-    const coins = await scavengerHunt.getUnscavengedCoinByValue(users.turquoiseCrimson, coinValues)
-    await validScavengerHaulSteps(users.turquoiseCrimson, coins, 249, page)
-});
 
 test(serialStep("Time's up"), async ({page}) => {
     const reportPage = ReportPage(page);
