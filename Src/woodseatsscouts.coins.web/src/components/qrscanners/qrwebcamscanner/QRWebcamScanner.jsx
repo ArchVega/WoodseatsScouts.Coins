@@ -6,7 +6,6 @@ export const QRWebcamScanner = ({videoSizeEm, qrCode, setQrCode, type, qrScanCod
     const [currentQRCode, setCurrentQRCode] = useState("");
     const [previousQRCode, setPreviousQRCode] = useState("");
     const [timeoutHandle, setTimeoutHandle] = useState(0);
-    const [appCameraAvailable, setAppCameraAvailable] = useContext(AppCameraAvailableContext)
 
     useEffect(() => {
         if (currentQRCode === "") {
