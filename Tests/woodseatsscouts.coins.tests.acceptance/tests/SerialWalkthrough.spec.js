@@ -34,7 +34,8 @@ function serialStep(name) {
 }
 
 test(serialStep("Creating users"), async ({page}, testInfo) => {
-    screenshotsComparer =  ScreenshotsComparer("screenshots", runName);
+    // screenshotsComparer =  ScreenshotsComparer("screenshots", runName); this deletes the existing master folder
+    screenshotsComparer =  ScreenshotsComparer("screenshots"); // this doesn't delete the folder
 
     await Helpers().setDeadlineTime(2)
 

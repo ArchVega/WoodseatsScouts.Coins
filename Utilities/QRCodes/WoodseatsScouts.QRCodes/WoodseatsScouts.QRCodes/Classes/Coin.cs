@@ -10,7 +10,6 @@ public class Coin(int i)
 
     public override string ToString()
     {
-        
-        return $"B{Id:0000}{Base:000}{Value:000}";
+        return $"C{Id:0000}{Base:000}{Value:000}";
     }
 }

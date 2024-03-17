@@ -27,7 +27,7 @@
 
         public static MemberCodeTranslationResult TranslateMemberCode(string code)
         {
-            if (!string.IsNullOrWhiteSpace(code) && code[..1] == "B")
+            if (!string.IsNullOrWhiteSpace(code) && code[..1] == "C")
             {
                 throw new CodeTranslationException($"The code '{code}' is a Coin code");                
             }
