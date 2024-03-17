@@ -142,14 +142,15 @@ test(serialStep("Invalid wrist code shows an error toast message"), async ({page
     expect(errorMessage).toBe("Could not translate Member Code 'member-code-does-not-exist'")
 });
 
-// test(serialStep("Scanning a coin instead of a wristband for logging in a member shows an error toast message"), async ({page}) => {
-//     // const homePage = HomePage(page);
-//     // await homePage.goTo()
-//     // await homePage.simulateInvalidUserWristbandScan("member-code-does-not-exist")
-//     //
-//     // const errorMessage = await ToastMessageModel(page).getMessage()
-//     // expect(errorMessage).toBe("Could not translate Member Code 'member-code-does-not-exist'")
-// });
+test(serialStep("Scanning a coin instead of a wristband for logging in a member shows an error toast message"), async ({page}) => {
+    const homePage = HomePage(page);
+    await homePage.goTo()
+    const anyCoinCode = await scavengerHunt.peekUnscavengedCoin(20);
+    await homePage.simulateInvalidUserWristbandScan(anyCoinCode.code)
+
+    const errorMessage = await ToastMessageModel(page).getMessage()
+    expect(errorMessage).toBe(`The code '${anyCoinCode.code}' is a Coin code`)
+});
 
 test(serialStep("User presses the Finished Scanning button for Asparagus Royal without any coins added"), async ({page}) => {
     const homePage = HomePage(page);
@@ -175,20 +176,19 @@ test(serialStep("Invalid coin code for Asparagus Royal shows an error toast mess
     expect(errorMessage).toBe("Could not translate Coin Code 'coin-code-does-not-exist'")
 });
 
-// test(serialStep("Scanning a wristband instead of a coin when logging coins shows an error toast message"), async ({page}) => {
-//     // Todo
-//     // const homePage = HomePage(page);
-//     // await homePage.goTo()
-//     //
-//     // const coinCodeScanPage = await homePage.simulateValidUserWristbandScan(users.asparagusRoyal)
-//     //
-//     // await coinCodeScanPage.enterCoinCode("coin-code-does-not-exist")
-//     //
-//     // const errorMessage = await ToastMessageModel(page).getMessage()
-//     // expect(errorMessage).toBe("Could not translate Coin Code 'coin-code-does-not-exist'")
-// });
+test(serialStep("Scanning a wristband instead of a coin when logging coins shows an error toast message"), async ({page}) => {
+    const homePage = HomePage(page);
+    await homePage.goTo()
 
-// todo: bug - significant one. After about 8 or so, scan continues, but coins are not registered.
+    const coinCodeScanPage = await homePage.simulateValidUserWristbandScan(users.violetSaffron)
+
+    const anyMemberCode = "M001A003"
+    await coinCodeScanPage.enterCoinCode(anyMemberCode)
+
+    const errorMessage = await ToastMessageModel(page).getMessage()
+    expect(errorMessage).toBe(`The code '${anyMemberCode}' is a Member code`)
+});
+
 test(serialStep("Asparagus Royal completes a scavenger haul"), async ({page}) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.asparagusRoyal, [10, 3, 20])
     await validScavengerHaulSteps(users.asparagusRoyal, coins, 33, page)

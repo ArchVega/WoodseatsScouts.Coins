@@ -6,26 +6,46 @@ namespace WoodseatsScouts.Coins.Tests;
 
 public class CodeTranslatorTests
 {
-    [Fact]
-    public void TranslateCoinPointCode_InvalidCode_ThrowsException()
+    [Theory]
+    [InlineData("does-not-exist")]
+    [InlineData("")]
+    public void TranslateCoinPointCode_InvalidCode_ThrowsException(string code)
     {
-        var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateCoinPointCode("does-not-exist"));
-        exception.Message.ShouldBe("Could not translate Coin Code 'does-not-exist'");
+        var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateCoinCode(code));
+        exception.Message.ShouldBe($"Could not translate Coin Code '{code}'");
+    }
+    
+    [Theory]
+    [InlineData("does-not-exist")]
+    [InlineData("")]
+    public void TranslateMemberCode_InvalidCode_ThrowsException(string code)
+    {
+        var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateMemberCode(code));
+        exception.Message.ShouldBe($"Could not translate Member Code '{code}'");
     }
     
     [Fact]
-    public void TranslateMemberCode_InvalidCode_ThrowsException()
+    public void TranslateMemberCode_CoinCodeGiven_ThrowsException()
     {
-        var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateMemberCode("does-not-exist"));
-        exception.Message.ShouldBe("Could not translate Member Code 'does-not-exist'");
+        const string validCoinCode = "B0002001020";
+        var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateMemberCode(validCoinCode));
+        exception.Message.ShouldBe($"The code 'B0002001020' is a Coin code");
     }
     
+    [Fact]
+    public void TranslateCodeCode_MemberCodeGiven_ThrowsException()
+    {
+        const string validCoinCode = "M001A001";
+        var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateCoinCode(validCoinCode));
+        exception.Message.ShouldBe($"The code 'M001A001' is a Member code");
+    }
+
     [Theory]
     [InlineData("B0001001010",  1, "B", 1, 10)]
     [InlineData("B0047010020", 47, "B", 10, 20)]
     public void TranslatingPoints(string code, int id, string tokenIdentifier, int baseNumber, int pointValue)
     {   
-        var pointTranslationResult = CodeTranslator.TranslateCoinPointCode(code);
+        var pointTranslationResult = CodeTranslator.TranslateCoinCode(code);
         pointTranslationResult.Id.ShouldBe(id);
         pointTranslationResult.TokenIdentifier.ShouldBe(tokenIdentifier);
         pointTranslationResult.BaseNumber.ShouldBe(baseNumber);

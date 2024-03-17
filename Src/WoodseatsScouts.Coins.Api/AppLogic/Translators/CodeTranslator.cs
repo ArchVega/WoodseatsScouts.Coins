@@ -2,8 +2,13 @@
 {
     public static class CodeTranslator
     {
-        public static CoinPointTranslationResult TranslateCoinPointCode(string code)
+        public static CoinPointTranslationResult TranslateCoinCode(string code)
         {
+            if (!string.IsNullOrWhiteSpace(code) && code[..1] == "M")
+            {
+                throw new CodeTranslationException($"The code '{code}' is a Member code");                
+            }
+            
             try
             {
                 return new CoinPointTranslationResult
@@ -22,6 +27,11 @@
 
         public static MemberCodeTranslationResult TranslateMemberCode(string code)
         {
+            if (!string.IsNullOrWhiteSpace(code) && code[..1] == "B")
+            {
+                throw new CodeTranslationException($"The code '{code}' is a Coin code");                
+            }
+            
             try
             {
                 return new MemberCodeTranslationResult

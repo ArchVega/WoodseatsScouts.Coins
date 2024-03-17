@@ -30,7 +30,9 @@ const HomePage = (page) => {
             await memberCodeTextbox.press('Enter')
 
             return CoinCodeScanPage(page);
-        }
+        },
+
+
     }
 }
 

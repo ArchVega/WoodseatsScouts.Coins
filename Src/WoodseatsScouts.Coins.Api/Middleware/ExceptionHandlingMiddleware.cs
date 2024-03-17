@@ -34,10 +34,7 @@ public class ExceptionHandlingMiddleware
         context.Response.ContentType = "application/json";
         var response = context.Response;
 
-        var errorResponse = new ErrorResponse
-        {
-            Success = false
-        };
+        string errorResponse;
         
         switch (exception)
         {
@@ -45,25 +42,25 @@ public class ExceptionHandlingMiddleware
                 if (invalidOperationException.Message.Contains("Sequence contains no elements"))
                 {
                     response.StatusCode = (int)HttpStatusCode.NotFound;
-                    errorResponse.Message = "Could not find the requested resource";
+                    errorResponse = "Could not find the requested resource";
                 }
                 else
                 {
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    errorResponse.Message = $"Error of type {invalidOperationException.GetType().Name} not handled";
+                    errorResponse = $"Error of type {invalidOperationException.GetType().Name} not handled";
                 }
                 break;
             case CodeTranslationException codeTranslationException:
                 response.StatusCode = (int) HttpStatusCode.BadRequest;
-                errorResponse.Message = codeTranslationException.Message;
+                errorResponse = codeTranslationException.Message;
                 break;
             case DbUpdateException dbUpdateException:
                 response.StatusCode = (int) HttpStatusCode.BadRequest;
-                errorResponse.Message = dbUpdateException.InnerException!.Message;
+                errorResponse = dbUpdateException.InnerException!.Message;
                 break;
             default:
                 response.StatusCode = (int) HttpStatusCode.InternalServerError;
-                errorResponse.Message = exception.Message;
+                errorResponse = exception.Message;
                 break;
         }
         

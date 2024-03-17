@@ -12,21 +12,7 @@ public class CoinsController(IAppDbContext appDbContext) : ControllerBase
     [Route("{code}/Scan/{memberCode}")]
     public IActionResult GetCoin(string code, string memberCode)
     {
-        if (appDbContext.Members!.Any(x => x.Code == code))
-        {
-            return BadRequest("Expected coin code but received user code.");
-        }
-
-        CoinPointTranslationResult result;
-
-        try
-        {
-            result = CodeTranslator.TranslateCoinPointCode(code);
-        }
-        catch (CodeTranslationException e)
-        {
-            return BadRequest(e.Message);
-        }
+        var result = CodeTranslator.TranslateCoinCode(code);
 
         var dbCoin = appDbContext.Coins!.SingleOrDefault(x => x.Code == code);
 

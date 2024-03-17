@@ -10,6 +10,7 @@ import MemberApiService from "../../../services/MemberApiService";
 import {toastError} from "../../../components/toaster/toaster";
 
 function ScanMemberSection({setMember}) {
+    const audioFx = AudioFx();
     const [loading, setLoading] = useState(false)
     const [memberQrCode, setMemberQrCode] = useState("")
 
@@ -20,7 +21,7 @@ function ScanMemberSection({setMember}) {
             setLoading(true)
 
             async function fetchData() {
-                AudioFx().playMemberScannedAudio()
+                audioFx.playMemberScannedAudio()
                 return await MemberApiService().fetchMember(memberQrCode)
             }
 
@@ -30,9 +31,9 @@ function ScanMemberSection({setMember}) {
                     logReactSet("Setting member", data)
                     setMember(data);
                 })
-                .catch(async reason => {
-                    logError("Setting member", reason)
-                    toastError(reason)
+                .catch(async axiosReason => {
+                    logError("Setting member", axiosReason)
+                    toastError(axiosReason)
                     setMember(null)
                 })
                 .finally(() => {

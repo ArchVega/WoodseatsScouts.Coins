@@ -167,7 +167,7 @@ namespace WoodseatsScouts.Coins.Api.Data
         {
             foreach (var coinCode in coinCodes)
             {
-                var result = CodeTranslator.TranslateCoinPointCode(coinCode);
+                var result = CodeTranslator.TranslateCoinCode(coinCode);
 
                 ScavengedCoins!.Add(new ScavengedCoin
                 {

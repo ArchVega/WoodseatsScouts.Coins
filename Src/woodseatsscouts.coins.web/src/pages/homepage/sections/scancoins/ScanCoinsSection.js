@@ -11,6 +11,7 @@ import QRScanCodeType from "../../../../components/qrscanners/QRScanCodeType";
 import {toastError} from "../../../../components/toaster/toaster";
 
 function ScanCoinsSection({member, setHaulResult}) {
+    const audioFx = AudioFx();
     const [coinQrCode, setCoinQrCode] = useState("");
     const [coins, setCoins] = useState([]);
     const [coinTotal, setCoinTotal] = useState(0);
@@ -26,14 +27,14 @@ function ScanCoinsSection({member, setHaulResult}) {
             fetchData()
                 .then(async value => {
                     const data = (await value.data)
-                    logReactSet("Adding coin", data)
+                    logReactSet("Set Coins", data)
                     setCoins([...coins, data])
-                    AudioFx().playCoinScannedSuccessAudio()
+                    audioFx.playCoinScannedSuccessAudio()
                 })
-                .catch(async reason => {
-                    AudioFx().playCoinScannedErrorAudio()
-                    logError("Adding coin")
-                    toastError(reason)
+                .catch(async axiosReason => {
+                    audioFx.playCoinScannedErrorAudio()
+                    logError("Set Coins", axiosReason)
+                    toastError(axiosReason)
                 })
         }
     }, [coinQrCode]);
