@@ -16,6 +16,9 @@ import {assertMembersPageContains} from "../assertionHelpers/MembersPageAssertio
 import ReportPage from "../pageModels/ReportPage";
 import ScreenshotsComparer from "../utilities/ScreenshotsComparer";
 
+let runName = "master"
+runName = "comparison"
+
 let screenshotsComparer =null;
 let users = Users();
 let scavengerHunt;
@@ -30,7 +33,7 @@ function serialStep(name) {
 }
 
 test(serialStep("Creating users"), async ({page}, testInfo) => {
-    screenshotsComparer =  ScreenshotsComparer("screenshots\\master");
+    screenshotsComparer =  ScreenshotsComparer("screenshots", runName);
 
     await Helpers().setDeadlineTime(2)
 
@@ -113,7 +116,7 @@ test(serialStep("Testing search"), async ({page}, testInfo) => {
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Testing navigation"), async ({page}) => {
+test(serialStep("Testing navigation"), async ({page}, testInfo) => {
     const homePage = HomePage(page);
     await homePage.goTo()
 
@@ -133,7 +136,7 @@ test(serialStep("Testing navigation"), async ({page}) => {
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Edit photo modal appears for a user"), async ({page}) => {
+test(serialStep("Edit photo modal appears for a user"), async ({page}, testInfo) => {
     const membersPage = MembersPage(page);
     await membersPage.goTo()
 
@@ -145,7 +148,7 @@ test(serialStep("Edit photo modal appears for a user"), async ({page}) => {
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Invalid wrist code shows an error toast message"), async ({page}) => {
+test(serialStep("Invalid wrist code shows an error toast message"), async ({page}, testInfo) => {
     const homePage = HomePage(page);
     await homePage.goTo()
     await homePage.simulateInvalidUserWristbandScan("member-code-does-not-exist")
@@ -156,7 +159,7 @@ test(serialStep("Invalid wrist code shows an error toast message"), async ({page
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Scanning a coin instead of a wristband for logging in a member shows an error toast message"), async ({page}) => {
+test(serialStep("Scanning a coin instead of a wristband for logging in a member shows an error toast message"), async ({page}, testInfo) => {
     const homePage = HomePage(page);
     await homePage.goTo()
     const anyCoinCode = await scavengerHunt.peekUnscavengedCoin(20);
@@ -168,7 +171,7 @@ test(serialStep("Scanning a coin instead of a wristband for logging in a member 
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("User presses the Finished Scanning button for Asparagus Royal without any coins added"), async ({page}) => {
+test(serialStep("User presses the Finished Scanning button for Asparagus Royal without any coins added"), async ({page}, testInfo) => {
     const homePage = HomePage(page);
     await homePage.goTo()
 
@@ -182,7 +185,7 @@ test(serialStep("User presses the Finished Scanning button for Asparagus Royal w
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Invalid coin code for Asparagus Royal shows an error toast message"), async ({page}) => {
+test(serialStep("Invalid coin code for Asparagus Royal shows an error toast message"), async ({page}, testInfo) => {
     const homePage = HomePage(page);
     await homePage.goTo()
 
@@ -196,7 +199,7 @@ test(serialStep("Invalid coin code for Asparagus Royal shows an error toast mess
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Scanning a wristband instead of a coin when logging coins shows an error toast message"), async ({page}) => {
+test(serialStep("Scanning a wristband instead of a coin when logging coins shows an error toast message"), async ({page}, testInfo) => {
     const homePage = HomePage(page);
     await homePage.goTo()
 
@@ -211,14 +214,14 @@ test(serialStep("Scanning a wristband instead of a coin when logging coins shows
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Asparagus Royal completes a scavenger haul"), async ({page}) => {
+test(serialStep("Asparagus Royal completes a scavenger haul"), async ({page}, testInfo) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.asparagusRoyal, [10, 3, 20])
     await validScavengerHaulSteps(users.asparagusRoyal, coins, 33, page)
 
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Viewing the report page"), async ({page}) => {
+test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await assertReportsPageIs(
         page,
         [
@@ -235,14 +238,14 @@ test(serialStep("Viewing the report page"), async ({page}) => {
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Icterine Crimson completes a scavenger haul"), async ({page}) => {
+test(serialStep("Icterine Crimson completes a scavenger haul"), async ({page}, testInfo) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.icterineCrimson, [20, 20])
     await validScavengerHaulSteps(users.icterineCrimson, coins, 40, page)
 
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Viewing the report page"), async ({page}) => {
+test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await assertReportsPageIs(
         page,
         [
@@ -262,14 +265,14 @@ test(serialStep("Viewing the report page"), async ({page}) => {
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Cerise Royal completes a scavenger haul"), async ({page}) => {
+test(serialStep("Cerise Royal completes a scavenger haul"), async ({page}, testInfo) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.ceriseRoyal, [10, 20])
     await validScavengerHaulSteps(users.ceriseRoyal, coins, 30, page)
 
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Viewing the report page"), async ({page}) => {
+test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await assertReportsPageIs(
         page,
         [
@@ -290,14 +293,14 @@ test(serialStep("Viewing the report page"), async ({page}) => {
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Glaucous Jet completes a scavenger haul"), async ({page}) => {
+test(serialStep("Glaucous Jet completes a scavenger haul"), async ({page}, testInfo) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.glaucousJet, [20, 10, 9, 10])
     await validScavengerHaulSteps(users.glaucousJet, coins, 49, page)
 
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Violet Saffron attempts to scan the same coin twice"), async ({page}) => {
+test(serialStep("Violet Saffron attempts to scan the same coin twice"), async ({page}, testInfo) => {
     const homePage = HomePage(page);
     await homePage.goTo()
 
@@ -319,7 +322,7 @@ test(serialStep("Violet Saffron attempts to scan the same coin twice"), async ({
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Viewing the report page"), async ({page}) => {
+test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await assertReportsPageIs(
         page,
         [
@@ -342,7 +345,7 @@ test(serialStep("Viewing the report page"), async ({page}) => {
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Viewing the members page"), async ({page}) => {
+test(serialStep("Viewing the members page"), async ({page}, testInfo) => {
     await assertMembersPageContains(
         page,
         [
@@ -357,7 +360,7 @@ test(serialStep("Viewing the members page"), async ({page}) => {
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
-test(serialStep("Olivine Crimson tries to use someone else's coin"), async ({page}) => {
+test(serialStep("Olivine Crimson tries to use someone else's coin"), async ({page}, testInfo) => {
     const coin1 = (await scavengerHunt.getUnscavengedCoinByValue(users.olivineCrimson, [20]))[0]
     const coin2 = (await scavengerHunt.getAnAlreadyScavengedCoin(users.olivineCrimson))
     const coin3 = (await scavengerHunt.getUnscavengedCoinByValue(users.olivineCrimson, [20]))[0]
@@ -384,7 +387,7 @@ test(serialStep("Olivine Crimson tries to use someone else's coin"), async ({pag
 
 test(
     serialStep("Jasper Royal and Oxford Saffron try to scan the same coin for each of their hauls"),
-    async ({context, page}) => {
+    async ({context, page}, testInfo) => {
         const jasperPage = {
             member: users.jasperRoyal,
             page: page,
@@ -426,7 +429,7 @@ test(
         await screenshotsComparer.takeScreenshot(page, testInfo, "End");
     });
 
-test(serialStep("Time's up"), async ({page}) => {
+test(serialStep("Time's up"), async ({page}, testInfo) => {
     const reportPage = ReportPage(page);
     await reportPage.goTo()
 

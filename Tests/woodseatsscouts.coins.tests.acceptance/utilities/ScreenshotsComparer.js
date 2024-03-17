@@ -2,8 +2,8 @@ import path from "node:path";
 
 const fs = require('node:fs');
 
-function ScreenshotsComparer(folderName) {
-    function createDirectory(dirName) {
+function ScreenshotsComparer(screenshotsDirectory, runName) {
+    function deleteDirectoryIfExists(dirName) {
         try {
             if (fs.existsSync(dirName)) {
                 fs.rmSync(dirName, { recursive: true, force: true });
@@ -11,7 +11,9 @@ function ScreenshotsComparer(folderName) {
         } catch (err) {
             console.error(err);
         }
+    }
 
+    function createDirectoryIfNotExists(dirName) {
         try {
             if (!fs.existsSync(dirName)) {
                 fs.mkdirSync(dirName, {recursive: true});
@@ -20,6 +22,14 @@ function ScreenshotsComparer(folderName) {
             console.error(err);
         }
     }
+
+    // Creates the directory for the first time if it doesn't exist. This directory should NOT be deleted afterwards.
+    createDirectoryIfNotExists(screenshotsDirectory);
+
+    // "Run Directories" should be deleted before each test run.
+    const runDirectory = path.join(screenshotsDirectory, runName);
+    deleteDirectoryIfExists(runDirectory)
+    createDirectoryIfNotExists(runDirectory);
 
     return {
         takeScreenshot: async (page, testInfo, description) => {
@@ -30,7 +40,7 @@ function ScreenshotsComparer(folderName) {
             }
 
             let directory = testInfo.titlePath[0].replace(/\.spec\.js/g, '').replace(/\./g, '_');
-            directory = path.join(folderName, directory);
+            directory = path.join(runDirectory, directory);
             if (!fs.existsSync(directory)) {
                 fs.mkdirSync(directory);
             }
