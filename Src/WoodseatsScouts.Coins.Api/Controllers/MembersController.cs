@@ -74,7 +74,16 @@ public class MembersController(
         return CreatedAtAction(nameof(AddPointsToMember), null, responseViewModel);
     }
 
-    [HttpPost]
+    [HttpGet]
+    [Route("{id:int}/Photo")]
+    public IActionResult Get(int id)
+    {
+        var bytes = imagePersister.RetrieveImageBytes(id);
+        
+        return File(bytes, "image/jpeg", $"{id}.jpg");
+    }
+    
+    [HttpPut]
     [Route("{id:int}/Photo")]
     public ActionResult SaveMemberPhoto(int id, [FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
     {

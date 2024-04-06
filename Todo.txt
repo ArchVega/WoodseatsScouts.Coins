@@ -6,3 +6,5 @@ DB - Sections.Code = Members.SectionId. Rename Members.SectionId to SectionCode
 change B to C for coin codes
 
 server side duplicate coins check hasn't been added. currently only client side checks. good enough?
+
+Live site: when the leaderboard refreshes, we get an azure not found page.

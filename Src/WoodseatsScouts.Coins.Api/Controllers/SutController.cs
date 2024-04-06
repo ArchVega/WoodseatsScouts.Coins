@@ -2,16 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
-#if (DEBUG || ACCEPTANCETEST)
 [ApiController]
 [Route("[controller]")]
-public class SutController(IAppDbContext appDbContext, IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase
+public class SutController(
+    IAppDbContext appDbContext,
+    SystemDateTimeProvider systemDateTimeProvider,
+    IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase
 {
     private readonly LeaderboardSettings leaderboardSettings = leaderboardSettingsOptions.Value;
 
@@ -38,12 +41,28 @@ public class SutController(IAppDbContext appDbContext, IOptions<LeaderboardSetti
     }
     
     [HttpPut]
-    [Route("Leaderboard/Deadline/{daysToAdd:int}")]
-    public IActionResult SetReportDeadline(int daysToAdd)
+    [Route("Leaderboard/Deadline/{minutesToAdd:int}")]
+    public IActionResult SetReportDeadline(int minutesToAdd)
     {
-        leaderboardSettings.ScavengerHuntDeadline = DateTime.Now.AddDays(daysToAdd);
+        leaderboardSettings.ScavengerHuntDeadline = DateTime.Now.AddMinutes(minutesToAdd);
 
         return Ok($"Report deadline datetime set to '{leaderboardSettings.ScavengerHuntDeadline}'");
+    }
+    
+    [HttpPut]
+    [Route("SystemDateTime/{minutesToAdd:int?}")]
+    public IActionResult SetSystemDateTime(int? minutesToAdd)
+    {
+        if (minutesToAdd.HasValue)
+        {
+            systemDateTimeProvider.SetDateTimeToSetTime(DateTime.Now.AddMinutes(minutesToAdd.Value));
+        }
+        else
+        {
+            systemDateTimeProvider.SetDateTimeToSystemClock();
+        }
+
+        return Ok($"System datetime set to '{systemDateTimeProvider.Now}'");
     }
     
     [HttpGet]
@@ -59,4 +78,3 @@ public class SutController(IAppDbContext appDbContext, IOptions<LeaderboardSetti
         }));
     }
 }
-#endif

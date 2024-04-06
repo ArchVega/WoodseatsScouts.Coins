@@ -1,4 +1,5 @@
 ﻿import {Col, Modal, ModalBody, ModalHeader, Row} from "reactstrap";
+import Uris from "../../services/Uris";
 
 const MemberPhotoModal = ({usersModal, setUsersModal, selectedUser}) => {
     const toggleUserModal = () => setUsersModal(!usersModal);
@@ -13,7 +14,7 @@ const MemberPhotoModal = ({usersModal, setUsersModal, selectedUser}) => {
                     <Col>
                         {selectedUser != null ? (
                             <img src={selectedUser.hasImage
-                                ? `member-images/${selectedUser.id}.jpg?x=${new Date().getTime()}`
+                                ? Uris.memberPhoto(selectedUser.id) // todo: rename to member
                                 : "images/unknown-member-image.png"}
                                  style={{maxWidth: '100%'}} alt=""/>
 

@@ -48,5 +48,6 @@ public static class ServicesRegistration
     private static void RegisterSingletons(IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<IScoutsAppEnvironment, ScoutsAppEnvironmentMode>();
+        serviceCollection.AddSingleton<SystemDateTimeProvider>();
     }
 }

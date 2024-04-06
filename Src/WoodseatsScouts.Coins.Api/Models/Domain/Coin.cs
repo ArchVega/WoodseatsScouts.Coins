@@ -19,4 +19,6 @@ public class Coin
     public int? MemberId { get; set; }
     
     public Member? Member { get; set; }
+    
+    public DateTime? LockUntil { get; set; }
 }

@@ -1,12 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Data
 {
-    public class AppDbContext(DbContextOptions<AppDbContext> options, IOptions<LeaderboardSettings> leaderboardSettings)
+    public class AppDbContext(
+        DbContextOptions<AppDbContext> options,
+        IOptions<AppSettings> appSettingsOptions,
+        SystemDateTimeProvider systemDateTimeProvider,
+        IOptions<LeaderboardSettings> leaderboardSettings)
         : DbContext(options), IAppDbContext
     {
         private readonly LeaderboardSettings leaderboardSettings = leaderboardSettings.Value;
@@ -94,7 +99,7 @@ namespace WoodseatsScouts.Coins.Api.Data
         {
             var memberIds = ScavengeResults!
                 .Include(x => x.Member)
-                .Where(x => x.CompletedAt >= startDateTime && x.CompletedAt < endDateTime)
+                .Where(x => x.CompletedAt >= startDateTime)
                 .Select(x => x.MemberId)
                 .ToList();
 
@@ -189,6 +194,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                 if (coinToAdd.MemberId == null)
                 {
                     coinToAdd.MemberId = member.Id;
+                    coinToAdd.LockUntil = DateTime.Now.AddMinutes(appSettingsOptions.Value.MinutesToLockScavengedCoins);
                 }
                 else
                 {

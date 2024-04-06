@@ -17,10 +17,10 @@ namespace WoodseatsScouts.Coins.Api.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Coin", b =>
                 {
@@ -34,6 +34,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .IsRequired()
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
+
+                    b.Property<DateTime?>("LockUntil")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("MemberId")
                         .HasColumnType("int");
@@ -54,7 +57,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("LoggedAt")
                         .HasColumnType("datetime2");
@@ -77,7 +80,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Clue1State")
                         .HasColumnType("nvarchar(max)");
@@ -126,13 +129,34 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.ToTable("Members");
                 });
 
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("ScavengeResults");
+                });
+
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengedCoin", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BaseNumber")
                         .HasColumnType("int");
@@ -152,27 +176,6 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.HasIndex("ScavengeResultId");
 
                     b.ToTable("ScavengedCoins");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CompletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("ScavengeResults");
                 });
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Section", b =>
@@ -198,7 +201,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -237,17 +240,6 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.Navigation("Troop");
                 });
 
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengedCoin", b =>
-                {
-                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", "ScavengeResult")
-                        .WithMany("ScavengedCoins")
-                        .HasForeignKey("ScavengeResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ScavengeResult");
-                });
-
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", b =>
                 {
                     b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Member", "Member")
@@ -257,6 +249,17 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengedCoin", b =>
+                {
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", "ScavengeResult")
+                        .WithMany("ScavengedCoins")
+                        .HasForeignKey("ScavengeResultId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ScavengeResult");
                 });
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Member", b =>

@@ -60,7 +60,7 @@ public class AppDbContextMembersTests
     //  [Fact]
     // public void AddPointsToMember_ValidCoinCodes_Success()
     // {
-    //     var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["B0001001010", "B0001001020"] };
+    //     var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["C0001001010", "C0001001020"] };
     //     var result = Should.NotThrow(() => appDbContext.AddPointsToMember(9, pointsForMemberViewModel));
     //     
     //     result.ShouldBeOfType<CreatedAtActionResult>();
@@ -81,7 +81,7 @@ public class AppDbContextMembersTests
     //         new Member { Id = 9 }
     //     ]);
     //     
-    //     var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["B0001001010", "test-invalid-coin-code"] };
+    //     var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["C0001001010", "test-invalid-coin-code"] };
     //     var result = membersController.AddPointsToMember(9, pointsForMemberViewModel);
     //     
     //     result.ShouldBeOfType<BadRequestObjectResult>();

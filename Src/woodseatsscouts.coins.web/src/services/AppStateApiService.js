@@ -12,6 +12,17 @@ const AppStateApiService = () => {
             fetch().then(response => {
                 responseFunc(response)
             });
+        },
+
+        getAppVersion: (responseFunc) => {
+            async function fetch() {
+                const response = await axios.get(Uris.appVersion);
+                return response.data
+            }
+
+            fetch().then(response => {
+                responseFunc(response)
+            });
         }
     }
 }

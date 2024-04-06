@@ -39,4 +39,25 @@ public class ImagePersister(IOptions<AppSettings> appSettingsOptions, IHostEnvir
 
         return imageFileInfo;
     }
+
+    public byte[] RetrieveImageBytes(int id)
+    {
+        var imageDirectoryFullPath = Path.IsPathRooted(appSettings.ContentRootDirectory)
+            ? appSettings.ContentRootDirectory
+            : Path.Join(hostEnvironment.ContentRootPath, appSettings.ContentRootDirectory);
+
+        if (!Path.Exists(imageDirectoryFullPath))
+        {
+            throw new ApplicationException($"Image directory does not exist at path '{imageDirectoryFullPath}'");
+        }
+
+        var path = Path.Combine(imageDirectoryFullPath, $"{id}.jpg");
+        
+        if (!Path.Exists(path))
+        {
+            throw new ApplicationException($"Image file does not exist at path '{path}'");
+        }
+
+        return File.ReadAllBytes(path);
+    }
 }

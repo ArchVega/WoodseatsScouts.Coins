@@ -6,6 +6,8 @@ const CoinCodeScanPage = (page) => {
             const coinTextbox = page.getByTestId("textbox-usb-scanner-code")
             await coinTextbox.fill(code)
             await coinTextbox.press('Enter')
+            // Wait a bit, this is probably where the tests fail by moving too quickly through this step.
+            await page.waitForTimeout(500)
         },
 
         getScannedCoins: async () => {

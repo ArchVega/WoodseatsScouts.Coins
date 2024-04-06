@@ -27,9 +27,9 @@ public class CodeTranslatorTests
     [Fact]
     public void TranslateMemberCode_CoinCodeGiven_ThrowsException()
     {
-        const string validCoinCode = "B0002001020";
+        const string validCoinCode = "C0002001020";
         var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateMemberCode(validCoinCode));
-        exception.Message.ShouldBe($"The code 'B0002001020' is a Coin code");
+        exception.Message.ShouldBe($"The code 'C0002001020' is a Coin code");
     }
     
     [Fact]
@@ -41,8 +41,8 @@ public class CodeTranslatorTests
     }
 
     [Theory]
-    [InlineData("B0001001010",  1, "C", 1, 10)]
-    [InlineData("B0047010020", 47, "C", 10, 20)]
+    [InlineData("C0001001010",  1, "C", 1, 10)]
+    [InlineData("C0047010020", 47, "C", 10, 20)]
     public void TranslatingPoints(string code, int id, string tokenIdentifier, int baseNumber, int pointValue)
     {   
         var pointTranslationResult = CodeTranslator.TranslateCoinCode(code);
@@ -53,11 +53,11 @@ public class CodeTranslatorTests
     }
     
     [Theory]
-    [InlineData("M007B004", "M", 7, "C", 4)]
-    [InlineData("M023B005", "M", 23, "C", 5)]
-    [InlineData("M045B008", "M", 45, "C", 8)]
-    [InlineData("M045B010", "M", 45, "C", 10)]
-    [InlineData("M045B019", "M", 45, "C", 19)]
+    [InlineData("M007B004", "M", 7, "B", 4)]
+    [InlineData("M023B005", "M", 23, "B", 5)]
+    [InlineData("M045B008", "M", 45, "B", 8)]
+    [InlineData("M045B010", "M", 45, "B", 10)]
+    [InlineData("M045B019", "M", 45, "B", 19)]
     public void TranslatingMemberCode(string code, string tokenIdentifier, int troop, string section, int memberNumber)
     {
         var memberCodeTranslationResult = CodeTranslator.TranslateMemberCode(code);

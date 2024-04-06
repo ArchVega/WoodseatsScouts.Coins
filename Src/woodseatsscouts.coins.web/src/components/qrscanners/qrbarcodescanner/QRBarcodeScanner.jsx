@@ -24,6 +24,7 @@ function QRBarcodeScanner({qrCode, setQrCode, qrScanCodeType = {qrScanCodeType}}
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             setQrCode(event.target.value)
+            event.target.value = ""
         }
     }
 

@@ -3,6 +3,7 @@ import {Col, Input, Row} from "reactstrap";
 import MemberApiService from "../../services/MemberApiService";
 import MemberPhotoModal from "../../components/modals/MemberPhotoModal";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal";
+import Uris from "../../services/Uris";
 
 function MembersListPage() {
     const [members, setMembers] = useState([]);
@@ -82,7 +83,7 @@ function MembersListPage() {
                                 <span className="show-user-photo-icon"
                                       onClick={() => showUserModal(x)}>
                                     <img key={Date.now()} title={"User id: " + x.id}
-                                         src={x.hasImage ? `member-images/${x.id}.jpg?x=${new Date().getTime()}` : "images/unknown-member-image.png"}
+                                         src={x.hasImage ? Uris.memberPhoto(x.id) : "images/unknown-member-image.png"}
                                          alt=""/>
                                 </span>
                             </td>

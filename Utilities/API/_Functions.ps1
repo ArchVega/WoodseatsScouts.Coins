@@ -1,16 +1,17 @@
-$baseUri = "http://localhost:7167"
-
 $headers = @{
     "Content-Type" = "application/json"
 }
 
 function CreateTroop {
     param(
+        [Parameter(Mandatory)]
+        [string] $BaseUri,
+        [Parameter(Mandatory)]
         [int] $Id, 
         [string] $Name
     )
 
-    $uri = "Admin/CreateTroop"
+    $uri = "Admin/Troop"
 
     $payload = @{
         id   = IntDefault $Id
@@ -22,6 +23,8 @@ function CreateTroop {
 
 function CreateMember {
     param(
+        [Parameter(Mandatory)]
+        [string] $BaseUri,        
         [string] $FirstName, 
         [string] $LastName, 
         [int] $TroopId, 
@@ -29,7 +32,7 @@ function CreateMember {
         [bool] $IsDayVisitor
     )
 
-    $uri = "Home/CreateMember"
+    $uri = "Admin/Member"
 
     $payload = @{
         firstName    = StringDefault $FirstName
@@ -44,11 +47,14 @@ function CreateMember {
 
 function UploadMemberImage {
     param(
+        [Parameter(Mandatory)]
+        [string] $BaseUri,
+        [Parameter(Mandatory)]
         [int] $MemberId,
         [string] $Path
     )
 
-    $uri = "Home/SaveMemberPhoto"
+    $uri = "Members/$MemberId/Photo"
 
     $photo = [System.Convert]::ToBase64String((Get-Content $Path -AsByteStream))
 
@@ -57,7 +63,7 @@ function UploadMemberImage {
         Photo    = $photo
     } | ConvertTo-Json
     
-    return Invoke-RestMethod "$baseUri/$uri" -Method 'Post' -Headers $headers -Body $payload
+    return Invoke-RestMethod "$baseUri/$uri" -Method 'Put' -Headers $headers -Body $payload
 }
 
 ###################

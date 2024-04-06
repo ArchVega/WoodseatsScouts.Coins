@@ -18,9 +18,23 @@ const Helpers = () => {
             }
         },
 
-        setDeadlineTime: async (daysToAdd) => {
+        setSystemDateTime: async (minutesToAdd) => {
             await axios({
-                url: Uris.sutScavengerHuntDeadline(daysToAdd),
+                url: Uris.sutSystemDateTime(minutesToAdd),
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                console.log(response)
+            }).catch(reason => {
+                console.error(reason)
+            })
+        },
+
+        setDeadlineTime: async (minutesToAdd) => {
+            await axios({
+                url: Uris.sutScavengerHuntDeadline(minutesToAdd),
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -35,29 +49,29 @@ const Helpers = () => {
         copyTestMemberImages: async () => {
             const membersResponse = await axios.get(Uris.sutMembers)
 
+            let promises = []
             membersResponse.data.forEach(member => {
                 const source = member.lastName + "-" + member.firstName + ".png";
-                const target = member.id + ".jpg";
+                const photoContent = fs.readFileSync(`./testImages/${source}`)
+                const photoBytes = Buffer.from(photoContent).toString('base64')
 
-                fs.cp(
-                    `./testImages/${source}`,
-                    `./../../Src/woodseatsscouts.coins.web/public/member-images/${target}`,
-                    (err) => {
-                    });
+                const promise = axios({
+                    url: Uris.memberPhoto(member),
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: {
+                        Photo: photoBytes
+                    }
+                })
+                promises.push(promise)
             })
 
-            await axios({
-                url: Uris.sutSetMemberPropertyHasImageToTrue,
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: {}
-            }).then(response => {
-                console.log(response)
-            }).catch(reason => {
-                console.error(reason)
-            })
+            await Promise.all(promises)
+                .then(response => console.log(response))
+                .catch(error => console.error(error))
+            const i = 0;
         },
 
         createMembersViaApi: async (users) => {
@@ -85,25 +99,26 @@ const Helpers = () => {
             })
         },
 
-        createTroopsViaApi: async (troops) => {
-            for (const troop of troops) {
-                await axios({
-                    url: Uris.adminCreateTroop,
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: {
-                        id: troop.id,
-                        name: troop.name
-                    }
-                }).then(response => {
-                    console.log(response)
-                }).catch(reason => {
-                    console.error(reason)
-                })
+        createTroopsViaApi:
+            async (troops) => {
+                for (const troop of troops) {
+                    await axios({
+                        url: Uris.adminCreateTroop,
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: {
+                            id: troop.id,
+                            name: troop.name
+                        }
+                    }).then(response => {
+                        console.log(response)
+                    }).catch(reason => {
+                        console.error(reason)
+                    })
+                }
             }
-        }
     }
 }
 

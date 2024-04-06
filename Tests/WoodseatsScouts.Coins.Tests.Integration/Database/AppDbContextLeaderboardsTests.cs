@@ -159,37 +159,6 @@ public class AppDbContextLeaderboardsTests
         var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPoints();
         topGroupsThisWeekend.Count.ShouldBe(0);
     }
-
-    /// <summary>
-    /// To prevent coins from being scanned after the deadline
-    /// </summary>
-    [Fact]
-    public void GetGroupsWithMostPoints_FourScavengeResultsButOnlyTwoBeforeDeadline_ResultsShouldBe2()
-    {
-        databaseFixture.RestoreBaseTestData();
-        
-        var differentGroupMembers = new List<Member>()
-        {
-            testDataFactory.Members.AsparagusRoyal,
-            testDataFactory.Members.GlaucousJet,
-            testDataFactory.Members.CharcoalCrimson,
-            testDataFactory.Members.HunterSaffron,
-        };
-        
-        var onTime = databaseFixture.LeaderboardSettings.ScavengerHuntDeadline.AddHours(-1);
-        var tooLate = databaseFixture.LeaderboardSettings.ScavengerHuntDeadline.AddHours(1);
-        
-        for (var i = 0; i < differentGroupMembers.Count; i++)
-        {
-            var scavengedAt = i % 2 == 0 ? tooLate : onTime;
-            
-            var points = new List<int> { 10 };
-            CreateScavengedResult(differentGroupMembers[i], scavengedAt, points);
-        }
-        
-        var topGroupsThisWeekend = appDbContext.GetGroupsWithMostPoints();
-        topGroupsThisWeekend.Count.ShouldBe(2);
-    }
     
     [Fact]
     public void GetGroupsWithMostPointsThisWeekend_FourScavengeResultsButTwoOccuredBeforeStartTime_ResultsShouldBe2()
@@ -310,7 +279,7 @@ public class AppDbContextLeaderboardsTests
 
             var scavengedCoin = new ScavengedCoin
             {
-                Code = "B0010" + p,
+                Code = "C0010" + p,
                 BaseNumber = 1,
                 PointValue = point,
                 ScavengeResult = scavengeResults

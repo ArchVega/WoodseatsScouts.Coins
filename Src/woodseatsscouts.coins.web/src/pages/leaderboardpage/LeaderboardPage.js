@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import Clock from "../../components/clocks/Clock";
 import CountdownClock from "../../components/clocks/Countdown";
 import LeaderboardApiService from "../../services/LeaderboardApiService";
+import Uris from "../../services/Uris";
 
 const LeaderboardPage = () => {
     const [reportData, setReportData] = useState([])
@@ -57,7 +58,9 @@ const LeaderboardPage = () => {
                                     <div className="rect-img-container">
                                         <img
                                             className="rect-img"
-                                            src={x.hasImage ? `member-images/${x.id}.jpg?x=${new Date().getTime()}` : "images/unknown-member-image.png"}
+                                            src={x.hasImage
+                                              ? Uris.memberPhoto(x.id)
+                                              : "images/unknown-member-image.png"}
                                             style={{maxWidth: "100%"}}/>
                                     </div>
                                 </Col>

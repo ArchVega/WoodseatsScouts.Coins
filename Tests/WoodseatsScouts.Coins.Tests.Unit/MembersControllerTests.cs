@@ -125,7 +125,7 @@ public class MembersControllerTests
             .Setup(x => x.RecordMemberAgainstUnscavengedCoins(It.IsAny<Member>(), It.IsAny<List<string>>()))
             .Returns(new List<Coin>());
 
-        var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["B0001001010", "B0001001020"] };
+        var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["C0001001010", "C0001001020"] };
         var result = Should.NotThrow(() => membersController.AddPointsToMember(9, pointsForMemberViewModel));
 
         result.ShouldBeOfType<CreatedAtActionResult>();

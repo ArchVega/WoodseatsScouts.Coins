@@ -16,11 +16,12 @@ import {assertMembersPageContains} from "../assertionHelpers/MembersPageAssertio
 import ReportPage from "../pageModels/ReportPage";
 import ScreenshotsComparer from "../utilities/ScreenshotsComparer";
 import joinImages from "join-images";
+import MemberScavengedResultPage from "../pageModels/MemberScavengedResultPage";
 
 let runName = "master"
 runName = "feature"
 
-let screenshotsComparer =null;
+let screenshotsComparer = null;
 let users = Users();
 let scavengerHunt;
 (async () => {
@@ -35,9 +36,9 @@ function serialStep(name) {
 
 test(serialStep("Creating users"), async ({page}, testInfo) => {
     // screenshotsComparer =  ScreenshotsComparer("screenshots", runName); this deletes the existing master folder
-    screenshotsComparer =  ScreenshotsComparer("screenshots"); // this doesn't delete the folder
+    screenshotsComparer = ScreenshotsComparer("screenshots"); // this doesn't delete the folder
 
-    await Helpers().setDeadlineTime(2)
+    // await Helpers().setDeadlineTime(2)
 
     Helpers().restoreDb()
 
@@ -316,7 +317,7 @@ test(serialStep("Violet Saffron attempts to scan the same coin twice"), async ({
     await coinCodeScanPage.enterCoinCode(otherCoin.code);
     await coinCodeScanPage.enterCoinCode(coinToBeEnteredTwice.code);
 
-    const errorMessage = await ToastMessageModel(   page).getMessage()
+    const errorMessage = await ToastMessageModel(page).getMessage()
     expect(errorMessage).toBe(`That coin has already been scanned for Violet`)
 
     expect(await coinCodeScanPage.getTotalCoinValue()).toBe(30)
@@ -426,10 +427,46 @@ test(
             = await clicksFinishButtonWithExpectation(oxfordCoinPage, 13)
         const additionalMessage = await oxfordScavengedResultPage.getAdditionalMessage();
         expect(additionalMessage)
-            . toEqual(`Unfortunately, there was an issue with at least one of your coins.${specificCoinToBeShared.code} scanned by Jasper Royal`)
+            .toEqual(`Unfortunately, there was an issue with at least one of your coins.${specificCoinToBeShared.code} scanned by Jasper Royal`)
 
         await screenshotsComparer.takeScreenshot(page, testInfo, "End");
     });
+
+test(serialStep("Olivine Crimson can't scan a scavenged coin after 9 minutes, but can after 11 minutes"), async ({page}, testInfo) => {
+    await Helpers().setSystemDateTime()
+
+    const scavengedCoin = (await scavengerHunt.getUnscavengedCoinByValue(users.olivineCrimson, [20]))[0]
+
+    const user = users.olivineCrimson
+
+    const homePage = HomePage(page);
+    await homePage.goTo()
+
+    let coinCodeScanPage = await homePage.simulateValidUserWristbandScan(user)
+
+    await coinCodeScanPage.enterCoinCode(scavengedCoin.code)
+    const totalCoinValue =await coinCodeScanPage.getTotalCoinValue()
+    expect(totalCoinValue).toBe(20)
+    await coinCodeScanPage.clickFinishScanningButton();
+
+    await homePage.goTo()
+
+    await Helpers().setSystemDateTime(9)
+    coinCodeScanPage = await homePage.simulateValidUserWristbandScan(user)
+    await coinCodeScanPage.enterCoinCode(scavengedCoin.code)
+    const errorMessage = await ToastMessageModel(page).getMessage()
+    expect(errorMessage).toBe("The coin has already been scavenged by Olivine")
+
+    await homePage.goTo()
+
+    await Helpers().setSystemDateTime(11)
+    coinCodeScanPage = await homePage.simulateValidUserWristbandScan(user)
+    await coinCodeScanPage.enterCoinCode(scavengedCoin.code)
+
+    expect(await coinCodeScanPage.getTotalCoinValue()).toBe(20)
+    const memberScavengedResultPage = await coinCodeScanPage.clickFinishScanningButton();
+    expect(await memberScavengedResultPage.getTotalPoints()).toBe(20);
+});
 
 test(serialStep("Time's up"), async ({page}, testInfo) => {
     const reportPage = ReportPage(page);
@@ -438,18 +475,18 @@ test(serialStep("Time's up"), async ({page}, testInfo) => {
     let hoursLeft = await reportPage.getHoursLeft()
     expect(hoursLeft).toBeGreaterThan(0);
 
-    await Helpers().setDeadlineTime(-1)
+    await Helpers().setDeadlineTime(-24 * 60)
     await reportPage.goTo()
 
     hoursLeft = await reportPage.getHoursLeft()
     expect(hoursLeft).toBe(0)
 
-    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
+    //await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Create screenshot comparisons"), async ({page}, testInfo) => {
     if (runName === "feature") {
-        screenshotsComparer =  ScreenshotsComparer("screenshots");
+        screenshotsComparer = ScreenshotsComparer("screenshots");
         screenshotsComparer.createComparisons(runName, testInfo);
     }
 });

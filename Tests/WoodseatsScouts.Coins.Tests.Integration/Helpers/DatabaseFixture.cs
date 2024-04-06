@@ -4,6 +4,7 @@ using System.Management.Automation.Runspaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.PowerShell;
+using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 
@@ -14,10 +15,13 @@ public class DatabaseFixture
 {
     private readonly DbContextOptions<AppDbContext> contextOptions;
     
+    private readonly IOptions<AppSettings> appSettingsOptions;
+    
     private readonly IOptions<LeaderboardSettings> leaderboardSettingsOptions;
     public LeaderboardSettings LeaderboardSettings { get; }
 
-    public AppDbContext AppDbContext => new(contextOptions, leaderboardSettingsOptions);
+    public SystemDateTimeProvider SystemDateTimeProvider { get; set; }
+    public AppDbContext AppDbContext => new(contextOptions, appSettingsOptions, SystemDateTimeProvider, leaderboardSettingsOptions);
 
     private const string SourceDatabaseConnectionString 
         = "Server=(local);Database=WoodseatsScouts.Coins.Tests.Source;Trusted_Connection=true;TrustServerCertificate=true";

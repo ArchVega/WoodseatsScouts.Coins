@@ -1,16 +1,22 @@
 ﻿import {Button, Col, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
-import {useContext, useEffect} from "react";
+import {useContext, useEffect, useState} from "react";
 import {AppCameraAvailableContext, UseAppCameraContext} from "../../contexts/AppContext";
+import AppStateApiService from "../../services/AppStateApiService";
 
 const AppSettingsModal = ({appSettingsModal, setAppSettingsModal}) => {
     const [useAppCamera, setUseAppCamera] = useContext(UseAppCameraContext)
-    const [appCameraAvailable] = useContext(AppCameraAvailableContext)    
+    const [appCameraAvailable] = useContext(AppCameraAvailableContext)
+    const [appVersion, setAppVersion] = useState("")
     const toggleModal = () => setAppSettingsModal(!appSettingsModal);
 
     useEffect(() => {
         const useCameraSetting = localStorage.getItem("woodseatsscouts.preferences.use-camera");
         const useCamera = useCameraSetting != null && useCameraSetting === "true"
         setUseAppCamera(useCamera)
+
+        AppStateApiService().getAppVersion(response => {
+            setAppVersion(response)
+        })
     }, [])
     
     useEffect(() => {
@@ -40,7 +46,9 @@ const AppSettingsModal = ({appSettingsModal, setAppSettingsModal}) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
+                    <Col className="text-end">
+                        <small><em>Version:&nbsp;</em></small>
+                        <small><em>{appVersion}</em></small>
                     </Col>
                 </Row>
             </ModalBody>

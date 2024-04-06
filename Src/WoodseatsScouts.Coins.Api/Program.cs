@@ -21,12 +21,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "AcceptanceTest")
-{
+// Todo: consider uncommenting in staging / release
+// if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "AcceptanceTest")
+// {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+// }
 
+// Todo: consider uncommenting in staging / release
 // app.UseHttpsRedirection();
 app.UseCors(allOrigins);
 app.MapControllers();
