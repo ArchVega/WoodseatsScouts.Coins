@@ -90,10 +90,12 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 name: "Coins",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BaseValueId = table.Column<int>(type: "int", nullable: false),
                     Base = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<int>(type: "int", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false, computedColumnSql: "'C' + (FORMAT([BaseValueId], '0000'))  + (FORMAT([Base], '000')) + (FORMAT([Value], '000'))"),
                     MemberId = table.Column<int>(type: "int", nullable: true),
                     LockUntil = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },

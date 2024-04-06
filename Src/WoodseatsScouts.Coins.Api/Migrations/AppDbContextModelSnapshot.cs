@@ -25,15 +25,23 @@ namespace WoodseatsScouts.Coins.Api.Migrations
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Coin", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Base")
                         .HasColumnType("int");
 
+                    b.Property<int>("BaseValueId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Code")
                         .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("nvarchar(16)")
+                        .HasComputedColumnSql("'C' + (FORMAT([BaseValueId], '0000'))  + (FORMAT([Base], '000')) + (FORMAT([Value], '000'))");
 
                     b.Property<DateTime?>("LockUntil")
                         .HasColumnType("datetime2");

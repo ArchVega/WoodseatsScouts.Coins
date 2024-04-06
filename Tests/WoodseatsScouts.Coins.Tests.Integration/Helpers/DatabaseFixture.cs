@@ -14,13 +14,16 @@ namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
 public class DatabaseFixture
 {
     private readonly DbContextOptions<AppDbContext> contextOptions;
-    
+
     private readonly IOptions<AppSettings> appSettingsOptions;
     
     private readonly IOptions<LeaderboardSettings> leaderboardSettingsOptions;
     public LeaderboardSettings LeaderboardSettings { get; }
 
+    public AppSettings AppSettings { get; set; }
+
     public SystemDateTimeProvider SystemDateTimeProvider { get; set; }
+    
     public AppDbContext AppDbContext => new(contextOptions, appSettingsOptions, SystemDateTimeProvider, leaderboardSettingsOptions);
 
     private const string SourceDatabaseConnectionString 
@@ -34,6 +37,10 @@ public class DatabaseFixture
         RecreateDbViaPowerShell();
 
         contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
+
+        AppSettings = new AppSettings();
+        appSettingsOptions = Options.Create(AppSettings);
+        
         LeaderboardSettings = new LeaderboardSettings();
         leaderboardSettingsOptions = Options.Create(LeaderboardSettings);
     }

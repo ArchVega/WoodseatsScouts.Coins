@@ -107,6 +107,16 @@ public class MembersControllerTests
     }
 
     [Fact]
+    public void GetPhoto()
+    {
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var imagePersisterMock = new Mock<IImagePersister>();
+        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+
+        membersController.Get(1);
+    }
+
+    [Fact]
     public void AddPointsToMember_Todo1()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
