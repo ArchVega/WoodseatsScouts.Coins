@@ -44,36 +44,37 @@ public class Database : IDisposable
         return members;
     }
 
-    public void InsertCoinCodes(List<Coin> coinCodes)
+    public List<Coin> GetCoinsFromDb(string databaseName)
     {
-        foreach (var coinCode in coinCodes)
-        {
-            const string sql = "INSERT INTO Coins (Id, Base, [Value], Code) values (@id, @base, @value, @code)";
-            var cmd = new SqlCommand(sql, connection);
-            cmd.Parameters.Add("@id", SqlDbType.Int);
-            cmd.Parameters.Add("@base", SqlDbType.Int);
-            cmd.Parameters.Add("@value", SqlDbType.Int);
-            cmd.Parameters.Add("@code", SqlDbType.NVarChar);
+        var connectionString =
+            $"Server=.;Database={databaseName};Trusted_Connection=true;TrustServerCertificate=True";
 
-            cmd.Parameters["@id"].Value = coinCode.Id;
-            cmd.Parameters["@base"].Value = coinCode.Base;
-            cmd.Parameters["@value"].Value = coinCode.Value;
-            cmd.Parameters["@code"].Value = coinCode.ToString();
-            
-            cmd.ExecuteNonQuery();    
+        const string queryString = "SELECT * from dbo.Coins";
+
+        var coins = new List<Coin>();
+
+        using var command = new SqlCommand(queryString, connection);
+        var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            var coin = new Coin(Convert.ToInt32(reader[0]))
+            {
+                BaseValueId = Convert.ToInt32(reader[1]),
+                Base = Convert.ToInt32(reader[2]),
+                Value = Convert.ToInt32(reader[3]),
+                Code = reader[4].ToString()
+            };
+
+            coins.Add(coin);
         }
+
+        reader.Close();
+
+        return coins;
     }
     
     public void Dispose()
     {
         connection.Dispose();
-    }
-
-    public void DeleteExistingCoins()
-    {
-        const string sql = "DELETE FROM Coins";
-
-        using var command = new SqlCommand(sql, connection);
-        command.ExecuteNonQuery();
     }
 }

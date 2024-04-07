@@ -77,4 +77,17 @@ public class SutController(
             IsAlreadyScavenged = x.MemberId != null
         }));
     }
+    
+    [HttpGet]
+    [Route("ResetData")]
+    public ActionResult ResetData()
+    {
+        appDbContext.ScavengeResults.ExecuteDelete();
+        appDbContext.ScavengedCoins.ExecuteDelete();
+        appDbContext.Coins.ExecuteDelete();
+
+        appDbContext.SaveChanges();
+        
+        return Ok();
+    }
 }

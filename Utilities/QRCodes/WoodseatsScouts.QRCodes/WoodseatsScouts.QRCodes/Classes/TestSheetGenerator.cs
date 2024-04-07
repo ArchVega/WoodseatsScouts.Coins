@@ -23,13 +23,11 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
     {
         var uniqueRandoms = new UniqueRandoms(random);
 
-        var memberCodeStack = new Stack<Member>(members);
-        var coinIndexesStack = new Stack<int>(coins.Select((x, y) => y));
+        var s = new List<int> { 3, 5, 7, 9 };
 
-        while (memberCodeStack.Count > 0)
-        {
-            var member = memberCodeStack.Pop();
-        }
+        var specialCoinsStack = new Stack<Coin>(coins.Where(x => s.Contains(x.Value)));
+
+        var coinIndexesStack = new Stack<int>(coins.Select((x, y) => y));
 
         foreach (var member in members)
         {
@@ -39,11 +37,9 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
                 Member = member,
                 FileInfo = fileInfo,
                 Bitmap = new Bitmap(fileInfo.FullName)
-
             };
 
-            const int max = 5;
-            var randomIndexes = uniqueRandoms.Get(5, coinIndexesStack.Count);
+            var randomIndexes = uniqueRandoms.Get(4, coinIndexesStack.Count);
             var randomCoinIndexStack = new Stack<int>(randomIndexes);
 
             var randomCoins = new List<Coin>();
@@ -63,6 +59,15 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
                         Bitmap = new Bitmap(qrCodeFileInfo.FullName)
                     };
                 }).ToList();
+
+            var specialCoin = specialCoinsStack.Pop();
+            var qrCodeFileInfo = databaseDirectoryInfo.GetFiles($"*{specialCoin}*", SearchOption.AllDirectories).Single();
+            coinQrCodeImageFileInfos.Add(new CoinFileInfo()
+            {
+                Coin = specialCoin,
+                FileInfo = qrCodeFileInfo,
+                Bitmap = new Bitmap(qrCodeFileInfo.FullName)
+            });
 
             GenerateTestSheetImage(memberQrCodeImageFileInfo, coinQrCodeImageFileInfos);
         }
@@ -99,7 +104,7 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
                 DrawText(graphics, "COIN QR CODE", row1X, 0);
                 DrawText(graphics, $"Code: {coinImage.Coin}", row1X, 22);
                 DrawText(graphics, $"Value: {coinImage.Coin.Value.ToString()}", row1X, 44);
-                
+
                 row1X += coinImage.Bitmap.Width;
             }
 

@@ -80,7 +80,7 @@ function ScanCoinsSection({member, setHaulResult}) {
 
     return (
         <>
-            <Row className="mb-3" style={{minHeight: '45vh', maxHeight: '50vh'}}>
+            <Row className="mb-5" style={{minHeight: '45vh', maxHeight: '50vh'}}>
                 <Col className="col-6">
                     <h1 id="scan-coins-section-h1">Welcome back,
                         <br/>
@@ -108,27 +108,26 @@ function ScanCoinsSection({member, setHaulResult}) {
                         </Col>
                     </Row>
                 </Col>
-            </Row>
-
-            <Row className="mt-5">
-                <Col className="col-6">
-                    <Button data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success w-50 btn-lg">
-                        <strong>Finish Scanning</strong>
-                    </Button>
-                </Col>
-                <Col className="col-6">
-                    <Row className="total-points-so-far">
-                        <Col className="col-6">
-                            <h4 className="text-end">Points added:</h4>
-                        </Col>
-                        <Col className=" text-end">
-                            <span style={{color: "white !important"}}>+</span>
-                            <strong className="font-black"
-                                    data-testid="coin-total"
-                                    style={{color: "white"}}>{coinTotal}</strong>
-                        </Col>
-                    </Row>
-                </Col>
+                <Row style={{position: "relative"}}>
+                    <Col className="col-6">
+                        <Button data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success btn-lg">
+                            <strong>Finish Scanning</strong>
+                        </Button>
+                    </Col>
+                    <Col className="col-6">
+                        <Row className="total-points-so-far">
+                            <Col className="col-6">
+                                <h4 className="text-end">Points added:</h4>
+                            </Col>
+                            <Col className=" text-end">
+                                <span style={{color: "white !important"}}>+</span>
+                                <strong className="font-black"
+                                        data-testid="coin-total"
+                                        style={{color: "white"}}>{coinTotal}</strong>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
             </Row>
         </>
     )

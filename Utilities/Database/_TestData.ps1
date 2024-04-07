@@ -35,13 +35,15 @@ function RestoreBaseTestData {
         if (!$tablesWithoutIdentities.Contains($tableName)) {
             $insertQueryStringBuilder.AppendLine("SET IDENTITY_INSERT $tableName ON;")
         }
-        $dataSet.Data | ForEach-Object { $insertQueryStringBuilder.AppendLine((CreateSqlQuery $tableSchema $tableName $_)) }
+        $dataSet.Data | ForEach-Object { 
+            $insertQueryStringBuilder.AppendLine((CreateSqlQuery $tableSchema $tableName $_)) | Out-Null
+        }
         if (!$tablesWithoutIdentities.Contains($tableName)) {
             $insertQueryStringBuilder.AppendLine("SET IDENTITY_INSERT $tableName OFF;")
         }        
 
         $insertQuery = $insertQueryStringBuilder.ToString();
-        Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query $insertQuery -TrustServerCertificate
+        Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query $insertQuery -TrustServerCertificate | out-null
     }    
 
     Write-Host "Finished inserting data from '$Path' into '$DatabaseName'"

@@ -28,13 +28,6 @@ namespace WoodseatsScouts.QRCodes
 
         private void Run()
         {
-            var coinCodeGenerator = new CoinCodeGenerator
-            {
-                NumberOfBasesToCreate = 100,
-                FixedCoinValues = [10, 20],
-                RandomCoinValues = [3, 9, 11]
-            };
-
             /* --------------------------------------------------------------- */
 
             GenerateDirectoriesIfRequired();
@@ -45,14 +38,12 @@ namespace WoodseatsScouts.QRCodes
             
             var members = database.GetMembers();
             qrCodeImagesGenerator.GenerateMemberQrCodes(members);
-
-            database.DeleteExistingCoins();
-            var coins = coinCodeGenerator.Generate();
+            
+            var coins = database.GetCoinsFromDb(databaseName);
             WriteCoinCodesToCsv(coins);
-            database.InsertCoinCodes(coins);
-            qrCodeImagesGenerator.GenerateCoinQrCodes(coins);
+            qrCodeImagesGenerator.GenerateCoinQrCodes(coins.Take(members.Count * 12).ToList());
 
-            testSheetGenerator.Generate(members, coins);
+            testSheetGenerator.Generate(members, coins.Take(members.Count * 12).ToList());
             
             Console.WriteLine("\nDone");
         }
