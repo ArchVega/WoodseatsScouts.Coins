@@ -76,10 +76,11 @@ CREATE TABLE [Members] (
 GO
 
 CREATE TABLE [Coins] (
-    [Id] int NOT NULL,
+    [Id] int NOT NULL IDENTITY,
+    [BaseValueId] int NOT NULL,
     [Base] int NOT NULL,
     [Value] int NOT NULL,
-    [Code] nvarchar(16) NOT NULL,
+    [Code] AS 'C' + (FORMAT([BaseValueId], '0000'))  + (FORMAT([Base], '000')) + (FORMAT([Value], '000')),
     [MemberId] int NULL,
     [LockUntil] datetime2 NULL,
     CONSTRAINT [PK_Coins] PRIMARY KEY ([Id]),
@@ -126,7 +127,7 @@ CREATE UNIQUE INDEX [IX_Sections_Code] ON [Sections] ([Code]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20240401171215_Initial', N'8.0.3');
+VALUES (N'20240407120856_Initial', N'8.0.3');
 GO
 
 COMMIT;

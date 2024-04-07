@@ -84,7 +84,11 @@ public class SutController(
     {
         appDbContext.ScavengeResults.ExecuteDelete();
         appDbContext.ScavengedCoins.ExecuteDelete();
-        appDbContext.Coins.ExecuteDelete();
+        foreach (var coin in appDbContext.Coins)
+        {
+            coin.MemberId = null;
+            coin.LockUntil = null;
+        }
 
         appDbContext.SaveChanges();
         
