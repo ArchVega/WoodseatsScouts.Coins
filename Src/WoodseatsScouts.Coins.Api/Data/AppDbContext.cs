@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
@@ -34,15 +35,17 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            const string coinCodeFormat = "'C' + (FORMAT([BaseValueId], '0000'))  + (FORMAT([Base], '000')) + (FORMAT([Value], '000'))";
+            const string memberCodeFormat = "'M' + (FORMAT(TroopId, '000'))  + [SectionId] + (FORMAT(Number, '000'))";
+            
             /* As of the v2024, Coins data is generated externally and the Id value is predetermined and inserted. */
             modelBuilder.Entity<Coin>()
-                .Property(et => et.Id)
-                .ValueGeneratedNever();
+                .Property(x => x.Code).HasComputedColumnSql(coinCodeFormat);
 
             /* See property notes */
             modelBuilder.Entity<Member>()
                 .Property(p => p.Code)
-                .HasComputedColumnSql("'M' + (FORMAT(TroopId, '000'))  + [SectionId] + (FORMAT(Number, '000'))");
+                .HasComputedColumnSql(memberCodeFormat);
 
             modelBuilder.Entity<Section>()
                 .HasIndex(u => u.Code)

@@ -1,10 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace WoodseatsScouts.Coins.Api.Models.Domain;
 
 public class Coin
 {
     public int Id { get; set; }
+    
+    /// <summary>
+    /// This is not a traditional Id (ie distinct for the entire table) but rather an Id for each Base/Value pair.
+    /// @24/04/06 this field is effectively redundant as we need a unique primary key (ie, "Id"), but as this value
+    /// has already been used in printed QR codes, we have to retain it for v2024.
+    /// Todo: v2025+, remove this property and instead just use Id 
+    /// </summary>
+    public int BaseValueId { get; set; }
     
     public int Base { get; set; }
 
