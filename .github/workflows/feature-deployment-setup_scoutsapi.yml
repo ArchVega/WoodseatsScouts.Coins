@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - ScoutsApi
 on:
   push:
     branches:
-      - feature/deployment-setup
+      - release/v2024
   workflow_dispatch:
 
 jobs:
