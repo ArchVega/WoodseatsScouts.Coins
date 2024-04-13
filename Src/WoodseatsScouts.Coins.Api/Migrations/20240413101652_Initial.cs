@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace WoodseatsScouts.Coins.Api.Migrations
 {
     /// <inheritdoc />
@@ -11,6 +13,19 @@ namespace WoodseatsScouts.Coins.Api.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Countries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Countries", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ErrorLogs",
                 columns: table => new
@@ -24,6 +39,19 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ErrorLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MemberCountryVotes",
+                columns: table => new
+                {
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    VotedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemberCountryVotes", x => new { x.MemberId, x.CountryId });
                 });
 
             migrationBuilder.CreateTable(
@@ -151,6 +179,23 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "England" },
+                    { 2, "Scotland" },
+                    { 3, "Northern Ireland" },
+                    { 4, "Wales" },
+                    { 5, "Ireland" },
+                    { 6, "France" },
+                    { 7, "Germany" },
+                    { 8, "Spain" },
+                    { 9, "Portugal" },
+                    { 10, "Netherlands" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Coins_MemberId",
                 table: "Coins",
@@ -190,7 +235,13 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 name: "Coins");
 
             migrationBuilder.DropTable(
+                name: "Countries");
+
+            migrationBuilder.DropTable(
                 name: "ErrorLogs");
+
+            migrationBuilder.DropTable(
+                name: "MemberCountryVotes");
 
             migrationBuilder.DropTable(
                 name: "ScavengedCoins");

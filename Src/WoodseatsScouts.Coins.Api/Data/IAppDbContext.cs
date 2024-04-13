@@ -37,4 +37,8 @@ public interface IAppDbContext
     void CreateScavengedCoins(ScavengeResult scavengeResult, List<string> coinCodes);
     
     List<Coin> RecordMemberAgainstUnscavengedCoins(Member member, List<string> coinCodes);
+    
+    DbSet<Country>? Countries { get; set; }
+        
+    DbSet<MemberCountryVote>? MemberCountryVotes { get; set; }
 }

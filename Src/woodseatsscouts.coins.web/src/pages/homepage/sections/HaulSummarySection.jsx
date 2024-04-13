@@ -16,11 +16,6 @@ function HaulResultsSection({member, haulResult}) {
     function reloadPage() {
         // Todo: get rid of location.reload mechanism
         global.location.reload()
-        // console.log('reload')
-        // setUser(null)
-        // setUserQRCode("")
-        // setCoinTotal(0)
-        // setCompletedScanning(false)
     }
 
     return (

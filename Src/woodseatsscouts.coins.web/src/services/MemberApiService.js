@@ -10,6 +10,12 @@ function MemberApiService() {
             return await axios.get(uri);
         },
 
+        async fetchMemberForVoting(memberQrCode) {
+            const uri = Uris.memberForVoting(memberQrCode);
+            logApi(uri)
+            return await axios.get(uri);
+        },
+
         async fetchMembers() {
             const uri = Uris.members
             return await axios.get(uri);

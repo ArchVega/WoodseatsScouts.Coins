@@ -30,6 +30,9 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public DbSet<ScavengeResult>? ScavengeResults { get; set; }
 
+        public DbSet<Country>? Countries { get; set; }
+
+        public DbSet<MemberCountryVote>? MemberCountryVotes { get; set; }
 
         public DbSet<ErrorLog>? ErrorLogs { get; set; }
 
@@ -37,7 +40,7 @@ namespace WoodseatsScouts.Coins.Api.Data
         {
             const string coinCodeFormat = "'C' + (FORMAT([BaseValueId], '0000'))  + (FORMAT([Base], '000')) + (FORMAT([Value], '000'))";
             const string memberCodeFormat = "'M' + (FORMAT(TroopId, '000'))  + [SectionId] + (FORMAT(Number, '000'))";
-            
+
             /* As of the v2024, Coins data is generated externally and the Id value is predetermined and inserted. */
             modelBuilder.Entity<Coin>()
                 .Property(x => x.Code).HasComputedColumnSql(coinCodeFormat);
@@ -50,6 +53,17 @@ namespace WoodseatsScouts.Coins.Api.Data
             modelBuilder.Entity<Section>()
                 .HasIndex(u => u.Code)
                 .IsUnique();
+
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 1, Name = "England" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 2, Name = "Scotland" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 3, Name = "Northern Ireland" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 4, Name = "Wales" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 5, Name = "Ireland" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 6, Name = "France" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 7, Name = "Germany" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 8, Name = "Spain" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 9, Name = "Portugal" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 10, Name = "Netherlands" });
         }
 
         public int GenerateNextMemberCode(int troopId, string section)
@@ -190,7 +204,7 @@ namespace WoodseatsScouts.Coins.Api.Data
         public List<Coin> RecordMemberAgainstUnscavengedCoins(Member member, List<string> coinCodes)
         {
             var alreadyScavengedCoins = new List<Coin>();
-            
+
             foreach (var coinCode in coinCodes)
             {
                 var coinToAdd = Coins!.Single(x => x.Code == coinCode);
@@ -211,7 +225,7 @@ namespace WoodseatsScouts.Coins.Api.Data
             {
                 alreadyScavengedCoins.ForEach(coin => coin.Member = Members!.Single(x => x.Id == coin.MemberId));
             }
-            
+
             return alreadyScavengedCoins;
         }
 

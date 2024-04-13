@@ -2,10 +2,10 @@ import {Col, Row} from "reactstrap";
 import React, {useEffect, useState} from "react";
 import AudioFx from "../../fx/AudioFx";
 import {logReactUseEffect} from "../../components/logging/Logger";
-import ScanMemberSection from "./sections/ScanMemberSection";
+import ScanMemberForCoinsSection from "./sections/ScanMemberForCoinsSection";
 import SectionNames from "./sections/SectionNames";
 import ScanCoinsSection from "./sections/scancoins/ScanCoinsSection";
-import HaulResultsSection from "./sections/HaulSummary";
+import HaulResultsSection from "./sections/HaulSummarySection";
 
 // Todo: rename paths and functions to either homepage or coinpage, not both
 export function CoinsPage() {
@@ -34,7 +34,7 @@ export function CoinsPage() {
         function getSection() {
             switch (sectionName) {
                 case SectionNames.ScanMember: {
-                    return (<ScanMemberSection setMember={setMember}/>)
+                    return (<ScanMemberForCoinsSection setMember={setMember}/>)
                 }
                 case SectionNames.ScanCoins: {
                     return (<ScanCoinsSection member={member} setHaulResult={setHaulResult}/>)

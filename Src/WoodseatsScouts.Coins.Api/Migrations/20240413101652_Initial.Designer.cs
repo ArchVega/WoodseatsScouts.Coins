@@ -12,7 +12,7 @@ using WoodseatsScouts.Coins.Api.Data;
 namespace WoodseatsScouts.Coins.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240407120856_Initial")]
+    [Migration("20240413101652_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -60,6 +60,75 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.HasIndex("MemberId");
 
                     b.ToTable("Coins");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "England"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Scotland"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Northern Ireland"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Wales"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Ireland"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "France"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Germany"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Spain"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Portugal"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Netherlands"
+                        });
                 });
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ErrorLog", b =>
@@ -138,6 +207,22 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.HasIndex("TroopId");
 
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.MemberCountryVote", b =>
+                {
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("VotedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MemberId", "CountryId");
+
+                    b.ToTable("MemberCountryVotes");
                 });
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", b =>

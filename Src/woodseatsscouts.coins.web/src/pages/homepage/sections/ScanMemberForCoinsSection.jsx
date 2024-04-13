@@ -9,7 +9,7 @@ import AudioFx from "../../../fx/AudioFx";
 import MemberApiService from "../../../services/MemberApiService";
 import {toastError} from "../../../components/toaster/toaster";
 
-function ScanMemberSection({setMember}) {
+function ScanMemberForCoinsSection({setMember}) {
     const audioFx = AudioFx();
     const [loading, setLoading] = useState(false)
     const [memberQrCode, setMemberQrCode] = useState("")
@@ -68,4 +68,4 @@ function ScanMemberSection({setMember}) {
     )
 }
 
-export default ScanMemberSection
+export default ScanMemberForCoinsSection

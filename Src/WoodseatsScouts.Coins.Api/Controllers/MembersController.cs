@@ -55,6 +55,40 @@ public class MembersController(
 
         return Ok(new MemberViewModel(member));
     }
+    
+    [HttpGet]
+    [Route("{code}/Vote")]
+    public IActionResult GetMemberInfoFromCodeForVoting(string code)
+    {
+        MemberCodeTranslationResult translationResult;
+        try
+        {
+            translationResult = CodeTranslator.TranslateMemberCode(code);
+        }
+        catch (CodeTranslationException e)
+        {
+            return BadRequest(e.Message);
+        }
+
+        var member = appDbContext.Members!
+            .Single(x => x.Number == translationResult.MemberNumber
+                         && x.TroopId == translationResult.TroopNumber
+                         && x.SectionId == translationResult.Section);
+
+        var alreadyVoted = appDbContext.MemberCountryVotes!.Any(x => x.MemberId == member.Id);
+
+        if (alreadyVoted)
+        {
+            return BadRequest($"{member.FirstName} has already casted their vote!");
+        }
+        
+        /* The other method (for logging in to scan coins) has a slight delay. We might not need this delay here, but keeping it here for
+         consistency for the UX.*/
+        // Todo: We don't need to wait between member code QR calls unless we're running in release. Either turn off or reduce.
+        Thread.Sleep(2000);
+
+        return Ok(new MemberViewModel(member));
+    }
 
     [HttpPut]
     [Route("{id:int}/Coins")]
