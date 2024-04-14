@@ -42,19 +42,6 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MemberCountryVotes",
-                columns: table => new
-                {
-                    MemberId = table.Column<int>(type: "int", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: false),
-                    VotedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MemberCountryVotes", x => new { x.MemberId, x.CountryId });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Sections",
                 columns: table => new
                 {
@@ -138,6 +125,31 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MemberCountryVotes",
+                columns: table => new
+                {
+                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    VotedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MemberCountryVotes", x => new { x.MemberId, x.CountryId });
+                    table.ForeignKey(
+                        name: "FK_MemberCountryVotes_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MemberCountryVotes_Members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Members",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScavengeResults",
                 columns: table => new
                 {
@@ -184,22 +196,27 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "England" },
-                    { 2, "Scotland" },
-                    { 3, "Northern Ireland" },
-                    { 4, "Wales" },
+                    { 1, "Italy" },
+                    { 2, "Germany" },
+                    { 3, "France" },
+                    { 4, "Belgium" },
                     { 5, "Ireland" },
-                    { 6, "France" },
-                    { 7, "Germany" },
-                    { 8, "Spain" },
-                    { 9, "Portugal" },
-                    { 10, "Netherlands" }
+                    { 6, "Poland" },
+                    { 7, "Australia" },
+                    { 8, "Finland" },
+                    { 9, "Norway" },
+                    { 10, "Spain" }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Coins_MemberId",
                 table: "Coins",
                 column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MemberCountryVotes_CountryId",
+                table: "MemberCountryVotes",
+                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Members_SectionId",
@@ -235,9 +252,6 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 name: "Coins");
 
             migrationBuilder.DropTable(
-                name: "Countries");
-
-            migrationBuilder.DropTable(
                 name: "ErrorLogs");
 
             migrationBuilder.DropTable(
@@ -245,6 +259,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "ScavengedCoins");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
 
             migrationBuilder.DropTable(
                 name: "ScavengeResults");

@@ -17,18 +17,13 @@ export default function VoteSummarySection({member, voteResult}) {
       </Row>
       <Row className="mb-3">
         <Col className="text-center">
-          <h4>Your vote goes to</h4>
+          <h4>You've voted for {voteResult.countryName}!</h4>
         </Col>
       </Row>
       <Row className="mb-4">
         <Col className="text-center">
-          <div className="country-div text-center border border-primary border-5 m-auto"
-               style={{width: '300px', height: '140px', position: "relative"}}>
-            <img src="images/fictional-country-flag.png" style={{width: '100%', height: '100%'}}/>
-            <div className="text-black bg-white"
-                 style={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", fontSize: "2.5em"}}>
-              {voteResult.countryName}
-            </div>
+          <div className="country-div text-center border border-primary border-5 m-auto" style={{width: '600px'}}>
+            <img src={`images/countries/${voteResult.countryName}.png`} style={{width: '100%', height: '100%'}}/>
           </div>
         </Col>
       </Row>

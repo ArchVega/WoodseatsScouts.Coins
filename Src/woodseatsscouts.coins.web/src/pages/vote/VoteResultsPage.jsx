@@ -21,15 +21,10 @@ export default function VoteResultsPage() {
     return (
       <>
         <div key={voteRow.countryId} className="p-2 my-auto">
-          <div className="country-div text-center border border-primary border-5" style={{height: '180px', position: "relative", width: "400px", margin: "auto"}}>
-
-            <img src="images/fictional-country-flag.png" style={{width: '100%', height: '100%'}}/>
-            <div
-              style={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", fontSize: "1.5em"}}>
-              <span className="text-black">
-                {voteRow.countryName}
-              </span>
-              <hr/>
+          <div className="country-div text-center border border-primary border-5"
+               style={{height: '180px', position: "relative", width: "400px", margin: "auto"}}>
+            <img src={`images/countries/${voteRow.countryName}.png`} style={{width: '100%', height: '100%'}}/>
+            <div className="total-votes" style={{position: "absolute", top: "80%", left: "90%", transform: "translate(-50%, -50%)", fontSize: "1.5em"}}>
               <span className="text-black">
                 {voteRow.totalVotes}
               </span>
@@ -52,7 +47,7 @@ export default function VoteResultsPage() {
         <Row>
           <Col>
             {voteResults && voteResults.map(voteRow => (
-              <Row key={voteRow.countryId}  className="m-auto">
+              <Row key={voteRow.countryId} className="m-auto">
                 <Col>
                   {renderCountryRow(voteRow)}
                 </Col>

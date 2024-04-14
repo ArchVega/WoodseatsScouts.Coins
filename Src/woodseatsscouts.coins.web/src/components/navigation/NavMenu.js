@@ -37,7 +37,7 @@ const NavMenu = () => {
 
   return (
     <header id="site-header">
-      <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container
+      <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3 align-middle" container
               light>
         <NavbarBrand tag={Link} to="/">
           <img id="site-image" src={SheafDistrictCampWhite}/>
@@ -87,7 +87,7 @@ const NavMenu = () => {
                        onClick={() => setCurrentPage("vote-results")}
                        className={menuItemCssClass("vote-results")}
                        to="/vote-results">
-                Vote Results
+                Votes Leaderboard
               </NavLink>
             </NavItem>
             {

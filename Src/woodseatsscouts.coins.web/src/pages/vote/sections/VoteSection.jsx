@@ -4,10 +4,12 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Uris from "../../../services/Uris";
 import SectionNames from "../../homepage/sections/SectionNames";
+import ConfirmVoteModal from "./ConfirmVoteModal";
 
 export default function VoteSection({member, setVoteResult}) {
   const [countries, setCountries] = useState([])
   const [selectedCountry, setSelectedCountry] = useState(null)
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     axios
@@ -24,25 +26,10 @@ export default function VoteSection({member, setVoteResult}) {
         <div className="country-div text-center border border-primary border-5"
              onClick={() => setSelectedCountry(country)}
              style={{height: '140px', position: "relative"}}>
-          <img src="images/fictional-country-flag.png" style={{width: '100%', height: '100%'}}/>
-          <div className="text-black bg-white"
-               style={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", fontSize: "2.5em"}}>
-            {country.name}
-          </div>
+          <img src={`images/countries/${country.name}.png`} style={{width: '100%', height: '100%'}} onClick={() => setModal(true)}/>
         </div>
       </div>
     )
-  }
-
-  function confirmVote() {
-    if (selectedCountry) {
-      axios
-        .put(Uris.registerVoteForMember(member.memberId, selectedCountry.id))
-        .then(async response=> {
-          const data = await response.data;
-          setVoteResult(data)
-        })
-    }
   }
 
   return (
@@ -63,19 +50,7 @@ export default function VoteSection({member, setVoteResult}) {
           </div>
         </Col>
       </Row>
-      <Row className="mt-5">
-        <Col className="text-center">
-          {selectedCountry
-            ?
-            <Button className="btn-success p-5 border border-primary border-1" style={{fontSize: "2em", width: '500px'}} onClick={confirmVote}>
-              <div>Vote for <span className="text-white">{selectedCountry.name}</span></div>
-              <div>
-                <img src="images/fictional-country-flag.png" style={{width: '100%', height: '100%'}}/>
-              </div>
-            </Button>
-            : null}
-        </Col>
-      </Row>
+      <ConfirmVoteModal member={member} country={selectedCountry} setVoteResult={setVoteResult} modal={modal} setModal={setModal}></ConfirmVoteModal>
     </>
   )
 }

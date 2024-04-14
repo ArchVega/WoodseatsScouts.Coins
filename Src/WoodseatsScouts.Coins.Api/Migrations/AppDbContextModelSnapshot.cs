@@ -79,22 +79,22 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "England"
+                            Name = "Italy"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Scotland"
+                            Name = "Germany"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Northern Ireland"
+                            Name = "France"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Wales"
+                            Name = "Belgium"
                         },
                         new
                         {
@@ -104,27 +104,27 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         new
                         {
                             Id = 6,
-                            Name = "France"
+                            Name = "Poland"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Germany"
+                            Name = "Australia"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Spain"
+                            Name = "Finland"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "Portugal"
+                            Name = "Norway"
                         },
                         new
                         {
                             Id = 10,
-                            Name = "Netherlands"
+                            Name = "Spain"
                         });
                 });
 
@@ -218,6 +218,8 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("MemberId", "CountryId");
+
+                    b.HasIndex("CountryId");
 
                     b.ToTable("MemberCountryVotes");
                 });
@@ -331,6 +333,25 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.Navigation("Section");
 
                     b.Navigation("Troop");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.MemberCountryVote", b =>
+                {
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", b =>

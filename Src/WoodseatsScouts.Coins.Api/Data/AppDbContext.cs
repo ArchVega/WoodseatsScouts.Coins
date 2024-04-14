@@ -54,16 +54,16 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .HasIndex(u => u.Code)
                 .IsUnique();
 
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 1, Name = "England" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 2, Name = "Scotland" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 3, Name = "Northern Ireland" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 4, Name = "Wales" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 1, Name = "Italy" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 2, Name = "Germany" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 3, Name = "France" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 4, Name = "Belgium" });
             modelBuilder.Entity<Country>().HasData(new Country { Id = 5, Name = "Ireland" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 6, Name = "France" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 7, Name = "Germany" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 8, Name = "Spain" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 9, Name = "Portugal" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 10, Name = "Netherlands" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 6, Name = "Poland" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 7, Name = "Australia" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 8, Name = "Finland" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 9, Name = "Norway" });
+            modelBuilder.Entity<Country>().HasData(new Country { Id = 10, Name = "Spain" });
         }
 
         public int GenerateNextMemberCode(int troopId, string section)

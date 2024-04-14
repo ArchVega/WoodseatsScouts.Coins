@@ -7,8 +7,8 @@
   width: 128px;
   font-size: 3em;
   padding: .3em .4em .4em;
-  margin: 0.1em;  
-  border: 0.05em solid black;  
+  margin: 0.1em;
+  border: 0.05em solid black;
   display: inline-block;
   position: relative;
   -webkit-border-radius: 20px !important;
@@ -22,10 +22,11 @@
 
 .coin-20 {
   background-color: variables.$colour-coins-20;
+
   span {
     color: black !important;
   }
-  
+
   .remove div {
     color: black !important;
   }
@@ -33,6 +34,7 @@
 
 .coin-10 {
   background-color: variables.$colour-coins-10;
+
   span {
     color: black !important;
   }
@@ -44,6 +46,7 @@
 
 .coin-random-odd {
   background-color: variables.$colour-coins-5;
+
   span {
     color: white !important;
   }
@@ -64,14 +67,14 @@
   right: 10px;
   color: white;
   font-style: normal;
-  font-size:10px !important;
+  font-size: 10px !important;
 }
 
 .total-points-so-far {
   & .col.text-end {
     background-color: #7413dc !important;
     font-size: 3em
-  } 
+  }
 }
 
 .total-points-saved {
@@ -83,5 +86,12 @@
   -webkit-border-radius: 20px !important;
   -moz-border-radius: 20px !important;
   border-radius: 20px !important;
-  box-shadow: 2px 2px rgba(0,0,0,0.3);
+  box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.total-votes {
+  border-radius: 50% !important;
+  width: 40px;
+  height: 40px;
+  border: 3px solid white;
 }
