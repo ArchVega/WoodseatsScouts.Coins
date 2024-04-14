@@ -1,12 +1,15 @@
+. .\Utilities\Deployment\Database\InsertCoinsSqlGenerator.ps1
+
 $sqlOutputFile = Join-Path (Get-Location) -ChildPath "Utilities/Deployment/Database/Output/WoodseatsScouts.Coins.sql"
 $removeAllTables = Join-Path (Get-Location) -ChildPath "Utilities/Deployment/Database/RemoveAllTables.sql"
-$productionTestDataFile = Join-Path (Get-Location) -ChildPath "Utilities/Deployment/Database/ProductionTestData.sql"
 
 Set-Location "./Src/WoodseatsScouts.Coins.Api"
 
 dotnet ef migrations script -o $sqlOutputFile
 
 $schemaSql = Get-Content $sqlOutputFile -Raw
+
+$insertData = GetCoinData
 
 $output = "
 $(Get-Content $removeAllTables -Raw)
@@ -21,7 +24,15 @@ begin
 CREATE USER ScoutsUser FOR LOGIN ScoutsUser WITH DEFAULT_SCHEMA = [WoodseatsScouts.Coins]
 end
 
-$(Get-Content $productionTestDataFile -Raw)
+INSERT [dbo].[Sections] ([Code], [Name]) VALUES (N'A', N'Adults')
+INSERT [dbo].[Sections] ([Code], [Name]) VALUES (N'B', N'Beavers')
+INSERT [dbo].[Sections] ([Code], [Name]) VALUES (N'C', N'Cubs')
+INSERT [dbo].[Sections] ([Code], [Name]) VALUES (N'E', N'Explorers')
+INSERT [dbo].[Sections] ([Code], [Name]) VALUES (N'S', N'Scouts')
+GO
+
+$insertData
+GO
 "
 
 Set-Content -Path $sqlOutputFile -Value $output
