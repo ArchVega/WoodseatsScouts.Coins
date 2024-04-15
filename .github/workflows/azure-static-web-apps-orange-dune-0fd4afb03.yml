@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-artifact
-          path: /github/workspace
+          path: /bin/staticsites/**/*
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
