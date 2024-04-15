@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-artifact
-          path: /home/runner/work/WoodseatsScouts.Coins/WoodseatsScouts.Coins/**/*      
+          path: /home/runner/work/WoodseatsScouts.Coins/WoodseatsScouts.Coins/Src/woodseatsscouts.coins.web/build/**/*      
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
