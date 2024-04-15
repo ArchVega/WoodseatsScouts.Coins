@@ -38,6 +38,9 @@ jobs:
           REACT_APP_WEB_API_URI: 'https://scoutsapi.azurewebsites.net'
       - name: npm install and build
         run: |
+          echo "$GITHUB_WORKSPACE"
+          echo "$PWD"
+          cd "Src/woodseatsscouts.coins.web"
           npm install
           npm run build --if-present
       - name: Archive production artifacts
