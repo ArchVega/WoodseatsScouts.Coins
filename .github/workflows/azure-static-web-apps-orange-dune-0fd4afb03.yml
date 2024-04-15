@@ -36,26 +36,11 @@ jobs:
           NPM_CONFIG_LEGACY_PEER_DEPS: true
           CI: false
           REACT_APP_WEB_API_URI: 'https://scoutsapi.azurewebsites.net'
-      - name: Archive production artifacts
+      - name: Archive production artifacts 
         uses: actions/upload-artifact@v4
         with:
           name: release-artifact
-          path: /home/runner/work/WoodseatsScouts.Coins/WoodseatsScouts.Coins/**/*
-      - name: npm install and build
-        run: |
-          echo "$GITHUB_WORKSPACE"
-          echo "$PWD"
-          cd "Src/woodseatsscouts.coins.web"
-          npm install --legacy-peer-deps
-          npm run build --if-present
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-without-markdown
-          path: |
-            dist
-            !dist/**/*.md
-
+          path: /home/runner/work/WoodseatsScouts.Coins/WoodseatsScouts.Coins/**/*      
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
