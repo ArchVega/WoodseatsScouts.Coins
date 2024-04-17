@@ -1,7 +1,8 @@
 name: Production-Scouts-ReactApp
 
 env:
-  WEB_API_URI: 'https://scoutsapi.azurewebsites.net'
+  WEB_API_URI: 'https://production-web-api-uri'
+
 on:
   push:
     branches:
