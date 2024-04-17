@@ -1,5 +1,8 @@
 # Woodseats.Coins
 
+## Requirements
+install-module sqlserver (for powershell db scripts)
+
 ## Database Schema
 
 Troops has many Members

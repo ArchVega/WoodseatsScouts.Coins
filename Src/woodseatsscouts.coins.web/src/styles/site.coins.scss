@@ -1,0 +1,141 @@
+﻿@use 'site.variables' as variables;
+
+/* adapted from http://maxwells.github.io/bootstrap-tags.html */
+.coin {
+  max-width: 128px;
+  min-width: 128px;
+  width: 128px;
+  font-size: 3em;
+  padding: .3em .4em .4em;
+  margin: 0.1em;
+  border: 0.05em solid black;
+  border-radius: 50% !important;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  display: inline-block;
+  position: relative;
+  line-height: 80px;
+  text-align: center;
+}
+
+.coin-value {
+  margin-top: 10px;
+}
+
+.coin-last-added {
+  animation: border-pulsate 2s infinite;
+}
+
+.coin-20 {
+  background-color: variables.$colour-coins-20;
+
+  span {
+    color: black !important;
+  }
+
+  .remove div {
+    color: black !important;
+  }
+}
+
+.coin-10 {
+  background-color: variables.$colour-coins-10;
+
+  span {
+    color: black !important;
+  }
+
+  .remove div {
+    color: black !important;
+  }
+}
+
+.coin-random-odd {
+  background-color: variables.$colour-coins-5;
+
+  span {
+    color: white !important;
+  }
+
+  .remove div {
+    color: white !important;
+  }
+}
+
+.coin span.remove-score {
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+}
+
+.coin .remove {
+  position: absolute;
+  top: -20px;
+  right: 30px;
+  color: white;
+  font-style: normal;
+  font-size: 10px !important;
+}
+
+.total-points-so-far {
+  & .col.text-end {
+    background-color: #7413dc !important;
+    font-size: 3em
+  }
+}
+
+.total-points-saved {
+  font-size: 8em;
+  color: white;
+  padding: 0.2em;
+  margin: 0.3em;
+  background-color: variables.$colour-scouts-teal;
+  -webkit-border-radius: 20px !important;
+  -moz-border-radius: 20px !important;
+  border-radius: 20px !important;
+  box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.total-votes {
+  border-radius: 50% !important;
+  width: 40px;
+  height: 40px;
+  border: 3px solid white;
+}
+
+#finish-scanning-button {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -webkit-border-radius: 20px !important;
+  -moz-border-radius: 20px !important;
+  border-radius: 20px !important;
+  width: 320px;
+  height: 170px;
+  margin: 10px;
+  display: inline-block;
+  padding: 6px 25px;
+  font-weight: bold;
+  box-shadow: 0 0 0 5px #088486,
+  inset 0 0 0 1px #fff;
+}
+
+.finish-scanning-button-points-value {
+  font-family: Nunito, serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 5em;
+}
+
+#finish-scanning-button img {
+  filter: invert(98%) sepia(0%) saturate(4881%) hue-rotate(14deg) brightness(111%) contrast(101%);
+  margin-right: 5px;
+}
+
+.focus-scanner-textbox-button {
+  background-color: variables.$colour-scouts-orange !important;
+
+  div {
+    color: white !important;
+  }
+}
+

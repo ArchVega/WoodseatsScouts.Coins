@@ -351,3 +351,6 @@ MigrationBackup/
 PrototypingProjects/Kexis.RSSv1/Kexis.RSS.Plugins/.idea/
 Kexis.RSS.Web/Kexis.RSS.Web/.local-chromium/
 **/.idea/
+Src/woodseatsscouts.coins.web1
+Src/woodseatsscouts.coins.web/dist/
+Src/woodseatsscouts.coins.web/build/

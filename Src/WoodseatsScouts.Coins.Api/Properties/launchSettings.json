@@ -1,0 +1,54 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:7167",
+      "sslPort": 44394
+    }
+  },
+  "profiles": {
+    "Scouts API - Development": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "ignore_launchBrowser": true,
+      "ignore_launchUrl": "swagger",
+      "applicationUrl": "http://localhost:7167",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SCOUTS_API_APP_MODE": "Development"
+      }
+    },
+    "Scouts API - AcceptanceTest": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "ignore_launchBrowser": true,
+      "ignore_launchUrl": "swagger",
+      "applicationUrl": "http://localhost:7167",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "AcceptanceTest",
+        "SCOUTS_API_APP_MODE": "AcceptanceTest"
+      }
+    },
+    "Scouts API - Production": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "ignore_launchBrowser": true,
+      "ignore_launchUrl": "swagger",
+      "applicationUrl": "http://localhost:7167",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "SCOUTS_API_APP_MODE": "Production"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "ignore_launchBrowser": true,
+      "ignore_launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
