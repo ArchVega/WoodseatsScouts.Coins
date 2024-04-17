@@ -53,7 +53,8 @@ public class MembersController(
         // Todo: We don't need to wait between member code QR calls unless we're running in release. Either turn off or reduce.
         Thread.Sleep(2000);
 
-        return Ok(new MemberViewModel(member));
+        var wtf = new MemberViewModel(member);
+        return Ok(wtf);
     }
     
     [HttpGet]

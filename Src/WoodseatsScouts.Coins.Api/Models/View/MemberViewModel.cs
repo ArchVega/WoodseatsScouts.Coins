@@ -10,10 +10,11 @@ public class MemberViewModel(Member member)
 
     public string? LastName { get; set; } = member.LastName;
 
-    public string MemberPhotoPath { get; set; } = $"/member-images/{member.Id}.jpg"; // Todo: hardcoded path
+    // public string MemberPhotoPath { get; set; } = $"/member-images/{member.Id}.jpg"; // Todo: hardcoded path
+
+    public bool HasImage { get; set; } = member.HasImage;
 
     public int MemberTroopNumber { get; set; } = member.TroopId;
-
     public string MemberSection { get; set; } = member.SectionId;
 
     public int MemberId { get; set; } = member.Id;

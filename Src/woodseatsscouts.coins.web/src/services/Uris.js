@@ -5,10 +5,11 @@ const Uris = {
   appVersion: `${baseUri}/AppState/AppVersion`,
   members: `${baseUri}/Members`,
   leaderboard: `${baseUri}/Leaderboard/Report`,
+  leaderboardLast6ScavengersPageRefreshSeconds: `${baseUri}/Leaderboard/Last6ScavengersPageRefreshSeconds`,
   testDataCoins: `${baseUri}/Sut/Coins`,
   countries: `${baseUri}/Countries`,
   voteResults: `${baseUri}/Vote/Results`,
-
+  latest6Scavengers: `${baseUri}/Leaderboard/Members`,
 
   addPointsToMember: function (id) {
     return `${baseUri}/Members/${id}/Coins`
@@ -23,11 +24,11 @@ const Uris = {
     return `${baseUri}/Members/${memberQrCode}/Vote`
   },
   memberPhoto: function (id) {
-    return `${baseUri}/Members/${id}/Photo`
+    return `${baseUri}/Members/${id}/Photo?${new Date()}`
   },
   registerVoteForMember(memberId, countryId) {
     return `${baseUri}/Vote/${memberId}/RegisterVote?countryId=${countryId}`
-  }
+  },
 }
 
 export default Uris

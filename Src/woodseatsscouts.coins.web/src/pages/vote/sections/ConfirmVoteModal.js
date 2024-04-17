@@ -29,7 +29,7 @@ export default function ConfirmVoteModal({country, member, setVoteResult, modal,
           </Row>
           <Row>
             <Col>
-              <Button className="btn btn-success" onClick={confirmVote}>
+              <Button className="btn btn-success" onClick={confirmVote} data-testid="confirm-vote-for-country">
                 Confirm
               </Button>
             </Col>

@@ -33,6 +33,14 @@ const CoinCodeScanPage = (page) => {
 
         getTotalCoinValue : async () => {
             return Number(await page.getByTestId("coin-total").textContent())
+        },
+
+        async clickStartAgainButton() {
+            await page.getByTestId("button-start-again").click()
+        },
+
+        async clickConfirmStartAgainButton() {
+            await page.getByTestId("button-confirm-start-again").click()
         }
     }
 }

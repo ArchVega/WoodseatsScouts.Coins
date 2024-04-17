@@ -90,6 +90,15 @@ public class DatabaseFixture
 
     private void ConsumeErrorStreamOutput(object? sender, DataAddedEventArgs e)
     {
+        if (sender is PSDataCollection<ErrorRecord> o)
+        {
+            var errs = o
+                .Select(x => x.Exception.Message)
+                .Aggregate((x, y) => $"{x}{Environment.NewLine}{y}");
+            
+            throw new Exception(errs);    
+        }
+        
         throw new Exception(sender.ToString());
     }
 }

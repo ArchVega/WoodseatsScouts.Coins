@@ -124,28 +124,33 @@ em {
   box-shadow: 2px 2px rgba(0,0,0,0.3);
   text-transform: uppercase;
   
-  &.label-section-beavers {
+  .label-section-beavers {
     color: white !important;
     background-color: #00afee;
+    padding: 5px !important;
   }
 
-  &.label-section-cubs {
+  .label-section-cubs {
     color: white !important;
-    background-color: #538135;    
+    background-color: #538135;
+    padding: 5px !important;
   }
 
-  &.label-section-scouts {
+  .label-section-scouts {
     color: white !important;
     background-color: #088385;
+    padding: 5px !important;
   }
 
-  &.label-section-explorers {
+  .label-section-explorers {
     color: black !important;
     background-color: #fdd765;
+    padding: 5px !important;
   }
 
-  &.label-section-adults {
+  .label-section-adults {
     color: white !important;
     background-color: #5a488b;
+    padding: 5px !important;
   }
 }

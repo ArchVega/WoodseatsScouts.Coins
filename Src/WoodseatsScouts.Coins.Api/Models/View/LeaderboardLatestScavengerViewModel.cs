@@ -1,4 +1,5 @@
 // dotcover disable
+
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Models.View;
@@ -25,7 +26,7 @@ public class LeaderboardLatestScavengerViewModel
     public string SectionName { get; set; }
 
     public string Section { get; set; }
-    
+
     public string TroopName { get; set; }
 
     public string? LastName { get; set; }

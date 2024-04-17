@@ -19,7 +19,7 @@ function RestoreBaseTestData {
         }        
     }
     
-    $tables = @("Sections", "Troops", "Members", "ScavengedCoins", "ScavengeResults")
+    $tables = @("ScavengeResults", "ScavengedCoins", "MemberCountryVotes", "Coins", "Members", "Sections", "Troops")
     $tables | ForEach-Object { Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query "DELETE FROM $_" -TrustServerCertificate }
 
     $tablesWithoutIdentities = @("Sections")

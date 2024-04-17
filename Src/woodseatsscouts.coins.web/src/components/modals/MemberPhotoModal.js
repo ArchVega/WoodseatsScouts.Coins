@@ -15,7 +15,7 @@ const MemberPhotoModal = ({usersModal, setUsersModal, selectedUser}) => {
                         {selectedUser != null ? (
                             <img src={selectedUser.hasImage
                                 ? Uris.memberPhoto(selectedUser.id) // todo: rename to member
-                                : "images/unknown-member-image.png"}
+                                : "/images/unknown-member-image.png"}
                                  style={{maxWidth: '100%'}} alt=""/>
 
                         ) : null}

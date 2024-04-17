@@ -8,7 +8,7 @@ const ReportPage = (page) => {
 
     return {
         goTo: async (code) => {
-            await page.goto('/leaderboard');
+            await page.goto('/leaderboard/groups');
 
             top3GroupsTable = page.getByTestId("table-top-3-groups")
             groupLeaderboardTable = page.getByTestId("table-group-leaderboard")

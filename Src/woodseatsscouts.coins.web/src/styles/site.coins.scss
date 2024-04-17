@@ -9,11 +9,17 @@
   padding: .3em .4em .4em;
   margin: 0.1em;
   border: 0.05em solid black;
+  border-radius: 50% !important;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
   display: inline-block;
   position: relative;
-  -webkit-border-radius: 20px !important;
-  -moz-border-radius: 20px !important;
-  border-radius: 20px !important;
+  line-height: 80px;
+  text-align: center;
+}
+
+.coin-value {
+  margin-top: 10px;
 }
 
 .coin-last-added {
@@ -63,8 +69,8 @@
 
 .coin .remove {
   position: absolute;
-  top: -5px;
-  right: 10px;
+  top: -20px;
+  right: 30px;
   color: white;
   font-style: normal;
   font-size: 10px !important;
@@ -95,3 +101,41 @@
   height: 40px;
   border: 3px solid white;
 }
+
+#finish-scanning-button {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -webkit-border-radius: 20px !important;
+  -moz-border-radius: 20px !important;
+  border-radius: 20px !important;
+  width: 320px;
+  height: 170px;
+  margin: 10px;
+  display: inline-block;
+  padding: 6px 25px;
+  font-weight: bold;
+  box-shadow: 0 0 0 5px #088486,
+  inset 0 0 0 1px #fff;
+}
+
+.finish-scanning-button-points-value {
+  font-family: Nunito, serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 5em;
+}
+
+#finish-scanning-button img {
+  filter: invert(98%) sepia(0%) saturate(4881%) hue-rotate(14deg) brightness(111%) contrast(101%);
+  margin-right: 5px;
+}
+
+.focus-scanner-textbox-button {
+  background-color: variables.$colour-scouts-orange !important;
+
+  div {
+    color: white !important;
+  }
+}
+

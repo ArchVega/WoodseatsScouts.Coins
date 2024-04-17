@@ -60,7 +60,7 @@ const LeaderboardPage = () => {
                                             className="rect-img"
                                             src={x.hasImage
                                               ? Uris.memberPhoto(x.id)
-                                              : "images/unknown-member-image.png"}
+                                              : "/images/unknown-member-image.png"}
                                             style={{maxWidth: "100%"}}/>
                                     </div>
                                 </Col>

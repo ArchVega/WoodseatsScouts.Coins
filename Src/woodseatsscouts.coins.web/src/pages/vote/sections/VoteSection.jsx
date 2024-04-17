@@ -24,6 +24,7 @@ export default function VoteSection({member, setVoteResult}) {
     return (
       <div key={country.id} className="p-2 my-auto" style={{width: '20%'}}>
         <div className="country-div text-center border border-primary border-5"
+             data-testid={`vote-for-${country.name.toLowerCase()}`}
              onClick={() => setSelectedCountry(country)}
              style={{height: '140px', position: "relative"}}>
           <img src={`images/countries/${country.name}.png`} style={{width: '100%', height: '100%'}} onClick={() => setModal(true)}/>

@@ -2,13 +2,12 @@ import {expect} from "@playwright/test";
 import axios from "axios";
 import CoinCodeScanPage from "./CoinCodeScanPage";
 import Uris from "./Uris";
+import VoteForCountryPage from "./VoteForCountryPage";
 
-const HomePage = (page) => {
+const VotePage = (page) => {
     return {
         goTo: async () => {
-            await page.goto('');
-
-            await expect(page).toHaveTitle(/Woodseats Scouts Coins/);
+            await page.goto('/vote');
         },
 
         simulateValidUserWristbandScan: async (userName) => {
@@ -21,26 +20,9 @@ const HomePage = (page) => {
             const userFirstName = await page.getByTestId("h1-user-firstname").textContent()
             expect(userFirstName).toBe(userData.firstName)
 
-            return CoinCodeScanPage(page);
+            return VoteForCountryPage(page);
         },
-
-        simulateInvalidUserWristbandScan: async (wristCode) => {
-            const memberCodeTextbox = page.getByTestId("textbox-usb-scanner-code")
-            await memberCodeTextbox.fill(wristCode);
-            await memberCodeTextbox.press('Enter')
-
-            return CoinCodeScanPage(page);
-        },
-
-        async clickLogo() {
-            await page.locator("#site-image").click()
-            await page.waitForTimeout(500)
-        },
-
-        async isHomePage() {
-            await page.getByTestId("textbox-usb-scanner-code").isVisible()
-        }
     }
 }
 
-export default HomePage
+export default VotePage

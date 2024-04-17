@@ -10,5 +10,6 @@ public class LeaderboardSettings
     public string PageTitle { get; set; }
     
     public int PageRefreshSeconds { get; set; }
-
+    
+    public int Last6ScavengersPageRefreshSeconds { get; set; }
 }

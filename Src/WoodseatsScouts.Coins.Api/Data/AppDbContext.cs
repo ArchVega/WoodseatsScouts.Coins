@@ -100,6 +100,45 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .ToList();
         }
 
+        public List<object> GetLastSixScavengers()
+        {
+            var last6MembersAndTotalCoins = ScavengeResults
+                .OrderByDescending(x => x.CompletedAt)
+                .Take(6)
+                .Select(x => new
+                {
+                    x.MemberId,
+                    TotalPoints = x.ScavengedCoins.Sum(y => y.PointValue)
+                })
+                .ToList();
+
+            var members = new List<Object>();
+
+            foreach (var memberAndTotalCoins in last6MembersAndTotalCoins)
+            {
+                var member = Members
+                    .Include(x => x.Section)
+                    .Single(x => memberAndTotalCoins.MemberId == x.Id);
+
+                var item = new
+                {
+                    member.Id,
+                    MemberCode = member.Code,
+                    member.HasImage,
+                    MemberNumber = member.Number,
+                    member.FirstName,
+                    member.LastName,
+                    Section = member.SectionId,
+                    SectionName = member.Section.Name,
+                    memberAndTotalCoins.TotalPoints
+                };
+
+                members.Add(item);
+            }
+
+            return members;
+        }
+
         public List<GroupPoints> GetTopThreeGroupsInLastHour()
         {
             var now = TimeProvider.GetLocalNow().DateTime;

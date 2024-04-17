@@ -17,6 +17,7 @@ import ReportPage from "../pageModels/ReportPage";
 import ScreenshotsComparer from "../utilities/ScreenshotsComparer";
 import joinImages from "join-images";
 import MemberScavengedResultPage from "../pageModels/MemberScavengedResultPage";
+import {last6ScannersAssertionHelpers} from "../assertionHelpers/Last6ScannersAssertionHelpers";
 
 let runName = "master"
 runName = "feature"
@@ -123,15 +124,37 @@ test(serialStep("Testing navigation"), async ({page}, testInfo) => {
     const homePage = HomePage(page);
     await homePage.goTo()
 
+    await homePage.clickLogo();
     await page.getByTestId("nav-coins-page").click();
     await expect(page).toHaveURL("")
 
+    await homePage.clickLogo();
+    await page.getByTestId("vote-page").click();
+    await expect(page).toHaveURL("vote")
+
+    await homePage.clickLogo();
     await page.getByTestId("nav-members-page").click();
     await expect(page).toHaveURL("members")
 
-    await page.getByTestId("nav-report-page").click();
-    await expect(page).toHaveURL("leaderboard")
+    await homePage.clickLogo();
+    await page.getByTestId("nav-leaderboard-dropdown").click();
+    await page.waitForTimeout(500);
+    await page.getByTestId("nav-report-page-leaderboard-groups").click();
+    await expect(page).toHaveURL("leaderboard/groups")
 
+    await homePage.clickLogo();
+    await page.getByTestId("nav-leaderboard-dropdown").click();
+    await page.waitForTimeout(500);
+    await page.getByTestId("nav-report-page-leaderboard-members").click();
+    await expect(page).toHaveURL("leaderboard/members")
+
+    await homePage.clickLogo();
+    await page.getByTestId("nav-leaderboard-dropdown").click();
+    await page.waitForTimeout(500);
+    await page.getByTestId("nav-report-page-leaderboard-votes").click();
+    await expect(page).toHaveURL("/vote-results")
+
+    await homePage.clickLogo();
     await page.getByTestId("nav-settings-modal").click();
     const useCameraSwitch = page.getByTestId("switch-use-camera");
     await expect(useCameraSwitch).toBeVisible()
@@ -224,6 +247,27 @@ test(serialStep("Asparagus Royal completes a scavenger haul"), async ({page}, te
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
+test(serialStep("Asparagus Royal starts scanning coins but decides to start again"), async ({page}, testInfo) => {
+    const coins = await scavengerHunt.getUnscavengedCoinByValue(users.asparagusRoyal, [10, 20])
+
+    let homePage = HomePage(page);
+    await homePage.goTo()
+
+    const coinCodeScanPage = await homePage.simulateValidUserWristbandScan(users.asparagusRoyal)
+
+    for (let i = 0; i < coins.length; i++) {
+        let coin = coins[i]
+        await coinCodeScanPage.enterCoinCode(coin.code)
+    }
+
+    await coinCodeScanPage.clickStartAgainButton();
+    await coinCodeScanPage.clickConfirmStartAgainButton();
+    homePage = HomePage(page);
+    await homePage.isHomePage()
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
+});
+
 test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await assertReportsPageIs(
         page,
@@ -235,6 +279,17 @@ test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
         ],
         [
             {groupName: "Royal", averagePoints: 8.25}
+        ]
+    )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
+});
+
+test(serialStep("Viewing the recent 6 leaderboard page"), async ({page}, testInfo) => {
+    await last6ScannersAssertionHelpers(
+        page,
+        [
+            {userName: users.asparagusRoyal, sectionName: "Cubs", userPoints: 33}
         ]
     )
 
@@ -268,6 +323,18 @@ test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
+test(serialStep("Viewing the recent 6 leaderboard page"), async ({page}, testInfo) => {
+    await last6ScannersAssertionHelpers(
+        page,
+        [
+            {userName: users.icterineCrimson, sectionName: "Adults", userPoints: 40},
+            {userName: users.asparagusRoyal, sectionName: "Cubs", userPoints: 33}
+        ]
+    )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
+});
+
 test(serialStep("Cerise Royal completes a scavenger haul"), async ({page}, testInfo) => {
     const coins = await scavengerHunt.getUnscavengedCoinByValue(users.ceriseRoyal, [10, 20])
     await validScavengerHaulSteps(users.ceriseRoyal, coins, 30, page)
@@ -290,6 +357,19 @@ test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
         [
             {groupName: "Royal", averagePoints: 15.75},
             {groupName: "Crimson", averagePoints: 10}
+        ]
+    )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
+});
+
+test(serialStep("Viewing the recent 6 leaderboard page"), async ({page}, testInfo) => {
+    await last6ScannersAssertionHelpers(
+        page,
+        [
+            {userName: users.ceriseRoyal, sectionName: "Cubs", userPoints: 30},
+            {userName: users.icterineCrimson, sectionName: "Adults", userPoints: 40},
+            {userName: users.asparagusRoyal, sectionName: "Cubs", userPoints: 33}
         ]
     )
 
@@ -342,6 +422,20 @@ test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
             {groupName: "Royal", averagePoints: 15.75},
             {groupName: "Jet", averagePoints: 12.25},
             {groupName: "Crimson", averagePoints: 10},
+        ]
+    )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
+});
+
+test(serialStep("Viewing the recent 6 leaderboard page"), async ({page}, testInfo) => {
+    await last6ScannersAssertionHelpers(
+        page,
+        [
+            {userName: users.glaucousJet, sectionName: "Beavers", userPoints: 49},
+            {userName: users.ceriseRoyal, sectionName: "Cubs", userPoints: 30},
+            {userName: users.icterineCrimson, sectionName: "Adults", userPoints: 40},
+            {userName: users.asparagusRoyal, sectionName: "Cubs", userPoints: 33}
         ]
     )
 
@@ -482,6 +576,22 @@ test(serialStep("Time's up"), async ({page}, testInfo) => {
     expect(hoursLeft).toBe(0)
 
     //await screenshotsComparer.takeScreenshot(page, testInfo, "End");
+});
+
+test(serialStep("Viewing the final recent 6 leaderboard page"), async ({page}, testInfo) => {
+    await last6ScannersAssertionHelpers(
+        page,
+        [
+            {userName: users.olivineCrimson, sectionName: "Adults", userPoints: 20},
+            {userName: users.olivineCrimson, sectionName: "Adults", userPoints: 20},
+            {userName: users.oxfordSaffron, sectionName: "Explorers", userPoints: 33},
+            {userName: users.jasperRoyal, sectionName: "Cubs", userPoints: 33},
+            {userName: users.glaucousJet, sectionName: "Beavers", userPoints: 49},
+            {userName: users.ceriseRoyal, sectionName: "Cubs", userPoints: 30},
+        ]
+    )
+
+    await screenshotsComparer.takeScreenshot(page, testInfo, "End");
 });
 
 test(serialStep("Create screenshot comparisons"), async ({page}, testInfo) => {

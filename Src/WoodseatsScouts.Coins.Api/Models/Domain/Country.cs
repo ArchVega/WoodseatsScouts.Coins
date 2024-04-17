@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
+﻿// dotcover disable
 namespace WoodseatsScouts.Coins.Api.Models.Domain
 {
     public class Country

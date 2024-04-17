@@ -26,6 +26,8 @@ public interface IAppDbContext
     
     List<Member> GetLastThreeUsersToScanPoints();
     
+    List<object> GetLastSixScavengers();
+    
     List<GroupPoints> GetTopThreeGroupsInLastHour();
     
     List<GroupPoints> GetGroupsWithMostPoints();

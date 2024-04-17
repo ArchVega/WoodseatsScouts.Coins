@@ -23,7 +23,7 @@ export default defineConfig({
     timeout: 10 * 60 * 1000, // Uncomment for development (10 minute timeouts instead of 30 seconds)
     expect: {
         // timeout: 5000
-        timeout: 5000 * 10
+        timeout: 3000
     },
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {

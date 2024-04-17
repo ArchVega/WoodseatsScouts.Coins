@@ -9,7 +9,7 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
 public class VoteController(
-    IAppDbContext appDbContext, 
+    IAppDbContext appDbContext,
     SystemDateTimeProvider systemDateTimeProvider) : ControllerBase
 {
     [HttpGet]
@@ -18,7 +18,7 @@ public class VoteController(
     {
         return Ok();
     }
-    
+
     [HttpPut]
     [Route("{memberId:int}/RegisterVote")]
     public IActionResult RegisterVoteForMember(int memberId, [FromQuery] int countryId)
@@ -37,13 +37,13 @@ public class VoteController(
             .Include(x => x.Member)
             .Include(x => x.Country)
             .Single(x => x.MemberId == memberId && x.CountryId == countryId);
-        
+
         var voteResultViewModel = new VoteResultViewModel
         {
             MemberName = persistedMemberCountryVote.Member.FirstName,
             CountryName = persistedMemberCountryVote.Country.Name
         };
-        
+
         return Ok(voteResultViewModel);
     }
 
@@ -54,8 +54,8 @@ public class VoteController(
         var memberCountryVotes = appDbContext.MemberCountryVotes!
             .Include(x => x.Country)
             .ToList();
-        
-        
+
+
         var countriesGroupedByVoteCount = memberCountryVotes
             .GroupBy(x => x.CountryId)
             .Select(x => new
@@ -64,12 +64,41 @@ public class VoteController(
                 CountryName = x.First().Country.Name,
                 TotalVotes = x.Count()
             })
-            .OrderByDescending(x => x.TotalVotes)
-            .ThenBy(x => x.CountryName)
             .ToList();
-        
-        return Ok(countriesGroupedByVoteCount);
+
+
+        var allCountriesWithVotes = new List<CountryVoteViewModel>();
+
+        var countries = appDbContext.Countries!.ToList();
+
+        foreach (var country in countries)
+        {
+            var countryVoteViewModel = new CountryVoteViewModel
+            {
+                CountryId = country.Id,
+                CountryName = country.Name
+            };
+
+            var hasVotes = countriesGroupedByVoteCount.SingleOrDefault(x => x.CountryId == country.Id);
+
+            countryVoteViewModel.TotalVotes = hasVotes?.TotalVotes ?? 0;  
+            
+            allCountriesWithVotes.Add(countryVoteViewModel);
+        }
+
+        return Ok(
+            allCountriesWithVotes
+                .OrderByDescending(x => x.TotalVotes)
+                .ThenBy(x => x.CountryName)
+                .ToList());
     }
+}
+
+public class CountryVoteViewModel
+{
+    public int TotalVotes { get; set; }
+    public int CountryId { get; set; }
+    public string CountryName { get; set; }
 }
 
 public class VoteResultViewModel

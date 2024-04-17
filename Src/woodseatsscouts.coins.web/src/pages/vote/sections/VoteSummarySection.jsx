@@ -10,13 +10,14 @@ export default function VoteSummarySection({member, voteResult}) {
     <>
       <Row className="mb-3">
         <Col className="text-center">
-          <h1>Thanks for voting <span className="font-black">{member.firstName}</span><span
-            style={{fontSize: '1em'}}>👍</span>
+          <h1 data-testid="thanks-for-voting-message">
+            Thanks for voting <span className="font-black">{member.firstName}</span>
+            <span style={{fontSize: '1em'}}>👍</span>
           </h1>
         </Col>
       </Row>
       <Row className="mb-3">
-        <Col className="text-center">
+        <Col data-testid="country-voted-for-message" className="text-center">
           <h4>You've voted for {voteResult.countryName}!</h4>
         </Col>
       </Row>

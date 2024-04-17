@@ -1,18 +1,32 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import wave from "../../../images/wave.png";
 import QRCodeInputDevices from "../../../components/qrinputdevices/QRCodeInputDevices";
-import {Col, Row} from "reactstrap";
+import {Button, Col, Row} from "reactstrap";
 import QRScanCodeType from "../../../components/qrscanners/QRScanCodeType";
 import SiteSpinner from "../../../components/spinner/SiteSpinner";
 import {logDebug, logError, logReactSet} from "../../../components/logging/Logger";
 import AudioFx from "../../../fx/AudioFx";
 import MemberApiService from "../../../services/MemberApiService";
 import {toastError} from "../../../components/toaster/toaster";
+import {UseAppCameraContext} from "../../../contexts/AppContext";
 
 function ScanMemberForVoteSection({setMember}) {
     const audioFx = AudioFx();
     const [loading, setLoading] = useState(false)
     const [memberQrCode, setMemberQrCode] = useState("")
+    const [useAppCamera] = useContext(UseAppCameraContext)
+
+    let timeoutId = null
+
+    useEffect(() => {
+        document.getElementById('usb-scanner-code-textbox').onblur = () => {
+            if (timeoutId) {
+                console.log('clearing timeout', timeoutId)
+                clearTimeout(timeoutId)
+            }
+            timeoutId = setTimeout(() => focusScanner(), 1000 * 10)
+        };
+    }, [])
 
     useEffect(() => {
         if (memberQrCode != null && memberQrCode.trim().length > 0) {
@@ -43,26 +57,43 @@ function ScanMemberForVoteSection({setMember}) {
 
     }, [memberQrCode]);
 
+    function focusScanner() {
+        const textbox = document.getElementById('usb-scanner-code-textbox');
+        if (textbox) {
+            textbox.focus();
+        }
+    }
+
     return (
         <>
             <Row id="scan-member-section">
-                <img id="scan-member-section-wave-image" src={wave} alt=""/>
-                <h1 className="mb-5">
-                    <strong>
-                        Scan your wristband to vote!
-                    </strong>
-                </h1>
+                <Col>
+                    <img id="scan-member-section-wave-image" src={wave} alt=""/>
+                    <span className="main-page-hello font-black">Hello</span>
+                    <h1 className="mb-5">
+                        <strong>
+                            Scan your wristband to vote!
+                        </strong>
+                    </h1>
 
-                {loading
-                    ? <SiteSpinner/>
-                    : (
+                    {loading
+                      ? <SiteSpinner/>
+                      : (
                         <Row>
                             <Col xs={{size: 8, offset: 2}}>
                                 <QRCodeInputDevices qrCode={memberQrCode} setQrCode={setMemberQrCode} qrScanCodeType={QRScanCodeType.Member}/>
+                                <div className="mb-3"/>
+                                {!useAppCamera
+                                  ? <Button className="btn focus-scanner-textbox-button mt-5" onClick={focusScanner}>
+                                      <div>Click here if your points do</div>
+                                      <div>not scan, then try again</div>
+                                  </Button>
+                                  : null}
                             </Col>
                         </Row>
-                    )
-                }
+                      )
+                    }
+                </Col>
             </Row>
         </>
     )
