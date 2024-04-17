@@ -3,7 +3,7 @@ name: Production-Scouts-DotNetWebApi
 on:
   push:
     branches:
-      - main
+      - release/v2024
   workflow_dispatch:
 
 jobs:
