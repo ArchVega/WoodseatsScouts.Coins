@@ -19,9 +19,9 @@ export default function ConfirmVoteModal({country, member, setVoteResult, modal,
 
   if (country) {
     return (
-      <Modal isOpen={modal} toggle={toggleModal}>
+      <Modal isOpen={modal} toggle={toggleModal} className="modal-dialog-centered">
         <ModalHeader toggle={toggleModal}>Vote for {country.name}?</ModalHeader>
-        <ModalBody  className="text-center">
+        <ModalBody className="text-center">
           <Row className="mb-3">
             <Col>
               <img src={`images/countries/${country.name}.png`} style={{width: '400px', height: '100%'}}/>
@@ -29,8 +29,14 @@ export default function ConfirmVoteModal({country, member, setVoteResult, modal,
           </Row>
           <Row>
             <Col>
-              <Button className="btn btn-success" onClick={confirmVote} data-testid="confirm-vote-for-country">
-                Confirm
+              <Button className="btn btn-success"
+                      style={{width: "400px", height: "80px"}}
+                      onClick={confirmVote} data-testid="confirm-vote-for-country">
+                <div>
+                  <strong id="confirm-country-choice-button">
+                    {`Yes, I want to vote for ${country.name}`}
+                  </strong>
+                </div>
               </Button>
             </Col>
           </Row>

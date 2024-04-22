@@ -12,7 +12,7 @@ const MembersPage = (page) => {
             await expect(membersTable).toBeVisible()
         },
 
-        getAllMembers: async () => {
+        getAllMembers: async (includeEditPhotoLink) => {
             let trs = await page.locator("tr").all()
             const results = [];
 
@@ -23,11 +23,14 @@ const MembersPage = (page) => {
                     const row = {
                         name: await tds[1].textContent(),
                         group: await tds[2].textContent(),
-                        totalPoints: Number(await tds[3].textContent()),
-                        section: await tds[4].textContent(),
+                        section: await tds[3].textContent(),
+                        totalPoints: Number(await tds[4].textContent()),
                         wristCode: await tds[5].textContent(),
-                        editPhotoTestId: await tds[6].locator('span').getAttribute("data-testid")
                     };
+
+                    if (includeEditPhotoLink) {
+                        row.editPhotoTestId = await tds[6].locator('span').getAttribute("data-testid")
+                    }
 
                     results.push(row);
                 }

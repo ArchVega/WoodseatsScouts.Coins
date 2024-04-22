@@ -82,6 +82,7 @@ function MembersListPage() {
             <th className="fit"></th>
             <th>NAME</th>
             <th className="fit">GROUP</th>
+            <th className="fit">SECTION</th>
             <th className="fit">TOTAL POINTS
               <input
                 type="checkbox"
@@ -89,7 +90,6 @@ function MembersListPage() {
                 onChange={(event) => setShowScores(event.target.checked)}
                 style={{marginLeft: '2px'}}/>
             </th>
-            <th className="fit">SECTION</th>
             <th className="fit">WRIST CODE</th>
             <th className="fit">EDIT PHOTO</th>
           </tr>
@@ -98,12 +98,12 @@ function MembersListPage() {
           {members && members.filter(member => filterMember(member)).map(x => (
             <tr key={x.memberCode} data-testid={x.firstName + "-" + x.lastName}>
               <td>
-                                <span className="show-user-photo-icon"
-                                      onClick={() => showUserModal(x)}>
-                                    <img key={Date.now()} title={"User id: " + x.id}
-                                         src={x.hasImage ? Uris.memberPhoto(x.id) : "images/unknown-member-image.png"}
-                                         alt=""/>
-                                </span>
+                <span className="show-user-photo-icon"
+                      onClick={() => showUserModal(x)}>
+                    <img key={Date.now()} title={"User id: " + x.id}
+                         src={x.hasImage ? Uris.memberPhoto(x.id) : "images/unknown-member-image.png"}
+                         alt=""/>
+                </span>
               </td>
               <td>
                 <strong>{x.firstName + " " + x.lastName}</strong>
@@ -111,13 +111,15 @@ function MembersListPage() {
               <td>
                 <span>{x.troopName}</span>
               </td>
-              <td>
-                                <span>
-                                    {showScores ? x.totalPoints : "xxx"}
-                                </span>
-              </td>
               <td className="label-section">
-                <strong className={sectionClassName(x.sectionName)}>{x.sectionName}</strong>
+                <span>
+                  <strong className={sectionClassName(x.sectionName)}>{x.sectionName}</strong>
+                </span>
+              </td>
+              <td>
+                <span>
+                    {showScores ? x.totalPoints : "xxx"}
+                </span>
               </td>
               <td>
                 <span>{x.memberCode}</span>

@@ -1,7 +1,7 @@
 const MemberScavengedResultPage = (page) => {
     return {
         getTotalPoints: async () => {
-            const spanTotalPointsSaved = page.getByTestId("span-total-points-saved");
+            const spanTotalPointsSaved = page.getByTestId("coin-total");
 
             const result = await spanTotalPointsSaved.textContent()
 

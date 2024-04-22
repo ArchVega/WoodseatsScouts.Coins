@@ -25,7 +25,7 @@ function ScannedCoin ({coin, removeCoin, isLast}) {
     
     return <>
      <span className={tagClass} ref={scrollRef}>
-            <div className="coin-value font-extra-bold text-white">{coin.pointValue}</div>
+            <div className={`coin-value font-extra-bold text-white coin-${coin.pointValue}`}>{coin.pointValue}</div>
             <span className="remove-score">
                 <i onClick={() => removeCoin(coin)} className="remove"><div style={{fontSize: '2em'}} >x</div></i>
             </span>

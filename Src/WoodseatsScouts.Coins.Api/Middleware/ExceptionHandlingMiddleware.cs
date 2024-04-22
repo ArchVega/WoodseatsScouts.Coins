@@ -42,12 +42,14 @@ public class ExceptionHandlingMiddleware
                 if (invalidOperationException.Message.Contains("Sequence contains no elements"))
                 {
                     response.StatusCode = (int)HttpStatusCode.NotFound;
-                    errorResponse = "Could not find the requested resource";
+                    // errorResponse = "Could not find the requested resource";
+                    errorResponse = "Oops, we can't find your profile - please speak to a District Camp Leader";
                 }
                 else
                 {
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    errorResponse = $"Error of type {invalidOperationException.GetType().Name} not handled";
+                    // errorResponse = $"Error of type {invalidOperationException.GetType().Name} not handled";
+                    errorResponse = "Oops, an unusual error occurred - please speak to a District Camp Leader";
                 }
                 break;
             case CodeTranslationException codeTranslationException:

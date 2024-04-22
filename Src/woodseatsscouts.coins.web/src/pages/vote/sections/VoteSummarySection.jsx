@@ -1,4 +1,5 @@
 import {Button, Col, Row} from "reactstrap";
+import {useEffect} from "react";
 
 export default function VoteSummarySection({member, voteResult}) {
   function reloadPage() {
@@ -6,19 +7,21 @@ export default function VoteSummarySection({member, voteResult}) {
     global.location.reload()
   }
 
+  // in the off-chance this value needs to be changed in production, find 2183 and replace.
+  useEffect(() => {
+    setTimeout(() => {
+      reloadPage()
+    }, 2183)
+  }, []);
+
   return (
     <>
       <Row className="mb-3">
         <Col className="text-center">
           <h1 data-testid="thanks-for-voting-message">
-            Thanks for voting <span className="font-black">{member.firstName}</span>
+            Thanks, <span className="font-black">{member.firstName}</span> - you've voted for {voteResult.countryName}
             <span style={{fontSize: '1em'}}>👍</span>
           </h1>
-        </Col>
-      </Row>
-      <Row className="mb-3">
-        <Col data-testid="country-voted-for-message" className="text-center">
-          <h4>You've voted for {voteResult.countryName}!</h4>
         </Col>
       </Row>
       <Row className="mb-4">

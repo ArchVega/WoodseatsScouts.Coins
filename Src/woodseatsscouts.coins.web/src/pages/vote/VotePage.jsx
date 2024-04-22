@@ -24,7 +24,7 @@ export default function VotePage() {
   useEffect(() => {
     if (voteResult != null) {
       setSectionName(SectionNamesForVote.VoteSummary)
-      new AudioFx().playHaulCompleteAudio();
+      new AudioFx().playVoteSuccessAudio();
     }
   }, [voteResult]);
 

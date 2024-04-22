@@ -63,6 +63,7 @@ function ScanMemberForCoinsSection({setMember}) {
   function focusScanner() {
     const textbox = document.getElementById('usb-scanner-code-textbox');
     if (textbox) {
+      textbox.value = '';
       textbox.focus();
     }
   }

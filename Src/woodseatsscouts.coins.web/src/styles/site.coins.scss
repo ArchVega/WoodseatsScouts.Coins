@@ -40,10 +40,7 @@
 
 .coin-10 {
   background-color: variables.$colour-coins-10;
-
-  span {
-    color: black !important;
-  }
+  color: black !important;
 
   .remove div {
     color: black !important;
@@ -109,7 +106,6 @@
   -webkit-border-radius: 20px !important;
   -moz-border-radius: 20px !important;
   border-radius: 20px !important;
-  width: 320px;
   height: 170px;
   margin: 10px;
   display: inline-block;
@@ -117,6 +113,10 @@
   font-weight: bold;
   box-shadow: 0 0 0 5px #088486,
   inset 0 0 0 1px #fff;
+
+  em {
+    font-size: 1.3em;
+  }
 }
 
 .finish-scanning-button-points-value {
@@ -129,6 +129,9 @@
 #finish-scanning-button img {
   filter: invert(98%) sepia(0%) saturate(4881%) hue-rotate(14deg) brightness(111%) contrast(101%);
   margin-right: 5px;
+  height: 30px;
+  font-size: 2em;
+  margin-top: -10px;
 }
 
 .focus-scanner-textbox-button {

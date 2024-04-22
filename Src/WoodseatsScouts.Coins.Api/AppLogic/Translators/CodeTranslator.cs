@@ -21,7 +21,8 @@
             }
             catch (Exception e)
             {
-                throw new CodeTranslationException($"Could not translate Coin Code '{code}'", e);
+                // throw new CodeTranslationException($"Could not translate Coin Code '{code}'", e);
+                throw new CodeTranslationException("Oops, we couldn't find that coin - please speak to a District Camp Leader", e);
             }
         }
 
@@ -29,7 +30,7 @@
         {
             if (!string.IsNullOrWhiteSpace(code) && code[..1] == "C")
             {
-                throw new CodeTranslationException($"The code '{code}' is a Coin code");                
+                throw new CodeTranslationException($"The was a Coin code - Please scan a wristband instead");                
             }
             
             try
@@ -45,7 +46,8 @@
             }
             catch (Exception e)
             {
-                throw new CodeTranslationException($"Could not translate Member Code '{code}'", e);
+                // throw new CodeTranslationException($"Could not translate Member Code '{code}'", e);
+                throw new CodeTranslationException("Oops, we can't find your profile - please speak to a District Camp Leader", e);
             }
         }
     }

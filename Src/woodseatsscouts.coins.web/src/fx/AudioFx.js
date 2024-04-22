@@ -6,6 +6,7 @@ function AudioFx() {
     const _playCoinScannedSuccessAudio = new Audio("sounds/ScanCoin_Success.mp3")
     const _playCoinScannedErrorAudio = new Audio("sounds/ScanCoin_Error.mp3")
     const _playHaulCompleteAudio = new Audio("sounds/HaulComplete.mp3")
+    const _playVoteSuccessAudio = new Audio("sounds/Vote_Success.mp3")
 
     return {
         playMemberScannedAudio: function () {
@@ -22,6 +23,10 @@ function AudioFx() {
 
         playHaulCompleteAudio: function() {
             _playHaulCompleteAudio.play();
+        },
+
+        playVoteSuccessAudio: function() {
+            _playVoteSuccessAudio.play();
         }
     }
 }

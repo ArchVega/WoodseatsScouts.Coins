@@ -1,14 +1,14 @@
 name: Production-Scouts-ReactApp
 
 env:
-  WEB_API_URI: 'https://production-web-api-uri'
+  WEB_API_URI: 'https://api.coinscanner.sheafdistrict.local'
 
 on:
   push:
     branches:
       - main
 
-jobs:
+jobs: 
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
