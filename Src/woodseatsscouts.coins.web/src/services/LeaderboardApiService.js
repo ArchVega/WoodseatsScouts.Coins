@@ -8,7 +8,9 @@ function LeaderboardApiService() {
         async getLeaderboardData() {
             const uri = Uris.leaderboard;
             logApi(uri)
-            return await axios.get(uri).catch(reason => toast(reason));
+            return await axios.get(uri).catch(reason => toast(reason, {
+                position: 'top-center'
+            }));
         }
     }
 }

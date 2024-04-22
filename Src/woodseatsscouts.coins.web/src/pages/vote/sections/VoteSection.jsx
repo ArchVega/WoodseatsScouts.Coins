@@ -37,7 +37,8 @@ export default function VoteSection({member, setVoteResult}) {
     <>
       <Row className="mb-4">
         <Col>
-          <h1 id="scan-coins-section-h1">Hi&nbsp;<span className="font-black" data-testid="h1-user-firstname">{member.firstName}</span>
+          <h1 id="scan-coins-section-h1" className="text-center">
+            Hi&nbsp;<span className="font-black" data-testid="h1-user-firstname">{member.firstName}</span>
             <img id="scan-coins-section-wave-image" src={wave} alt=""/>
             <br/>
             <span>Which country do you want to vote for?</span>

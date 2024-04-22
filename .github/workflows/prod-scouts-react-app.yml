@@ -1,7 +1,7 @@
 name: Production-Scouts-ReactApp
 
 env:
-  WEB_API_URI: 'https://production-web-api-uri'
+  WEB_API_URI: 'https://api.coinscanner.sheafdistrict.local'
 
 on:
   push:

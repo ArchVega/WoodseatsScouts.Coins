@@ -68,6 +68,7 @@ h1 {
 
 .btn-next-member {
   border: none;
+  font-size: 2em;
 }
 
 .scouts-sitebar-appmode-development {
@@ -149,26 +150,26 @@ h1 {
 
   .member-info {
     .background-beavers {
-      background-color: variables.$colour-scouts-navy;
+      background-color: variables.$colour-sections-beavers;
     }
 
     .background-cubs {
-      background-color: variables.$colour-scouts-orange;
+      background-color: variables.$colour-sections-cubs;
     }
 
     .background-scouts {
       color: white !important;
-      background-color: variables.$colour-scouts-teal;
+      background-color: variables.$colour-sections-scouts;
     }
 
     .background-explorers {
       color: black !important;
-      background-color: variables.$colour-scouts-green;
+      background-color: variables.$colour-sections-explorers;
     }
 
     .background-adults {
       color: white !important;
-      background-color: variables.$colour-scouts-red;
+      background-color: variables.$colour-sections-adults;
     }
 
     .member-info-inner {
@@ -212,14 +213,15 @@ h1 {
           font-style: normal;
           font-weight: 900;
           font-size: 4.5em;
-          margin-top: 20px;
+          //margin-top: 20px;
         }
 
         img {
           filter: invert(98%) sepia(0%) saturate(4881%) hue-rotate(14deg) brightness(111%) contrast(101%);
-          margin-right: 5px;
+          //margin-right: 5px;
           height: 40px;
-          margin-top: -30px;
+          //margin-top: -30px;
+          margin-bottom: -20px;
         }
       }
     }
@@ -247,4 +249,22 @@ h1 {
   right: 0 ;
   bottom: 0 ;
   left: 10px;
+}
+
+#usb-scanner-code-textbox[type="text"],
+select.form-control {
+  border: 2px solid black !important;
+}
+
+#usb-scanner-code-textbox[type="text"]:focus {
+  box-shadow: none;
+}
+
+#confirm-country-choice-button:before {
+  content: "☑ ";
+}
+
+.Toastify__toast-body {
+  font-size: 1.4em;
+  text-align: center;
 }

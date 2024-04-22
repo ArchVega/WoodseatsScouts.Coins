@@ -40,7 +40,9 @@ public class CoinsController(
         if (dbCoin.MemberId.HasValue && systemDateTimeProvider.Now < dbCoin.LockUntil)
         {
             var memberWhoScavengedCoin = appDbContext.Members!.Single(x => x.Id == dbCoin.MemberId);
-            return base.Conflict($"The coin with code '{code}' has already been scavenged by {memberWhoScavengedCoin.FullName}!");
+            // return base.Conflict($"The coin with code '{code}' has already been scavenged by {memberWhoScavengedCoin.FullName}!");
+            var message = $"This points token has already been used by {memberWhoScavengedCoin.FullName}. Please hand it to a District Camp Leader";
+            return base.Conflict(message);
         }
 
         /* The coin has either never been scavenged, or it has but enough time has passed to allow it to be scavenged again.

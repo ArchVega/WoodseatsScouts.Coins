@@ -41,7 +41,7 @@ export default function MemberLeaderboardPage() {
           <Col xs={2} key={member.id} className="member-info p-2">
             <div className={sectionBackgroundClassName(member.sectionName)} style={{paddingBottom: "2px"}}>
               <div style={{padding: "20px 20px 10px 20px", height: "350px", maxHeight: "350px"}}>
-                <img className="member-image mb-2"
+                <img className="member-image mb-2" style={{objectFit: "cover", border:"4px solid white"}}
                      alt=""
                      src={member && member.hasImage
                        ? Uris.memberPhoto(member.id)
@@ -53,12 +53,17 @@ export default function MemberLeaderboardPage() {
                   {`${member.sectionName}`}
                 </div>
               </div>
-              <div className="total-points">
-                <img src="/images/plus-circle-fill.svg" alt=""></img>
-                <strong className="total-points-value text-white"  data-testid="latest-6-scanned-user-points">
+              <div className="total-points text-center">
+                <div>
+                  <img src="/images/plus-circle-fill.svg" alt=""></img>
+                </div>
+                <strong
+                  className="total-points-value text-white text-center"
+                  style={{display: "block", width: "100%"}}
+                  data-testid="latest-6-scanned-user-points">
                   {member.totalPoints}
                 </strong>
-                <div className="text-white" style={{marginTop: "-30px", marginLeft: "50px"}}>points...</div>
+                <div className="text-white" style={{marginTop: "-30px"}}>points...</div>
               </div>
             </div>
           </Col>

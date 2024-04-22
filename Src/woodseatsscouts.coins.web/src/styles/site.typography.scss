@@ -1,4 +1,5 @@
 ﻿@use 'site.mixins' as mixins;
+@use 'site.variables' as variables;
 
 @font-face {
   font-family: 'Nunito';
@@ -120,37 +121,37 @@ em {
 .label-section {
   font-size: 0.8em;
   padding: 0.2em 0.4em;
-  @include mixins.rounded-borders-soft;
   box-shadow: 2px 2px rgba(0,0,0,0.3);
   text-transform: uppercase;
+  line-height: 2em;
   
   .label-section-beavers {
     color: white !important;
-    background-color: #00afee;
+    background-color: variables.$colour-sections-beavers;
     padding: 5px !important;
   }
 
   .label-section-cubs {
     color: white !important;
-    background-color: #538135;
+    background-color: variables.$colour-sections-cubs;
     padding: 5px !important;
   }
 
   .label-section-scouts {
     color: white !important;
-    background-color: #088385;
+    background-color: variables.$colour-sections-scouts;
     padding: 5px !important;
   }
 
   .label-section-explorers {
     color: black !important;
-    background-color: #fdd765;
+    background-color: variables.$colour-sections-explorers;
     padding: 5px !important;
   }
 
   .label-section-adults {
     color: white !important;
-    background-color: #5a488b;
+    background-color: variables.$colour-sections-adults;
     padding: 5px !important;
   }
 }

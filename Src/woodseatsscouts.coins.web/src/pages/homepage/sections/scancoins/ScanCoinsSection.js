@@ -20,6 +20,7 @@ function ScanCoinsSection({member, setHaulResult}) {
   const [useAppCamera] = useContext(UseAppCameraContext)
 
   useEffect(() => {
+    console.log('Coin qr code:', coinQrCode)
     if (coinQrCode != null && coinQrCode.trim().length > 0) {
       logDebug(`Fetching coin data for code ${coinQrCode}`)
 
@@ -39,6 +40,8 @@ function ScanCoinsSection({member, setHaulResult}) {
           if (!isDuplicateCoin((coin))) {
             setCoins([...coins, coin])
             audioFx.playCoinScannedSuccessAudio()
+            console.log('Resetting coin QR code to null. Was: ', coinQrCode)
+            setCoinQrCode(null)
           } else {
             audioFx.playCoinScannedErrorAudio()
             toastError(`That coin has already been scanned for ${member.firstName}`)
@@ -62,7 +65,9 @@ function ScanCoinsSection({member, setHaulResult}) {
 
   async function onFinished() {
     if (coins.length === 0) {
-      toast("Add at least one coin for this member")
+      toast("Add at least one coin for this member", {
+        position: 'top-center'
+      })
       return
     }
 
@@ -84,6 +89,7 @@ function ScanCoinsSection({member, setHaulResult}) {
   function focusScanner() {
     const textbox = document.getElementById('usb-scanner-code-textbox');
     if (textbox) {
+      textbox.value = '';
       textbox.focus();
     }
   }
@@ -96,7 +102,7 @@ function ScanCoinsSection({member, setHaulResult}) {
             <span>Welcome back,</span>
             <br/>
             <span className="font-black" data-testid="h1-user-firstname">
-                <img className="coins-member-img"
+                <img className="coins-member-img mt-1"
                      alt=""
                      style={{marginTop: "-20px"}}
                      src={member && member.hasImage
@@ -123,7 +129,7 @@ function ScanCoinsSection({member, setHaulResult}) {
           <Row>
             <Col>
               <div id="scanned-coins-div" data-testid="div-scanned-coins" className="text-end mb-4"
-                   style={{overflow: 'auto', maxHeight: '50vh'}}>
+                   style={{overflow: 'auto', maxHeight: '415px'}}>
                 {coins.map((coin, index) =>
                   <ScannedCoin key={index}
                                coin={coin}
@@ -134,18 +140,21 @@ function ScanCoinsSection({member, setHaulResult}) {
             </Col>
           </Row>
           <Row style={{position: "relative"}}>
-            <Col className="float-end text-end">
-              <Button id="finish-scanning-button" data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success btn-lg">
-                <div>
-                  <img src="/images/plus-circle-fill.svg"></img><em className="text-white">Click to add</em>
-                </div>
-                <div style={{lineHeight: "normal"}}>
-                  <strong className="finish-scanning-button-points-value" data-testid="coin-total">
-                    {coinTotal}
-                  </strong>
-                  &nbsp;
-                  <span className="text-white">points...</span></div>
-              </Button>
+            <Col className="float-end text-end ">
+              <div className="d-grid">
+                <Button id="finish-scanning-button" data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success btn-lg">
+                  <div>
+                    <img src="/images/plus-circle-fill.svg"></img>
+                    <em className="text-white">Click to add</em>
+                  </div>
+                  <div style={{lineHeight: "normal"}}>
+                    <strong className="finish-scanning-button-points-value" data-testid="coin-total">
+                      {coinTotal}
+                    </strong>
+                    &nbsp;
+                    <span className="text-white" style={{fontSize: "2em"}}>points...</span></div>
+                </Button>
+              </div>
             </Col>
           </Row>
         </Col>

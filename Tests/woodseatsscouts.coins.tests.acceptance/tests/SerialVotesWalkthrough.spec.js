@@ -97,9 +97,7 @@ test(serialStep("Asparagus votes for Poland"), async ({page}, testInfo) => {
 
     const voteSummaryPage = await voteForCountryPage.confirmVoteForCountry();
     const thanksForVotingMessage = await voteSummaryPage.getThanksForVotingMessage();
-    const countryVotedForMessage = await voteSummaryPage.getCountryVotedForMessage();
-    expect(thanksForVotingMessage).toBe("Thanks for voting Asparagus👍")
-    expect(countryVotedForMessage).toBe("You've voted for Poland!")
+    expect(thanksForVotingMessage).toBe(`Thanks, Asparagus - you've voted for Poland👍`)
 });
 
 test(serialStep("Votes leaderboard page is as expected"), async ({page}, testInfo) => {
@@ -130,9 +128,8 @@ test(serialStep("Icterine votes for Australia"), async ({page}, testInfo) => {
 
     const voteSummaryPage = await voteForCountryPage.confirmVoteForCountry();
     const thanksForVotingMessage = await voteSummaryPage.getThanksForVotingMessage();
-    const countryVotedForMessage = await voteSummaryPage.getCountryVotedForMessage();
-    expect(thanksForVotingMessage).toBe("Thanks for voting Icterine👍")
-    expect(countryVotedForMessage).toBe("You've voted for Australia!")
+    expect(thanksForVotingMessage).toBe(`Thanks, Icterine - you've voted for Australia👍`)
+
 });
 
 test(serialStep("Votes leaderboard page is as expected"), async ({page}, testInfo) => {
@@ -163,9 +160,8 @@ test(serialStep("Turquoise votes for Finland"), async ({page}, testInfo) => {
 
     const voteSummaryPage = await voteForCountryPage.confirmVoteForCountry();
     const thanksForVotingMessage = await voteSummaryPage.getThanksForVotingMessage();
-    const countryVotedForMessage = await voteSummaryPage.getCountryVotedForMessage();
-    expect(thanksForVotingMessage).toBe("Thanks for voting Turquoise👍")
-    expect(countryVotedForMessage).toBe("You've voted for Finland!")
+    expect(thanksForVotingMessage).toBe(`Thanks, Turquoise - you've voted for Finland👍`)
+
 });
 
 test(serialStep("Votes leaderboard page is as expected"), async ({page}, testInfo) => {

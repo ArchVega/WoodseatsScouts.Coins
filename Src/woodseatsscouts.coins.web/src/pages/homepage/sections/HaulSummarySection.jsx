@@ -1,4 +1,5 @@
 import {Button, Col, Row} from "reactstrap";
+import {useEffect} from "react";
 
 // todo: change extensions to jsx
 function HaulResultsSection({member, haulResult}) {
@@ -18,6 +19,13 @@ function HaulResultsSection({member, haulResult}) {
     global.location.reload()
   }
 
+  // in the off-chance this value needs to be changed in production, find 5149 and replace.
+  useEffect(() => {
+    setTimeout(() => {
+      reloadPage()
+    }, 5149)
+  }, []);
+
   return (
     <>
       <Row>
@@ -34,11 +42,14 @@ function HaulResultsSection({member, haulResult}) {
       </Row>
       <Row className="mb-3">
         <Col className="text-center">
-          <div>
-                            <span className="font-black total-points-saved" data-testid="span-total-points-saved">
-                                {haulResult.coinTotal}
-                            </span>
-          </div>
+          <Button id="finish-scanning-button" data-testid="button-finish-scanning" className="btn btn-success btn-lg">
+            <div style={{lineHeight: "normal"}}>
+              <strong className="finish-scanning-button-points-value" data-testid="coin-total">
+                {haulResult.coinTotal}
+              </strong>
+              &nbsp;
+              <span className="text-white" style={{fontSize: "2em"}}>points</span></div>
+          </Button>
         </Col>
       </Row>
       {haulResult.additionalData !== undefined && haulResult.additionalData.hasAnomalyOccurred
