@@ -5,12 +5,14 @@ using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
+using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
@@ -25,8 +27,10 @@ public class MembersControllerTests
     public void GetMembersWithPoints_ReturnsValidViewModel()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
+        var appSettingsOptionsMock = new Mock<IOptions<AppSettings>>();
         var imagePersisterMock = new Mock<IImagePersister>();
-        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+        
+        var membersController = new MembersController(appDbContextMock.Object, appSettingsOptionsMock.Object, imagePersisterMock.Object);
 
         var troop = new Troop { Id = 1 };
         var section = new Section { Code = "A" };
@@ -57,8 +61,9 @@ public class MembersControllerTests
     public void GetMemberInfoFromCode_InvalidCode_ThrowsException()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
+        var appSettingsOptionsMock = new Mock<IOptions<AppSettings>>();
         var imagePersisterMock = new Mock<IImagePersister>();
-        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+        var membersController = new MembersController(appDbContextMock.Object, appSettingsOptionsMock.Object, imagePersisterMock.Object);
 
         var result = membersController.GetMemberInfoFromCode("invalid");
         result.ShouldBeOfType<BadRequestObjectResult>();
@@ -69,8 +74,9 @@ public class MembersControllerTests
     public void GetMemberInfoFromCode_ValidCode_OkResult()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
+        var appSettingsOptionsMock = new Mock<IOptions<AppSettings>>();
         var imagePersisterMock = new Mock<IImagePersister>();
-        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+        var membersController = new MembersController(appDbContextMock.Object, appSettingsOptionsMock.Object, imagePersisterMock.Object);
 
         var troop = new Troop { Id = 1 };
         var section = new Section { Code = "A" };
@@ -91,8 +97,9 @@ public class MembersControllerTests
     public void SaveMemberPhoto_UpdatesHasImageProperty()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
+        var appSettingsOptionsMock = new Mock<IOptions<AppSettings>>();
         var imagePersisterMock = new Mock<IImagePersister>();
-        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+        var membersController = new MembersController(appDbContextMock.Object, appSettingsOptionsMock.Object, imagePersisterMock.Object);
 
         SetupDbMock(appDbContextMock, x => x.Members!, [
             new Member { Id = 9 }
@@ -110,8 +117,9 @@ public class MembersControllerTests
     public void GetPhoto()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
+        var appSettingsOptionsMock = new Mock<IOptions<AppSettings>>();
         var imagePersisterMock = new Mock<IImagePersister>();
-        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+        var membersController = new MembersController(appDbContextMock.Object, appSettingsOptionsMock.Object, imagePersisterMock.Object);
 
         membersController.Get(1);
     }
@@ -120,8 +128,9 @@ public class MembersControllerTests
     public void AddPointsToMember_Todo1()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
+        var appSettingsOptionsMock = new Mock<IOptions<AppSettings>>();
         var imagePersisterMock = new Mock<IImagePersister>();
-        var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
+        var membersController = new MembersController(appDbContextMock.Object, appSettingsOptionsMock.Object, imagePersisterMock.Object);
 
         var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
         var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };

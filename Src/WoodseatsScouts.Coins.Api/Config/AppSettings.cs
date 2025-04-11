@@ -9,4 +9,6 @@ public class AppSettings
     public string ContentRootDirectory { get; set; }
 
     public int MinutesToLockScavengedCoins { get; set; }
+    
+    public int SecondsBetweenScavengerHauls { get; set; }
 }

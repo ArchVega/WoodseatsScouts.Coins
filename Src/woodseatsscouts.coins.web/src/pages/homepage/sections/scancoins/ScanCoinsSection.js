@@ -71,19 +71,26 @@ function ScanCoinsSection({member, setHaulResult}) {
       return
     }
 
-    await CoinApiService().addPointsToMember(member, coins).then(async response => {
-      const additionalData = await response.data
+    await CoinApiService()
+      .addPointsToMember(member, coins)
+      .then(async response => {
+        const additionalData = await response.data
 
-      let finalTotal = coinTotal;
-      if (additionalData.hasAnomalyOccurred) {
-        finalTotal = finalTotal - additionalData.anomalousCoinsTotalValue
-      }
+        let finalTotal = coinTotal;
+        if (additionalData.hasAnomalyOccurred) {
+          finalTotal = finalTotal - additionalData.anomalousCoinsTotalValue
+        }
 
-      setHaulResult({
-        coinTotal: finalTotal,
-        additionalData: additionalData
+        setHaulResult({
+          coinTotal: finalTotal,
+          additionalData: additionalData
+        })
       })
-    })
+      .catch(async axiosReason => {
+        toast(axiosReason, {
+          position: 'top-center'
+        })
+      })
   }
 
   function focusScanner() {
