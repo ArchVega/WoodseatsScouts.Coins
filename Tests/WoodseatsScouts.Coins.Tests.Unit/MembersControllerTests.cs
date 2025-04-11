@@ -29,7 +29,7 @@ public class MembersControllerTests
         var appDbContextMock = new Mock<IAppDbContext>();
         var appSettingsOptionsMock = new Mock<IOptions<AppSettings>>();
         var imagePersisterMock = new Mock<IImagePersister>();
-        
+
         var membersController = new MembersController(appDbContextMock.Object, appSettingsOptionsMock.Object, imagePersisterMock.Object);
 
         var troop = new Troop { Id = 1 };
@@ -125,7 +125,7 @@ public class MembersControllerTests
     }
 
     [Fact]
-    public void AddPointsToMember_Todo1()
+    public void AddPointsToMember_ValidData_Ok()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var appSettingsOptionsMock = new Mock<IOptions<AppSettings>>();
@@ -148,6 +148,40 @@ public class MembersControllerTests
         var result = Should.NotThrow(() => membersController.AddPointsToMember(9, pointsForMemberViewModel));
 
         result.ShouldBeOfType<CreatedAtActionResult>();
+    }
+
+    [Fact]
+    public void AddPointsToMember_AttemptToSubmitANewHaulWithinExclusionPeriod_ThrowsException()
+    {
+        var appDbContextMock = new Mock<IAppDbContext>();
+        var appSettingsOptionsMock = new Mock<IOptions<AppSettings>>();
+        var imagePersisterMock = new Mock<IImagePersister>();
+        appSettingsOptionsMock.Setup(x => x.Value).Returns(new AppSettings { SecondsBetweenScavengerHauls = 10 });
+        var membersController = new MembersController(appDbContextMock.Object, appSettingsOptionsMock.Object, imagePersisterMock.Object);
+
+        var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
+        var scavengeResults = new List<ScavengeResult>
+        {
+            new()
+            {
+                MemberId = 9,
+                ScavengedCoins = scavengedCoins,
+                CompletedAt = DateTime.Now
+            }
+        };
+        SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
+        SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);
+        SetupDbMock(appDbContextMock, x => x.Members!, [new Member { Id = 9 }]);
+
+        appDbContextMock
+            .Setup(x => x.RecordMemberAgainstUnscavengedCoins(It.IsAny<Member>(), It.IsAny<List<string>>()))
+            .Returns(new List<Coin>());
+
+        var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["C0001001010", "C0001001020"] };
+
+        Should
+            .Throw<ApplicationException>(() => membersController.AddPointsToMember(9, pointsForMemberViewModel))
+            .Message.ShouldBe("Oops, your coins have already been stashed!");
     }
 
     private static void SetupDbMock<T>(
