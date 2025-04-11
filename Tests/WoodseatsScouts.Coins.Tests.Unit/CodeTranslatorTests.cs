@@ -12,7 +12,7 @@ public class CodeTranslatorTests
     public void TranslateCoinPointCode_InvalidCode_ThrowsException(string code)
     {
         var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateCoinCode(code));
-        exception.Message.ShouldBe($"Could not translate Coin Code '{code}'");
+        exception.Message.ShouldBe($"Oops, we couldn't find that coin - please speak to a District Camp Leader");
     }
     
     [Theory]
@@ -21,7 +21,7 @@ public class CodeTranslatorTests
     public void TranslateMemberCode_InvalidCode_ThrowsException(string code)
     {
         var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateMemberCode(code));
-        exception.Message.ShouldBe($"Could not translate Member Code '{code}'");
+        exception.Message.ShouldBe("Oops, we can't find your profile - please speak to a District Camp Leader");
     }
     
     [Fact]
@@ -29,7 +29,7 @@ public class CodeTranslatorTests
     {
         const string validCoinCode = "C0002001020";
         var exception = Should.Throw<CodeTranslationException>(() => CodeTranslator.TranslateMemberCode(validCoinCode));
-        exception.Message.ShouldBe($"The code 'C0002001020' is a Coin code");
+        exception.Message.ShouldBe("The was a Coin code - Please scan a wristband instead");
     }
     
     [Fact]
