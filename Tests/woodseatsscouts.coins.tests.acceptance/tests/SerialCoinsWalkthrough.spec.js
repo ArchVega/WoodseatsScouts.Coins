@@ -615,11 +615,11 @@ test(serialStep("Viewing the final recent 6 leaderboard page"), async ({page}, t
         page,
         [
             {userName: users.olivineCrimson, sectionName: "Adults", userPoints: 20},
-            {userName: users.olivineCrimson, sectionName: "Adults", userPoints: 20},
             {userName: users.oxfordSaffron, sectionName: "Explorers", userPoints: 33},
             {userName: users.jasperRoyal, sectionName: "Cubs", userPoints: 33},
             {userName: users.glaucousJet, sectionName: "Beavers", userPoints: 49},
             {userName: users.ceriseRoyal, sectionName: "Cubs", userPoints: 30},
+            {userName: users.icterineCrimson, sectionName: "Adults", userPoints: 40},
         ]
     )
 
