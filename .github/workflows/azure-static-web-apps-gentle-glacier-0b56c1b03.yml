@@ -28,7 +28,7 @@ jobs:
           app_location: "/Src/woodseatsscouts.coins.web"
           api_location: ""
           output_location: "build"
-	env:
+        env:
           NPM_CONFIG_LEGACY_PEER_DEPS: true
           CI: false
           REACT_APP_WEB_API_URI: $WEB_API_URI
