@@ -9,6 +9,8 @@ public class MemberViewModel(Member member)
     public string FirstName { get; set; } = member.FirstName;
 
     public string? LastName { get; set; } = member.LastName;
+    
+    public string? AgentName { get; set; } = member.AgentName;
 
     // public string MemberPhotoPath { get; set; } = $"/member-images/{member.Id}.jpg"; // Todo: hardcoded path
 

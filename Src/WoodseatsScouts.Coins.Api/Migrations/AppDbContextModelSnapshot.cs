@@ -159,6 +159,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AgentName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Clue1State")
                         .HasColumnType("nvarchar(max)");
 

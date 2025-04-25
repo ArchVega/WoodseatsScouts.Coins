@@ -15,6 +15,7 @@ public class LeaderboardLatestScavengerViewModel
         MemberNumber = domain.Number;
         FirstName = domain.FirstName;
         LastName = domain.LastName;
+        AgentName = domain.AgentName;
         TroopName = domain.Troop.Name;
         Section = domain.SectionId;
         SectionName = domain.Section.Name;
@@ -29,9 +30,11 @@ public class LeaderboardLatestScavengerViewModel
 
     public string TroopName { get; set; }
 
-    public string? LastName { get; set; }
-
     public string FirstName { get; set; }
+    
+    public string? LastName { get; set; }
+    
+    public string? AgentName { get; set; }
 
     public int MemberNumber { get; set; }
 

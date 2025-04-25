@@ -12,7 +12,7 @@ using WoodseatsScouts.Coins.Api.Data;
 namespace WoodseatsScouts.Coins.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250411073749_Initial")]
+    [Migration("20250425082557_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -161,6 +161,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AgentName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Clue1State")
                         .HasColumnType("nvarchar(max)");

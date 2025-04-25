@@ -116,9 +116,9 @@ function CreateCoinData {
         [string] $DatabaseName
     )
 
-    Push-Location "D:\Dev\Archvega\WoodseatsScouts\Utilities\QRCodes\WoodseatsScouts.QRCodes\WoodseatsScouts.QRCodes\bin\Debug"
+    Push-Location "..\..\Utilities\QRCodes\WoodseatsScouts.QRCodes\WoodseatsScouts.QRCodes\bin\Debug"
     try {
-        .\WoodseatsScouts.QRCodes.exe $DatabaseName "D:\Temp\WoodseatsScouts.QRCodes"
+        .\WoodseatsScouts.QRCodes.exe $DatabaseName "C:\Temp\WoodseatsScouts.QRCodes"
     } finally {
         Pop-Location
     }   

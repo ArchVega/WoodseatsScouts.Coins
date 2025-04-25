@@ -76,6 +76,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     Number = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AgentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TroopId = table.Column<int>(type: "int", nullable: false),
                     SectionId = table.Column<string>(type: "char(1)", nullable: false),
                     Clue1State = table.Column<string>(type: "nvarchar(max)", nullable: true),

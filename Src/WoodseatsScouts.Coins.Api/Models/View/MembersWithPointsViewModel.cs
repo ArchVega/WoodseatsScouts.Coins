@@ -13,6 +13,7 @@ public class MembersWithPointsViewModel
         MemberNumber = member.Number;
         FirstName = member.FirstName;
         LastName = member.LastName;
+        AgentName = member.AgentName;
         FullName = member.FullName;
         TroopName = member.Troop.Name;
         Section = member.SectionId;
@@ -31,6 +32,8 @@ public class MembersWithPointsViewModel
     public string FirstName { get; set; }
 
     public string? LastName { get; set; }
+    
+    public string? AgentName { get; set; }
 
     public string TroopName { get; set; }
 
@@ -38,7 +41,6 @@ public class MembersWithPointsViewModel
     public string SectionName { get; set; }
 
     public int TotalPoints { get; set; }
-
 
     public int Id { get; set; }
 }
