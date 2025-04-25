@@ -1,6 +1,6 @@
 . .\Utilities\Api\_Functions.ps1
 
-$baseUri = "https://scoutsapi.azurewebsites.net"
+$baseUri = "https://release-scouts-webapi.azurewebsites.net"
 CreateTroop -BaseUri $baseUri -Id 1 -Name "Crimson"
 CreateTroop -BaseUri $baseUri -Id 2 -Name "Jet"
 CreateTroop -BaseUri $baseUri -Id 3 -Name "Royal"
