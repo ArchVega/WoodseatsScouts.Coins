@@ -164,7 +164,7 @@ CREATE UNIQUE INDEX [IX_Sections_Code] ON [Sections] ([Code]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20240414161258_Initial', N'8.0.3');
+VALUES (N'20250411073749_Initial', N'8.0.3');
 GO
 
 COMMIT;
