@@ -62,7 +62,7 @@ public class MembersControllerTests
 
         var result = membersController.GetMemberInfoFromCode("invalid");
         result.ShouldBeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.ShouldBe("Could not translate Member Code 'invalid'");
+        ((BadRequestObjectResult)result).Value.ShouldBe("Oops, we can't find your profile - please speak to a District Camp Leader");
     }
 
     [Fact]

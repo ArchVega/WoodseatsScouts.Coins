@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
+using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.PowerShell;
@@ -27,10 +28,10 @@ public class DatabaseFixture
     public AppDbContext AppDbContext => new(contextOptions, appSettingsOptions, SystemDateTimeProvider, leaderboardSettingsOptions);
 
     private const string SourceDatabaseConnectionString 
-        = "Server=(local);Database=WoodseatsScouts.Coins.Tests.Source;Trusted_Connection=true;TrustServerCertificate=true";
+        = "Server=localhost,1433;Database=WoodseatsScouts.Coins.Development;User Id=SA;Password=Pa55w0rd123;TrustServerCertificate=True;Encrypt=False";
 
     private const string TestDatabaseConnectionString 
-        = "Server=(local);Database=WoodseatsScouts.Coins.Tests.Integration;Trusted_Connection=true;TrustServerCertificate=true ";
+        = "Server=localhost,1433;Database=WoodseatsScouts.Coins.Tests.Integration;User Id=SA;Password=Pa55w0rd123;TrustServerCertificate=True;Encrypt=False";
 
     public DatabaseFixture()
     {
@@ -48,7 +49,10 @@ public class DatabaseFixture
     private static void RecreateDbViaPowerShell()
     {
         var initialSessionState = InitialSessionState.CreateDefault();
-        initialSessionState.ExecutionPolicy = ExecutionPolicy.Unrestricted;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            initialSessionState.ExecutionPolicy = ExecutionPolicy.Unrestricted;
+        }
         
         using var runspace = RunspaceFactory.CreateRunspace(initialSessionState);
         runspace.Open();
@@ -71,15 +75,20 @@ public class DatabaseFixture
     public void RestoreBaseTestData()
     {
         var initialSessionState = InitialSessionState.CreateDefault();
-        initialSessionState.ExecutionPolicy = ExecutionPolicy.Unrestricted;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            initialSessionState.ExecutionPolicy = ExecutionPolicy.Unrestricted;
+        }
         
         using var runspace = RunspaceFactory.CreateRunspace(initialSessionState);
         runspace.Open();
-        runspace.SessionStateProxy.Path.SetLocation(@"..\..\..\..\..");
+        runspace.SessionStateProxy.Path.SetLocation("../../../../..");
 
         using (var instance = PowerShell.Create(runspace))
         {
             instance.Streams.Error.DataAdded += ConsumeErrorStreamOutput;
+            instance.Streams.Verbose.DataAdded += ConsumeErrorStreamOutput;
+            instance.Streams.Information.DataAdded += ConsumeStreamOutput;
             instance.AddCommand(@"./Utilities/Database/RestoreBaseTestDataScriptRunner.ps1");
             var results = instance.Invoke();
             Console.WriteLine(results);
@@ -88,6 +97,28 @@ public class DatabaseFixture
         runspace.Close();
     }
 
+    private void ConsumeStreamOutput(object? sender, DataAddedEventArgs e)
+    {
+        if (sender is PSDataCollection<InformationRecord> i)
+        {
+            var collection = (PSDataCollection<InformationRecord>)sender;
+            var record = collection[e.Index];
+
+            var message = record.MessageData?.ToString();
+            Console.WriteLine("Information: " + message);
+        }
+        
+        if (sender is PSDataCollection<VerboseRecord> v)
+        {
+            var collection = (PSDataCollection<VerboseRecord>)sender;
+            var record = collection[e.Index];
+
+            var message = record.Message?.ToString();
+            Console.WriteLine(message);
+            Console.WriteLine("Verbose: " + message);
+        }
+    }
+    
     private void ConsumeErrorStreamOutput(object? sender, DataAddedEventArgs e)
     {
         if (sender is PSDataCollection<ErrorRecord> o)

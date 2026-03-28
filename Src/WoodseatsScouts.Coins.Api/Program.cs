@@ -5,8 +5,8 @@ using WoodseatsScouts.Coins.Api.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
-    .AddJsonFile("appSettings.json")
-    .AddJsonFile($"appSettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
 const string allOrigins = "_allOrigins";
 builder.Services.AddCors(options =>

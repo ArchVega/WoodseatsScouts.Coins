@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoodseatsScouts.Coins.Tests.Unit", "Tests\WoodseatsScouts.Coins.Tests.Unit\WoodseatsScouts.Coins.Tests.Unit.csproj", "{9446F256-25B7-4D4C-844C-00E93263A6F0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{F5D5B81C-CF85-4AC0-A8A1-797B401F5CBA}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yaml = docker-compose.yaml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C14BA076-73AB-4E58-84BB-61837025175E}"
 EndProject

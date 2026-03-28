@@ -39,14 +39,14 @@ public class CoinsControllerTests
         var appDbContextMock = new Mock<IAppDbContext>();
         var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
         var coinsController = new CoinsController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
-        const string memberCode = "test-valid-member-code";
-        const string coinCode = "test-invalid-coin-code";
+        const string memberCode = "test-any-member-code";
+        const string coinCode = "test-any-coin-code";
 
         appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
 
         var exception = Should.Throw<CodeTranslationException>(() => coinsController.GetCoin(coinCode, memberCode));
 
-        exception.Message.ShouldBe("Could not translate Coin Code 'test-invalid-coin-code'");
+        exception.Message.ShouldBe("Oops, we couldn't find that coin - please speak to a District Camp Leader");
     }
 
     [Fact]
@@ -131,7 +131,7 @@ public class CoinsControllerTests
 
         result.ShouldBeOfType<ConflictObjectResult>();
         ((ConflictObjectResult)result).Value.ShouldBe(
-            "The coin with code 'C0001010020' has already been scavenged by test-other-first-name test-other-last-name!");
+            "This points token has already been used by test-other-first-name test-other-last-name. Please hand it to a District Camp Leader");
     }
 
     [Fact]
