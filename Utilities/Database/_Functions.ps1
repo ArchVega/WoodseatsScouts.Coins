@@ -1,5 +1,31 @@
 Import-Module SqlServer
 
+function _ExecuteQuery {
+    param(
+        [Parameter(Mandatory)]
+        $Query,
+        [Parameter()]
+        $DatabaseName        
+    )
+    
+    Write-Host "Executing query $Query"
+
+    $arguments = @{
+        ServerInstance =  "localhost,1433"
+        Query =  $Query
+        Username =  "SA"
+        Password =  "Pa55w0rd123"
+        Encrypt =  "Optional"
+        TrustServerCertificate = $true
+    }
+
+    if ($null -ne $DatabaseName) {
+        $arguments.Database = $DatabaseName
+    }
+
+    return Invoke-Sqlcmd @arguments
+}
+
 function RecreateDb {
     param(        
         [Parameter(Mandatory)]
@@ -20,8 +46,8 @@ function RecreateDb {
     }
     Write-Host "Deleting Database"
     try {
-        Invoke-Sqlcmd -ServerInstance . -Query "alter database [$DatabaseName] set single_user with rollback immediate;" -TrustServerCertificate
-        Invoke-Sqlcmd -ServerInstance . -Query "Drop database [$DatabaseName];" -TrustServerCertificate
+        _ExecuteQuery "alter database [$DatabaseName] set single_user with rollback immediate;"
+        _ExecuteQuery "Drop database [$DatabaseName];"
     }
     catch {
         Write-Warning "Did not delete database $DatabaseName, it might not exist."
@@ -34,8 +60,8 @@ function RecreateDb {
     if ($null -ne $CloneSourceDatabaseName) {
         try {
             Write-Host "Deleting clone source db..."
-            Invoke-Sqlcmd -ServerInstance . -Query "alter database [$CloneSourceDatabaseName] set single_user with rollback immediate;" -TrustServerCertificate
-            Invoke-Sqlcmd -ServerInstance . -Query "Drop database [$CloneSourceDatabaseName];" -TrustServerCertificate        
+            _ExecuteQuery "alter database [$CloneSourceDatabaseName] set single_user with rollback immediate;"
+            _ExecuteQuery "Drop database [$CloneSourceDatabaseName];"
         }
         catch {
             Write-Warning "Did not delete clone source database $CloneSourceDatabaseName, it might not exist."
@@ -44,7 +70,7 @@ function RecreateDb {
 
         try {
             Write-Host "Creating TestDB Source"    
-            Invoke-Sqlcmd -ServerInstance . -Query "DBCC CLONEDATABASE ([$DatabaseName], [$CloneSourceDatabaseName]);" -TrustServerCertificate
+            _ExecuteQuery "DBCC CLONEDATABASE ([$DatabaseName], [$CloneSourceDatabaseName]);"
         
         }
         catch {
@@ -70,8 +96,8 @@ function CloneDb {
 
     try {
         Write-Output  "Deleting source db '$DatabaseName'..."
-        Invoke-Sqlcmd -ServerInstance . -Query "alter database [$DatabaseName] set single_user with rollback immediate;" -TrustServerCertificate
-        Invoke-Sqlcmd -ServerInstance . -Query "Drop database [$DatabaseName];" -TrustServerCertificate        
+        _ExecuteQuery "alter database [$DatabaseName] set single_user with rollback immediate;"
+        _ExecuteQuery "Drop database [$DatabaseName];"
     }
     catch {
         Write-Output "Did not delete clone source database $DatabaseName, it might not exist."
@@ -80,7 +106,7 @@ function CloneDb {
 
     try {
         Write-Output  "Creating $DatabaseName..."    
-        Invoke-Sqlcmd -ServerInstance . -Query "DBCC CLONEDATABASE ([$SourceDatabaseName], [$DatabaseName]);" -TrustServerCertificate
+        _ExecuteQuery "DBCC CLONEDATABASE ([$SourceDatabaseName], [$DatabaseName]);"
     
     }
     catch {
@@ -105,7 +131,7 @@ function CopyDbData {
         $tableName = $_
         Write-Output "Copying data, table: '$tableName'"
         $query = "INSERT INTO [$DatabaseToName].[dbo].[$tableName] SELECT * FROM [$DatabaseFromName].[dbo].[$tableName]"
-        Invoke-Sqlcmd -ServerInstance . -Query $query -TrustServerCertificate
+        _ExecuteQuery $query
     }
 
 }
@@ -116,10 +142,11 @@ function CreateCoinData {
         [string] $DatabaseName
     )
 
-    Push-Location "D:\Dev\Archvega\WoodseatsScouts\Utilities\QRCodes\WoodseatsScouts.QRCodes\WoodseatsScouts.QRCodes\bin\Debug"
+    Push-Location "../../Utilities/QRCodes/WoodseatsScouts.QRCodes.Net10/WoodseatsScouts.QRCodes.Net10/bin/Debug/net10.0"
     try {
-        .\WoodseatsScouts.QRCodes.exe $DatabaseName "D:\Temp\WoodseatsScouts.QRCodes"
-    } finally {
+        dotnet ./WoodseatsScouts.QRCodes.Net10.dll $DatabaseName "/home/developer/dev/temp/woodseats-scouts-qrcodes"
+    }
+    finally {
         Pop-Location
     }   
 }
@@ -158,7 +185,7 @@ function CreateAdditionalDbObjects {
         on Coins.Code = ScavengedCoins.Code
         "
         
-        Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query $viewQuery -TrustServerCertificate
+        _ExecuteQuery $viewQuery $DatabaseName
     }
     catch {
         Write-Warning "Could not create Views"

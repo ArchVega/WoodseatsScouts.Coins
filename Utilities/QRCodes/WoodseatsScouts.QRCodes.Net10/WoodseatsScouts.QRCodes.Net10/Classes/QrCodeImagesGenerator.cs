@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.IO;
-using QRCoder;
+﻿using QRCoder.Core;
+using WoodseatsScouts.QRCodes.Classes;
 
-namespace WoodseatsScouts.QRCodes.Classes;
+namespace WoodseatsScouts.QRCodes.Net10.Classes;
 
 public class QrCodeImagesGenerator(FileSystemInfo memberQrCodesDirectoryInfo, FileSystemInfo coinCodesDirectoryInfo) : IDisposable
 {
@@ -18,11 +15,13 @@ public class QrCodeImagesGenerator(FileSystemInfo memberQrCodesDirectoryInfo, Fi
     {
         foreach (var member in members)
         {
-            using var qrCodeData = qrCodeGenerator.CreateQrCode(member.Code, EccLevel);
-            using var qrCode = new QRCode(qrCodeData);
-            var qrCodeImageBitmap = qrCode.GetGraphic(PixelsPerModule);
             var fullName = Path.Combine(memberQrCodesDirectoryInfo.FullName, $"{member.FullName}.png");
-            qrCodeImageBitmap.Save(fullName, ImageFormat.Png);
+            
+            using var qrCodeData = qrCodeGenerator.CreateQrCode(member.Code, EccLevel);
+            using var qrCode = new PngByteQRCode(qrCodeData);
+            var qrCodeImageBitmap = qrCode.GetGraphic(PixelsPerModule);
+            
+            File.WriteAllBytes(fullName, qrCodeImageBitmap);
         }
     }
 
@@ -30,11 +29,13 @@ public class QrCodeImagesGenerator(FileSystemInfo memberQrCodesDirectoryInfo, Fi
     {
         foreach (var coin in coins)
         {
-            using var qrCodeData = qrCodeGenerator.CreateQrCode(coin.ToString(), EccLevel);
-            using var qrCode = new QRCode(qrCodeData);
-            var qrCodeImageBitmap = qrCode.GetGraphic(PixelsPerModule);
             var fullName = Path.Combine(coinCodesDirectoryInfo.FullName, $"{coin}.png");
-            qrCodeImageBitmap.Save(fullName, ImageFormat.Png);
+
+            using var qrCodeData = qrCodeGenerator.CreateQrCode(coin.ToString(), EccLevel);
+            using var qrCode = new PngByteQRCode(qrCodeData);
+            var qrCodeImageBitmap = qrCode.GetGraphic(PixelsPerModule);
+
+            File.WriteAllBytes(fullName, qrCodeImageBitmap);
         }
     }
 

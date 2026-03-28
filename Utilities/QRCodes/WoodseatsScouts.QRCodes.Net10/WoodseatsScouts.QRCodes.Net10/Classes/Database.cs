@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
+using WoodseatsScouts.QRCodes.Classes;
 
-namespace WoodseatsScouts.QRCodes.Classes;
+namespace WoodseatsScouts.QRCodes.Net10.Classes;
 
 public class Database : IDisposable
 {
@@ -13,7 +11,7 @@ public class Database : IDisposable
     {
         var builder = new SqlConnectionStringBuilder
         {
-            ConnectionString = $"Server=(local);Database={databaseName};Trusted_Connection=true;TrustServerCertificate=true"
+            ConnectionString = $"Server=localhost,1433;Database={databaseName};User Id=SA;Password=Pa55w0rd123;TrustServerCertificate=True;Encrypt=False"
         };
 
         this.connection = new SqlConnection(builder.ConnectionString);

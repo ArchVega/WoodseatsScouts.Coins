@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
+﻿using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using WoodseatsScouts.QRCodes.Classes;
 
-namespace WoodseatsScouts.QRCodes.Classes;
+namespace WoodseatsScouts.QRCodes.Net10.Classes;
 
-public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryInfo testSheetsDirectoryInfo)
+public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryInfo testSheetsDirectoryInfo, DirectoryInfo testSheetsPaddedDirectoryInfo)
 {
     private static readonly int Seed;
 
-    private Random random = new Random(Seed);
+    private readonly Random random = new(Seed);
 
     static TestSheetGenerator()
     {
@@ -36,7 +35,7 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
             {
                 Member = member,
                 FileInfo = fileInfo,
-                Bitmap = new Bitmap(fileInfo.FullName)
+                Bitmap = Image.Load<Rgba32>(fileInfo.FullName)
             };
 
             var randomIndexes = uniqueRandoms.Get(4, coinIndexesStack.Count);
@@ -56,17 +55,18 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
                     {
                         Coin = x,
                         FileInfo = qrCodeFileInfo,
-                        Bitmap = new Bitmap(qrCodeFileInfo.FullName)
+                        Bitmap = Image.Load<Rgba32>(qrCodeFileInfo.FullName)
                     };
                 }).ToList();
 
             var specialCoin = specialCoinsStack.Pop();
-            var qrCodeFileInfo = databaseDirectoryInfo.GetFiles($"*{specialCoin}*", SearchOption.AllDirectories).Single();
+            var qrCodeFileInfo = databaseDirectoryInfo.GetFiles($"*{specialCoin}*", SearchOption.AllDirectories)
+                .Single();
             coinQrCodeImageFileInfos.Add(new CoinFileInfo()
             {
                 Coin = specialCoin,
                 FileInfo = qrCodeFileInfo,
-                Bitmap = new Bitmap(qrCodeFileInfo.FullName)
+                Bitmap = Image.Load<Rgba32>(qrCodeFileInfo.FullName)
             });
 
             GenerateTestSheetImage(memberQrCodeImageFileInfo, coinQrCodeImageFileInfos);
@@ -78,63 +78,83 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
         const int outputImageWidth = 1920; // memberImage.Width > secondImage.Width ? memberImage.Width : secondImage.Width;
         const int outputImageHeight = 1200; //memberImage.Height + secondImage.Height + 1;
 
-        var outputImage = new Bitmap(outputImageWidth, outputImageHeight, PixelFormat.Format32bppArgb);
+        // var outputImage = new Bitmap(outputImageWidth, outputImageHeight, PixelFormat.Format32bppArgb);
+        var outputImage = new Image<Rgba32>(outputImageWidth, outputImageHeight);
 
-        using (var graphics = Graphics.FromImage(outputImage))
+        outputImage.Mutate(ctx =>
         {
-            var row1X = 0;
+            // Fill background white
+            ctx.Fill(Color.White);
+
+            // Setup font (you can pick a font installed on Linux)
+            var collection = new FontCollection();
+            var fontFamily = collection.Add("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"); //
+            var font = fontFamily.CreateFont(16);
+
+            int row1X = 0;
 
             // Row 1
-            graphics.DrawImage(
-                memberQrCodeImageFileInfo.Bitmap,
-                new Rectangle(new Point(), memberQrCodeImageFileInfo.Bitmap.Size),
-                new Rectangle(new Point(), memberQrCodeImageFileInfo.Bitmap.Size),
-                GraphicsUnit.Pixel);
-            DrawText(graphics, "MEMBER QR CODE", row1X, 0);
-            DrawText(graphics, $"Code: {memberQrCodeImageFileInfo.Member.Code}", row1X, 22);
-            DrawText(graphics, $"Member: {memberQrCodeImageFileInfo.Member.FullName}", row1X, 44);
+            ctx.DrawImage(memberQrCodeImageFileInfo.Bitmap, new Point(row1X, 0), 1f);
+            DrawText(ctx, "MEMBER QR CODE", row1X, 0, font);
+            DrawText(ctx, $"Code: {memberQrCodeImageFileInfo.Member.Code}", row1X, 22, font);
+            DrawText(ctx, $"Member: {memberQrCodeImageFileInfo.Member.FullName}", row1X, 44, font);
             row1X += memberQrCodeImageFileInfo.Bitmap.Width;
 
             foreach (var coinImage in coinQrCodeImageFileInfos.Take(2))
             {
-                graphics.DrawImage(coinImage.Bitmap,
-                    new Rectangle(new Point(row1X, 0), coinImage.Bitmap.Size),
-                    new Rectangle(new Point(), coinImage.Bitmap.Size),
-                    GraphicsUnit.Pixel);
-                DrawText(graphics, "COIN QR CODE", row1X, 0);
-                DrawText(graphics, $"Code: {coinImage.Coin}", row1X, 22);
-                DrawText(graphics, $"Value: {coinImage.Coin.Value.ToString()}", row1X, 44);
-
+                ctx.DrawImage(coinImage.Bitmap, new Point(row1X, 0), 1f);
+                DrawText(ctx, "COIN QR CODE", row1X, 0, font);
+                DrawText(ctx, $"Code: {coinImage.Coin}", row1X, 22, font);
+                DrawText(ctx, $"Value: {coinImage.Coin.Value}", row1X, 44, font);
                 row1X += coinImage.Bitmap.Width;
             }
 
-            var row2X = 0;
-            var row2Y = memberQrCodeImageFileInfo.Bitmap.Height + 1;
-
             // Row 2
+            int row2X = 0;
+            int row2Y = memberQrCodeImageFileInfo.Bitmap.Height + 1;
+
             foreach (var coinImage in coinQrCodeImageFileInfos.Skip(2).Take(3))
             {
-                graphics.DrawImage(coinImage.Bitmap,
-                    new Rectangle(new Point(row2X, row2Y), coinImage.Bitmap.Size),
-                    new Rectangle(new Point(), coinImage.Bitmap.Size),
-                    GraphicsUnit.Pixel);
-                DrawText(graphics, "COIN QR CODE", row2X, row2Y);
-                DrawText(graphics, $"Code: {coinImage.Coin}", row2X, 22 + row2Y);
-                DrawText(graphics, $"Value: {coinImage.Coin.Value.ToString()}", row2X, 44 + row2Y);
+                ctx.DrawImage(coinImage.Bitmap, new Point(row2X, row2Y), 1f);
+                DrawText(ctx, "COIN QR CODE", row2X, row2Y, font);
+                DrawText(ctx, $"Code: {coinImage.Coin}", row2X, 22 + row2Y, font);
+                DrawText(ctx, $"Value: {coinImage.Coin.Value}", row2X, 44 + row2Y, font);
                 row2X += coinImage.Bitmap.Width;
             }
+        });
 
-            var path = Path.Combine(testSheetsDirectoryInfo.FullName, $"{memberQrCodeImageFileInfo.Member.FullName}_TestSheet.png");
-            outputImage.Save(path, ImageFormat.Png);
-        }
+        var path = Path.Combine(testSheetsDirectoryInfo.FullName, $"{memberQrCodeImageFileInfo.Member.FullName}_TestSheet.png");
 
-        memberQrCodeImageFileInfo.Bitmap.Dispose();
-        coinQrCodeImageFileInfos.ForEach(x => x.Bitmap.Dispose());
+        outputImage.Save(path);
+        
+        ResizeWithPadding(outputImage, testSheetsPaddedDirectoryInfo, memberQrCodeImageFileInfo);
     }
 
-    private void DrawText(Graphics graphics, string text, int x, int y)
+    static void ResizeWithPadding(Image<Rgba32> original, DirectoryInfo testSheetsPaddedDirectoryInfo, MemberFileInfo memberQrCodeImageFileInfo)
     {
-        graphics.DrawString(text, new Font(FontFamily.GenericMonospace, 20), new SolidBrush(Color.Black), x, y);
+        // Set padding
+        int padding = 40;
+
+        // Create new image with extra padding on all sides
+        int newWidth = original.Width + 2 * padding;
+        int newHeight = original.Height + 2 * padding;
+
+        using Image<Rgba32> padded = new Image<Rgba32>(newWidth, newHeight);
+
+        // Fill background (optional)
+        padded.Mutate(ctx => ctx.Fill(Color.White));
+
+        // Draw original image onto new canvas at offset (padding, padding)
+        padded.Mutate(ctx => ctx.DrawImage(original, new Point(padding, padding), 1f));
+
+        var path = Path.Combine(testSheetsPaddedDirectoryInfo.FullName, $"{memberQrCodeImageFileInfo.Member.FullName}_TestSheet.png");
+        Console.WriteLine($"Saving {path}");
+        padded.Save(path);
+    }
+
+    static void DrawText(IImageProcessingContext ctx, string text, int x, int y, Font font)
+    {
+        ctx.DrawText(text, font, Color.Black, new PointF(x, y));
     }
 }
 
@@ -142,12 +162,12 @@ public class MemberFileInfo
 {
     public Member Member { get; set; }
     public FileInfo FileInfo { get; set; }
-    public Bitmap Bitmap { get; set; }
+    public new Image<Rgba32> Bitmap { get; set; }
 }
 
 public class CoinFileInfo
 {
     public Coin Coin { get; set; }
     public FileInfo FileInfo { get; set; }
-    public Bitmap Bitmap { get; set; }
+    public new Image<Rgba32> Bitmap { get; set; }
 }

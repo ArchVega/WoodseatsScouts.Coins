@@ -1,24 +1,5 @@
 $script:csvTestDataRootDirectory = Join-Path (Get-Location) "Utilities\Database\TestData"
 
-function _ExecuteQuery {
-    param(
-        [Parameter(Mandatory)]
-        $DatabaseName,
-        [Parameter(Mandatory)]
-        $Query
-    )
-    
-    Write-Host "Executing query $Query"
-    return Invoke-Sqlcmd `
-        -ServerInstance "localhost,1433" `
-        -Database $DatabaseName `
-        -Query $Query `
-        -Username "SA" `
-        -Password "Pa55w0rd123" `
-        -TrustServerCertificate `
-        -Encrypt Optional         
-}
-
 function RestoreBaseTestData {
     param(
         [Parameter(Mandatory)]    
@@ -41,7 +22,7 @@ function RestoreBaseTestData {
     $tables = @("ScavengeResults", "ScavengedCoins", "MemberCountryVotes", "Coins", "Members", "Sections", "Troops")
     Write-Host "Inserting data from '$Path' into '$DatabaseName'..."
     $tables | ForEach-Object { 
-        _ExecuteQuery $DatabaseName "DELETE FROM $_"
+        _ExecuteQuery "DELETE FROM $_" $DatabaseName
     }
 
     $tablesWithoutIdentities = @("Sections")
@@ -50,7 +31,7 @@ function RestoreBaseTestData {
         $tableName = $dataSet.Table
                 
         $query = "SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '$tableName'"
-        $tableSchema =_ExecuteQuery $DatabaseName $query
+        $tableSchema = _ExecuteQuery $query $DatabaseName
 
         $insertQueryStringBuilder = [System.Text.StringBuilder]::new()
         
@@ -65,7 +46,7 @@ function RestoreBaseTestData {
         }        
 
         $insertQuery = $insertQueryStringBuilder.ToString();
-        _ExecuteQuery $DatabaseName $insertQuery
+        _ExecuteQuery $insertQuery $DatabaseName 
     }    
 
     Write-Host "Finished inserting data from '$Path' into '$DatabaseName'"
