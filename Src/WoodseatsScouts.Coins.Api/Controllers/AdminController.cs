@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Middleware;
 using WoodseatsScouts.Coins.Api.Models.View;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[AdminAuth]
 public class AdminController(AppDbContext appDbContext) : ControllerBase
 {
     private static readonly object Locker = new();  

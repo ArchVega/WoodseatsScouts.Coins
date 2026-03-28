@@ -1,7 +1,9 @@
 // dotcover disable
+
+using Microsoft.OpenApi.Models;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Middleware;
-
+    
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
@@ -17,7 +19,35 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 ServicesRegistration.RegisterAll(builder.Services, builder.Configuration, builder.Environment);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition(AppSettings.ApiAuthenticationTokenKey, new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        Name = AppSettings.ApiAuthenticationTokenKey,
+        In = ParameterLocation.Header,
+        Description = "Enter your authentication token for the Scouts Coin API service"
+    });
+    
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Name = AppSettings.ApiAuthenticationTokenKey,
+                Type = SecuritySchemeType.ApiKey,
+                In = ParameterLocation.Header,
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = AppSettings.ApiAuthenticationTokenKey
+                }
+            },
+            []
+        }
+    });
+});
 
 var app = builder.Build();
 
