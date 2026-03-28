@@ -12,7 +12,7 @@ using WoodseatsScouts.Coins.Api.Data;
 namespace WoodseatsScouts.Coins.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260328141019_Initial")]
+    [Migration("20260328150019_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
