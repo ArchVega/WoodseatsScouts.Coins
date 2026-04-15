@@ -3,7 +3,11 @@ import axios from "axios";
 import Uris from "../pageModels/Uris";
 
 const ScavengerHunt = async () => {
-    const coinsResponse = await axios.get(Uris.coinsGet)
+    const coinsResponse = await axios.get(Uris.coinsGet, {
+        headers: {
+            'X-Coins-Authentication-Token': 'test'
+        }
+    })
     const _coins = coinsResponse.data.map(x => {
         return {
             code: x.code,
@@ -19,6 +23,9 @@ const ScavengerHunt = async () => {
 
             for (const value of values) {
                 const unscavengedCoin = _coins.filter(x => !x.isAlreadyScavenged && x.value === value)[0]
+                if (!unscavengedCoin) {
+                    throw "Undefined unscavenged coin"
+                }
                 unscavengedCoin.isAlreadyScavenged = true;
                 unscavengedCoin.fullName = userFullName;
                 coins.push(unscavengedCoin);

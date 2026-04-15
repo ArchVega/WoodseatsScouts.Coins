@@ -3,7 +3,7 @@
 using Microsoft.OpenApi.Models;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Middleware;
-    
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
@@ -65,5 +65,23 @@ app.MapControllers();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 AppStartupValidator.Validate(app);
+
+// var cultureInfo = new CultureInfo("en-GB");
+//
+// // Sets the culture for the current thread
+// CultureInfo.CurrentCulture = cultureInfo;
+// CultureInfo.CurrentUICulture = cultureInfo;
+//
+// // Sets the default culture for all new threads in the app
+// CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+// CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+//
+// var supportedCultures = new[] { "en-GB" };
+// var localizationOptions = new RequestLocalizationOptions()
+//     .SetDefaultCulture(supportedCultures[0])
+//     .AddSupportedCultures(supportedCultures)
+//     .AddSupportedUICultures(supportedCultures);
+//
+// app.UseRequestLocalization(localizationOptions);
 
 app.Run();

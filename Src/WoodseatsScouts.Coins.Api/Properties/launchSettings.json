@@ -16,6 +16,7 @@
       "ignore_launchUrl": "swagger",
       "applicationUrl": "http://localhost:7167",
       "environmentVariables": {
+        "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT": "false",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "SCOUTS_API_APP_MODE": "Development"
       }
@@ -27,6 +28,7 @@
       "ignore_launchUrl": "swagger",
       "applicationUrl": "http://localhost:7167",
       "environmentVariables": {
+        "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT": "false",
         "ASPNETCORE_ENVIRONMENT": "AcceptanceTest",
         "SCOUTS_API_APP_MODE": "AcceptanceTest"
       }
@@ -38,6 +40,7 @@
       "ignore_launchUrl": "swagger",
       "applicationUrl": "http://localhost:7167",
       "environmentVariables": {
+        "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT": "false",
         "ASPNETCORE_ENVIRONMENT": "Production",
         "SCOUTS_API_APP_MODE": "Production"
       }

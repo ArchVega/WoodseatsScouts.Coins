@@ -19,6 +19,8 @@ import joinImages from "join-images";
 import MemberScavengedResultPage from "../pageModels/MemberScavengedResultPage";
 import {last6ScannersAssertionHelpers} from "../assertionHelpers/Last6ScannersAssertionHelpers";
 
+test.describe.configure({ mode: 'serial' });
+
 let runName = "master"
 runName = "feature"
 
@@ -35,7 +37,8 @@ function serialStep(name) {
     return `Step ${counter}: ${name}`
 }
 
-test(serialStep("Creating users"), async ({page}, testInfo) => {
+
+test("Creating users", async ({page}, testInfo) => {
     // screenshotsComparer =  ScreenshotsComparer("screenshots", runName); this deletes the existing master folder
     // screenshotsComparer = ScreenshotsComparer("screenshots"); // this doesn't delete the folder
 
@@ -594,7 +597,7 @@ test(serialStep("Olivine Crimson can't scan a scavenged coin after 9 minutes, bu
     expect(await memberScavengedResultPage.getTotalPoints()).toBe(20);
 });
 
-test(serialStep("Time's up"), async ({page}, testInfo) => {
+test("Time's up", async ({page}, testInfo) => {
     const reportPage = ReportPage(page);
     await reportPage.goTo()
 

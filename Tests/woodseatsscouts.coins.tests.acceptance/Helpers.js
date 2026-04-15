@@ -8,8 +8,8 @@ const Helpers = () => {
             const currentDirectory = process.cwd()
 
             try {
-                process.chdir("..\\..");
-                const child = require("child_process").execSync("pwsh.exe .\\Utilities\\Database\\RecreateDbs-3-AcceptanceTests.ps1");
+                process.chdir("../..");
+                const child = require("child_process").execSync("pwsh ./Utilities/Database/RecreateDbs-3-AcceptanceTests.ps1");
                 console.info(child.toString('utf8'))
 
 
@@ -23,6 +23,7 @@ const Helpers = () => {
                 url: Uris.sutSystemDateTime(minutesToAdd),
                 method: 'PUT',
                 headers: {
+                    'X-Coins-Authentication-Token': 'test',
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
@@ -37,6 +38,7 @@ const Helpers = () => {
                 url: Uris.sutScavengerHuntDeadline(minutesToAdd),
                 method: 'PUT',
                 headers: {
+                    'X-Coins-Authentication-Token': 'test',
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
@@ -59,6 +61,7 @@ const Helpers = () => {
                     url: Uris.memberPhoto(member),
                     method: 'PUT',
                     headers: {
+                        'X-Coins-Authentication-Token': 'test',
                         'Content-Type': 'application/json'
                     },
                     data: {
@@ -81,6 +84,7 @@ const Helpers = () => {
                         url: Uris.adminCreateMember,
                         method: 'POST',
                         headers: {
+                            'X-Coins-Authentication-Token': 'test',
                             'Content-Type': 'application/json'
                         },
                         data: {
@@ -106,6 +110,7 @@ const Helpers = () => {
                         url: Uris.adminCreateTroop,
                         method: 'POST',
                         headers: {
+                            'X-Coins-Authentication-Token': 'test',
                             'Content-Type': 'application/json'
                         },
                         data: {

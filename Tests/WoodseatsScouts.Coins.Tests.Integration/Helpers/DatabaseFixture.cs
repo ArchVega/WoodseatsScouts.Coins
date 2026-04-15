@@ -37,8 +37,8 @@ public class DatabaseFixture
     {
         RecreateDbViaPowerShell();
 
-        contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(SourceDatabaseConnectionString).Options;
-        // contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
+        // contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(SourceDatabaseConnectionString).Options;
+        contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
 
         AppSettings = new AppSettings();
         appSettingsOptions = Options.Create(AppSettings);

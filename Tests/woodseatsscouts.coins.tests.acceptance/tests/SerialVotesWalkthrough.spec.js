@@ -28,7 +28,7 @@ function serialStep(name) {
     return `Step ${counter}: ${name}`
 }
 
-test(serialStep("Creating users"), async ({page}, testInfo) => {
+test("Creating users", async ({page}, testInfo) => {
     // screenshotsComparer =  ScreenshotsComparer("screenshots", runName); this deletes the existing master folder
     screenshotsComparer = ScreenshotsComparer("screenshots"); // this doesn't delete the folder
 
