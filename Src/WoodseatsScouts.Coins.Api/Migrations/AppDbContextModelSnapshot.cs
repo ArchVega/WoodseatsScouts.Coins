@@ -138,6 +138,11 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         {
                             Id = 20,
                             Name = "Zip wire"
+                        },
+                        new
+                        {
+                            Id = 99,
+                            Name = "Misc"
                         });
                 });
 
@@ -172,6 +177,8 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Base");
 
                     b.HasIndex("MemberId");
 
@@ -428,9 +435,17 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Coin", b =>
                 {
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Base", "BaseEntity")
+                        .WithMany()
+                        .HasForeignKey("Base")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Member", "Member")
                         .WithMany()
                         .HasForeignKey("MemberId");
+
+                    b.Navigation("BaseEntity");
 
                     b.Navigation("Member");
                 });

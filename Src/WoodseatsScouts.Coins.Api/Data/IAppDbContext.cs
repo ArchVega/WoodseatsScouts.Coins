@@ -43,4 +43,12 @@ public interface IAppDbContext
     DbSet<Country>? Countries { get; set; }
         
     DbSet<MemberCountryVote>? MemberCountryVotes { get; set; }
+    
+    DbSet<Base> Bases { get; set; }
+
+    Member? CreateMember(string firstName, string lastName, int troopId, string section, bool isDayVisitor);
+    
+    Member UpdateMemberName(int memberId, string firstName, string lastName);
+    
+    List<Coin> CreateCoins(int baseId, int points, int count);
 }

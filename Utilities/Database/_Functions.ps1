@@ -8,7 +8,8 @@ function _ExecuteQuery {
         $DatabaseName        
     )
     
-    Write-Host "Executing query $Query"
+    Write-Warning "Executing Query. Query is shown in verbose"
+    Write-Verbose "Executing query $Query"
 
     $arguments = @{
         ServerInstance =  "localhost,1433"

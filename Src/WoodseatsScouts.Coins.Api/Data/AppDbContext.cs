@@ -47,6 +47,8 @@ namespace WoodseatsScouts.Coins.Api.Data
             modelBuilder.Entity<Coin>()
                 .Property(x => x.Code).HasComputedColumnSql(coinCodeFormat);
 
+            modelBuilder.Entity<Coin>().HasOne(x => x.BaseEntity).WithMany().HasForeignKey(x => x.Base);
+            
             /* See property notes */
             modelBuilder.Entity<Member>()
                 .Property(p => p.Code)
@@ -87,6 +89,7 @@ namespace WoodseatsScouts.Coins.Api.Data
             modelBuilder.Entity<Base>().HasData(new Base { Id = 18, Name = "Sailing" });
             modelBuilder.Entity<Base>().HasData(new Base { Id = 19, Name = "Tomahawk throwing" });
             modelBuilder.Entity<Base>().HasData(new Base { Id = 20, Name = "Zip wire" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 99, Name = "Misc" });
         }
 
         public int GenerateNextMemberCode(int troopId, string section)
@@ -319,6 +322,25 @@ namespace WoodseatsScouts.Coins.Api.Data
             SaveChanges();
 
             return member;
+        }
+        
+        public List<Coin> CreateCoins(int baseId, int points, int count)
+        {
+            var maxBaseValueId = Coins!.Where(x => x.Base == baseId).Max(x => x.BaseValueId);
+            var newCoins = new List<Coin>();
+            for (var i = maxBaseValueId + 1; i < maxBaseValueId + 1 + count; i++)
+            {
+                newCoins.Add(new Coin
+                {
+                    Base = baseId,
+                    BaseValueId = i,
+                    Value = points
+                });
+            }
+            Coins!.AddRange(newCoins);
+            SaveChanges();
+
+            return newCoins;
         }
     }
 }

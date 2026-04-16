@@ -17,6 +17,8 @@ public class Coin
     public int BaseValueId { get; set; }
     
     public int Base { get; set; }
+    
+    public Base BaseEntity { get; set; }
 
     public int Value { get; set; }
 
