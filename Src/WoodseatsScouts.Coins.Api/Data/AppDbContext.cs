@@ -25,6 +25,8 @@ namespace WoodseatsScouts.Coins.Api.Data
         public DbSet<Section>? Sections { get; set; }
 
         public DbSet<Coin>? Coins { get; set; }
+        
+        public DbSet<Base>? Bases { get; set; }
 
         public DbSet<ScavengedCoin>? ScavengedCoins { get; set; }
 
@@ -64,6 +66,27 @@ namespace WoodseatsScouts.Coins.Api.Data
             modelBuilder.Entity<Country>().HasData(new Country { Id = 8, Name = "Finland" });
             modelBuilder.Entity<Country>().HasData(new Country { Id = 9, Name = "Norway" });
             modelBuilder.Entity<Country>().HasData(new Country { Id = 10, Name = "Spain" });
+            
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 1, Name = "Archery" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 2, Name = "Abseiling" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 3, Name = "Aerial Trek" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 4, Name = "Aeroball" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 5, Name = "Bouldering" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 6, Name = "Bushcraft" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 7, Name = "Campfire" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 8, Name = "Canoeing" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 9, Name = "Caving" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 10, Name = "Fencing" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 11, Name = "Hike" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 12, Name = "Hillwalking" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 13, Name = "Kayaking" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 14, Name = "Orienteering" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 15, Name = "Pioneering" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 16, Name = "Powerboating" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 17, Name = "Raft Building" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 18, Name = "Sailing" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 19, Name = "Tomahawk throwing" });
+            modelBuilder.Entity<Base>().HasData(new Base { Id = 20, Name = "Zip wire" });
         }
 
         public int GenerateNextMemberCode(int troopId, string section)

@@ -57,7 +57,7 @@ public class DatabaseFixture
         
         using var runspace = RunspaceFactory.CreateRunspace(initialSessionState);
         runspace.Open();
-        runspace.SessionStateProxy.Path.SetLocation(@"..\..\..\..\..");
+        runspace.SessionStateProxy.Path.SetLocation(@"../../../../..");
 
         using (var instance = PowerShell.Create(runspace))
         {

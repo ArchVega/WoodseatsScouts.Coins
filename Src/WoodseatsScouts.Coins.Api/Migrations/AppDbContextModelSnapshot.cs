@@ -22,6 +22,125 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Base", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bases");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Archery"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Abseiling"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Aerial Trek"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Aeroball"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Bouldering"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Bushcraft"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Campfire"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Canoeing"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Caving"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Fencing"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Hike"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Hillwalking"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Kayaking"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Orienteering"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Pioneering"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "Powerboating"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "Raft Building"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Sailing"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "Tomahawk throwing"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Zip wire"
+                        });
+                });
+
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Coin", b =>
                 {
                     b.Property<int>("Id")
