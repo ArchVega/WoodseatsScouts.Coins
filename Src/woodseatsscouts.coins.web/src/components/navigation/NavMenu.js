@@ -1,13 +1,14 @@
-import SheafDistrictCampWhite from '../../images/sheaf-district-camp-white.png'
+import ScoutsLogo from '../../images/fleur-de-lis-marque-white.png'
+
 import React, {Component, useContext, useEffect, useState} from 'react';
 import {
-  Button,
+  Button, Col,
   Collapse,
   Navbar,
   NavbarBrand,
   NavbarToggler,
   NavItem,
-  NavLink,
+  NavLink, Row,
 } from 'reactstrap';
 import {Link, useLocation} from 'react-router-dom';
 import './NavMenu.css';
@@ -67,8 +68,8 @@ const NavMenu = () => {
     <header id="site-header">
       <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3 align-middle" container
               light>
-        <NavbarBrand onClick={() => setShowNavBarMenu(!showNavBarMenu)}>
-          <img role="button" id="site-image" src={SheafDistrictCampWhite}/>
+        <NavbarBrand onClick={() => setShowNavBarMenu(!showNavBarMenu)} style={{width:'100%', textAlign: "center"}}>
+          <img role="button" id="site-image" src={ScoutsLogo} style={{objectFit: "contain", height: "60px"}} />
         </NavbarBrand>
         <NavbarToggler onClick={toggleNavbar} className="mr-2"/>
         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
