@@ -28,7 +28,7 @@ const NavMenu = () => {
   const [showNavBarMenu, setShowNavBarMenu] = useState(false)
   const location = useLocation();
 
-  const navItemWidth = "110px"
+  // const navItemWidth = "110px"
 
   useEffect(() => {
     if (location.pathname !== "/") {
@@ -42,11 +42,12 @@ const NavMenu = () => {
   }
 
   function menuItemCssClass(id) {
+    let classNames = "text-light m-3 darker-menu-bg fw-bold"
     if (id === currentPage) {
-      return "text-dark menu-item-active"
+      classNames += "menu-item-active";
     }
 
-    return "text-dark"
+    return classNames;
   }
 
   useEffect(() => {
@@ -64,118 +65,68 @@ const NavMenu = () => {
     }
   }, [showStartCoinsAgainButton]);
 
-  return (
-    <header id="site-header">
-      <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3 align-middle" container
-              light>
-        <NavbarBrand onClick={() => setShowNavBarMenu(!showNavBarMenu)} style={{width:'100%', textAlign: "center"}}>
-          <img role="button" id="site-image" src={ScoutsLogo} style={{objectFit: "contain", height: "60px"}} />
-        </NavbarBrand>
-        <NavbarToggler onClick={toggleNavbar} className="mr-2"/>
-        <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
-          {showNavBarMenu
-            ? <ul className="navbar-nav flex-grow navbar-toggle-menu-list">
-              <NavItem className="border-end text-center" style={{'width': navItemWidth}}>
-                <NavLink tag={Link}
-                         data-testid="nav-coins-page"
-                         onClick={() => setCurrentPage("coins")}
-                         className={menuItemCssClass("coins")}
-                         to="/">
-                  Coins
-                </NavLink>
-              </NavItem>
-              <NavItem className="border-end text-center" style={{'width': navItemWidth}}>
-                <NavLink tag={Link}
-                         data-testid="vote-page"
-                         onClick={() => setCurrentPage("vote")}
-                         className={menuItemCssClass("vote")}
-                         to="/vote">
-                  Vote
-                </NavLink>
-              </NavItem>
-              <NavItem className="border-end text-center" style={{'width': navItemWidth}}>
-                <NavLink tag={Link}
-                         data-testid="nav-members-page"
-                         onClick={() => setCurrentPage("members")}
-                         className={menuItemCssClass("members")}
-                         to="/members">
-                  Members
-                </NavLink>
-              </NavItem>
-
-              <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-                   data-testid="nav-leaderboard-dropdown"
-                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Leaderboards
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <NavLink tag={Link}
-                             data-testid="nav-report-page-leaderboard-groups"
-                             onClick={() => setCurrentPage("leaderboard-groups")}
-                             className={`${menuItemCssClass("leaderboard-groups")} dropdown-item`}
-                             to="/leaderboard/groups">
-                      Groups
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink tag={Link}
-                             data-testid="nav-report-page-leaderboard-members"
-                             onClick={() => setCurrentPage("leaderboard-members")}
-                             className={`${menuItemCssClass("leaderboard-members")} dropdown-item`}
-                             to="/leaderboard/members">
-                      Members
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink tag={Link}
-                             data-testid="nav-report-page-leaderboard-votes"
-                             onClick={() => setCurrentPage("vote-results")}
-                             className={`${menuItemCssClass("vote-results")} dropdown-item`}
-                             to="/vote-results">
-                      Votes
-                    </NavLink>
-                  </li>
-                </ul>
-              </li>
-
-              {/*<NavItem className="border-end text-center" style={{'width': navItemWidth}}>*/}
-              {/*  <NavLink tag={Link}*/}
-              {/*           data-testid="nav-report-page"*/}
-              {/*           onClick={() => setCurrentPage("leaderboard")}*/}
-              {/*           className={menuItemCssClass("leaderboard")}*/}
-              {/*           to="/leaderboard">*/}
-              {/*    Leaderboards*/}
-              {/*  </NavLink>*/}
-              {/*</NavItem>*/}
-
-              {/*<NavItem className="text-center" style={{'width': navItemWidth}}>*/}
-              {/*  <NavLink tag={Link}*/}
-              {/*           data-testid="nav-report-page"*/}
-              {/*           onClick={() => setCurrentPage("vote-results")}*/}
-              {/*           className={menuItemCssClass("vote-results")}*/}
-              {/*           to="/vote-results">*/}
-              {/*    Votes Leaderboard*/}
-              {/*  </NavLink>*/}
-              {/*</NavItem>*/}
-
+  function RenderMenu() {
+    return (
+        <>
+          <div className="darker-menu-bg">
+           <NavLink tag={Link}
+                    data-testid="nav-members-page"
+                    onClick={() => setCurrentPage("members")}
+                    className={menuItemCssClass("members")}
+                    to="/members">
+             Participants
+           </NavLink>
+          </div>
+          <div className="darker-menu-bg">
+            <NavLink tag={Link}
+                     data-testid="nav-report-page-leaderboard-members"
+                     onClick={() => setCurrentPage("leaderboard-members")}
+                     className={`${menuItemCssClass("leaderboard-members")} dropdown-item`}
+                     to="/leaderboard/members">
+              Secondary Dashboard
+            </NavLink>
+          </div>
+          <div className={"ms-auto darker-menu-bg"}>
               {
                 appCameraAvailable
-                  ? <NavItem className="border-start text-center" style={{'width': navItemWidth}}>
-                    <span className="text-dark nav-link text-white cursor-pointer"
+                    ? <span className="nav-link text-white cursor-pointer"
                           data-testid="nav-settings-modal"
+                            style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "3px", marginRight: "5px"}}
                           onClick={() => setAppSettingsModal(true)}>
-                      Settings</span>
-                  </NavItem>
-                  : null
+                      ⛭
+                    </span>
+                    : null
               }
-            </ul>
-            : (startCoinsAgainButtonFragment)
-          }
-        </Collapse>
-      </Navbar>
+          </div>
+          <div className="darker-menu-bg">
+            <NavLink tag={Link}
+                     data-testid="nav-coins-page"
+                     onClick={() => setCurrentPage("coins")}
+                     className={menuItemCssClass("coins")}
+                     to="/">
+              <div id={"return-to-main-screen-button"} className={"rounded-3 darker-menu-bg"}>
+                Return to Main Screen
+              </div>
+            </NavLink>
+          </div>
+        </>
+    )
+  }
 
+  return (
+    <header id="site-header">
+      <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white box-shadow align-middle" container light>
+        <NavbarBrand onClick={() => setShowNavBarMenu(!showNavBarMenu)} style={{width:'100%', textAlign: "center"}}>
+          <img role="button" id="site-image" src={ScoutsLogo} style={{objectFit: "contain", height: "60px", marginTop: "1em", marginBottom: "1em"}} />
+        </NavbarBrand>
+        <NavbarToggler onClick={toggleNavbar} className="mr-2"/>
+      </Navbar>
+      <Collapse className="d-sm-inline-flex w-100 g-2 darker-menu-bg" isOpen={!collapsed} navbar>
+        {showNavBarMenu
+            ? RenderMenu()
+            : (startCoinsAgainButtonFragment)
+        }
+      </Collapse>
       <AppSettingsModal
         appSettingsModal={appSettingsModal}
         setAppSettingsModal={setAppSettingsModal}>
