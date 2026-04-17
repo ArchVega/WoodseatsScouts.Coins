@@ -1,23 +1,24 @@
 import ScoutsLogo from '../../images/fleur-de-lis-marque-white.png'
 
-import React, {Component, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
-  Button, Col,
+  Button,
   Collapse,
   Navbar,
   NavbarBrand,
   NavbarToggler,
-  NavItem,
-  NavLink, Row,
+  NavLink,
 } from 'reactstrap';
 import {Link, useLocation} from 'react-router-dom';
 import './NavMenu.css';
 import AppSettingsModal from "../common/AppSettingsModal";
-import {AppCameraAvailableContext, ShowStartCoinsAgainButtonContext} from "../../contexts/AppContext";
+import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../../contexts/AppContext";
 import ConfirmStartAgainModal from "../../pages/homepage/sections/ConfirmStartAgainModal";
+import SectionNames from "../../pages/homepage/sections/SectionNames";
 
 const NavMenu = () => {
-  const [showStartCoinsAgainButton, setShowStartCoinsAgainButton] = useContext(ShowStartCoinsAgainButtonContext)
+  const [pageActionMenuAreaAction, setPageActionMenuAreaAction] = useContext(PageActionMenuAreaContext)
+
 
   const [startCoinsAgainButtonFragment, setStartCoinsAgainButtonFragment] = useState(null);
   const [currentPage, setCurrentPage] = useState("");
@@ -30,12 +31,35 @@ const NavMenu = () => {
 
   // const navItemWidth = "110px"
 
+  // useEffect(() => {
+  //   setShowNavBarMenu(false)
+  // }, [location]);
+
   useEffect(() => {
-    if (location.pathname !== "/") {
-      setShowStartCoinsAgainButton(false)
-    }
-    setShowNavBarMenu(false)
-  }, [location]);
+      console.log('pageActionMenuAreaAction--------------', pageActionMenuAreaAction)
+
+      if (pageActionMenuAreaAction === SectionNames.ScanMember) {
+          setStartCoinsAgainButtonFragment((
+              <Button type="button"
+                      className="btn btn-outline-light start-again-button"
+                      onClick={() => window.location.reload()}>
+                  Not scanning? Click here to try again.
+              </Button>
+          ))
+      } else if (pageActionMenuAreaAction === SectionNames.ScanCoins) {
+          setStartCoinsAgainButtonFragment(
+              <Button type="button"
+                      data-testid="button-start-again"
+                      className="btn btn-outline-light start-again-button"
+                      onClick={() => setStartAgainModal(true)}>
+                  Start again
+              </Button>
+          )
+      }
+      else {
+        setStartCoinsAgainButtonFragment(null)
+      }
+  }, [pageActionMenuAreaAction]);
 
   function toggleNavbar() {
     setCollapsed(!collapsed);
@@ -50,20 +74,29 @@ const NavMenu = () => {
     return classNames;
   }
 
-  useEffect(() => {
-    if (showStartCoinsAgainButton) {
-      setStartCoinsAgainButtonFragment((
-        <Button type="button"
-                data-testid="button-start-again"
-                className="btn btn-outline-light start-again-button"
-                onClick={() => setStartAgainModal(true)}>
-          Start again
-        </Button>
-      ))
-    } else {
-      setStartCoinsAgainButtonFragment(null)
-    }
-  }, [showStartCoinsAgainButton]);
+  // useEffect(() => {
+  //     setStartCoinsAgainButtonFragment(<>OK</>)
+    // if (showStartCoinsAgainButton) {
+    //   setStartCoinsAgainButtonFragment((
+    //     <Button type="button"
+    //             data-testid="button-start-again"
+    //             className="btn btn-outline-light start-again-button"
+    //             onClick={() => setStartAgainModal(true)}>
+    //       Start again
+    //     </Button>
+    //   ))
+    // } else if (showStartMemberScanAgainButton) {
+    //   setShowStartMemberScanAgainButton(
+    //     <Button type="button"
+    //             className="btn btn-outline-light start-again-button"
+    //             onClick={() => window.location.reload()}>
+    //       Boom
+    //     </Button>
+    //   )
+    // } else {
+    //   setStartCoinsAgainButtonFragment(null)
+    // }
+  // }, [showStartCoinsAgainButton]);
 
   function RenderMenu() {
     return (
@@ -116,15 +149,16 @@ const NavMenu = () => {
   return (
     <header id="site-header">
       <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white box-shadow align-middle" container light>
-        <NavbarBrand onClick={() => setShowNavBarMenu(!showNavBarMenu)} style={{width:'100%', textAlign: "center"}}>
+        <div onClick={() => setShowNavBarMenu(!showNavBarMenu)} style={{width:'100%', textAlign: "center"}}>
           <img role="button" id="site-image" src={ScoutsLogo} style={{objectFit: "contain", height: "60px", marginTop: "1em", marginBottom: "1em"}} />
-        </NavbarBrand>
+            {startCoinsAgainButtonFragment}
+        </div>
         <NavbarToggler onClick={toggleNavbar} className="mr-2"/>
       </Navbar>
       <Collapse className="d-sm-inline-flex w-100 g-2 darker-menu-bg" isOpen={!collapsed} navbar>
         {showNavBarMenu
             ? RenderMenu()
-            : (startCoinsAgainButtonFragment)
+            : <></>
         }
       </Collapse>
       <AppSettingsModal

@@ -7,14 +7,14 @@ export const AppCameraAvailableContext = createContext(cameraAvailable);
 export const UseAppCameraContext = createContext(cameraAvailable);
 export const AppTestModeContext = createContext(false); // Todo: if AppTestModeContext is still needed, refactor into an env variable to remove the React Context
 export const AppModeContext = createContext("");
-export const ShowStartCoinsAgainButtonContext = createContext(false);
+export const PageActionMenuAreaContext = createContext(false);
 
 export const AppContext = ({children}) => {
   const [useAppCamera, setUseAppCamera] = useState(cameraAvailable);
   const [appCameraAvailable, setAppCameraAvailable] = useState(cameraAvailable);
   const [appTestMode, setAppTestMode] = useState(true);
   const [appMode, setAppMode] = useState("");
-  const [showStartCoinsAgainButton, setShowStartCoinsAgainButton] = useState(false);
+  const [pageActionMenuAreaAction, setPageActionMenuAreaAction] = useState("");
 
   useEffect(() => {
     AppStateApiService().getAppSate(response => {
@@ -23,7 +23,7 @@ export const AppContext = ({children}) => {
   }, [appMode])
 
   return (
-    <ShowStartCoinsAgainButtonContext.Provider value={[showStartCoinsAgainButton, setShowStartCoinsAgainButton]}>
+    <PageActionMenuAreaContext.Provider value={[pageActionMenuAreaAction, setPageActionMenuAreaAction]}>
       <AppCameraAvailableContext.Provider value={[appCameraAvailable, setAppCameraAvailable]}>
         <UseAppCameraContext.Provider value={[useAppCamera, setUseAppCamera]}>
           <AppModeContext.Provider value={[appMode, setAppMode]}>
@@ -33,6 +33,6 @@ export const AppContext = ({children}) => {
           </AppModeContext.Provider>
         </UseAppCameraContext.Provider>
       </AppCameraAvailableContext.Provider>
-    </ShowStartCoinsAgainButtonContext.Provider>
+    </PageActionMenuAreaContext.Provider>
   )
 }

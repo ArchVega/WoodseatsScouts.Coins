@@ -6,32 +6,32 @@ import ScanMemberForCoinsSection from "./sections/ScanMemberForCoinsSection";
 import SectionNames from "./sections/SectionNames";
 import ScanCoinsSection from "./sections/scancoins/ScanCoinsSection";
 import HaulResultsSection from "./sections/HaulSummarySection";
-import {ShowStartCoinsAgainButtonContext} from "../../contexts/AppContext";
+import {PageActionMenuAreaContext} from "../../contexts/AppContext";
 
 // Todo: rename paths and functions to either homepage or coinpage, not both
 export function CoinsPage() {
-  const [showStartCoinsAgainButton, setShowStartCoinsAgainButton] = useContext(ShowStartCoinsAgainButtonContext)
+  const [pageActionMenuAreaAction, setPageActionMenuAreaAction] = useContext(PageActionMenuAreaContext)
 
   const [sectionName, setSectionName] = useState(SectionNames.ScanMember)
   const [section, setSection] = useState(null);
   const [member, setMember] = useState(null)
   const [haulResult, setHaulResult] = useState(null)
 
-  useEffect(() => {
-    setShowStartCoinsAgainButton(false)
-  }, []);
+  // useEffect(() => {
+  //   setShowStartCoinsAgainButton(false)
+  // }, []);
 
   useEffect(() => {
     logReactUseEffect("member", member)
     if (member !== null) {
-      setShowStartCoinsAgainButton(true)
+      // setShowStartCoinsAgainButton(true)
       setSectionName(SectionNames.ScanCoins)
     }
   }, [member]);
 
   useEffect(() => {
     if (haulResult != null) {
-      setShowStartCoinsAgainButton(false)
+      // setShowStartCoinsAgainButton(false)
       setSectionName(SectionNames.HaulSummary)
       new AudioFx().playHaulCompleteAudio();
     }
@@ -43,12 +43,15 @@ export function CoinsPage() {
     function getSection() {
       switch (sectionName) {
         case SectionNames.ScanMember: {
+          setPageActionMenuAreaAction(SectionNames.ScanMember)
           return (<ScanMemberForCoinsSection setMember={setMember}/>)
         }
         case SectionNames.ScanCoins: {
+          setPageActionMenuAreaAction(SectionNames.ScanCoins)
           return (<ScanCoinsSection member={member} setHaulResult={setHaulResult}/>)
         }
         case SectionNames.HaulSummary: {
+          setPageActionMenuAreaAction(SectionNames.HaulSummary)
           return (<HaulResultsSection member={member} haulResult={haulResult}/>)
         }
         default: {
