@@ -124,7 +124,8 @@ h1 {
   -webkit-border-radius: 5px !important;
   -moz-border-radius: 5px !important;
   font-size: 1.2em;
-  width: 7em;
+  position: absolute;
+  float: right;
 }
 
 .start-over-modal-buttons {

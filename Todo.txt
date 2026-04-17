@@ -1,3 +1,6 @@
  Notes
 
  new update member name endpoint - does not check if names are duplicated, would have to put in client side handling for validation responses
+
+
+ Coin scan, upper right button - no access to current user, cannot put "Not <usename>?"

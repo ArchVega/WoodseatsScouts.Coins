@@ -11,11 +11,11 @@ export default function ConfirmStartAgainModal({modal, setModal}) {
 
   return (
     <Modal isOpen={modal} toggle={toggleModal}>
-      <ModalHeader toggle={toggleModal}>Start over?</ModalHeader>
+      <ModalHeader toggle={toggleModal}>Log out?</ModalHeader>
       <ModalBody className="text-center">
         <Row className="mb-3">
           <Col>
-            <p>Are you sure you want to start over?</p>
+            <p>Are you sure?</p>
           </Col>
         </Row>
         <Row className="start-over-modal-buttons">

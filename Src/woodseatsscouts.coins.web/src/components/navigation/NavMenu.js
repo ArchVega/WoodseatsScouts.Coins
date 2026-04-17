@@ -41,18 +41,23 @@ const NavMenu = () => {
       if (pageActionMenuAreaAction === SectionNames.ScanMember) {
           setStartCoinsAgainButtonFragment((
               <Button type="button"
+                      style={{top: "18px", right: "10px", width: "230px"}}
                       className="btn btn-outline-light start-again-button"
                       onClick={() => window.location.reload()}>
-                  Not scanning? Click here to try again.
+                  Not scanning? <br />Click here to try again.
               </Button>
           ))
       } else if (pageActionMenuAreaAction === SectionNames.ScanCoins) {
           setStartCoinsAgainButtonFragment(
               <Button type="button"
+                      style={{top: "18px", right: "34px", width: "230px"}}
                       data-testid="button-start-again"
                       className="btn btn-outline-light start-again-button"
-                      onClick={() => setStartAgainModal(true)}>
-                  Start again
+                      onClick={(e) => {
+                          setStartAgainModal(true)
+                          e.stopPropagation()
+                      }}>
+                  Click here to log out.
               </Button>
           )
       }
@@ -150,7 +155,7 @@ const NavMenu = () => {
     <header id="site-header">
       <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white box-shadow align-middle" container light>
         <div onClick={() => setShowNavBarMenu(!showNavBarMenu)} style={{width:'100%', textAlign: "center"}}>
-          <img role="button" id="site-image" src={ScoutsLogo} style={{objectFit: "contain", height: "60px", marginTop: "1em", marginBottom: "1em"}} />
+          <img role="button" id="site-image" src={ScoutsLogo} style={{objectFit: "contain", height: "60px", marginTop: "1em", marginBottom: "1em", width: "100%"}} />
             {startCoinsAgainButtonFragment}
         </div>
         <NavbarToggler onClick={toggleNavbar} className="mr-2"/>
