@@ -3,3 +3,5 @@
  new update member name endpoint - does not check if names are duplicated, would have to put in client side handling for validation responses
 
  coin grid left to right, newest lower right - not matching spec yet - will try at end. it's none standard and requires advanced css grid
+
+ for the member list page, not implementing the three filter boxes as the global one works fine, unless there's time

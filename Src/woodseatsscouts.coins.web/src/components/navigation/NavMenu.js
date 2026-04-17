@@ -28,13 +28,6 @@ const NavMenu = () => {
   const [startAgainModal, setStartAgainModal] = useState(false);
   const [appCameraAvailable] = useContext(AppCameraAvailableContext)
   const [showNavBarMenu, setShowNavBarMenu] = useState(false)
-  const location = useLocation();
-
-  // const navItemWidth = "110px"
-
-  // useEffect(() => {
-  //   setShowNavBarMenu(false)
-  // }, [location]);
 
   useEffect(() => {
     console.log(activeScanningMember)
@@ -137,7 +130,7 @@ const NavMenu = () => {
                    onClick={() => setCurrentPage("coins")}
                    className={menuItemCssClass("coins")}
                    to="/">
-            <div id={"return-to-main-screen-button"} className={"rounded-3 darker-menu-bg"}>
+            <div id={"return-to-main-screen-button"} className={"rounded-3 darker-menu-bg px-3 py-1"} style={{border: "1px solid white"}}>
               Return to Main Screen
             </div>
           </NavLink>
@@ -158,14 +151,18 @@ const NavMenu = () => {
         <div className="flex-fill text-end">
             {pageActionMenuAreaFragment}
         </div>
-        <NavbarToggler onClick={toggleNavbar} className="mr-2"/>
+        {/*<NavbarToggler onClick={toggleNavbar} className="mr-2"/>*/}
       </Navbar>
-      <Collapse className="d-sm-inline-flex w-100 g-2 darker-menu-bg" isOpen={!collapsed} navbar>
+      <div className="container-fluid w-100 darker-menu-bg" isOpen={!collapsed}>
         {showNavBarMenu
-          ? RenderMenu()
+          ? <div className={"container darker-menu-bg"}>
+            <div className="d-sm-inline-flex w-100 g-2 darker-menu-bg align-items-center">
+              {RenderMenu()}
+            </div>
+          </div>
           : <></>
         }
-      </Collapse>
+      </div>
       <AppSettingsModal
         appSettingsModal={appSettingsModal}
         setAppSettingsModal={setAppSettingsModal}>

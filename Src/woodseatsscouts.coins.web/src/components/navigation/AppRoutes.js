@@ -4,6 +4,7 @@ import LeaderboardPage from "../../pages/leaderboardpage/LeaderboardPage";
 import VotePage from "../../pages/vote/VotePage";
 import VoteResultsPage from "../../pages/vote/VoteResultsPage";
 import MemberLeaderboardPage from "../../pages/leaderboardpage/MemberLeaderboardPage";
+import MembersListPage2026 from "../../pages/memberslistpage/MembersListPage2026";
 
 const AppRoutes = [
     {
@@ -15,8 +16,12 @@ const AppRoutes = [
         element: <VotePage/>
     },
     {
-        path: '/members',
+        path: '/members-old',
         element: <MembersListPage/>
+    },
+    {
+        path: '/members',
+        element: <MembersListPage2026/>
     },
     {
         path: '/leaderboard/groups',

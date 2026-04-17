@@ -245,8 +245,8 @@ h1 {
   width: 470px;
   height: 350px;
   top: 0;
-  right: 0 ;
-  bottom: 0 ;
+  right: 0;
+  bottom: 0;
   left: 10px;
 }
 
@@ -273,7 +273,7 @@ select.form-control {
 }
 
 .darker-menu-bg {
-  background-color:  #320070 !important;
+  background-color: #320070 !important;
 }
 
 .min-w-0 {
@@ -283,7 +283,7 @@ select.form-control {
 .site-header-member-image {
   width: 64px !important;
   height: 64px !important;
-  border-radius: 50%  !important;
+  border-radius: 50% !important;
   object-fit: cover !important;
   border: 3px solid #fff;
 }
@@ -309,9 +309,9 @@ select.form-control {
   grid-template-columns: repeat(7, 1fr);
   /* ✅ define row height instead */
   grid-auto-rows: 120px;
-  height: 400px;              /* fixed height */
-  overflow-y: auto !important;           /* scrollbar after overflow */
-  gap: 4px;                   /* optional spacing */
+  height: 400px; /* fixed height */
+  overflow-y: auto !important; /* scrollbar after overflow */
+  gap: 4px; /* optional spacing */
   align-content: start; /* IMPORTANT */
 }
 
@@ -320,4 +320,33 @@ select.form-control {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.members-list-item-card {
+  width: 220px;
+  border-radius: 10px !important;
+  background-color: lightgrey;
+}
+
+.members-list-item-card .card-body {
+}
+
+.members-list-item-card img {
+  width: 100% !important;
+  height: 186px !important;
+  object-fit: cover !important;
+}
+
+.members-list-item-card .row:nth-child(1) {
+  min-height: 200px;
+}
+
+.members-list-item-section {
+  padding-bottom: 3px;
+}
+
+.members-list-item-section * {
+  text-align: center;
+  width: 100% !important;
+  background-color: white;
 }
