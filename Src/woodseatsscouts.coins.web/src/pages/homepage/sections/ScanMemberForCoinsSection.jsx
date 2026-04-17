@@ -8,9 +8,11 @@ import {logDebug, logError, logReactSet} from "../../../components/logging/Logge
 import AudioFx from "../../../fx/AudioFx";
 import MemberApiService from "../../../services/MemberApiService";
 import {toastError} from "../../../components/toaster/toaster";
-import {UseAppCameraContext} from "../../../contexts/AppContext";
+import {PageActionMenuAreaContext, UseAppCameraContext} from "../../../contexts/AppContext";
 
 function ScanMemberForCoinsSection({setMember}) {
+  const [pageActionMenuAreaAction, setPageActionMenuAreaAction, activeScanningMember, setActiveScanningMember] = useContext(PageActionMenuAreaContext)
+
   const audioFx = AudioFx();
   const [loading, setLoading] = useState(false)
   const [memberQrCode, setMemberQrCode] = useState("")
@@ -47,11 +49,13 @@ function ScanMemberForCoinsSection({setMember}) {
           const data = (await value.data)
           logReactSet("Setting member", data)
           setMember(data);
+          setActiveScanningMember(data)
         })
         .catch(async axiosReason => {
           logError("Setting member", axiosReason)
           toastError(axiosReason)
           setMember(null)
+          setActiveScanningMember(null)
         })
         .finally(() => {
           setLoading(false)

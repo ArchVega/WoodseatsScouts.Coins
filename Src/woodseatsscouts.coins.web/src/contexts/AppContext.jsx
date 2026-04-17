@@ -14,6 +14,7 @@ export const AppContext = ({children}) => {
   const [appCameraAvailable, setAppCameraAvailable] = useState(cameraAvailable);
   const [appTestMode, setAppTestMode] = useState(true);
   const [appMode, setAppMode] = useState("");
+  const [activeScanningMember, setActiveScanningMember] = useState(null);
   const [pageActionMenuAreaAction, setPageActionMenuAreaAction] = useState("");
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export const AppContext = ({children}) => {
   }, [appMode])
 
   return (
-    <PageActionMenuAreaContext.Provider value={[pageActionMenuAreaAction, setPageActionMenuAreaAction]}>
+    <PageActionMenuAreaContext.Provider value={[pageActionMenuAreaAction, setPageActionMenuAreaAction, activeScanningMember, setActiveScanningMember]}>
       <AppCameraAvailableContext.Provider value={[appCameraAvailable, setAppCameraAvailable]}>
         <UseAppCameraContext.Provider value={[useAppCamera, setUseAppCamera]}>
           <AppModeContext.Provider value={[appMode, setAppMode]}>

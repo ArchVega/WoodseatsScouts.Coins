@@ -44,6 +44,8 @@ public class MembersController(
         }
 
         var member = appDbContext.Members!
+            .Include(x => x.Troop)
+            .Include(x => x.Section)
             .Single(x => x.Number == translationResult.MemberNumber
                          && x.TroopId == translationResult.TroopNumber
                          && x.SectionId == translationResult.Section);
@@ -53,10 +55,10 @@ public class MembersController(
         // Todo: We don't need to wait between member code QR calls unless we're running in release. Either turn off or reduce.
         Thread.Sleep(2000);
 
-        var wtf = new MemberViewModel(member);
-        return Ok(wtf);
+        var memberViewModel = new MemberViewModel(member);
+        return Ok(memberViewModel);
     }
-    
+
     [HttpGet]
     [Route("{code}/Vote")]
     public IActionResult GetMemberInfoFromCodeForVoting(string code)
@@ -82,7 +84,7 @@ public class MembersController(
         {
             return BadRequest($"{member.FirstName} has already casted their vote!");
         }
-        
+
         /* The other method (for logging in to scan coins) has a slight delay. We might not need this delay here, but keeping it here for
          consistency for the UX.*/
         // Todo: We don't need to wait between member code QR calls unless we're running in release. Either turn off or reduce.
@@ -114,10 +116,10 @@ public class MembersController(
     public IActionResult Get(int id)
     {
         var bytes = imagePersister.RetrieveImageBytes(id);
-        
+
         return File(bytes, "image/jpeg", $"{id}.jpg");
     }
-    
+
     [HttpPut]
     [Route("{id:int}/Photo")]
     public ActionResult SaveMemberPhoto(int id, [FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
@@ -137,7 +139,7 @@ public class MembersController(
         member.FirstName = updateMemberNameViewModel.FirstName;
         member.LastName = updateMemberNameViewModel.LastName;
         appDbContext.SaveChanges();
-        
+
         return Ok();
     }
 }

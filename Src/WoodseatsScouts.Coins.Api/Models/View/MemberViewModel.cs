@@ -22,4 +22,8 @@ public class MemberViewModel(Member member)
     public string MemberCode { get; set; } = member.Code;
 
     public int MemberNumber { get; set; } = member.Number;
+
+    public string MemberSectionName { get; set; } = member.Section.Name;
+    
+    public string MemberTroopName { get; set; } = member.Troop.Name;
 }

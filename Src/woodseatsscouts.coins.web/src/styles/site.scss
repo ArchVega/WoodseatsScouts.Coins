@@ -124,8 +124,6 @@ h1 {
   -webkit-border-radius: 5px !important;
   -moz-border-radius: 5px !important;
   font-size: 1.2em;
-  position: absolute;
-  float: right;
 }
 
 .start-over-modal-buttons {
@@ -274,11 +272,18 @@ select.form-control {
   border-width: 1px !important;
 }
 
-#return-to-main-screen-button {
-  border: 1px solid white;
-  padding: 4px 8px;
-}
-
 .darker-menu-bg {
   background-color:  #320070 !important;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+.site-header-member-image {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50%  !important;
+  object-fit: cover !important;
+  border: 3px solid #fff;
 }
