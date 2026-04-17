@@ -91,12 +91,12 @@ function ScanMemberForCoinsSection({setMember}) {
                 <Col xs={{size: 8, offset: 2}}>
                   <QRCodeInputDevices qrCode={memberQrCode} setQrCode={setMemberQrCode} qrScanCodeType={QRScanCodeType.Member}/>
                   <div className="mb-3"/>
-                  {!useAppCamera
-                    ? <Button className="btn focus-scanner-textbox-button mt-5" onClick={focusScanner}>
-                      <div>Click here if your points do</div>
-                      <div>not scan, then try again</div>
-                    </Button>
-                    : null}
+                  {/*{!useAppCamera*/}
+                  {/*  ? <Button className="btn focus-scanner-textbox-button mt-5" onClick={focusScanner}>*/}
+                  {/*    <div>Click here if your points do</div>*/}
+                  {/*    <div>not scan, then try again</div>*/}
+                  {/*  </Button>*/}
+                  {/*  : null}*/}
                 </Col>
               </Row>
             )

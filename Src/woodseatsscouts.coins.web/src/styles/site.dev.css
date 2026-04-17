@@ -152,12 +152,7 @@ input {
     background-color: white;
 }
 
-#scanned-coins-div {
-    margin-bottom: 2em;
-    min-height: 10em;
-    text-align: center;
-    padding: 1em;
-}
+
 
 #scanned-coins-tally-div {
 }

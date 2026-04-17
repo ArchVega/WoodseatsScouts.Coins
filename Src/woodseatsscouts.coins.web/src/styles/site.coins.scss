@@ -2,19 +2,19 @@
 
 /* adapted from http://maxwells.github.io/bootstrap-tags.html */
 .coin {
-  max-width: 128px;
-  min-width: 128px;
-  width: 128px;
+  max-width: 100px;
+  min-width: 100px;
+  width: 100px;
   font-size: 3em;
   padding: .3em .4em .4em;
   margin: 0.1em;
   border: 0.05em solid black;
-  border-radius: 50% !important;
-  -webkit-border-radius: 50% !important;
-  -moz-border-radius: 50% !important;
+  border-radius: 25px !important;
+  -webkit-border-radius: 25px !important;
+  -moz-border-radius: 25px !important;
   display: inline-block;
   position: relative;
-  line-height: 80px;
+  line-height: 60px;
   text-align: center;
 }
 
@@ -23,8 +23,22 @@
 }
 
 .coin-last-added {
-  animation: border-pulsate 2s infinite;
+  animation: breathe 3s ease-in-out infinite;
 }
+
+
+@keyframes breathe {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(76, 80, 80, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(76, 80, 80, 0.2);
+  }
+}
+
+
+
+
 
 .coin-20 {
   background-color: variables.$colour-coins-20;

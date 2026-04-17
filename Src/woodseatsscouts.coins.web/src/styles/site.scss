@@ -287,3 +287,37 @@ select.form-control {
   object-fit: cover !important;
   border: 3px solid #fff;
 }
+
+.scanned-info-card {
+  background-color: grey;
+  color: black;
+  border: 1px solid darkgrey;
+  border-radius: 5px;
+}
+
+#scanned-coins-div {
+  background-color: grey;
+  border-radius: 15px !important;
+  margin-bottom: 2em;
+  min-height: 10em;
+  text-align: center;
+  padding: 1em;
+}
+
+.coins-grid-2026 {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* ✅ define row height instead */
+  grid-auto-rows: 120px;
+  height: 400px;              /* fixed height */
+  overflow-y: auto !important;           /* scrollbar after overflow */
+  gap: 4px;                   /* optional spacing */
+  align-content: start; /* IMPORTANT */
+}
+
+.coins-cell-2026 {
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

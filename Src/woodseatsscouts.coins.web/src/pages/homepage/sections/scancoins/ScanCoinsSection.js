@@ -97,45 +97,45 @@ function ScanCoinsSection({member, setHaulResult}) {
   return (
     <>
       <Row className="mb-5" style={{minHeight: '45vh', maxHeight: '50vh'}}>
-        <Col className="col-6">
-          <h1 id="scan-coins-section-h1">
-            <span>Welcome back,</span>
-            <br/>
-            <span className="font-black" data-testid="h1-user-firstname">
-                <img className="coins-member-img mt-1"
-                     alt=""
-                     style={{marginTop: "-20px"}}
-                     src={member && member.hasImage
-                       ? Uris.memberPhoto(member.memberId)
-                       : "/images/unknown-member-image.png"}/>
-            <span id="member-name">{member.firstName}</span>
-            <img id="scan-coins-section-wave-image" src={wave} alt="" style={{marginTop: "-20px"}}/>
-            </span>
-          </h1>
-
-          <h4 className="mt-5 text-black fs-3 fw-semibold">Start scanning your points cards...</h4>
-          <QRCodeInputDevices qrCode={coinQrCode} setQrCode={setCoinQrCode} qrScanCodeType={QRScanCodeType.Coin}/>
-
+        <Col className="col-8">
+          <Col>
+            {/*<div id="scanned-coins-div" data-testid="div-scanned-coins" className="text-end mb-4" style={{overflow: 'auto', maxHeight: '415px'}}>*/}
+            {/*  {coins.map((coin, index) =>*/}
+            {/*    <ScannedCoin key={index} coin={coin} isLast={index + 1 === coins.length} removeCoin={coinToRemove => removeCoin(coinToRemove)}/>)}*/}
+            {/*</div>*/}
+            <div data-testid="div-scanned-coins" className="coins-grid-2026 text-end mb-4">
+              {coins.map((coin, index) =>
+                (
+                  <div>
+                    <ScannedCoin key={index} coin={coin} isLast={index + 1 === coins.length} removeCoin={coinToRemove => removeCoin(coinToRemove)}/>
+                  </div>
+                ))}
+            </div>
+          </Col>
           <div className="mb-5"/>
-
-          {!useAppCamera
-            ? <Button className="btn focus-scanner-textbox-button mt-5" onClick={focusScanner}>
-              <div>Click here if your points do</div>
-              <div>not scan, then try again</div>
-            </Button>
-            : null}
         </Col>
-        <Col className="col-6">
+        <Col className="col-4">
           <Row>
             <Col>
-              <div id="scanned-coins-div" data-testid="div-scanned-coins" className="text-end mb-4"
-                   style={{overflow: 'auto', maxHeight: '415px'}}>
-                {coins.map((coin, index) =>
-                  <ScannedCoin key={index}
-                               coin={coin}
-                               isLast={index + 1 === coins.length}
-                               removeCoin={coinToRemove => removeCoin(coinToRemove)}/>
-                )}
+              <h4 className="mt-5 text-black fs-3 fw-semibold">Now scan your points tokens...</h4>
+              <QRCodeInputDevices qrCode={coinQrCode} setQrCode={setCoinQrCode} qrScanCodeType={QRScanCodeType.Coin}/>
+            </Col>
+          </Row>
+          <Row>
+            <Col className={"scanned-info-card"}>
+              <div style={{lineHeight: "normal"}}>
+                <div className="text-white" style={{fontSize: "2em"}}>Tokens scanned</div>
+                <strong className="finish-scanning-button-points-value" data-testid="coin-total">
+                  {coins.length}
+                </strong>
+              </div>
+            </Col>
+            <Col className={"scanned-info-card"}>
+              <div className="text-white" style={{fontSize: "2em"}}>Points this scan</div>
+              <div style={{lineHeight: "normal"}}>
+                <strong className="finish-scanning-button-points-value" data-testid="coin-total">
+                  {coinTotal}
+                </strong>
               </div>
             </Col>
           </Row>
@@ -144,15 +144,9 @@ function ScanCoinsSection({member, setHaulResult}) {
               <div className="d-grid">
                 <Button id="finish-scanning-button" data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success btn-lg">
                   <div>
-                    <img src="/images/plus-circle-fill.svg"></img>
-                    <em className="text-white">Click to add</em>
+                    <div style={{fontSize: "3em"}}>🎉</div>
+                    <em className="text-white">SAVE POINTS</em>
                   </div>
-                  <div style={{lineHeight: "normal"}}>
-                    <strong className="finish-scanning-button-points-value" data-testid="coin-total">
-                      {coinTotal}
-                    </strong>
-                    &nbsp;
-                    <span className="text-white" style={{fontSize: "2em"}}>points...</span></div>
                 </Button>
               </div>
             </Col>
