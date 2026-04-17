@@ -5,6 +5,7 @@ import MemberPhotoModal from "../../components/modals/MemberPhotoModal";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal";
 import Uris from "../../services/Uris";
 import {AppCameraAvailableContext, UseAppCameraContext} from "../../contexts/AppContext";
+import EditMemberNameModal from "../../components/modals/EditMemberNameModal";
 
 function MembersListPage() {
   const [useAppCamera] = useContext(UseAppCameraContext)
@@ -12,6 +13,7 @@ function MembersListPage() {
   const [members, setMembers] = useState([]);
   const [userModal, setUserModal] = useState(false);
   const [editUserModal, setEditUserModal] = useState(false);
+  const [editMemberNameModal, setEditMemberNameModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [filterText, setFilterText] = useState(null);
   const [showScores, setShowScores] = useState(false);
@@ -21,6 +23,7 @@ function MembersListPage() {
       return await MemberApiService().fetchMembers();
     }
     fetchMembers().then(response => setMembers(response.data));
+    console.log('only once')
   }, [])
 
   function sectionClassName(sectionName) {
@@ -35,6 +38,12 @@ function MembersListPage() {
   function showEditUserModal(user1) {
     setSelectedUser(user1)
     setEditUserModal(true)
+  }
+
+  function showMemberNameModal(user1) {
+    setSelectedUser(user1)
+    setEditMemberNameModal(true)
+    return false
   }
 
   function filterMember(member) {
@@ -59,6 +68,17 @@ function MembersListPage() {
         selectedMember.hasImage = true
         setMembers((updatedMembers))
       }
+
+        if (selectedUser) {
+          const newMembers = members.map((m, i) => {
+            if (m.id === selectedUser.id) {
+              return selectedUser
+            } else {
+              return m
+            }
+          })
+          setMembers([...newMembers])
+        }
     }
   }, [selectedUser])
 
@@ -106,7 +126,9 @@ function MembersListPage() {
                 </span>
               </td>
               <td>
-                <strong>{x.firstName + " " + x.lastName}</strong>
+                <span style={{cursor: "pointer"}} onClick={() => showMemberNameModal(x)}>
+                  <strong>{x.firstName + " " + x.lastName}</strong>
+                </span>
               </td>
               <td>
                 <span>{x.troopName}</span>
@@ -136,7 +158,6 @@ function MembersListPage() {
                     ⃠
                   </div>
                 }
-
               </td>
             </tr>
           ))}
@@ -148,6 +169,8 @@ function MembersListPage() {
     <MemberPhotoModal usersModal={userModal} setUsersModal={setUserModal} selectedUser={selectedUser}/>
     <EditMemberPhotoModal editUsersModal={editUserModal} setEditUsersModal={setEditUserModal} selectedUser={selectedUser}
                           setSelectedUser={setSelectedUser}/>
+    <EditMemberNameModal editMembersModal={editMemberNameModal} setEditMembersModal={setEditMemberNameModal} selectedMember={selectedUser}
+                          setSelectedMember={setSelectedUser}/>
   </>
 }
 

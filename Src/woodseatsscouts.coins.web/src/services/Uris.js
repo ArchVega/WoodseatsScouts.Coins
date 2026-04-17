@@ -26,6 +26,9 @@ const Uris = {
   memberPhoto: function (id) {
     return `${baseUri}/Members/${id}/Photo?${new Date()}`
   },
+  memberName: function (id) {
+    return `${baseUri}/Members/${id}/Name?`
+  },
   registerVoteForMember(memberId, countryId) {
     return `${baseUri}/Vote/${memberId}/RegisterVote?countryId=${countryId}`
   },

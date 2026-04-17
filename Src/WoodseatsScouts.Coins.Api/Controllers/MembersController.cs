@@ -128,4 +128,16 @@ public class MembersController(
 
         return Ok();
     }
+
+    [HttpPost]
+    [Route("{id:int}/Name")]
+    public ActionResult Name(int id, [FromBody] UpdateMemberNameViewModel updateMemberNameViewModel)
+    {
+        var member = appDbContext.Members!.Single(x => x.Id == id);
+        member.FirstName = updateMemberNameViewModel.FirstName;
+        member.LastName = updateMemberNameViewModel.LastName;
+        appDbContext.SaveChanges();
+        
+        return Ok();
+    }
 }
