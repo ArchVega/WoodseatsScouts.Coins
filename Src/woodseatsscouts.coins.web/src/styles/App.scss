@@ -5,6 +5,7 @@
 @use './base/site-reset' as reset;
 @use './base/site-typography' as typography;
 @use './widgets/site-spinner' as spinner;
+@use './widgets/site-images' as image;
 
 // to move
 .site-container {

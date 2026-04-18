@@ -1,13 +1,8 @@
 import ScoutsLogo from '../../images/fleur-de-lis-marque-white.png'
-
 import './NavMenu.scss';
-
 import React, {useContext, useEffect, useState} from 'react';
 import {NavLink, Link, useLocation} from 'react-router-dom';
 import './NavMenu.scss';
-// import AppSettingsModal from "../common/AppSettingsModal";
-// import ConfirmStartAgainModal from "../../pages/homepage/sections/ConfirmStartAgainModal";
-// import SectionNames from "../../pages/homepage/sections/SectionNames";
 import Uris from "../../services/Uris";
 import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../../contexts/AppContextExporter.tsx";
 import SectionNames from "../../pages/home-page/sections/SectionNames.ts";
@@ -36,33 +31,31 @@ export default function NavMenu() {
   }
 
   function CurrentCoinsPageViewSwitchedToScanCoins() {
-    setActiveScanningMemberFragment(
-      <div className="d-flex">
-        <div className="flex-shrink-0 px-2">
-          <img className="member-image mb-2" style={{objectFit: "cover"}}
-               alt=""
-               src={activeScanningMember && activeScanningMember.hasImage
-                 ? Uris.memberPhoto(activeScanningMember.memberId)
-                 : "/images/unknown-member-image.png"}/>
-        </div>
-        <div className="flex-fill">
-          <div><span className="text-white">Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
-          <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberTroopName}</div>
-        </div>
-      </div>
-    )
-    setPageActionMenuAreaFragment(
-      <button type="button"
-              style={{top: "18px", right: "34px", width: "230px"}}
-              data-testid="button-start-again"
-              className="btn btn-outline-light"
-              onClick={(e) => {
-                setStartAgainModal(true)
-                e.stopPropagation()
-              }}>
-        Not {activeScanningMember.firstName}? <br/> Click here to log out.
-      </button>
-    )
+    // setActiveScanningMemberFragment(
+    //   <div className="d-flex">
+    //     <div className="flex-shrink-0 px-2">
+    //       <Image className="member-image mb-2"
+    //              style={{width: "100px", height: "100px"}}
+    //              src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.memberId) : "/images/unknown-member-image.png"}></Image>
+    //     </div>
+    //     <div className="flex-fill">
+    //       <div><span className="text-white">Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
+    //       <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberTroopName}</div>
+    //     </div>
+    //   </div>
+    // )
+    // setPageActionMenuAreaFragment(
+    // <button type="button"
+    //         style={{top: "18px", right: "34px", width: "230px"}}
+    //         data-testid="button-start-again"
+    //         className="btn btn-outline-light"
+    //         onClick={(e) => {
+    //           setStartAgainModal(true)
+    //           e.stopPropagation()
+    //         }}>
+    //   Not {activeScanningMember.firstName}? <br/> Click here to log out.
+    // </button>
+    // )
   }
 
   function CurrentCoinsPageViewSwitchedToHaulSummary() {
@@ -149,13 +142,42 @@ export default function NavMenu() {
     <header className={"scouts-nav-bar"}>
       <div className="container navbar navbar-expand-sm navbar-toggleable-sm ng-white box-shadow align-middle" style={{height: "100px"}}>
         <div className="flex-fill text-start">
-          {activeScanningMemberFragment}
+          {pageActionMenuAreaAction === SectionNames.ScanCoins && (
+            <>
+              <div className="d-flex">
+                <div className="flex-shrink-0 px-2">
+                  <Image className="member-image mb-2"
+                         style={{width: "100px", height: "100px"}}
+                         src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.memberId) : "/images/unknown-member-image.png"}></Image>
+                </div>
+                <div className="flex-fill">
+                  <div><span className="text-white">Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
+                  <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberTroopName}</div>
+                </div>
+              </div>
+            </>
+          )}
+          {/*{activeScanningMemberFragment}*/}
         </div>
         <div className="position-absolute top-50 start-50 translate-middle text-center">
           <Image role="button" src={ScoutsLogo} style={{height: "60px", width: "100%"}} onClick={() => setShowNavBarMenu(!showNavBarMenu)}/>
         </div>
         <div className="flex-fill text-end">
-          {pageActionMenuAreaFragment}
+          {pageActionMenuAreaAction === SectionNames.ScanCoins && (
+            <>
+              <button type="button"
+                      style={{top: "18px", right: "34px", width: "230px"}}
+                      data-testid="button-start-again"
+                      className="btn btn-outline-light"
+                      onClick={(e) => {
+                        setStartAgainModal(true)
+                        e.stopPropagation()
+                      }}>
+                Not {activeScanningMember.firstName}? <br/> Click here to log out.
+              </button>
+            </>
+          )}
+          {/*{pageActionMenuAreaFragment}*/}
         </div>
       </div>
       {RenderNavBarSubmenu()}

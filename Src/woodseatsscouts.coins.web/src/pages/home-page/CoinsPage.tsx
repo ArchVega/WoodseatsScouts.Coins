@@ -7,6 +7,7 @@ import SectionNames from "./sections/SectionNames";
 // import HaulResultsSection from "./sections/HaulSummarySection";
 import {PageActionMenuAreaContext} from "../../contexts/AppContextExporter.tsx";
 import ScanMemberForCoinsSection from "./sections/ScanMemberForCoinsSection.tsx";
+import ScanCoinsSection from "./sections/scancoins/ScanCoinsSection.tsx";
 
 // Todo: rename paths and functions to either homepage or coinpage, not both
 export function CoinsPage() {
@@ -48,7 +49,7 @@ export function CoinsPage() {
         }
         case SectionNames.ScanCoins: {
           setPageActionMenuAreaAction(SectionNames.ScanCoins)
-          // return (<ScanCoinsSection member={member} setHaulResult={setHaulResult}/>)
+          return (<ScanCoinsSection member={member} setHaulResult={setHaulResult}/>)
         }
         case SectionNames.HaulSummary: {
           setPageActionMenuAreaAction(SectionNames.HaulSummary)
