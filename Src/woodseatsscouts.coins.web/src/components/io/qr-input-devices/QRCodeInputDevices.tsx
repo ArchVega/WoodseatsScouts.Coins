@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
+import {UseAppCameraContext} from "../../../contexts/AppContextExporter.tsx";
 import {QRWebcamScanner} from "./qr-scanners/QRWebcamScanner.tsx";
 import QRBarcodeScanner from "./qr-scanners/QRBarcodeScanner.tsx";
 

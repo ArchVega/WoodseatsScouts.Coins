@@ -3,10 +3,10 @@ import wave from "../../../images/wave.png";
 import "./ScanMemberForCoinsSection.scss"
 import MemberApiService from "../../../services/MemberApiService";
 import {AppSettingsContext, PageActionMenuAreaContext, UseAppCameraContext} from "../../../contexts/AppContextExporter.tsx";
-import AudioFx from "../../../fx/AudioFx.ts";
-import SiteSpinner from "../../../components/spinner/SiteSpinner.tsx";
-import QRCodeInputDevices from "../../../components/qr-input-devices/QRCodeInputDevices.tsx";
-import QRScanCodeType from "../../../components/qr-input-devices/qr-scanners/QRScanCodeType.ts";
+import AudioFx from "../../../components/fx/AudioFx.ts";
+import Spinner from "../../../components/widgets/Spinner.tsx";
+import QRCodeInputDevices from "../../../components/io/qr-input-devices/QRCodeInputDevices.tsx";
+import QRScanCodeType from "../../../components/io/qr-input-devices/qr-scanners/QRScanCodeType.ts";
 
 export default function ScanMemberForCoinsSection({setMember}) {
   const {pageActionMenuAreaAction, setPageActionMenuAreaAction, activeScanningMember, setActiveScanningMember} = useContext(PageActionMenuAreaContext)
@@ -84,7 +84,7 @@ export default function ScanMemberForCoinsSection({setMember}) {
         </div>
 
         {loading
-          ? <SiteSpinner/>
+          ? <Spinner/>
           : (
             <div className="row">
               <div className="col-8 offset-sm-2">

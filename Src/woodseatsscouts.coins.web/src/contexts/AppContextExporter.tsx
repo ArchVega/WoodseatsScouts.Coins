@@ -1,6 +1,6 @@
 import {createContext} from "react";
 import * as React from "react";
-import type {AppSettings} from "../components/AppSettings.ts";
+import type {AppSettings} from "../AppSettings.ts";
 
 const cameraAvailable = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 

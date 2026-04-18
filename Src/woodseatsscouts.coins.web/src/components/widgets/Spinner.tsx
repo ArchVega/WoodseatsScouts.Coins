@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function SiteSpinner() {
+export default function Spinner() {
     return (
         <div className="row">
             <div className="col text-center">

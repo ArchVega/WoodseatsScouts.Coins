@@ -1,7 +1,7 @@
 import {useContext, useState} from "react";
 // import TestQRBarcodeDataModal from "../../_dev/TestQRBarcodeDataModal";
-import {AppModeContext, AppTestModeContext} from "../../../contexts/AppContextExporter.tsx";
-import TestQRBarcodeDataModal from "../../_dev/TestQRBarcodeDataModal.tsx";
+import {AppModeContext, AppTestModeContext} from "../../../../contexts/AppContextExporter.tsx";
+import TestQRBarcodeDataModal from "../../../_dev/TestQRBarcodeDataModal.tsx";
 
 function QRBarcodeScanner({qrCode, setQrCode, qrScanCodeType}) {
     const {appMode, setAppMode} = useContext(AppModeContext);

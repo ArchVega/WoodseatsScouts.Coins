@@ -1,10 +1,10 @@
 import {toast} from "react-toastify";
 import {useEffect, useState} from "react";
 import ScannedCoin from "./ScannedCoin.tsx";
-import QRCodeInputDevices from "../../../../components/qr-input-devices/QRCodeInputDevices";
-import AudioFx from "../../../../fx/AudioFx";
+import QRCodeInputDevices from "../../../../components/io/qr-input-devices/QRCodeInputDevices";
+import AudioFx from "../../../../components/fx/AudioFx";
 import CoinApiService from "../../../../services/CoinApiService.tsx";
-import QRScanCodeType from "../../../../components/qr-input-devices/qr-scanners/QRScanCodeType.ts";
+import QRScanCodeType from "../../../../components/io/qr-input-devices/qr-scanners/QRScanCodeType.ts";
 import {logDebug, logError, logReactSet} from "../../../../components/logging/Logger.ts";
 import {toastError} from "../../../../components/toaster/toaster.ts";
 import './ScanCoinsSection.scss'

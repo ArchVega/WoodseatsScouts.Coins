@@ -2,8 +2,8 @@
 import {AppCameraAvailableContext, UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import AppStateApiService from "../../services/AppStateApiService.tsx";
 import {BaseModal} from "./BaseModal.tsx";
-import {Switch} from "../common/HtmlControlWrappers.tsx";
-import AppLocalStorage from "../local-storage/AppLocalStorage.ts";
+import {Switch} from "../widgets/HtmlControlWrappers.tsx";
+import AppLocalStorage from "../storage/AppLocalStorage.ts";
 
 export default function AppSettingsModal({appSettingsModal, setAppSettingsModal}) {
   const {useAppCamera, setUseAppCamera} = useContext(UseAppCameraContext)

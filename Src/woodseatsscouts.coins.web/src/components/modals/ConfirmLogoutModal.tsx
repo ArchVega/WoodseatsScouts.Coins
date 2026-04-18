@@ -1,5 +1,5 @@
 ﻿import {BaseModal} from "./BaseModal.tsx";
-import {Button} from "../common/HtmlControlWrappers.tsx";
+import {Button} from "../widgets/HtmlControlWrappers.tsx";
 
 export default function ConfirmLogoutModal({showConfirmLogoutModal, setShowConfirmLogoutModal}) {
   return (

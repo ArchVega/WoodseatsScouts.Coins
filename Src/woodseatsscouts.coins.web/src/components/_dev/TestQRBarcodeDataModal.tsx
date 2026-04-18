@@ -1,5 +1,5 @@
 ﻿import {useEffect, useState} from "react";
-import QRScanCodeType from "../qr-input-devices/qr-scanners/QRScanCodeType.ts";
+import QRScanCodeType from "../io/qr-input-devices/qr-scanners/QRScanCodeType.ts";
 import TestDataApiService from "./TestDataApiService.tsx";
 import {BaseModal} from "../modals/BaseModal.tsx";
 

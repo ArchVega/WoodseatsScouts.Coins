@@ -1,14 +1,14 @@
-import ScoutsLogo from '../../images/fleur-de-lis-marque-white.png'
+import ScoutsLogo from '../images/fleur-de-lis-marque-white.png'
 import './NavMenu.scss';
 import React, {useContext, useEffect, useState} from 'react';
 import {NavLink, Link, useLocation} from 'react-router-dom';
 import './NavMenu.scss';
-import Uris from "../../services/Uris";
-import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../../contexts/AppContextExporter.tsx";
-import SectionNames from "../../pages/home-page/sections/SectionNames.ts";
-import {Button, Image} from "../common/HtmlControlWrappers.tsx";
-import AppSettingsModal from "../modals/AppSettingsModal.tsx";
-import ConfirmLogoutModal from "../modals/ConfirmLogoutModal.tsx";
+import Uris from "../services/Uris.ts";
+import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../contexts/AppContextExporter.tsx";
+import SectionNames from "../pages/home-page/sections/SectionNames.ts";
+import {Button, Image} from "../components/widgets/HtmlControlWrappers.tsx";
+import AppSettingsModal from "../components/modals/AppSettingsModal.tsx";
+import ConfirmLogoutModal from "../components/modals/ConfirmLogoutModal.tsx";
 
 export default function NavMenu() {
   const {pageActionMenuAreaAction, activeScanningMember} = useContext(PageActionMenuAreaContext)
