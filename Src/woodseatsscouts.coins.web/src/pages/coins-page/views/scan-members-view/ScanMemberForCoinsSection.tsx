@@ -1,18 +1,18 @@
 import React, {useContext, useEffect, useState} from "react";
-import wave from "../../../images/wave.png";
+import wave from "../../../../images/wave.png";
 import "./ScanMemberForCoinsSection.scss"
-import MemberApiService from "../../../services/MemberApiService";
-import {AppSettingsContext, PageActionMenuAreaContext, UseAppCameraContext} from "../../../contexts/AppContextExporter.tsx";
-import AudioFx from "../../../components/fx/AudioFx.ts";
-import Spinner from "../../../components/widgets/Spinner.tsx";
-import QRCodeInputDevices from "../../../components/io/qr-input-devices/QRCodeInputDevices.tsx";
-import QRScanCodeType from "../../../components/io/qr-input-devices/qr-scanners/QRScanCodeType.ts";
+import MemberApiService from "../../../../services/MemberApiService.ts";
+import {PageActionMenuAreaContext, UseAppCameraContext} from "../../../../contexts/AppContextExporter.tsx";
+import AudioFx from "../../../../components/fx/AudioFx.ts";
+import Spinner from "../../../../components/widgets/Spinner.tsx";
+import QRCodeInputDevices from "../../../../components/io/qr-input-devices/QRCodeInputDevices.tsx";
+import QRScanCodeType from "../../../../components/io/qr-input-devices/QRScanCodeType.ts";
+import {logError} from "../../../../components/logging/Logger.ts";
+import {toastError} from "../../../../components/toaster/toaster.ts";
 
 export default function ScanMemberForCoinsSection({setMember}) {
-  const {pageActionMenuAreaAction, setPageActionMenuAreaAction, activeScanningMember, setActiveScanningMember} = useContext(PageActionMenuAreaContext)
-  const {useAppCamera} = useContext(UseAppCameraContext)
-
-  const audioFx = AudioFx();
+  const {setActiveScanningMember} = useContext(PageActionMenuAreaContext)
+  const audioFx = AudioFx(); // todo: move into Context
   const [loading, setLoading] = useState(false)
   const [memberQrCode, setMemberQrCode] = useState("")
 
@@ -33,8 +33,6 @@ export default function ScanMemberForCoinsSection({setMember}) {
 
   useEffect(() => {
     if (memberQrCode != null && memberQrCode.trim().length > 0) {
-      // logDebug(`Fetching member data for code ${memberQrCode}`)
-
       setLoading(true)
 
       async function fetchData() {
@@ -45,13 +43,12 @@ export default function ScanMemberForCoinsSection({setMember}) {
       fetchData()
         .then(async value => {
           const data = (await value.data)
-          // logReactSet("Setting member", data)
           setMember(data);
           setActiveScanningMember(data)
         })
         .catch(async axiosReason => {
-          // logError("Setting member", axiosReason)
-          // toastError(axiosReason)
+          logError("Setting member", axiosReason)
+          toastError(axiosReason)
           setMember(null)
           setActiveScanningMember(null)
         })
@@ -89,7 +86,6 @@ export default function ScanMemberForCoinsSection({setMember}) {
             <div className="row">
               <div className="col-8 offset-sm-2">
                 <QRCodeInputDevices qrCode={memberQrCode} setQrCode={setMemberQrCode} qrScanCodeType={QRScanCodeType.Member}/>
-                <div className="mb-3"/>
               </div>
             </div>
           )

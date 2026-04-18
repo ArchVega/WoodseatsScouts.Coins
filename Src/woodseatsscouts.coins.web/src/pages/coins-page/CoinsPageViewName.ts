@@ -1,7 +1,7 @@
-const SectionNames = {
+const CoinsPageViewName = {
     ScanMember: 'ScanMember',
     ScanCoins: 'ScanCoins',
     HaulSummary: 'HaulSummary'
 }
 
-export default SectionNames
+export default CoinsPageViewName

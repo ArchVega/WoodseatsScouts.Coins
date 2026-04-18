@@ -1,17 +1,18 @@
 import ScoutsLogo from '../images/fleur-de-lis-marque-white.png'
 import './NavMenu.scss';
 import React, {useContext, useEffect, useState} from 'react';
-import {NavLink, Link, useLocation} from 'react-router-dom';
+import {NavLink, Link, useLocation, useNavigate} from 'react-router-dom';
 import './NavMenu.scss';
 import Uris from "../services/Uris.ts";
 import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../contexts/AppContextExporter.tsx";
-import SectionNames from "../pages/home-page/sections/SectionNames.ts";
+import CoinsPageViewName from "../pages/coins-page/CoinsPageViewName.ts";
 import {Button, Image} from "../components/widgets/HtmlControlWrappers.tsx";
 import AppSettingsModal from "../components/modals/AppSettingsModal.tsx";
 import ConfirmLogoutModal from "../components/modals/ConfirmLogoutModal.tsx";
 
 export default function NavMenu() {
   const {pageActionMenuAreaAction, activeScanningMember} = useContext(PageActionMenuAreaContext)
+  const navigate = useNavigate()
 
   const [collapsed, setCollapsed] = useState(true);
   const [appSettingsModal, setAppSettingsModal] = useState(false);
@@ -47,7 +48,7 @@ export default function NavMenu() {
       const RenderReturnToMainScreenButton = () => {
         return (
           <div>
-            <span data-testid="nav-coins-page" onClick={() => window.location.reload()} className={"scouts-nav-link m-3"}>
+            <span data-testid="nav-coins-page" onClick={() => navigate("/")} className={"scouts-nav-link m-3"}>
               <div className={"px-3 py-1 scouts-borders-white"}>
                 Return to Main Screen
               </div>
@@ -85,7 +86,7 @@ export default function NavMenu() {
 
   function RenderLeftSideHeaderSection() {
     switch (pageActionMenuAreaAction) {
-      case SectionNames.ScanCoins:
+      case CoinsPageViewName.ScanCoins:
         return (
           <div className="d-flex h-100 p-2">
             <Image className="member-image h-100 w-auto me-3"
@@ -103,13 +104,13 @@ export default function NavMenu() {
 
   function RenderRightSideHeaderSection() {
     switch (pageActionMenuAreaAction) {
-      case SectionNames.ScanMember:
+      case CoinsPageViewName.ScanMember:
         return (
           <Button className={"btn-outline-light text-black bg-white"} onClick={() => window.location.reload()}>
             Not scanning? <br/>Click here and try again.
           </Button>
         )
-      case SectionNames.ScanCoins:
+      case CoinsPageViewName.ScanCoins:
         return (
           <button type="button"
                   data-testid="button-start-again"

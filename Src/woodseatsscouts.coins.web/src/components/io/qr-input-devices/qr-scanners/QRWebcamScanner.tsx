@@ -1,50 +1,51 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import type {QRCodeInputDevicesProps} from "../QRCodeInputDevicesProps.tsx";
 import {Scanner} from "@yudiel/react-qr-scanner";
 
-export const QRWebcamScanner = ({videoSizeEm, qrCode, setQrCode, type, qrScanCodeType}) => {
-  // this is the new stuff
-  // <Scanner
-  //   onScan={(result) => console.log(result)}
-  //   onError={(error) => console.log(error?.message)}
-  // />
+interface QRWebcamScanner extends QRCodeInputDevicesProps {
+  videoSizeEm: any
+  type: string
+}
 
-    const [currentQRCode, setCurrentQRCode] = useState("");
-    const [previousQRCode, setPreviousQRCode] = useState("");
-    const [timeoutHandle, setTimeoutHandle] = useState(0);
+export default function QRWebcamScanner({videoSizeEm, type, ...props}: QRWebcamScanner) {
+  const [currentQRCode, setCurrentQRCode] = useState("");
+  const [previousQRCode, setPreviousQRCode] = useState("");
+  const [timeoutHandle, setTimeoutHandle] = useState(0);
 
-    useEffect(() => {
-        if (currentQRCode === "") {
-            setCurrentQRCode(currentQRCode);
-        } else {
-            setPreviousQRCode(currentQRCode);
-            setQrCode(currentQRCode)
+  useEffect(() => {
+    if (currentQRCode === "") {
+      setCurrentQRCode(currentQRCode);
+    } else {
+      setPreviousQRCode(currentQRCode);
+      props.setQrCode(currentQRCode)
 
-            clearTimeout(timeoutHandle);
-            let t = setTimeout(() => {
-                setCurrentQRCode("")
-            }, 5000)
-            setTimeoutHandle(t);
-        }
+      clearTimeout(timeoutHandle);
+      let t = setTimeout(() => {
+        setCurrentQRCode("")
+      }, 5000)
+      setTimeoutHandle(t);
+    }
 
-    }, [currentQRCode])
+  }, [currentQRCode])
 
-    return (
-        <div className="qr-code-scanner-container">
-            {/*<QrReader*/}
-            {/*    constraints={{facingMode: "environment"}}*/}
-            {/*    containerStyle={{height: (videoSizeEm + 1) + "em"}}*/}
-            {/*    videoStyle={{height: videoSizeEm + "em"}}*/}
-            {/*    videoContainerStyle={{paddingTop: videoSizeEm + "em"}}*/}
-            {/*    onResult={(result, error) => {*/}
-            {/*        if (!!result) {*/}
-            {/*            setCurrentQRCode(result?.text)*/}
-            {/*        }*/}
+  return (
+    <div className="qr-code-scanner-container">
+      <Scanner onScan={(result) => console.log(result)} onError={(error: any) => console.log(error?.message)}/>
+      {/*<QrReader*/}
+      {/*  constraints={{facingMode: "environment"}}*/}
+      {/*  containerStyle={{height: (videoSizeEm + 1) + "em"}}*/}
+      {/*  videoStyle={{height: videoSizeEm + "em"}}*/}
+      {/*  videoContainerStyle={{paddingTop: videoSizeEm + "em"}}*/}
+      {/*  onResult={(result, error) => {*/}
+      {/*    if (!!result) {*/}
+      {/*      setCurrentQRCode(result?.text)*/}
+      {/*    }*/}
 
-            {/*        if (!!error) {*/}
-            {/*        }*/}
-            {/*    }}*/}
-            {/*    style={{width: '100%'}}*/}
-            {/*/>*/}
-        </div>
-    );
-};
+      {/*    if (!!error) {*/}
+      {/*    }*/}
+      {/*  }}*/}
+      {/*  style={{width: '100%'}}*/}
+      {/*/>*/}
+    </div>
+  );
+}

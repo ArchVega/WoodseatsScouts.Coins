@@ -1,5 +1,5 @@
 @use "sass:map";
-@use "./../../../styles/abstract/_site-colours" as colours;
+@use "../../../../styles/abstract/site-colours" as colours;
 
 .page {
   &-hello-text {

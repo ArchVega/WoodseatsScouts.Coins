@@ -1,5 +1,5 @@
 import {useContext, useEffect} from "react";
-import {AppSettingsContext} from "../../../contexts/AppContextExporter.tsx";
+import {AppSettingsContext} from "../../../../contexts/AppContextExporter.tsx";
 
 export default function HaulResultsSection({member, haulResult}) {
   const {appSettings} = useContext(AppSettingsContext)

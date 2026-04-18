@@ -1,4 +1,4 @@
-function AudioFx() {
+export default function AudioFx() {
     /* Audio instances must be constructed once if they are to be played multiple times (eg several coins being scanned in succession). Calling
     * new Audio() inside the functions results in performance bugs where some successive audio plays are missed entirely and causes tests to fail
     * (not sure if this failure would happen in the real world). */
@@ -30,5 +30,3 @@ function AudioFx() {
         }
     }
 }
-
-export default AudioFx
