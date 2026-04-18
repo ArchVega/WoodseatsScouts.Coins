@@ -1,5 +1,7 @@
+import "./HaulSummarySection.scss"
 import {useContext, useEffect} from "react";
 import {AppSettingsContext} from "../../../../contexts/AppContextExporter.tsx";
+import {logInfo} from "../../../../components/logging/Logger.ts";
 
 export default function HaulResultsSection({member, haulResult}) {
   const {appSettings} = useContext(AppSettingsContext)
@@ -21,6 +23,7 @@ export default function HaulResultsSection({member, haulResult}) {
   }
 
   useEffect(() => {
+    logInfo(`Timeout seconds for page is: ${appSettings.VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT}`)
     setTimeout(() => {
       reloadPage()
     }, appSettings.VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT)
@@ -28,7 +31,7 @@ export default function HaulResultsSection({member, haulResult}) {
 
   return (
     <>
-      <div className="row">
+      <div className="row mt-5">
         <div className="col text-center">
           <h1>{congratsPhrase}<span className="font-black">{member.firstName}</span><span
             style={{fontSize: '1em'}}>👍</span>
@@ -42,7 +45,7 @@ export default function HaulResultsSection({member, haulResult}) {
       </div>
       <div className="row mb-3">
         <div className="col text-center">
-          <button id="finish-scanning-button" data-testid="button-finish-scanning" className="btn btn-success btn-lg">
+          <button id="haul-summary-tally-total-box" data-testid="button-finish-scanning" className="btn btn-success btn-lg">
             <div style={{lineHeight: "normal"}}>
               <strong className="finish-scanning-button-points-value" data-testid="coin-total">
                 {haulResult.coinTotal}
