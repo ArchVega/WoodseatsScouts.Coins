@@ -1,14 +1,29 @@
 @use "sass:map";
-
 @use "./abstract/_site-variables" as variables;
 @use "./abstract/_site-mixins" as mixins;
 @use "./abstract/_site-colours" as colours;
-
-@use 'base/site-reset' as reset;
-@use 'base/site-typography' as typography;
+@use './base/site-reset' as reset;
+@use './base/site-typography' as typography;
 
 // to move
-.app-shell {
+.site-container {
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .page-container {
+    flex: 1;
+    min-height: 0; // imp (prevents flex overflow bugs)
+    overflow-y: auto;
+  }
+
+  .page-footer {
+    text-align: center;
+    color: map.get(colours.$colours, white);
+    background-color: map.get(colours.$colours, purple);
+  }
+
   .scouts {
     &-borders-white {
       border: 1px solid white;
