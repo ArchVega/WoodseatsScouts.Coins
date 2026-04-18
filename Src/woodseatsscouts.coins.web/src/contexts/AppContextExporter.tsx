@@ -1,5 +1,6 @@
 import {createContext} from "react";
 import * as React from "react";
+import type {AppSettings} from "../components/AppSettings.ts";
 
 const cameraAvailable = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 
@@ -25,10 +26,12 @@ type AppModeContextType = {
 type PageActionMenuAreaContextType = {
     pageActionMenuAreaAction: string
     setPageActionMenuAreaAction: React.Dispatch<React.SetStateAction<string>>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     activeScanningMember: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setActiveScanningMember: React.Dispatch<React.SetStateAction<any>>; // todo: rename to member
+}
+
+type AppSettingsContextType = {
+    appSettings: AppSettings;
 }
 
 export const AppCameraAvailableContext = createContext<AppCameraAvailableContextType>({appCameraAvailable: cameraAvailable});
@@ -41,3 +44,5 @@ export const AppTestModeContext = createContext<AppTestModeContextType | undefin
 export const AppModeContext = createContext<AppModeContextType | undefined>(undefined);
 
 export const PageActionMenuAreaContext = createContext<PageActionMenuAreaContextType | undefined>(undefined);
+
+export const AppSettingsContext = createContext<AppSettingsContextType | undefined>(undefined)

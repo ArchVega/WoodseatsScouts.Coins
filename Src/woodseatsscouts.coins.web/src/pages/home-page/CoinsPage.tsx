@@ -8,6 +8,7 @@ import SectionNames from "./sections/SectionNames";
 import {PageActionMenuAreaContext} from "../../contexts/AppContextExporter.tsx";
 import ScanMemberForCoinsSection from "./sections/ScanMemberForCoinsSection.tsx";
 import ScanCoinsSection from "./sections/scancoins/ScanCoinsSection.tsx";
+import HaulResultsSection from "./sections/HaulSummarySection.tsx";
 
 // Todo: rename paths and functions to either homepage or coinpage, not both
 export function CoinsPage() {
@@ -53,7 +54,7 @@ export function CoinsPage() {
         }
         case SectionNames.HaulSummary: {
           setPageActionMenuAreaAction(SectionNames.HaulSummary)
-          // return (<HaulResultsSection member={member} haulResult={haulResult}/>)
+          return (<HaulResultsSection member={member} haulResult={haulResult}/>)
         }
         default: {
           throw `Handler not defined ${sectionName}`

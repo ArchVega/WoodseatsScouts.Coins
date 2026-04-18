@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import wave from "../../../images/wave.png";
 import "./ScanMemberForCoinsSection.scss"
 import MemberApiService from "../../../services/MemberApiService";
-import {PageActionMenuAreaContext, UseAppCameraContext} from "../../../contexts/AppContextExporter.tsx";
+import {AppSettingsContext, PageActionMenuAreaContext, UseAppCameraContext} from "../../../contexts/AppContextExporter.tsx";
 import AudioFx from "../../../fx/AudioFx.ts";
 import SiteSpinner from "../../../components/spinner/SiteSpinner.tsx";
 import QRCodeInputDevices from "../../../components/qr-input-devices/QRCodeInputDevices.tsx";
