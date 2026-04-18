@@ -4,7 +4,7 @@ import AppStateApiService from "../../services/AppStateApiService.tsx";
 import {BaseModal} from "./BaseModal.tsx";
 import {Switch} from "../common/HtmlControlWrappers.tsx";
 
-const AppSettingsModal = ({appSettingsModal, setAppSettingsModal}) => {
+export default function AppSettingsModal({appSettingsModal, setAppSettingsModal}) {
   const {useAppCamera, setUseAppCamera} = useContext(UseAppCameraContext)
   const {appCameraAvailable} = useContext(AppCameraAvailableContext)
   const [appVersion, setAppVersion] = useState("")
@@ -48,5 +48,3 @@ const AppSettingsModal = ({appSettingsModal, setAppSettingsModal}) => {
     </BaseModal>
   )
 }
-
-export default AppSettingsModal;
