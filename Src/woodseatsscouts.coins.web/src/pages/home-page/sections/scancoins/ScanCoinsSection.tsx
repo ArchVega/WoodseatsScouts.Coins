@@ -7,6 +7,7 @@ import CoinApiService from "../../../../services/CoinApiService.tsx";
 import QRScanCodeType from "../../../../components/qr-input-devices/qr-scanners/QRScanCodeType.ts";
 import {logDebug, logError, logReactSet} from "../../../../components/logging/Logger.ts";
 import {toastError} from "../../../../components/toaster/toaster.ts";
+import './ScanCoinsSection.scss'
 
 export default function ScanCoinsSection({member, setHaulResult}) {
   const audioFx = AudioFx();
@@ -89,59 +90,73 @@ export default function ScanCoinsSection({member, setHaulResult}) {
     }
   }
 
-  return (
-    <>
-      <div className="row mb-5" style={{minHeight: '45vh', maxHeight: '50vh'}}>
-        <div className="col-8">
-          <div data-testid="div-scanned-coins" className="coins-grid-2026 text-end mb-4">
-            {coins.map((coin, index) =>
-              (
-                <div>
-                  <ScannedCoin key={index} coin={coin} isLast={index + 1 === coins.length} removeCoin={coinToRemove => removeCoin(coinToRemove)}/>
-                </div>
-              ))}
-          </div>
-          <div className="mb-5"/>
-        </div>
-        <div className="col-4">
-          <div className="row">
-            <div className="col">
-              <h4 className="mt-5 text-black fs-3 fw-semibold">Now scan your points tokens...</h4>
-              <QRCodeInputDevices qrCode={coinQrCode} setQrCode={setCoinQrCode} qrScanCodeType={QRScanCodeType.Coin}/>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col scanned-info-card">
-              <div style={{lineHeight: "normal"}}>
-                <div className="text-white" style={{fontSize: "2em"}}>Tokens scanned</div>
-                <strong className="finish-scanning-button-points-value" data-testid="coin-total">
-                  {coins.length}
-                </strong>
-              </div>
-            </div>
-            <div className="col scanned-info-card">
-              <div className="text-white" style={{fontSize: "2em"}}>Points this scan</div>
-              <div style={{lineHeight: "normal"}}>
-                <strong className="finish-scanning-button-points-value" data-testid="coin-total">
-                  {coinTotal}
-                </strong>
-              </div>
-            </div>
-          </div>
-          <div className="row" style={{position: "relative"}}>
-            <div className="col float-end text-end ">
-              <div className="d-grid">
-                <button id="finish-scanning-button" data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success btn-lg">
-                  <div>
-                    <div style={{fontSize: "3em"}}>🎉</div>
-                    <em className="text-white">SAVE POINTS</em>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+  function RenderTrackerCard(header: string, value: number) {
+    return (
+      <div className="tracker-card">
+        <div>{header}</div>
+        <div className="finish-scanning-button-points-value" data-testid="coin-total">{value}</div>
       </div>
-    </>
+    )
+  }
+
+  function RenderLeftPanel() {
+    return (
+      <div className="coins-grid-2026 mt-3" data-testid="div-scanned-coins">
+        {coins.map((coin, index) =>
+          (
+            <div>
+              <ScannedCoin key={index} coin={coin} isLast={index + 1 === coins.length} removeCoin={coinToRemove => removeCoin(coinToRemove)}/>
+            </div>
+          ))}
+      </div>
+    )
+  }
+
+  function RenderRightPanel() {
+    return (
+      <>
+        <div className="row mb-1">
+          <div className="col">
+            <div className="mt-3 mb-2 text-black fs-3 fw-semibold">Now scan your points tokens...</div>
+          </div>
+        </div>
+        <div className="row mb-3">
+          <div className="col">
+            <QRCodeInputDevices qrCode={coinQrCode} setQrCode={setCoinQrCode} qrScanCodeType={QRScanCodeType.Coin}/>
+          </div>
+        </div>
+        <div className="row mb-2 g-2">
+          <div className="col">
+            {RenderTrackerCard("Tokens scanned", coins.length)}
+          </div>
+          <div className="col">
+            {RenderTrackerCard("Points this scan", coinTotal)}
+          </div>
+        </div>
+        <div className="row" style={{position: "relative"}}>
+          <div className="col float-end text-end ">
+            <div className="d-grid">
+              <button id="finish-scanning-button" data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success btn-lg">
+                <div>
+                  <div style={{fontSize: "3em"}}>🎉</div>
+                  <em className="text-white">SAVE POINTS</em>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <div className="row">
+      <div className="col-8">
+        {RenderLeftPanel()}
+      </div>
+      <div className="col-4">
+        {RenderRightPanel()}
+      </div>
+    </div>
   )
 }

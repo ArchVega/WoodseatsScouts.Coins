@@ -1,6 +1,6 @@
-﻿@use '../site.variables' as variables;
+﻿@use 'sass:map';
+@use '../../../../styles/abstract/site-colours' as colours;
 
-/* adapted from http://maxwells.github.io/bootstrap-tags.html */
 .coin {
   max-width: 100px;
   min-width: 100px;
@@ -16,6 +16,30 @@
   position: relative;
   line-height: 60px;
   text-align: center;
+
+  &.coin-20 {
+    background-color: map.get(colours.$colours, blue);
+
+    * {
+      color: white !important;
+    }
+  }
+
+  &.coin-10 {
+    background-color: map.get(colours.$colours, yellow);
+
+    *  {
+      color: black !important;
+    }
+  }
+
+  &.coin-random-odd {
+    background-color: map.get(colours.$colours, pink);
+
+    * {
+      color: black !important;
+    }
+  }
 }
 
 .coin-value {
@@ -26,50 +50,12 @@
   animation: breathe 3s ease-in-out infinite;
 }
 
-
 @keyframes breathe {
   0%, 100% {
     box-shadow: 0 0 0 2px rgba(76, 80, 80, 0.5);
   }
   50% {
     box-shadow: 0 0 0 6px rgba(76, 80, 80, 0.2);
-  }
-}
-
-
-
-
-
-.coin-20 {
-  background-color: variables.$colour-coins-20;
-
-  span {
-    color: black !important;
-  }
-
-  .remove div {
-    color: black !important;
-  }
-}
-
-.coin-10 {
-  background-color: variables.$colour-coins-10;
-  color: black !important;
-
-  .remove div {
-    color: black !important;
-  }
-}
-
-.coin-random-odd {
-  background-color: variables.$colour-coins-5;
-
-  span {
-    color: white !important;
-  }
-
-  .remove div {
-    color: white !important;
   }
 }
 
@@ -99,7 +85,7 @@
   color: white;
   padding: 0.2em;
   margin: 0.3em;
-  background-color: variables.$colour-scouts-teal;
+  background-color: map.get(colours.$colours, scouts);
   -webkit-border-radius: 20px !important;
   -moz-border-radius: 20px !important;
   border-radius: 20px !important;
@@ -114,19 +100,7 @@
 }
 
 #finish-scanning-button {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -webkit-border-radius: 20px !important;
-  -moz-border-radius: 20px !important;
-  border-radius: 20px !important;
-  height: 170px;
-  margin: 10px;
-  display: inline-block;
-  padding: 6px 25px;
-  font-weight: bold;
-  box-shadow: 0 0 0 5px #088486,
-  inset 0 0 0 1px #fff;
+  border: 2px solid map.get(colours.$colours, black);
 
   em {
     font-size: 1.3em;
@@ -149,7 +123,7 @@
 }
 
 .focus-scanner-textbox-button {
-  background-color: variables.$colour-scouts-orange !important;
+  background-color: map.get(colours.$colours, network);
 
   div {
     color: white !important;

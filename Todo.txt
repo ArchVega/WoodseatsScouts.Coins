@@ -5,3 +5,5 @@
  coin grid left to right, newest lower right - not matching spec yet - will try at end. it's none standard and requires advanced css grid
 
  for the member list page, not implementing the three filter boxes as the global one works fine, unless there's time
+
+ sticky footer ie fixed viewport height + a toggleable submenu was way too complex.

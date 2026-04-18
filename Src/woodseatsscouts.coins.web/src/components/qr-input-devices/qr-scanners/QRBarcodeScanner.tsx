@@ -30,11 +30,11 @@ function QRBarcodeScanner({qrCode, setQrCode, qrScanCodeType}) {
     return (
         <>
             <input id="usb-scanner-code-textbox"
-                   data-testid="textbox-usb-scanner-code"
                    autoComplete="off"
                    autoFocus={true}
                    onClick={onMemberCodeTextBoxClicked}
-                   onKeyDown={handleKeyDown}/>
+                   onKeyDown={handleKeyDown}
+                   data-testid="textbox-usb-scanner-code"/>
             <TestQRBarcodeDataModal
                 testUsersModal={testUsersModal}
                 setTestUsersModal={setTestUsersModal}
