@@ -7,3 +7,9 @@
  for the member list page, not implementing the three filter boxes as the global one works fine, unless there's time
 
  sticky footer ie fixed viewport height + a toggleable submenu was way too complex.
+
+ add a test if one doesn't exist to ensure that nothing is carried over from a previous member's haul
+
+ the member photos - are they large? could slow down the site when all are loaded in memory
+
+ scores are shown always now - is this ok?

@@ -8,6 +8,7 @@ import MemberApiService from "../../services/MemberApiService";
 import Uris from "../../services/Uris";
 import {useNavigate} from "react-router-dom";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
+import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";
 
 export default function MembersListPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -19,14 +20,12 @@ export default function MembersListPage() {
   const [editMemberNameModal, setEditMemberNameModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [filterText, setFilterText] = useState(null);
-  const [showScores, setShowScores] = useState(true);
 
   useEffect(() => {
     const fetchMembers = async () => {
       return await MemberApiService().fetchMembers();
     }
     fetchMembers().then(response => setMembers(response.data));
-    console.log('only once')
   }, [])
 
   function sectionClassName(sectionName) {
@@ -65,9 +64,9 @@ export default function MembersListPage() {
 
   function RenderMember(member) {
     return (
-      <div className="card members-list-item-card flex-shrink-0">
+      <div key={member.memberCode} className="card members-list-item-card flex-shrink-0">
         <div className="card-body">
-          <div className="row">
+          <div className="row pb-2">
             <div className="col">
               <img key={Date.now()}
                    onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}
@@ -75,34 +74,30 @@ export default function MembersListPage() {
                    src={member.hasImage ? Uris.memberPhoto(member.id) : "images/unknown-member-image.png"} alt=""/>
             </div>
           </div>
-          <div className="row">
-            <div className={"col d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}>
-              <strong className={"d-flex flex-column justify-content-center h-100"}>{member.firstName + " " + member.lastName}</strong>
+          <div className="row pb-2 member-name-row">
+            <div className={"col d-flex justify-content-center align-items-center members-list-item-section"}>
+              <strong className={"tile d-flex flex-column justify-content-center h-100"}>{member.firstName + " " + member.lastName}</strong>
             </div>
           </div>
-          <div className="row g-1">
+          <div className="row pb-2 g-1">
             <div className="col-7 members-list-item-section">
-              <div>
-                {member.memberCode}
-              </div>
+              <div className="tile">{member.memberCode}</div>
             </div>
-            <div className="col-4 members-list-item-section">
-              <div>
-                {showScores ? member.totalPoints : "xxx"}
-              </div>
+            <div className="col-5 members-list-item-section">
+              <div className="tile">{member.totalPoints}</div>
             </div>
           </div>
-          <div className="row">
+          <div className="row pb-2">
             <div className="members-list-item-section">
-              <div>{member.troopName}</div>
+              <div className="tile">{member.troopName}</div>
             </div>
           </div>
-          <div className="row g-1">
+          <div className="row pb-2 g-1">
             <div className="col-6 members-list-item-section">
-              <button style={{color: "Black"}} onClick={() => navigate(`/member-details/${member.memberCode}`)}>EDIT</button>
+              <Button onClick={() => navigate(`/member-details/${member.memberCode}`)}>EDIT</Button>
             </div>
             <div className=" col-6 members-list-item-section">
-              <button style={{color: "Black"}} onClick={() => showEditUserModal(member)}>PHOTO</button>
+              <Button onClick={() => showEditUserModal(member)}>PHOTO</Button>
             </div>
           </div>
         </div>
@@ -137,7 +132,7 @@ export default function MembersListPage() {
       <div className="row mt-3 mb-3">
         <div className="col">
           <input
-            style={{width:'100%'}}
+            style={{width: '100%', height: "40px", color: 'black', textAlign: 'center'}}
             className="filter-members"
             data-testid="textbox-search-members"
             autoFocus={true}
@@ -148,7 +143,7 @@ export default function MembersListPage() {
       </div>
       <div className="row">
         <div className="col">
-          <div id="members-list-grid" className="d-flex flex-div row gap-3 overflow-auto flex-nowrap py-2 overflow-y-hidden">
+          <div id="members-list-row" className="d-flex flex-div gap-3 overflow-auto flex-nowrap py-4">
             {members && members.filter(member => filterMember(member)).map(x => RenderMember(x))}
           </div>
         </div>
