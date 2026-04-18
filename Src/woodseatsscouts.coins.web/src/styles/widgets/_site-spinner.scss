@@ -1,4 +1,5 @@
-﻿@use '../site.variables' as variables;
+﻿@use 'sass:map';
+@use '../abstract/site-colours' as colours;
 
 .spinner {
   display: inline-block;
@@ -13,8 +14,8 @@
   height: 64px;
   margin: 8px;
   border-radius: 50%;
-  border: 6px solid variables.$colour-scouts-purple;
-  border-color: variables.$colour-scouts-purple transparent variables.$colour-scouts-purple transparent;
+  border: 6px solid map.get(colours.$colours, purple);
+  border-color: map.get(colours.$colours, purple) transparent map.get(colours.$colours, purple) transparent;
   animation: spinner 1.2s linear infinite;
 }
 

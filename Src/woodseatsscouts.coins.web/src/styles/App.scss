@@ -4,6 +4,7 @@
 @use "./abstract/_site-colours" as colours;
 @use './base/site-reset' as reset;
 @use './base/site-typography' as typography;
+@use './widgets/site-spinner' as spinner;
 
 // to move
 .site-container {

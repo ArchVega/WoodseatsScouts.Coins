@@ -1,14 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import wave from "../../../images/wave.png";
 import "./ScanMemberForCoinsSection.scss"
-import { Scanner } from '@yudiel/react-qr-scanner';
-
-// import QRCodeInputDevices from "../../../components/qr-input-devices/QRCodeInputDevices";
-// import QRScanCodeType from "../../../components/qr-scanners/QRScanCodeType";
-// import {logDebug, logError, logReactSet} from "../../../components/logging/Logger";
-// import AudioFx from "../../../fx/AudioFx";
 import MemberApiService from "../../../services/MemberApiService";
-// import {toastError} from "../../../components/toaster/toaster";
 import {PageActionMenuAreaContext, UseAppCameraContext} from "../../../contexts/AppContextExporter.tsx";
 import AudioFx from "../../../fx/AudioFx.ts";
 import SiteSpinner from "../../../components/spinner/SiteSpinner.tsx";
