@@ -1,24 +1,82 @@
+@use "sass:map";
+@use "./../../styles/abstract/_site-mixins" as mixins;
+@use "./../../styles/abstract/_site-colours" as colours;
+
 .member-details-member-card {
     width: 100%;
     border-radius: 10px !important;
-    background-color: lightgrey;
+    border: 1px solid map.get(colours.$colours, grey-darker);;
+    background-color: map.get(colours.$colours, grey-light);;
+
+    * {
+        color: black;
+    }
+
+    .tile {
+        @include mixins.rounded-borders;
+        border: 1px solid map.get(colours.$colours, grey-dark);
+        padding: 5px;
+        width: 100%;
+        text-align: center;
+        background-color: map.get(colours.$colours, white);;
+    }
+
+    & img {
+        @include mixins.rounded-borders;
+        width: 100% !important;
+        height: 186px !important;
+        object-fit: cover !important;
+    }
+
+    .row:nth-child(1) {
+        min-height: 200px;
+    }
 }
 
-.member-details-member-card img {
-    height: 186px !important;
-    object-fit: cover !important;
+.member-action-button-container {
+    button {
+        @include mixins.rounded-borders;
+        border: none;
+        font-size: 12px !important;
+        font-weight: bold;
+        height: 40px;
+        width: 100%;
+    }
+
+    #add-points-button {
+        background-color: map.get(colours.$colours, green);
+        color: white;
+
+        &:hover {
+            background-color: darken(map.get(colours.$colours, green), 10%);
+        }
+    }
+
+    #remove-points-button {
+        background-color: map.get(colours.$colours, red);
+        color: white;
+
+        &:hover {
+            background-color: darken(map.get(colours.$colours, red), 10%);
+        }
+    }
 }
 
-.member-details-member-card .row:nth-child(1) {
-    min-height: 200px;
-}
+#recent-member-activity-summary-cards {
+    .card {
+        border: 1px solid map.get(colours.$colours, grey-darker);;
+        margin-bottom: 10px;
+    }
 
-.member-details-member-card {
-    padding-bottom: 3px;
-}
+    * {
+        color: black;
+        text-align: center;
+    }
 
-.member-details-member-card * {
-    text-align: center;
-    width: 100% !important;
-    background-color: white;
+    .title {
+        font-style: italic;
+    }
+
+    .children {
+    }
 }

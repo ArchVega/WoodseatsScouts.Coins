@@ -1,219 +1,235 @@
 import './MemberDetailsPage.scss'
-
 import {useParams} from "react-router-dom";
-import {useContext, useEffect, useState} from "react";
+import React, {type ReactNode, useContext, useEffect, useState} from "react";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import MemberApiService from "../../services/MemberApiService.ts";
+import Spinner from "../../components/widgets/Spinner.tsx";
+import QRCodeInputDevices from "../../components/io/qr-input-devices/QRCodeInputDevices.tsx";
+import QRScanCodeType from "../../components/io/qr-input-devices/QRScanCodeType.ts";
+import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
+import ScoutsLogo from "../../images/fleur-de-lis-marque-white.png";
+import Uris from "../../services/Uris.ts";
+import type {Member} from "../../types/ServerTypes.ts";
 
 function MemberDetailsPage() {
-    const {useAppCamera} = useContext(UseAppCameraContext)
-    const {memberCode} = useParams();
-    const [member, setMember] = useState(null);
-    const [selectedSession, setSelectedSession] = useState(null);
-    const [userModal, setUserModal] = useState(false);
-    const [editUserModal, setEditUserModal] = useState(false);
-    const [editMemberNameModal, setEditMemberNameModal] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [filterText, setFilterText] = useState(null);
-    const [showScores, setShowScores] = useState(true);
+  const {useAppCamera} = useContext(UseAppCameraContext)
+  const {memberCode} = useParams();
+  const [loading, setLoading] = useState(false)
+  const [member, setMember] = useState(null);
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [userModal, setUserModal] = useState(false);
+  const [editUserModal, setEditUserModal] = useState(false);
+  const [editMemberNameModal, setEditMemberNameModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [filterText, setFilterText] = useState(null);
+  const [showScores, setShowScores] = useState(true);
 
-    // showMemberNameModal(member)}
+  // showMemberNameModal(member)}
 
-    // todo: these are what we need to hook up
-    // <EditMemberNameModal editMembersModal={editMemberNameModal} setEditMembersModal={setEditMemberNameModal} selectedMember={selectedUser}
-    //                      setSelectedMember={setSelectedUser}/>
-    // <EditMemberPhotoModal editUsersModal={editUserModal} setEditUsersModal={setEditUserModal} selectedUser={selectedUser}
-    //                       setSelectedUser={setSelectedUser}/>
+  // todo: these are what we need to hook up
+  // <EditMemberNameModal editMembersModal={editMemberNameModal} setEditMembersModal={setEditMemberNameModal} selectedMember={selectedUser}
+  //                      setSelectedMember={setSelectedUser}/>
+  // <EditMemberPhotoModal editUsersModal={editUserModal} setEditUsersModal={setEditUserModal} selectedUser={selectedUser}
+  //                       setSelectedUser={setSelectedUser}/>
 
-    useEffect(() => {
-        if (memberCode) {
-            MemberApiService().fetchMember(memberCode).then(response => response.data).then(member => setMember(member));
-        }
-    }, [memberCode])
+  useEffect(() => {
+    if (memberCode) {
+      setLoading(true)
+      MemberApiService().fetchMember(memberCode).then(response => response.data).then(member => setMember(member)).finally(() => setLoading(false));
+    }
+  }, [memberCode])
 
-    useEffect(() => {
-        console.log('member', member);
-    }, [member])
+  useEffect(() => {
+    console.log('member', member);
+  }, [member])
 
-    function RenderMember(member) {
-        return (
-            <div className={"card member-details-member-card flex-shrink-0 sticky-top"}>
-                <div className={"card-body"}>
-                    <div className={"row"}>
-                        <div className={"col"}>
-                            {/*<img key={Date.now()}*/}
-                            {/*     onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}*/}
-                            {/*     title={"User id: " + member.id}*/}
-                            {/*     src={member.hasImage ? Uris.memberPhoto(member.id) : "images/unknown-member-image.png"} alt=""/>*/}
-                        </div>
-                    </div>
-                    <div className={"row"}>
-                        <div className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}>
-                            <strong className={"d-flex flex-column justify-content-center h-100"}>{member.firstName + " " + member.lastName}</strong>
-                        </div>
-                    </div>
-                    <div className="row g-1">
-                        <div className={"col-7 members-list-item-section"}>
-                            <div>
-                                {member.memberCode}
-                            </div>
-                        </div>
-                        <div className={"col-5 members-list-item-section"}>
-                            <div>
-                                {member.totalPoints}
-                            </div>
-                        </div>
-                    </div>
-                    <div className={"row"}>
-                        <div className={"members-list-item-section"}>
-                            <div>{member.troopName}</div>
-                        </div>
-                    </div>
-                    <div className="row mb-3 g-1">
-                        <div className={"members-list-item-section"}>
-                            <button className={"text-black"}>Add fixed amount points</button>
-                        </div>
-                        <div className={"members-list-item-section"}>
-                            <button className={"text-black"}>Remove fixed amount points</button>
-                        </div>
-                    </div>
-                    <div className="row mb-3 g-1">
-                        <div className={"members-list-item-section"}>
-                            <button className={"text-black"}>Change Group</button>
-                        </div>
-                        <div className={"members-list-item-section"}>
-                            <button className={"text-black"}>Change Section</button>
-                        </div>
-                    </div>
-                </div>
+  function showEditUserModal(user1) {
+    setSelectedUser(user1)
+    setEditUserModal(true)
+  }
+
+  function RenderMemberDetails(member: Member) {
+    return (
+      <>
+        <div className="card member-details-member-card flex-shrink-0 sticky-top mb-3">
+          <div className="card-body">
+            <Image key={Date.now()}
+                   className="mb-2"
+                   onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}
+                   title={"User id: " + member.memberId}
+                   src={member.hasImage ? Uris.memberPhoto(member.memberId) : "images/unknown-member-image.png"} alt=""/>
+            <div className="row mb-2">
+              <div className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}>
+                <strong className="tile d-flex flex-column justify-content-center h-100">{member.firstName + " " + member.lastName}</strong>
+              </div>
             </div>
-        )
-    }
-
-    const rows = Array.from({ length: 200 }); // 👈 controls height
-
-    function RenderMemberScanSessions() {
-        return (
-            <table className="table table-striped">
-                <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Total Points</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                {rows.map((_, i) => (
-                    <tr key={i}>
-                        <td>{new Date().toLocaleString()}</td>
-                        <td>{i + 1}</td>
-                        <td><button className={"btn-warning"}>EDIT</button></td>
-                        <td><button className={"btn-danger"}>DELETE</button></td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        )
-    }
-
-    function RenderSelectedScanSessions() {
-        return (
-            <table className="table table-striped">
-                <thead>
-                <tr>
-                    <th>Base</th>
-                    <th>Total Points</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                {rows.map((_, i) => (
-                    <tr key={i}>
-                        <td>{['Archery', 'Shooting', "Cave Bus", "Arts and Crafts"][Math.floor(Math.random() * 4)]}</td>
-                        <td>{i + 1}</td>
-                        <td><button className={"btn-warning"}>EDIT</button></td>
-                        <td><button className={"btn-danger"}>DELETE</button></td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        )
-    }
-
-    if (member) {
-        return (
-            <div id={"member-details-page"}>
-                <div className="row g-3">
-                    <div className={"col-2"}>
-                        {RenderMember(member)}
-                    </div>
-                    <div className={"col-4"}>
-                        <div className={"card"}>
-                            {RenderMemberScanSessions()}
-                        </div>
-                    </div>
-                    <div className={"col-4"}>
-                        <div className={"card"}>
-                            {!selectedSession && (
-                                <>Select a session</>
-                            )}
-                            {
-                                RenderSelectedScanSessions()
-                            }
-
-                        </div>
-                    </div>
-                    <div className={"col-2"}>
-                        <div className="row g-1 sticky-top">
-                            <div className={"col-12"} >
-                                <div className={"card"}>
-                                    <div className={"card-body"}>
-                                        <h5>Most Visited Base</h5>
-                                        <div>Archery</div>
-                                        <div>54 visits</div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/*<div className={"col-12"}>*/}
-                            {/*    <Card>*/}
-                            {/*        <CardBody>*/}
-                            {/*            <h5>Least Visited Base</h5>*/}
-                            {/*            <div>229th Greenhill</div>*/}
-                            {/*            <div>2 Visits</div>*/}
-                            {/*        </CardBody>*/}
-                            {/*    </Card>*/}
-                            {/*</Col>*/}
-                            {/*<div className={"col-12"}>*/}
-                            {/*    <Card>*/}
-                            {/*        <CardBody>*/}
-                            {/*            <h5>Most Scans</h5>*/}
-                            {/*            <div>44 Tokens</div>*/}
-                            {/*        </CardBody>*/}
-                            {/*    </Card>*/}
-                            {/*</Col>*/}
-                            {/*<Col xs={12}>*/}
-                            {/*    <Card>*/}
-                            {/*        <CardBody>*/}
-                            {/*            <h5>Total tokens scanned</h5>*/}
-                            {/*            <div>412</div>*/}
-                            {/*        </CardBody>*/}
-                            {/*    </Card>*/}
-                            {/*</Col>*/}
-                            {/*<Col xs={12}>*/}
-                            {/*    <Button className={"btn-success"}>Save Changes</Button>*/}
-                            {/*</Col>*/}
-                        </div>
-                    </div>
-                </div>
+            <div className="row  mb-2 g-1">
+              <div className="col-6 members-list-item-section">
+                <div className="tile" style={{fontSize: "12px"}}>{member.memberCode}</div>
+              </div>
+              <div className="col-6 members-list-item-section">
+                <div className="tile" style={{fontSize: "12px"}}>todo-pts</div>
+              </div>
             </div>
-        )
+            <div className="row mb-2">
+              <div className="members-list-item-section">
+                <div className="tile">{member.memberTroopName}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="row mb-3 g-1">
+          <div className={"member-action-button-container"}>
+            <button id="add-points-button">Add fixed amount points</button>
+          </div>
+          <div className={"member-action-button-container"}>
+            <button id="remove-points-button">Remove fixed amount points</button>
+          </div>
+        </div>
+        <div className="row g-1">
+          <div className={"member-action-button-container"}>
+            <button className={"text-black"}>Change Group</button>
+          </div>
+          <div className={"member-action-button-container"}>
+            <button className={"text-black"}>Change Section</button>
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  const rows = Array.from({length: 200}); // 👈 controls height
+
+  function RenderMemberScanSessions() {
+    return (
+      <table className="table table-striped">
+        <thead>
+        <tr>
+          <th>Time</th>
+          <th>Total Points</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {rows.map((_, i) => (
+          <tr key={i}>
+            <td>{new Date().toLocaleString()}</td>
+            <td>{i + 1}</td>
+            <td>
+              <button className={"btn-warning"}>EDIT</button>
+            </td>
+            <td>
+              <button className={"btn-danger"}>DELETE</button>
+            </td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+    )
+  }
+
+  function RenderSelectedScanSessions() {
+    return (
+      <table className="table table-striped">
+        <thead>
+        <tr>
+          <th>Base</th>
+          <th>Total Points</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {rows.map((_, i) => (
+          <tr key={i}>
+            <td>{['Archery', 'Shooting', "Cave Bus", "Arts and Crafts"][Math.floor(Math.random() * 4)]}</td>
+            <td>{i + 1}</td>
+            <td>
+              <button className={"btn-warning"}>EDIT</button>
+            </td>
+            <td>
+              <button className={"btn-danger"}>DELETE</button>
+            </td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
+    )
+  }
+
+  function RenderMemberActivitySummary() {
+    function RenderActivityCard(title: string, node: ReactNode) {
+      return (
+        <div className="col-12">
+          <div className="card">
+            <div className="card-body">
+              <div className="title">{title}</div>
+              <div className="children">{node}</div>
+            </div>
+          </div>
+        </div>
+      )
     }
 
-    return null
+    return (
+      <div id="recent-member-activity-summary-cards" className="row g-1 sticky-top">
+        {RenderActivityCard("Most Visited Base", <>
+          <div><strong className="fs-3">Archery</strong></div>
+          <div><em>54 visits</em></div>
+        </>)}
+        {RenderActivityCard("Least Visited Base", <>
+          <div><strong className="fs-3">229th Greenhill</strong></div>
+          <div><em>2 Visits</em></div>
+        </>)}
+        {RenderActivityCard("Most Scans", <>
+          <div><strong className="fs-3">44 Tokens</strong></div>
+        </>)}
+        {RenderActivityCard("Total tokens scanned", <>
+          <div><strong className="fs-3">412</strong></div>
+        </>)}
+      </div>
+    )
+  }
+
+  if (loading) {
+    return <Spinner/>
+  }
+
+  if (member) {
+    return (
+      <div id="member-details-page">
+        <div className="row mt-1 g-3">
+          <div className={"col-2"}>
+            {RenderMemberDetails(member)}
+          </div>
+          <div className={"col-4"}>
+            <div className={"card"}>
+              {RenderMemberScanSessions()}
+            </div>
+          </div>
+          <div className={"col-4"}>
+            <div className={"card"}>
+              {!selectedSession && (
+                <>Select a session</>
+              )}
+              {
+                RenderSelectedScanSessions()
+              }
+            </div>
+          </div>
+          <div className={"col-2"}>
+            {RenderMemberActivitySummary()}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return null
 }
 
 export default MemberDetailsPage;
