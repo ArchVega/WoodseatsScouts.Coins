@@ -1,10 +1,11 @@
 import MemberDetailsPage from "../../pages/member-details-page/MemberDetailsPage.tsx";
+import CoinsPage from "../../pages/home-page/CoinsPage.tsx";
 
 const AppRoutes = [
-    // {
-    //     index: true,
-    //     element: <CoinsPage/>
-    // },
+    {
+        index: true,
+        element: <CoinsPage/>
+    },
     // {
     //     path: '/members-old',
     //     element: <MembersListPage/>
