@@ -12,6 +12,7 @@ import Uris from "../../services/Uris";
 import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../../contexts/AppContextExporter.tsx";
 import SectionNames from "../../pages/home-page/sections/SectionNames.ts";
 import {Button, Image} from "../common/HtmlControlWrappers.tsx";
+import AppSettingsModal from "../modals/AppSettingsModal.tsx";
 
 export default function NavMenu() {
   const {pageActionMenuAreaAction, setPageActionMenuAreaAction, activeScanningMember, setActiveScanningMember} = useContext(PageActionMenuAreaContext)
@@ -110,10 +111,7 @@ export default function NavMenu() {
   function RenderAppSettingsGearIcon() {
     if (appCameraAvailable) {
       return (
-        <span className="nav-link text-white cursor-pointer"
-              data-testid="nav-settings-modal"
-              style={{fontSize: "1.5em", fontWeight: "bold", marginTop: "3px", marginRight: "5px"}}
-              onClick={() => setAppSettingsModal(true)}>
+        <span id="app-settings-gear" data-testid="nav-settings-modal" onClick={() => setAppSettingsModal(true)}>
           ⛭
         </span>
       )
@@ -161,10 +159,7 @@ export default function NavMenu() {
         </div>
       </div>
       {RenderNavBarSubmenu()}
-      {/*<AppSettingsModal*/}
-      {/*  appSettingsModal={appSettingsModal}*/}
-      {/*  setAppSettingsModal={setAppSettingsModal}>*/}
-      {/*</AppSettingsModal>*/}
+      <AppSettingsModal appSettingsModal={appSettingsModal} setAppSettingsModal={setAppSettingsModal}></AppSettingsModal>
       {/*<ConfirmStartAgainModal*/}
       {/*  modal={startAgainModal}*/}
       {/*  setModal={setStartAgainModal}></ConfirmStartAgainModal>*/}

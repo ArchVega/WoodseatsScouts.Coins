@@ -1,0 +1,28 @@
+import axios from "axios";
+import Uris from "./Uris";
+
+export default function AppStateApiService() {
+    return {
+        getAppSate: (responseFunc) => {
+            async function fetch() {
+                const response = await axios.get(Uris.appState);
+                return response.data
+            }
+
+            fetch().then(response => {
+                responseFunc(response)
+            });
+        },
+
+        getAppVersion: (responseFunc) => {
+            async function fetch() {
+                const response = await axios.get(Uris.appVersion);
+                return response.data
+            }
+
+            fetch().then(response => {
+                responseFunc(response)
+            });
+        }
+    }
+}

@@ -8,6 +8,15 @@
 
   &-sub-menu {
     background-color: map.get(colours.$colours, purple-dark);
+
+    #app-settings-gear {
+      color: map.get(colours.$colours, white);
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 3px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
   }
 
   .scouts-nav-link {
