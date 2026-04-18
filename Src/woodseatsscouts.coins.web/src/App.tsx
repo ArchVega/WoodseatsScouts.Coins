@@ -3,7 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import AppRoutes from "./components/navigation/AppRoutes.tsx";
 import Layout from "./components/common/Layout.tsx";
 
-function App() {
+export default function App() {
   return (
       <AppContext>
         <Layout>
@@ -19,5 +19,3 @@ function App() {
       </AppContext>
   )
 }
-
-export default App

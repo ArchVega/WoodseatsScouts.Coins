@@ -1,0 +1,99 @@
+﻿@use 'site.variables' as variables;
+
+#report-page {
+  * {
+    color: white !important;
+    background-color: variables.$colour-scouts-purple;
+  }
+
+  .rect-img-container {
+    position: relative;
+  }
+
+  .rect-img-container::after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  .rect-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .white-background {
+    color: black !important;
+    background-color: white;
+  }
+
+  strong {
+    background-color: white;
+    color: variables.$colour-scouts-purple !important
+  }
+
+  .leader-group-number {
+    color: variables.$colour-scouts-purple !important;
+    text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  table.report-grid * {
+    border: none;
+    padding: 0.1em;
+
+    tr {
+      background-color: variables.$colour-scouts-purple;
+    }
+
+    td {
+      vertical-align: middle;
+      height: inherit;
+    }
+
+    tr td div {
+      height: 100%;
+      vertical-align: middle;
+
+
+      color: variables.$colour-scouts-purple !important;
+      background-color: white !important;
+    }
+
+    &.top-3 {
+      tr td:nth-child(3) div {
+        color: black !important;
+        background-color: white !important;
+        text-align: center;
+      }
+    }
+
+    &.all {
+      tr td:nth-child(2) div {
+        color: black !important;
+        background-color: white !important;
+        text-align: center;
+      }
+    }
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .countdown-container {
+    color: variables.$colour-scouts-purple !important;
+    font-weight: bold;
+  }
+}
+
+.countdown {
+  .hours, .minutes {    
+    font-size: 2em;
+  }
+}
+
+.country-div {
+  border-color: variables.$colour-scouts-purple !important;
+}

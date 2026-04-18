@@ -1,0 +1,43 @@
+﻿@use 'site.variables' as variables;
+@use 'site.mixins' as mixins;
+
+input, input:focus {
+  text-align: center;
+  color: variables.$colour-scouts-purple !important;
+  border: 3px solid variables.$colour-scouts-navy !important;  
+}
+
+.scan-textbox {
+  input {
+    font-size: 2em !important;
+  }
+  
+  .btn-primary {
+    background-color: variables.$colour-scouts-purple;
+    border-left: none;
+    border-top: 3px solid variables.$colour-scouts-navy !important;
+    border-right: 3px solid variables.$colour-scouts-navy !important;
+    border-bottom: 3px solid variables.$colour-scouts-navy !important;
+  }
+  img {
+    width: 3em;
+  }
+}
+
+.btn-success {
+  background-color: variables.$colour-scouts-teal;
+  strong {
+    color: white;
+  }
+}
+
+.btn-warning {
+  background-color: variables.$colour-scouts-yellow;
+  strong {
+    color: white;
+  }
+}
+
+input.filter-members {
+  @include mixins.rounded-borders    
+}
