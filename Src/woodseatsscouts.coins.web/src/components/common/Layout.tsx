@@ -15,6 +15,10 @@ export default function Layout({children}) {
       <footer className="page-footer">
         Scouts Coin App
       </footer>
+
+      {/*<footer className="mt-auto"> bear this in mind in case the above breaks*/}
+      {/*  Footer*/}
+      {/*</footer>*/}
     </div>
   )
 }

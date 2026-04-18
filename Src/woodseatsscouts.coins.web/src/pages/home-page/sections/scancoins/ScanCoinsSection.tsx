@@ -3,11 +3,11 @@
 // import {toast} from "react-toastify";
 // import {useContext, useEffect, useState} from "react";
 // import ScannedCoin from "./ScannedCoin.tsx";
-// import QRCodeInputDevices from "../../../../components/qrinputdevices/QRCodeInputDevices";
+// import QRCodeInputDevices from "../../../../components/qr-input-devices/QRCodeInputDevices";
 // import {logDebug, logError, logReactSet} from "../../../../components/logging/Logger";
 // import CoinApiService from "../../../../services/CoinApiService";
 // import AudioFx from "../../../../fx/AudioFx";
-// import QRScanCodeType from "../../../../components/qrscanners/QRScanCodeType";
+// import QRScanCodeType from "../../../../components/qr-scanners/QRScanCodeType";
 // import {toastError} from "../../../../components/toaster/toaster";
 // import Uris from "../../../../services/Uris";
 // import {UseAppCameraContext} from "../../../../contexts/AppContext";

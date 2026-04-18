@@ -1,7 +1,10 @@
 import React, {useContext, useEffect, useState} from "react";
 import wave from "../../../images/wave.png";
-// import QRCodeInputDevices from "../../../components/qrinputdevices/QRCodeInputDevices";
-// import QRScanCodeType from "../../../components/qrscanners/QRScanCodeType";
+import "./ScanMemberForCoinsSection.scss"
+import { Scanner } from '@yudiel/react-qr-scanner';
+
+// import QRCodeInputDevices from "../../../components/qr-input-devices/QRCodeInputDevices";
+// import QRScanCodeType from "../../../components/qr-scanners/QRScanCodeType";
 // import {logDebug, logError, logReactSet} from "../../../components/logging/Logger";
 // import AudioFx from "../../../fx/AudioFx";
 import MemberApiService from "../../../services/MemberApiService";
@@ -9,8 +12,10 @@ import MemberApiService from "../../../services/MemberApiService";
 import {PageActionMenuAreaContext, UseAppCameraContext} from "../../../contexts/AppContextExporter.tsx";
 import AudioFx from "../../../fx/AudioFx.ts";
 import SiteSpinner from "../../../components/spinner/SiteSpinner.tsx";
+import QRCodeInputDevices from "../../../components/qr-input-devices/QRCodeInputDevices.tsx";
+import QRScanCodeType from "../../../components/qr-input-devices/qr-scanners/QRScanCodeType.ts";
 
-function ScanMemberForCoinsSection({setMember}) {
+export default function ScanMemberForCoinsSection({setMember}) {
   const {pageActionMenuAreaAction, setPageActionMenuAreaAction, activeScanningMember, setActiveScanningMember} = useContext(PageActionMenuAreaContext)
   const {useAppCamera} = useContext(UseAppCameraContext)
 
@@ -73,34 +78,30 @@ function ScanMemberForCoinsSection({setMember}) {
   }
 
   return (
-    <>
-      <div className={"row"} id="scan-member-section">
-        <div className={"col"}>
+    <div className="row text-center page">
+      <div className="col">
+        <div className="mt-3">
+          <span className="page-hello-text">Hello</span>
           <img id="scan-member-section-wave-image" src={wave} alt=""/>
-          <span className="main-page-hello font-black">Hello</span>
           <h1 className="mb-5">
             <strong>
-              Scan your wristband to start...
+              Scan your wristband with the scanner to start saving points…
             </strong>
           </h1>
-
-          {loading
-            ? <SiteSpinner />
-            : (
-              <div className={"row"}>
-                {/*todo - offset ok?*/}
-                <div className={"col-8 offset-sm-2"}>
-                  {/*todo - qr reader*/}
-                  {/*<QRCodeInputDevices qrCode={memberQrCode} setQrCode={setMemberQrCode} qrScanCodeType={QRScanCodeType.Member}/>*/}
-                  <div className="mb-3"/>
-                </div>
-              </div>
-            )
-          }
         </div>
+
+        {loading
+          ? <SiteSpinner/>
+          : (
+            <div className="row">
+              <div className="col-8 offset-sm-2">
+                <QRCodeInputDevices qrCode={memberQrCode} setQrCode={setMemberQrCode} qrScanCodeType={QRScanCodeType.Member}/>
+                <div className="mb-3"/>
+              </div>
+            </div>
+          )
+        }
       </div>
-    </>
+    </div>
   )
 }
-
-export default ScanMemberForCoinsSection
