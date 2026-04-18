@@ -12,9 +12,10 @@ const SiteDevBar = () => {
     const [state, setState] = useState(true);
     const [testModeState, setTestModeState] = useState(true);
 
-    useEffect(() => {
-        setUseAppCamera(state)
-    }, [state])
+    // interfering with AppSettingsModal
+    // useEffect(() => {
+    //     setUseAppCamera(state)
+    // }, [state])
 
     useEffect(() => {
         setAppTestMode(testModeState)

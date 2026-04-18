@@ -9,11 +9,9 @@ function QRBarcodeScanner({qrCode, setQrCode, qrScanCodeType}) {
     const [testUsersModal, setTestUsersModal] = useState(false);
 
     function onMemberCodeTextBoxClicked() {
-        // todo
-        // if (appMode === "Development" && appTestMode) {
-        //     setTestUsersModal(true);
-        // }
-        setTestUsersModal(true);
+        if (appMode === "Development" && appTestMode) {
+            setTestUsersModal(true);
+        }
     }
 
     function setUserAndCloseModal(code) {

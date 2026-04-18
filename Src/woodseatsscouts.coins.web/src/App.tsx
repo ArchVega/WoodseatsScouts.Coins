@@ -1,4 +1,4 @@
-import {AppContext} from "./contexts/AppContext";
+import AppContext from "./contexts/AppContext";
 import {Route, Routes} from "react-router-dom";
 import AppRoutes from "./components/navigation/AppRoutes.tsx";
 import Layout from "./components/common/Layout.tsx";

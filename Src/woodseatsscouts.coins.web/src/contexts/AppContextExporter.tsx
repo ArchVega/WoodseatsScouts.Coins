@@ -10,7 +10,6 @@ type AppCameraAvailableContextType = {
 type UseAppCameraContextType = {
     useAppCamera: boolean;
     setUseAppCamera: React.Dispatch<React.SetStateAction<boolean>>;
-
 };
 
 type AppTestModeContextType = {

@@ -3,6 +3,7 @@ import {AppCameraAvailableContext, UseAppCameraContext} from "../../contexts/App
 import AppStateApiService from "../../services/AppStateApiService.tsx";
 import {BaseModal} from "./BaseModal.tsx";
 import {Switch} from "../common/HtmlControlWrappers.tsx";
+import AppLocalStorage from "../local-storage/AppLocalStorage.ts";
 
 export default function AppSettingsModal({appSettingsModal, setAppSettingsModal}) {
   const {useAppCamera, setUseAppCamera} = useContext(UseAppCameraContext)
@@ -10,17 +11,13 @@ export default function AppSettingsModal({appSettingsModal, setAppSettingsModal}
   const [appVersion, setAppVersion] = useState("")
 
   useEffect(() => {
-    const useCameraSetting = localStorage.getItem("woodseatsscouts.preferences.use-camera");
-    const useCamera = useCameraSetting != null && useCameraSetting === "true"
-    setUseAppCamera(useCamera)
-
     AppStateApiService().getAppVersion(response => {
       setAppVersion(response)
     })
   }, [])
 
   useEffect(() => {
-    localStorage.setItem("woodseatsscouts.preferences.use-camera", String(useAppCamera));
+    AppLocalStorage().setUseAppCamera(useAppCamera)
   }, [useAppCamera])
 
   return (

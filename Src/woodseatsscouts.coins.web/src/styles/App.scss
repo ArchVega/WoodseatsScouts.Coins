@@ -12,6 +12,16 @@
   display: flex;
   flex-direction: column;
 
+  .scouts-sitebar-appmode-development {
+    &,* {
+      color: map.get(colours.$colours, white);
+    }
+
+    text-align: center;
+    background-color: map.get(colours.$colours, green);
+  }
+
+
   .page-container {
     flex: 1;
     min-height: 0; // imp (prevents flex overflow bugs)
