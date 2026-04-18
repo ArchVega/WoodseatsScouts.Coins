@@ -92,12 +92,9 @@ export default function NavMenu() {
     switch (pageActionMenuAreaAction) {
       case SectionNames.ScanCoins:
         return (
-          <div className="d-flex">
-            <div className="flex-shrink-0 px-2">
-              <Image className="member-image mb-2"
-                     style={{width: "100px", height: "100px"}}
+          <div className="d-flex h-100">
+              <Image className="member-image h-100 w-auto"
                      src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.memberId) : "/images/unknown-member-image.png"}></Image>
-            </div>
             <div className="flex-fill">
               <div><span className="text-white">Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
               <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberTroopName}</div>
@@ -113,14 +110,13 @@ export default function NavMenu() {
     switch (pageActionMenuAreaAction) {
       case SectionNames.ScanMember:
         return (
-          <Button className={"btn-outline-light text-black bg-white"} style={{width: "230px"}} onClick={() => window.location.reload()}>
+          <Button className={"btn-outline-light text-black bg-white"} onClick={() => window.location.reload()}>
             Not scanning? <br/>Click here and try again.
           </Button>
         )
       case SectionNames.ScanCoins:
         return (
           <button type="button"
-                  style={{top: "18px", right: "34px", width: "230px"}}
                   data-testid="button-start-again"
                   className="btn btn-outline-light"
                   onClick={(e) => {
@@ -136,15 +132,15 @@ export default function NavMenu() {
   }
 
   return (
-    <header className={"scouts-nav-bar"}>
-      <div className="container navbar navbar-expand-sm navbar-toggleable-sm ng-white box-shadow align-middle" style={{height: "100px"}}>
-        <div className="flex-fill text-start" style={{backgroundColor: "red"}}>
+    <header id={"scouts-navbar"} className={""}>
+      <div className="container h-100">
+        <div id="left-column">
           {RenderLeftSideHeaderSection()}
         </div>
-        <div className="position-absolute top-50 start-50 translate-middle text-center">
+        <div id="middle-column">
           <Image role="button" src={ScoutsLogo} style={{height: "60px", width: "100%"}} onClick={() => setShowNavBarMenu(!showNavBarMenu)}/>
         </div>
-        <div className="flex-fill text-end" style={{backgroundColor: "blue"}}>
+        <div id="right-column">
           {RenderRightSideHeaderSection()}
         </div>
       </div>

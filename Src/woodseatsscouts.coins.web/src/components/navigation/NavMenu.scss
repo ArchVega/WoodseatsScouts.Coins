@@ -1,9 +1,38 @@
 ﻿@use "sass:map";
 @use '../../styles/abstract/site-colours' as colours;
 
-.scouts-nav-bar {
+#scouts-navbar {
+  height: 100px !important; // important, so that the nested image takes up the full height
+
+  .container {
+    //background-color: orange;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+
   & {
     background-color: map.get(colours.$colours, purple);
+  }
+
+  #left-column {
+    //background-color: red;
+    width: 200px; /* adjust as needed */
+    text-align: center;
+    height: 100%;
+  }
+
+  #middle-column {
+    //background-color: pink;
+    flex-shrink: 0;
+    text-align: center;
+  }
+
+  #right-column {
+    //background-color: blue;
+    width: 200px; /* adjust as needed */
+    text-align: center;
   }
 
   &-sub-menu {
