@@ -52,11 +52,6 @@ export default function NavMenu() {
                 Return to Main Screen
               </div>
             </span>
-            {/*<NavLink data-testid="nav-coins-page" onClick={() => setCurrentPage("coins")} className={"scouts-nav-link m-3"} to="/">*/}
-            {/*  <div className={"px-3 py-1 scouts-borders-white"}>*/}
-            {/*    Return to Main Screen*/}
-            {/*  </div>*/}
-            {/*</NavLink>*/}
           </div>
         )
       }
@@ -78,7 +73,7 @@ export default function NavMenu() {
     }
 
     return (
-      <div className="container-fluid scouts-nav-bar-sub-menu">
+      <div className="container-fluid scouts-navbar-sub-menu">
         <div className="container">
           <div className="d-sm-inline-flex w-100 align-items-center">
             {RenderNavBarSubmenuItems()}
@@ -93,8 +88,8 @@ export default function NavMenu() {
       case SectionNames.ScanCoins:
         return (
           <div className="d-flex h-100 p-2">
-              <Image className="member-image h-100 w-auto me-3"
-                     src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.memberId) : "/images/unknown-member-image.png"}></Image>
+            <Image className="member-image h-100 w-auto me-3"
+                   src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.memberId) : "/images/unknown-member-image.png"}></Image>
             <div id="member-details" className="flex-fill">
               <div><span>Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
               <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberTroopName}</div>
@@ -132,8 +127,8 @@ export default function NavMenu() {
   }
 
   return (
-    <header id={"scouts-navbar"} className={""}>
-      <div className="container h-100">
+    <header className={"scouts-navbar"}>
+      <div className="container" style={{height: "100px"}}>
         <div id="left-column">
           {RenderLeftSideHeaderSection()}
         </div>

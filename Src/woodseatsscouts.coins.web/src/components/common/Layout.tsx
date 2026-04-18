@@ -8,17 +8,10 @@ export default function Layout({children}) {
     <div className={"site-container d-flex flex-column"}>
       <SiteDevBar/>
       <NavMenu/>
-      <div className="page-container container flex-grow-1">
+      <div className="page-container container">
         {children}
         {/*<ToastContainer />*/}
       </div>
-      <footer className="page-footer">
-        Scouts Coin App
-      </footer>
-
-      {/*<footer className="mt-auto"> bear this in mind in case the above breaks*/}
-      {/*  Footer*/}
-      {/*</footer>*/}
     </div>
   )
 }

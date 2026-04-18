@@ -1,9 +1,9 @@
 ﻿@use "sass:map";
 @use '../../styles/abstract/site-colours' as colours;
 
-#scouts-navbar {
-  height: 100px !important; // important, so that the nested image takes up the full height
-
+.scouts-navbar {
+  min-height: 100px;
+  height: auto;
   $left-right-column-width: 200px;
 
   .container {

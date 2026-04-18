@@ -9,11 +9,6 @@
 
 // to move
 .site-container {
-  height: 100vh;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-
   .scouts-sitebar-appmode-development {
     &,* {
       color: map.get(colours.$colours, white);
@@ -23,17 +18,9 @@
     background-color: map.get(colours.$colours, green);
   }
 
-
   .page-container {
-    flex: 1;
     min-height: 0; // imp (prevents flex overflow bugs)
     overflow-y: auto;
-  }
-
-  .page-footer {
-    text-align: center;
-    color: map.get(colours.$colours, white);
-    background-color: map.get(colours.$colours, purple);
   }
 
   .scouts {
