@@ -1,9 +1,13 @@
+import "./QRBarcodeScanner.scss"
 import {useContext, useState} from "react";
 import {AppModeContext, AppTestModeContext} from "../../../../contexts/AppContextExporter.tsx";
 import TestQRBarcodeDataModal from "../../../_dev/TestQRBarcodeDataModal.tsx";
 import type {QRCodeInputDevicesProps} from "../QRCodeInputDevicesProps.tsx";
 
-export default function QRBarcodeScanner(props: QRCodeInputDevicesProps) {
+interface QRBarcodeScannerProps extends QRCodeInputDevicesProps {
+}
+
+export default function QRBarcodeScanner({...props}: QRBarcodeScannerProps) {
   const {appMode} = useContext(AppModeContext);
   const {appTestMode} = useContext(AppTestModeContext);
   const [testUsersModal, setTestUsersModal] = useState(false);
@@ -33,6 +37,7 @@ export default function QRBarcodeScanner(props: QRCodeInputDevicesProps) {
              autoFocus={true}
              onClick={onMemberCodeTextBoxClicked}
              onKeyDown={handleKeyDown}
+             style={{width: props.width, height: props.height}}
              data-testid="textbox-usb-scanner-code"/>
       <TestQRBarcodeDataModal
         testUsersModal={testUsersModal}

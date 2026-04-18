@@ -122,7 +122,7 @@ export default function ScanCoinsSection({member, setHaulResult}) {
         </div>
         <div className="row mb-3">
           <div className="col">
-            <QRCodeInputDevices qrCode={coinQrCode} setQrCode={setCoinQrCode} qrScanCodeType={QRScanCodeType.Coin}/>
+            <QRCodeInputDevices qrCode={coinQrCode} setQrCode={setCoinQrCode} qrScanCodeType={QRScanCodeType.Coin} width={"100%"} height={"60px"}/>
           </div>
         </div>
         <div className="row mb-2 g-2">

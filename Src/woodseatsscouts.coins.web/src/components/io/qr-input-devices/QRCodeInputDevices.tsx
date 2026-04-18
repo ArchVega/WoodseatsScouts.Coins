@@ -11,8 +11,8 @@ export default function QRCodeInputDevices(props: QRCodeInputDevicesProps) {
     <div className="row">
       <div className="col">
         {useAppCamera
-          ? <QRWebcamScanner qrCode={props.qrCode} setQrCode={props.setQrCode} qrScanCodeType={props.qrScanCodeType} videoSizeEm={20} type={"user"}/>
-          : <QRBarcodeScanner qrCode={props.qrCode} setQrCode={props.setQrCode} qrScanCodeType={props.qrScanCodeType}></QRBarcodeScanner>
+          ? <QRWebcamScanner {...props} videoSizeEm={20} type={"user"}/>
+          : <QRBarcodeScanner {...props}></QRBarcodeScanner>
         }
       </div>
     </div>

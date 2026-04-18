@@ -2,12 +2,12 @@ import React, {useEffect, useState} from "react";
 import type {QRCodeInputDevicesProps} from "../QRCodeInputDevicesProps.tsx";
 import {Scanner} from "@yudiel/react-qr-scanner";
 
-interface QRWebcamScanner extends QRCodeInputDevicesProps {
+interface QRWebcamScannerProps extends QRCodeInputDevicesProps {
   videoSizeEm: any
   type: string
 }
 
-export default function QRWebcamScanner({videoSizeEm, type, ...props}: QRWebcamScanner) {
+export default function QRWebcamScanner({videoSizeEm, type, ...props}: QRWebcamScannerProps) {
   const [currentQRCode, setCurrentQRCode] = useState("");
   const [previousQRCode, setPreviousQRCode] = useState("");
   const [timeoutHandle, setTimeoutHandle] = useState(0);
