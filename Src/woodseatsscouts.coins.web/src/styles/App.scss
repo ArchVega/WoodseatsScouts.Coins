@@ -1,4 +1,73 @@
-@use 'styles/abstract/site.colours' as colours;
+@use "sass:map";
 
-@use 'styles/base/site.reset' as reset;
-@use 'styles/base/site.typography' as typography;
+@use "./abstract/_site-variables" as variables;
+@use "./abstract/_site-mixins" as mixins;
+@use "./abstract/_site-colours" as colours;
+
+@use 'base/site-reset' as reset;
+@use 'base/site-typography' as typography;
+
+// to move
+.app-shell {
+  .scouts {
+    &-borders-white {
+      border: 1px solid white;
+      border-radius: 5px;
+      @include mixins.rounded-borders
+    }
+
+    &-colours {
+      &-blue {
+        background-color: #006ddf;
+      }
+
+      &-yellow {
+        background-color: #ffe627;
+      }
+
+      &-pink {
+        background-color: #ffb4e5;
+      }
+
+      &-green {
+        background-color: #25b755;
+      }
+
+      &-red {
+        background-color: #ed3f23;
+      }
+
+      &-grey-light {
+        background-color: #D5D5D5;
+      }
+
+      &-grey-dark {
+        background-color: #F7F7F7;
+      }
+
+      &-groups-squirrels {
+        background-color: #ed3f23;
+      }
+
+      &-groups-beavers {
+        background-color: #006ddf;
+      }
+
+      &-groups-cubs {
+        background-color: #25b755;
+      }
+
+      &-groups-scouts {
+        background-color: #088486;
+      }
+
+      &-groups-explorers {
+        background-color: #003982;
+      }
+
+      &-groups-network {
+        background-color: #ff912a;
+      }
+    }
+  }
+}

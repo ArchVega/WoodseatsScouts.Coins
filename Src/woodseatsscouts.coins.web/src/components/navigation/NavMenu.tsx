@@ -1,8 +1,10 @@
 import ScoutsLogo from '../../images/fleur-de-lis-marque-white.png'
 
+import './NavMenu.scss';
+
 import React, {useContext, useEffect, useState} from 'react';
 import {NavLink, Link, useLocation} from 'react-router-dom';
-import './NavMenu.css';
+import './NavMenu.scss';
 // import AppSettingsModal from "../common/AppSettingsModal";
 // import ConfirmStartAgainModal from "../../pages/homepage/sections/ConfirmStartAgainModal";
 // import SectionNames from "../../pages/homepage/sections/SectionNames";
@@ -36,7 +38,7 @@ export default function NavMenu() {
     setActiveScanningMemberFragment(
       <div className="d-flex">
         <div className="flex-shrink-0 px-2">
-          <img className="member-image mb-2 site-header-member-image" style={{objectFit: "cover"}}
+          <img className="member-image mb-2" style={{objectFit: "cover"}}
                alt=""
                src={activeScanningMember && activeScanningMember.hasImage
                  ? Uris.memberPhoto(activeScanningMember.memberId)
@@ -77,19 +79,10 @@ export default function NavMenu() {
     }
   }, [pageActionMenuAreaAction]);
 
-  function menuItemCssClass(id) {
-    let classNames = "text-light m-3 fw-bold"
-    if (id === currentPage) {
-      classNames += "menu-item-active";
-    }
-
-    return classNames;
-  }
-
   function RenderNavBarSubmenu() {
     if (showNavBarMenu) {
       return (
-        <div className="container-fluid scouts-colours-menu-header-darker">
+        <div className="container-fluid scouts-nav-bar-sub-menu">
           <div className="container">
             <div className="d-sm-inline-flex w-100 align-items-center">
               {RenderMenuItems()}
@@ -107,7 +100,7 @@ export default function NavMenu() {
       <NavLink
         data-testid={dataTestId}
         onClick={() => setCurrentPage(targetPageName)}
-        className={menuItemCssClass(targetPageName)}
+        className={"scouts-nav-link m-3"}
         to={targetLocation}>
         {text}
       </NavLink>
@@ -132,7 +125,7 @@ export default function NavMenu() {
   function RenderReturnToMainScreenButton() {
     return (
       <div>
-        <NavLink data-testid="nav-coins-page" onClick={() => setCurrentPage("coins")} className={menuItemCssClass("coins")} to="/">
+        <NavLink data-testid="nav-coins-page" onClick={() => setCurrentPage("coins")} className={"scouts-nav-link m-3"} to="/">
           <div className={"px-3 py-1 scouts-borders-white"}>
             Return to Main Screen
           </div>
@@ -155,7 +148,7 @@ export default function NavMenu() {
   }
 
   return (
-    <header className={"scouts-colours-menu-header"}>
+    <header className={"scouts-nav-bar"}>
       <div className="container navbar navbar-expand-sm navbar-toggleable-sm ng-white box-shadow align-middle" style={{height: "100px"}}>
         <div className="flex-fill text-start">
           {activeScanningMemberFragment}

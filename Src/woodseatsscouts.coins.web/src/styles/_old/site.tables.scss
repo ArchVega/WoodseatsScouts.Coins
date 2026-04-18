@@ -1,5 +1,5 @@
-﻿@use 'site.mixins' as mixins;
-@use 'site.variables' as variables;
+﻿@use '_old/site.mixins' as mixins;
+@use '../abstract/site-variables' as variables;
 
 
 table.members-table {

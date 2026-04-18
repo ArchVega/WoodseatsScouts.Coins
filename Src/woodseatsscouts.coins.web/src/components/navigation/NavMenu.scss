@@ -1,11 +1,25 @@
-﻿.scouts-nav-link {
-  color: white;
-  text-decoration: none;
-  &:hover {
-    color: white;
+﻿@use "sass:map";
+@use '../../styles/abstract/site-colours' as colours;
+
+.scouts-nav-bar {
+  & {
+    background-color: map.get(colours.$colours, purple);
   }
 
-  * {
+  &-sub-menu {
+    background-color: map.get(colours.$colours, purple-dark);
+  }
+
+  .scouts-nav-link {
     color: white;
+    text-decoration: none;
+
+    &:hover {
+    }
+
+    * {
+      color: white;
+    }
   }
 }
+

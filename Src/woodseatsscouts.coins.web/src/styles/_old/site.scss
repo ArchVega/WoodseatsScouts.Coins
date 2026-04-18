@@ -1,15 +1,15 @@
-@use 'site.variables' as variables;
-@use 'site.reset' as reset;
+@use '../site.variables' as variables;
+@use '_old/site.reset' as reset;
 
-@use 'site.spinner' as spinner;
-@use 'site.controls' as controls;
-@use 'site.coins' as coins;
-@use 'site.scrollbars' as scrollbars;
-@use 'site.tables' as tables;
-@use 'site.report' as report;
-@use 'site.typography' as typography;
+@use '_old/site.spinner' as spinner;
+@use '_old/site.controls' as controls;
+@use '_old/site.coins' as coins;
+@use '_old/site.scrollbars' as scrollbars;
+@use '_old/site.tables' as tables;
+@use '_old/site.report' as report;
+@use '_old/site.typography' as typography;
 
-@use './pages/homepage';
+@use 'pages/homepage';
 
 #site-header {
   img {
@@ -279,15 +279,6 @@ select.form-control {
 .min-w-0 {
   min-width: 0;
 }
-
-.site-header-member-image {
-  width: 64px !important;
-  height: 64px !important;
-  border-radius: 50% !important;
-  object-fit: cover !important;
-  border: 3px solid #fff;
-}
-
 .scanned-info-card {
   background-color: grey;
   color: black;
