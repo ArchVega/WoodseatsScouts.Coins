@@ -328,9 +328,6 @@ select.form-control {
   background-color: lightgrey;
 }
 
-.members-list-item-card .card-body {
-}
-
 .members-list-item-card img {
   width: 100% !important;
   height: 186px !important;
@@ -346,6 +343,43 @@ select.form-control {
 }
 
 .members-list-item-section * {
+  text-align: center;
+  width: 100% !important;
+  background-color: white;
+}
+
+#member-details-page {
+
+}
+
+#member-details-page > .row {
+  //background-color: red;
+}
+
+
+
+
+
+.member-details-member-card {
+  width: 100%;
+  border-radius: 10px !important;
+  background-color: lightgrey;
+}
+
+.member-details-member-card img {
+  height: 186px !important;
+  object-fit: cover !important;
+}
+
+.member-details-member-card .row:nth-child(1) {
+  min-height: 200px;
+}
+
+.member-details-member-card {
+  padding-bottom: 3px;
+}
+
+.member-details-member-card * {
   text-align: center;
   width: 100% !important;
   background-color: white;

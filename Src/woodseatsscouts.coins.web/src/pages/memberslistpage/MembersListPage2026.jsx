@@ -6,9 +6,11 @@ import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal";
 import Uris from "../../services/Uris";
 import {AppCameraAvailableContext, UseAppCameraContext} from "../../contexts/AppContext";
 import EditMemberNameModal from "../../components/modals/EditMemberNameModal";
+import { useNavigate } from "react-router-dom";
 
 function MembersListPage() {
   const [useAppCamera] = useContext(UseAppCameraContext)
+  const navigate = useNavigate();
 
   const [members, setMembers] = useState([]);
   const [userModal, setUserModal] = useState(false);
@@ -96,7 +98,7 @@ function MembersListPage() {
           </Row>
           <Row className="g-1">
             <Col xs={6} className={"members-list-item-section"}>
-              <Button style={{color: "Black"}} onClick={() => showMemberNameModal(member)}>EDIT</Button>
+              <Button style={{color: "Black"}} onClick={() => navigate(`/member-details/${member.memberCode}`)}>EDIT</Button>
             </Col>
             <Col xs={6} className={"members-list-item-section"}>
               <Button style={{color: "Black"}} onClick={() => showEditUserModal(member)}>PHOTO</Button>
