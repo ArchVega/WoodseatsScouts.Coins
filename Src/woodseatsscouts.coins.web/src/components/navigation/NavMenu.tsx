@@ -92,11 +92,11 @@ export default function NavMenu() {
     switch (pageActionMenuAreaAction) {
       case SectionNames.ScanCoins:
         return (
-          <div className="d-flex h-100">
-              <Image className="member-image h-100 w-auto"
+          <div className="d-flex h-100 p-2">
+              <Image className="member-image h-100 w-auto me-3"
                      src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.memberId) : "/images/unknown-member-image.png"}></Image>
-            <div className="flex-fill">
-              <div><span className="text-white">Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
+            <div id="member-details" className="flex-fill">
+              <div><span>Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
               <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberTroopName}</div>
             </div>
           </div>

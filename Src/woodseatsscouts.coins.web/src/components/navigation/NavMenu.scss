@@ -4,8 +4,9 @@
 #scouts-navbar {
   height: 100px !important; // important, so that the nested image takes up the full height
 
+  $left-right-column-width: 200px;
+
   .container {
-    //background-color: orange;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -17,21 +18,36 @@
   }
 
   #left-column {
-    //background-color: red;
-    width: 200px; /* adjust as needed */
+    width: $left-right-column-width;
     text-align: center;
     height: 100%;
+
+    #member-details {
+      * {
+        color: map.get(colours.$colours, white);
+        text-align: left;
+        line-height: 1em;
+      }
+
+      div:first-child {
+        font-size: 2em;
+        margin-top: 10px;
+      }
+
+      div:nth-child(2) {
+        font-size: 1.2em;
+        margin-top: 5px;
+      }
+    }
   }
 
   #middle-column {
-    //background-color: pink;
     flex-shrink: 0;
     text-align: center;
   }
 
   #right-column {
-    //background-color: blue;
-    width: 200px; /* adjust as needed */
+    width: $left-right-column-width;
     text-align: center;
   }
 
