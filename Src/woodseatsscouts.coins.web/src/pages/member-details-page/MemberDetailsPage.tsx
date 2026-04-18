@@ -1,3 +1,5 @@
+import './MemberDetailsPage.scss'
+
 import {useParams} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
@@ -16,6 +18,12 @@ function MemberDetailsPage() {
     const [showScores, setShowScores] = useState(true);
 
     // showMemberNameModal(member)}
+
+    // todo: these are what we need to hook up
+    // <EditMemberNameModal editMembersModal={editMemberNameModal} setEditMembersModal={setEditMemberNameModal} selectedMember={selectedUser}
+    //                      setSelectedMember={setSelectedUser}/>
+    // <EditMemberPhotoModal editUsersModal={editUserModal} setEditUsersModal={setEditUserModal} selectedUser={selectedUser}
+    //                       setSelectedUser={setSelectedUser}/>
 
     useEffect(() => {
         if (memberCode) {

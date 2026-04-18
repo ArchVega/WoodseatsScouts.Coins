@@ -1,0 +1,38 @@
+@use "./../../styles/abstract/_site-mixins" as mixins;
+
+.members-list-item-card {
+  width: 220px;
+  border-radius: 10px !important;
+  background-color: lightgrey;
+}
+
+.members-list-item-card img {
+  width: 100% !important;
+  height: 186px !important;
+  object-fit: cover !important;
+}
+
+.members-list-item-card .row:nth-child(1) {
+  min-height: 200px;
+}
+
+.members-list-item-section {
+  padding-bottom: 3px;
+}
+
+.members-list-item-section * {
+  text-align: center;
+  width: 100% !important;
+  background-color: white;
+}
+
+#member-details-page {
+}
+
+#member-details-page > .row {
+  //background-color: red;
+}
+
+input.filter-members {
+  @include mixins.rounded-borders
+}

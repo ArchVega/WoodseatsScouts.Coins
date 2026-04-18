@@ -1,0 +1,24 @@
+.member-details-member-card {
+    width: 100%;
+    border-radius: 10px !important;
+    background-color: lightgrey;
+}
+
+.member-details-member-card img {
+    height: 186px !important;
+    object-fit: cover !important;
+}
+
+.member-details-member-card .row:nth-child(1) {
+    min-height: 200px;
+}
+
+.member-details-member-card {
+    padding-bottom: 3px;
+}
+
+.member-details-member-card * {
+    text-align: center;
+    width: 100% !important;
+    background-color: white;
+}
