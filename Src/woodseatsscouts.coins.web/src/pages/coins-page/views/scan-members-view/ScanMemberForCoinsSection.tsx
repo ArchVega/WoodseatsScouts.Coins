@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import wave from "../../../../images/wave.png";
 import "./ScanMemberForCoinsSection.scss"
-import MemberApiService from "../../../../services/MemberApiService.ts";
+import MemberApiService from "../../../../services/apis/MemberApiService.ts";
 import {PageActionMenuAreaContext, UseAppCameraContext} from "../../../../contexts/AppContextExporter.tsx";
 import AudioFx from "../../../../components/fx/AudioFx.ts";
 import Spinner from "../../../../components/widgets/Spinner.tsx";

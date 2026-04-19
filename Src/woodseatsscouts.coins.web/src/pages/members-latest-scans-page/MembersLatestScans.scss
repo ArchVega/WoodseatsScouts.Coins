@@ -36,12 +36,7 @@
 
   .group {
     div {
-      background-color: green;
       @include mixins.rounded-borders;
-
-      strong {
-        color: white;
-      }
     }
   }
 }

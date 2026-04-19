@@ -1,13 +1,26 @@
 import "./MembersLatestScans.scss"
 import {useEffect, useState} from "react";
-import Uris from "../../services/Uris";
+import Uris from "../../services/apis/Uris.ts";
 import axios from "axios";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
+import type {MembersWithPoints} from "../../types/ServerTypes.ts";
+import {getSectionBranding} from "../../utilities/branding.ts";
 
 export default function MembersLatestScansPage() {
   const [members, setMembers] = useState([])
 
   useEffect(() => {
+    function loadData() {
+      setMembers([])
+
+      axios
+        .get(Uris.latest6Scavengers)
+        .then(async response => {
+          const members = await response.data
+          setMembers(members)
+        })
+    }
+
     loadData()
 
     axios
@@ -20,23 +33,10 @@ export default function MembersLatestScansPage() {
       })
   }, []);
 
-  function loadData() {
-    setMembers([])
+  function RenderMember(member: MembersWithPoints) {
+    const sectionBranding = getSectionBranding(member.sectionId)
+    console.log(sectionBranding)
 
-    axios
-      .get(Uris.latest6Scavengers)
-      .then(async response => {
-        const members = await response.data
-        const repeated = Array.from({length: 40}, () => members).flat();
-        setMembers(repeated)
-      })
-  }
-
-  function sectionBackgroundClassName(sectionName) {
-    return `member-info-inner background-${sectionName.toLowerCase()}`
-  }
-
-  function RenderMember(member) {
     return (
       <div className="card members-list-item-card flex-shrink-0" >
         <div className="card-body">
@@ -49,11 +49,11 @@ export default function MembersLatestScansPage() {
             <strong>{member.firstName}</strong>
           </div>
           <div className="points m-0">
-            <strong>points</strong>
+            <strong>{member.totalPoints}</strong>
           </div>
           <div className="group mt-2">
-            <div>
-              <strong>229th Greenhill</strong>
+            <div style={{backgroundColor: sectionBranding.backgroundColour}}>
+              <strong style={{color: sectionBranding.foregroundColour}}>{member.scoutGroupName}</strong>
             </div>
           </div>
         </div>
@@ -63,10 +63,10 @@ export default function MembersLatestScansPage() {
 
   return (
     <div id="latest-scans-page" className="d-flex flex-wrap mt-2">
-      {members.map((item, i) => (
+      {members.map((member, i) => (
         <div key={i} className="w-16 p-2">
           <div className="card h-100">
-            {RenderMember(item)}
+            {RenderMember(member)}
           </div>
         </div>
       ))}

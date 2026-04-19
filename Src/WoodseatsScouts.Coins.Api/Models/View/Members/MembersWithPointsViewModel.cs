@@ -1,7 +1,8 @@
 // dotcover disable 
+
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
-namespace WoodseatsScouts.Coins.Api.Models.View;
+namespace WoodseatsScouts.Coins.Api.Models.View.Members;
 
 public class MembersWithPointsViewModel
 {
@@ -15,7 +16,7 @@ public class MembersWithPointsViewModel
         LastName = member.LastName;
         FullName = member.FullName;
         ScoutGroupName = member.ScoutGroup.Name;
-        Section = member.SectionId;
+        SectionId = member.SectionId;
         SectionName = member.Section.Name;
         TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.PointValue)).Sum();
     }
@@ -34,7 +35,7 @@ public class MembersWithPointsViewModel
 
     public string ScoutGroupName { get; set; }
 
-    public string Section { get; set; } // Todo Section is now "SectionId". Rename
+    public string SectionId { get; set; } // Todo Section is now "SectionId". Rename
     public string SectionName { get; set; }
 
     public int TotalPoints { get; set; }

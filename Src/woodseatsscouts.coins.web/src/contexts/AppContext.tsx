@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {AppCameraAvailableContext, AppModeContext, AppSettingsContext, AppTestModeContext, PageActionMenuAreaContext, UseAppCameraContext} from "./AppContextExporter";
-import AppStateApiService from "../services/AppStateApiService.tsx";
+import AppStateApiService from "../services/apis/AppStateApiService.tsx";
 import AppLocalStorage from "../components/storage/AppLocalStorage.ts";
 import getAppSettings from "../AppSettings.ts";
 

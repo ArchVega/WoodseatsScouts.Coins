@@ -39,13 +39,4 @@ public class LeaderboardController(IAppDbContext appDbContext, IOptions<Leaderbo
 
         return reportViewModel;
     }
-
-    [HttpGet]
-    [Route("Members")]
-    public ActionResult MembersLeaderboard()
-    {
-        var latest6Scavengers = appDbContext.GetLastSixScavengers();
-        
-        return Ok(latest6Scavengers);
-    }
 }

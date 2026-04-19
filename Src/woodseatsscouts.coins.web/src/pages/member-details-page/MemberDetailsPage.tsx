@@ -2,13 +2,13 @@ import './MemberDetailsPage.scss'
 import {useParams} from "react-router-dom";
 import React, {type ReactNode, useContext, useEffect, useState} from "react";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
-import MemberApiService from "../../services/MemberApiService.ts";
+import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import QRCodeInputDevices from "../../components/io/qr-input-devices/QRCodeInputDevices.tsx";
 import QRScanCodeType from "../../components/io/qr-input-devices/QRScanCodeType.ts";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import ScoutsLogo from "../../images/fleur-de-lis-marque-white.png";
-import Uris from "../../services/Uris.ts";
+import Uris from "../../services/apis/Uris.ts";
 import type {Member} from "../../types/ServerTypes.ts";
 
 function MemberDetailsPage() {

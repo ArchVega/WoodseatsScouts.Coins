@@ -1,11 +1,11 @@
 import './MembersListPage.scss'
 
 import {useContext, useEffect, useState} from "react";
-import MemberApiService from "../../services/MemberApiService";
+import MemberApiService from "../../services/apis/MemberApiService.ts";
 // import MemberPhotoModal from "../../components/modals/MemberPhotoModal";
 // import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal";
 // import EditMemberNameModal from "../../components/modals/EditMemberNameModal";
-import Uris from "../../services/Uris";
+import Uris from "../../services/apis/Uris.ts";
 import {useNavigate} from "react-router-dom";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";

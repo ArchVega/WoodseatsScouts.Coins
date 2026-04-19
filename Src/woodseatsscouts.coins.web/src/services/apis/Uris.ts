@@ -7,9 +7,7 @@ const Uris = {
   leaderboard: `${baseUri}/Leaderboard/Report`,
   refreshSecondsForLatestScans: `${baseUri}/Members/RefreshSecondsForLatestScans`,
   testDataCoins: `${baseUri}/Sut/Coins`,
-  countries: `${baseUri}/Countries`,
-  voteResults: `${baseUri}/Vote/Results`,
-  latest6Scavengers: `${baseUri}/Leaderboard/Members`,
+  latest6Scavengers: `${baseUri}/Members/LatestScans`,
 
   addPointsToMember: function (id) {
     return `${baseUri}/Members/${id}/Coins`
@@ -28,10 +26,7 @@ const Uris = {
   },
   memberName: function (id) {
     return `${baseUri}/Members/${id}/Name?`
-  },
-  registerVoteForMember(memberId, countryId) {
-    return `${baseUri}/Vote/${memberId}/RegisterVote?countryId=${countryId}`
-  },
+  }
 }
 
 export default Uris

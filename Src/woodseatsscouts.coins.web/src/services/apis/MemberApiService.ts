@@ -1,6 +1,6 @@
 import axios from "axios";
 // import {logApi} from "../components/logging/Logger";
-import Uris from "./Uris";
+import Uris from "./Uris.ts";
 
 function MemberApiService() {
     return {

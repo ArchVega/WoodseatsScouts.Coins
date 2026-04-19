@@ -1,5 +1,5 @@
 import axios from "axios";
-import Uris from "./Uris";
+import Uris from "./Uris.ts";
 
 export default function AppStateApiService() {
     return {

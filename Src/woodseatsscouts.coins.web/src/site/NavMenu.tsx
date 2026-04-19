@@ -3,7 +3,7 @@ import './NavMenu.scss';
 import React, {useContext, useEffect, useState} from 'react';
 import {NavLink, Link, useLocation, useNavigate} from 'react-router-dom';
 import './NavMenu.scss';
-import Uris from "../services/Uris.ts";
+import Uris from "../services/apis/Uris.ts";
 import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../contexts/AppContextExporter.tsx";
 import CoinsPageViewName from "../pages/coins-page/CoinsPageViewName.ts";
 import {Button, Image} from "../components/widgets/HtmlControlWrappers.tsx";

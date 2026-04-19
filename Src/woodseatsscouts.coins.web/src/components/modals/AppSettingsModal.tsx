@@ -1,6 +1,6 @@
 ﻿import {useContext, useEffect, useState} from "react";
 import {AppCameraAvailableContext, UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
-import AppStateApiService from "../../services/AppStateApiService.tsx";
+import AppStateApiService from "../../services/apis/AppStateApiService.tsx";
 import {BaseModal} from "./BaseModal.tsx";
 import {Switch} from "../widgets/HtmlControlWrappers.tsx";
 import AppLocalStorage from "../storage/AppLocalStorage.ts";

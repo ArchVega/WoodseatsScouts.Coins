@@ -7,6 +7,7 @@ using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.View;
+using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -117,5 +118,14 @@ public class MembersController(
     public ActionResult RefreshSecondsForLatestScans()
     {
         return Ok(leaderboardSettingsOptions.Value.Last6ScavengersPageRefreshSeconds);
+    }
+    
+    [HttpGet]
+    [Route("LatestScans")]
+    public ActionResult LatestScans()
+    {
+        var latest6Scavengers = appDbContext.GetLastSixScavengers();
+        
+        return Ok(latest6Scavengers);
     }
 }

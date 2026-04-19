@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import ScannedCoin from "./ScannedCoin.tsx";
 import QRCodeInputDevices from "../../../../components/io/qr-input-devices/QRCodeInputDevices";
 import AudioFx from "../../../../components/fx/AudioFx";
-import CoinApiService from "../../../../services/CoinApiService.tsx";
+import CoinApiService from "../../../../services/apis/CoinApiService.tsx";
 import QRScanCodeType from "../../../../components/io/qr-input-devices/QRScanCodeType.ts";
 import {logDebug, logError, logReactSet} from "../../../../components/logging/Logger.ts";
 import {toastError} from "../../../../components/toaster/toaster.ts";

@@ -1,5 +1,5 @@
 import axios from "axios";
-import Uris from "../../services/Uris";
+import Uris from "../../services/apis/Uris.ts";
 
 export default function TestDataApiService() {
     return {

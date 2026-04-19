@@ -5,6 +5,7 @@ using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Models.Domain;
+using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Data
 {
@@ -111,43 +112,51 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .ToList();
         }
 
-        public List<object> GetLastSixScavengers()
+        public List<MembersWithPointsViewModel> GetLastSixScavengers()
         {
-            var last6MembersAndTotalCoins = ScavengeResults
+            var last6MembersIds = ScavengeResults!
                 .OrderByDescending(x => x.CompletedAt)
                 .Take(6)
-                .Select(x => new
-                {
-                    x.MemberId,
-                    TotalPoints = x.ScavengedCoins.Sum(y => y.PointValue)
-                })
+                .Select(x => x.MemberId)
                 .ToList();
 
-            var members = new List<Object>();
+            
+            var last6MembersAndTotalCoins = Members!
+                .Where(x => last6MembersIds.Contains(x.Id))
+                .Include(x => x.Section)
+                .Include(x => x.ScoutGroup)
+                .Include(x => x.ScavengeResults)
+                .ThenInclude(x => x.ScavengedCoins)
+                .Select(x => new MembersWithPointsViewModel(x))
+                .ToList();
 
-            foreach (var memberAndTotalCoins in last6MembersAndTotalCoins)
-            {
-                var member = Members
-                    .Include(x => x.Section)
-                    .Single(x => memberAndTotalCoins.MemberId == x.Id);
+            return last6MembersAndTotalCoins;
 
-                var item = new
-                {
-                    member.Id,
-                    MemberCode = member.Code,
-                    member.HasImage,
-                    MemberNumber = member.Number,
-                    member.FirstName,
-                    member.LastName,
-                    Section = member.SectionId,
-                    SectionName = member.Section.Name,
-                    memberAndTotalCoins.TotalPoints
-                };
+            // var members = new List<Object>();
+            //
+            // foreach (var memberAndTotalCoins in last6MembersAndTotalCoins)
+            // {
+            //     var member = Members
+            //         .Include(x => x.Section)
+            //         .Single(x => memberAndTotalCoins.MemberId == x.Id);
+            //
+            //     var item = new
+            //     {
+            //         member.Id,
+            //         MemberCode = member.Code,
+            //         member.HasImage,
+            //         MemberNumber = member.Number,
+            //         member.FirstName,
+            //         member.LastName,
+            //         Section = member.SectionId,
+            //         SectionName = member.Section.Name,
+            //         memberAndTotalCoins.TotalPoints
+            //     };
+            //
+            //     members.Add(item);
+            // }
 
-                members.Add(item);
-            }
-
-            return members;
+            // return members;
         }
 
         public List<GroupPoints> GetTopThreeGroupsInLastHour()
