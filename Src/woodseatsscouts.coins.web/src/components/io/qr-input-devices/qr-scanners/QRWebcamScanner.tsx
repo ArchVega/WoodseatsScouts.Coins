@@ -28,9 +28,22 @@ export default function QRWebcamScanner({videoSizeEm, type, ...props}: QRWebcamS
 
   }, [currentQRCode])
 
+  const handleScan = (detectedCodes) => {
+    if (detectedCodes && detectedCodes.length >= 1) {
+      setCurrentQRCode(detectedCodes[0].rawValue)
+    }
+  }
+
   return (
-    <div className="qr-code-scanner-container">
-      <Scanner onScan={(result) => console.log(result)} onError={(error: any) => console.log(error?.message)}/>
+    <div className="qr-code-scanner-container" style={{width: props.webcamWidth, height: props.webcamHeight, margin: "0 auto"}}>
+      <Scanner
+        onScan={handleScan}
+        onError={(error: any) => console.log(error?.message)}
+        constraints={{
+          facingMode: "environment",
+          aspectRatio: 1,
+        }}
+      />
       {/*<QrReader*/}
       {/*  constraints={{facingMode: "environment"}}*/}
       {/*  containerStyle={{height: (videoSizeEm + 1) + "em"}}*/}

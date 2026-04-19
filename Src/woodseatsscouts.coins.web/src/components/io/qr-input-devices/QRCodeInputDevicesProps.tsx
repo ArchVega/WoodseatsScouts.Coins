@@ -4,6 +4,8 @@ export interface QRCodeInputDevicesProps {
   qrCode: string,
   setQrCode: React.Dispatch<React.SetStateAction<string>>
   qrScanCodeType: string,
-  width: string,
-  height: string,
+  textboxWidth: string,
+  textboxHeight: string,
+  webcamWidth: string,
+  webcamHeight: string,
 }

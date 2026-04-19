@@ -37,7 +37,7 @@ export default function QRBarcodeScanner({...props}: QRBarcodeScannerProps) {
              autoFocus={true}
              onClick={onMemberCodeTextBoxClicked}
              onKeyDown={handleKeyDown}
-             style={{width: props.width, height: props.height}}
+             style={{width: props.textboxWidth, height: props.textboxHeight}}
              data-testid="textbox-usb-scanner-code"/>
       <TestQRBarcodeDataModal
         testUsersModal={testUsersModal}

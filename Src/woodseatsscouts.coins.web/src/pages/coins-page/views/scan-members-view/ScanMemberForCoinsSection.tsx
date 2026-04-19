@@ -85,7 +85,15 @@ export default function ScanMemberForCoinsSection({setMember}) {
           : (
             <div className="row">
               <div className="col-8 offset-sm-2">
-                <QRCodeInputDevices qrCode={memberQrCode} setQrCode={setMemberQrCode} qrScanCodeType={QRScanCodeType.Member} width={"100%"} height={"70px"}/>
+                <QRCodeInputDevices
+                  qrCode={memberQrCode}
+                  setQrCode={setMemberQrCode}
+                  qrScanCodeType={QRScanCodeType.Member}
+                  textboxWidth={"100%"}
+                  textboxHeight={"70px"}
+                  webcamWidth={"240px"}
+                  webcamHeight={"240px"}
+                />
               </div>
             </div>
           )
