@@ -101,63 +101,84 @@ function MemberDetailsPage() {
 
   const rows = Array.from({length: 200}); // 👈 controls height
 
+  function formatDateTime(date: Date) {
+    return new Intl.DateTimeFormat("en-GB", {
+      dateStyle: "short",
+      timeStyle: "short", // ← this omits seconds
+    }).format(date);
+  }
+
   function RenderMemberScanSessions() {
     return (
-      <table className="table table-striped">
-        <thead>
-        <tr>
-          <th>Time</th>
-          <th>Total Points</th>
-          <th>Edit</th>
-          <th>Delete</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {rows.map((_, i) => (
-          <tr key={i}>
-            <td>{new Date().toLocaleString()}</td>
-            <td>{i + 1}</td>
-            <td>
-              <button className={"btn-warning"}>EDIT</button>
-            </td>
-            <td>
-              <button className={"btn-danger"}>DELETE</button>
-            </td>
+      <div className="member-details-table-container">
+        <div className="row">
+          <div className="col-12 mt-1">
+            <h4>Member's Scan Sessions</h4>
+          </div>
+        </div>
+        <table className="table table-bordered">
+          <thead className="table-dark">
+          <tr>
+            <th>Time</th>
+            <th>Total Points</th>
+            <th>Edit</th>
+            <th>Delete</th>
           </tr>
-        ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+          {rows.map((_, i) => (
+            <tr key={i}>
+              <td>{formatDateTime(new Date())}</td>
+              <td>{i + 1}</td>
+              <td>
+                <span>✏️</span>
+              </td>
+              <td>
+                <span>🗑️</span>
+              </td>
+            </tr>
+          ))}
+          </tbody>
+        </table>
+      </div>
     )
   }
 
   function RenderSelectedScanSessions() {
     return (
-      <table className="table table-striped">
-        <thead>
-        <tr>
-          <th>Base</th>
-          <th>Total Points</th>
-          <th>Edit</th>
-          <th>Delete</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {rows.map((_, i) => (
-          <tr key={i}>
-            <td>{['Archery', 'Shooting', "Cave Bus", "Arts and Crafts"][Math.floor(Math.random() * 4)]}</td>
-            <td>{i + 1}</td>
-            <td>
-              <button className={"btn-warning"}>EDIT</button>
-            </td>
-            <td>
-              <button className={"btn-danger"}>DELETE</button>
-            </td>
+      <div className="member-details-table-container">
+        <div className="row">
+          <div className="col-12 mt-1">
+            <h4 className="mb-0">Edit Member's Scan Points</h4>
+            <small>Session: 10/03/2026 10:45</small>
+          </div>
+        </div>
+        <table className="table ">
+          <thead className="table-dark" >
+          <tr>
+            <th>Base</th>
+            <th>Total Points</th>
+            <th>Edit</th>
+            <th>Delete</th>
           </tr>
-        ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+          {rows.map((_, i) => (
+            <tr key={i}>
+              <td>{['Archery', 'Shooting', "Cave Bus", "Arts and Crafts"][Math.floor(Math.random() * 4)]}</td>
+              <td>{i + 1}</td>
+              <td>
+                <span>✏️</span>
+              </td>
+              <td>
+                <span>🗑️</span>
+              </td>
+            </tr>
+          ))}
+          </tbody>
+        </table>
+      </div>
     )
   }
 
@@ -213,9 +234,9 @@ function MemberDetailsPage() {
           </div>
           <div className={"col-4"}>
             <div className={"card"}>
-              {!selectedSession && (
-                <>Select a session</>
-              )}
+              {/*{!selectedSession && (*/}
+              {/*  <>Select a session</>*/}
+              {/*)}*/}
               {
                 RenderSelectedScanSessions()
               }
