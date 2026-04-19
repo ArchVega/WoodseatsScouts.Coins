@@ -1,7 +1,7 @@
 import MemberDetailsPage from "../pages/member-details-page/MemberDetailsPage.tsx";
 import CoinsPage from "../pages/coins-page/CoinsPage.tsx";
 import MembersListPage from "../pages/members-list-page/MembersListPage.tsx";
-import MemberLeaderboardPage from "../pages/member-leaderboard-page/MemberLeaderboardPage2026.tsx";
+import MemberLeaderboardPage from "../pages/member-leaderboard-page/MemberLeaderboardPage.tsx";
 
 const AppRoutes = [
     {

@@ -128,7 +128,7 @@ export default function MembersListPage() {
   }, [selectedUser])
 
   return (
-    <>
+    <div id="members-list-page">
       <div className="row mt-3 mb-3">
         <div className="col">
           <input
@@ -148,6 +148,6 @@ export default function MembersListPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

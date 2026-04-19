@@ -110,7 +110,7 @@ function MemberDetailsPage() {
 
   function RenderMemberScanSessions() {
     return (
-      <div className="member-details-table-container">
+      <div className="member-details-table-container card">
         <div className="row">
           <div className="col-12 mt-1">
             <h4>Member's Scan Sessions</h4>
@@ -146,15 +146,15 @@ function MemberDetailsPage() {
 
   function RenderSelectedScanSessions() {
     return (
-      <div className="member-details-table-container">
+      <div className="member-details-table-container card">
         <div className="row">
           <div className="col-12 mt-1">
             <h4 className="mb-0">Edit Member's Scan Points</h4>
             <small>Session: 10/03/2026 10:45</small>
           </div>
         </div>
-        <table className="table ">
-          <thead className="table-dark" >
+        <table className="table table-bordered">
+          <thead className="table-dark">
           <tr>
             <th>Base</th>
             <th>Total Points</th>
@@ -228,19 +228,15 @@ function MemberDetailsPage() {
             {RenderMemberDetails(member)}
           </div>
           <div className={"col-4"}>
-            <div className={"card"}>
-              {RenderMemberScanSessions()}
-            </div>
+            {RenderMemberScanSessions()}
           </div>
           <div className={"col-4"}>
-            <div className={"card"}>
-              {/*{!selectedSession && (*/}
-              {/*  <>Select a session</>*/}
-              {/*)}*/}
-              {
-                RenderSelectedScanSessions()
-              }
-            </div>
+            {/*{!selectedSession && (*/}
+            {/*  <>Select a session</>*/}
+            {/*)}*/}
+            {
+              RenderSelectedScanSessions()
+            }
           </div>
           <div className={"col-2"}>
             {RenderMemberActivitySummary()}

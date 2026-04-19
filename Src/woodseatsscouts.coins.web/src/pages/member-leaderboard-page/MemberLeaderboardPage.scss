@@ -1,0 +1,47 @@
+@use "sass:map";
+@use "./../../styles/abstract/_site-mixins" as mixins;
+@use "./../../styles/abstract/_site-colours" as colours;
+
+#latest-scans-page {
+  .card {
+    background-color: map.get(colours.$colours, grey-light);
+  }
+
+  * {
+    color: black;
+    font-style: italic;
+    text-align: center;
+  }
+  img {
+    border-radius: 50% !important;
+    object-fit: contain;
+  }
+
+  .col * {
+    width: 100%;
+  }
+
+  .first-name {
+    font-size: 20px;
+  }
+
+  .points {
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 0.7;
+    &::before {
+      content: '+'
+    }
+  }
+
+  .group {
+    div {
+      background-color: green;
+      @include mixins.rounded-borders;
+
+      strong {
+        color: white;
+      }
+    }
+  }
+}
