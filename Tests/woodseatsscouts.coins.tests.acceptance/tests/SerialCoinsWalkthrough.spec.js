@@ -49,7 +49,7 @@ test("Creating users", async ({page}, testInfo) => {
     const membersPage = MembersPage(page);
     await membersPage.goTo()
 
-    await Helpers().createTroopsViaApi([
+    await Helpers().createScoutGroupsViaApi([
         {id: 1, name: "Crimson"},
         {id: 2, name: "Jet"},
         {id: 3, name: "Royal"},
@@ -60,28 +60,28 @@ test("Creating users", async ({page}, testInfo) => {
         {
             firstNames: ["Charcoal", "Icterine", "Olivine", "Turquoise"],
             lastName: "Crimson",
-            troopId: 1,
+            scoutGroupId: 1,
             section: "A",
             isDayVisitor: false
         },
         {
             firstNames: ["Glaucous", "Pistachio", "Pumpkin", "Red"],
             lastName: "Jet",
-            troopId: 2,
+            scoutGroupId: 2,
             section: "B",
             isDayVisitor: false
         },
         {
             firstNames: ["Asparagus", "Cerise", "Ghost", "Jasper"],
             lastName: "Royal",
-            troopId: 3,
+            scoutGroupId: 3,
             section: "C",
             isDayVisitor: false
         },
         {
             firstNames: ["Hunter", "Oxford", "Rosewood", "Violet"],
             lastName: "Saffron",
-            troopId: 4,
+            scoutGroupId: 4,
             section: "E",
             isDayVisitor: false
         },
@@ -286,7 +286,7 @@ test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await assertReportsPageIs(
         page,
         [
-            {userName: users.asparagusRoyal, troopName: "Royal", sectionName: "Cubs", userPoints: 33}
+            {userName: users.asparagusRoyal, scoutGroupName: "Royal", sectionName: "Cubs", userPoints: 33}
         ],
         [
             {groupName: "Royal", averagePoints: 8.25}
@@ -321,8 +321,8 @@ test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await assertReportsPageIs(
         page,
         [
-            {userName: users.icterineCrimson, troopName: "Crimson", sectionName: "Adults", userPoints: 40},
-            {userName: users.asparagusRoyal, troopName: "Royal", sectionName: "Cubs", userPoints: 33}
+            {userName: users.icterineCrimson, scoutGroupName: "Crimson", sectionName: "Adults", userPoints: 40},
+            {userName: users.asparagusRoyal, scoutGroupName: "Royal", sectionName: "Cubs", userPoints: 33}
         ],
         [
             {groupName: "Crimson", averagePoints: 10},
@@ -360,9 +360,9 @@ test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await assertReportsPageIs(
         page,
         [
-            {userName: users.ceriseRoyal, troopName: "Royal", sectionName: "Cubs", userPoints: 30},
-            {userName: users.icterineCrimson, troopName: "Crimson", sectionName: "Adults", userPoints: 40},
-            {userName: users.asparagusRoyal, troopName: "Royal", sectionName: "Cubs", userPoints: 33},
+            {userName: users.ceriseRoyal, scoutGroupName: "Royal", sectionName: "Cubs", userPoints: 30},
+            {userName: users.icterineCrimson, scoutGroupName: "Crimson", sectionName: "Adults", userPoints: 40},
+            {userName: users.asparagusRoyal, scoutGroupName: "Royal", sectionName: "Cubs", userPoints: 33},
         ],
         [
             {groupName: "Royal", averagePoints: 15.75},
@@ -442,9 +442,9 @@ test(serialStep("Viewing the report page"), async ({page}, testInfo) => {
     await assertReportsPageIs(
         page,
         [
-            {userName: users.glaucousJet, troopName: "Jet", sectionName: "Beavers", userPoints: 49},
-            {userName: users.ceriseRoyal, troopName: "Royal", sectionName: "Cubs", userPoints: 30},
-            {userName: users.icterineCrimson, troopName: "Crimson", sectionName: "Adults", userPoints: 40},
+            {userName: users.glaucousJet, scoutGroupName: "Jet", sectionName: "Beavers", userPoints: 49},
+            {userName: users.ceriseRoyal, scoutGroupName: "Royal", sectionName: "Cubs", userPoints: 30},
+            {userName: users.icterineCrimson, scoutGroupName: "Crimson", sectionName: "Adults", userPoints: 40},
         ],
         [
             {groupName: "Royal", averagePoints: 15.75},

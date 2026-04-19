@@ -169,7 +169,7 @@ function CreateAdditionalDbObjects {
             Members.Code as 'Member Code',
             Members.Number as 'Member Number',
             Members.HasImage as 'Member Image Exists?',
-            Troops.Name as 'Troop',
+            ScoutGroups.Name as 'Scout Group',
             Sections.Name as 'Section',
             Coins.Code as 'Coin Code',
             Coins.Value as 'Coin Value'
@@ -178,8 +178,8 @@ function CreateAdditionalDbObjects {
         on ScavengeResults.MemberId = Members.Id
         join ScavengedCoins
         on ScavengedCoins.ScavengeResultId = ScavengeResults.Id
-        join Troops
-        on Troops.Id = Members.TroopId
+        join ScoutGroups
+        on ScoutGroups.Id = Members.ScoutGroupId
         join Sections
         on Sections.Code = Members.SectionId
         join Coins

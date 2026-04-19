@@ -14,7 +14,7 @@ public class MemberViewModel(Member member)
 
     public bool HasImage { get; set; } = member.HasImage;
 
-    public int MemberTroopNumber { get; set; } = member.TroopId;
+    public int MemberScoutGroupNumber { get; set; } = member.ScoutGroupId;
     public string MemberSection { get; set; } = member.SectionId;
 
     public int MemberId { get; set; } = member.Id;
@@ -25,5 +25,5 @@ public class MemberViewModel(Member member)
 
     public string MemberSectionName { get; set; } = member.Section.Name;
     
-    public string MemberTroopName { get; set; } = member.Troop.Name;
+    public string MemberScoutGroupName { get; set; } = member.ScoutGroup.Name;
 }

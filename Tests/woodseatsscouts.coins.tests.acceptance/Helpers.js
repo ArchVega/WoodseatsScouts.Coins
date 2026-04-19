@@ -90,7 +90,7 @@ const Helpers = () => {
                         data: {
                             firstName: firstName,
                             lastName: user.lastName,
-                            troopId: user.troopId,
+                            scoutGroupId: user.scoutGroupId,
                             section: user.section,
                             isDayVisitor: user.isDayVisitor
                         }
@@ -103,19 +103,19 @@ const Helpers = () => {
             })
         },
 
-        createTroopsViaApi:
-            async (troops) => {
-                for (const troop of troops) {
+        createScoutGroupsViaApi:
+            async (scoutGroups) => {
+                for (const scoutGroup of scoutGroups) {
                     await axios({
-                        url: Uris.adminCreateTroop,
+                        url: Uris.adminCreateScoutGroup,
                         method: 'POST',
                         headers: {
                             'X-Coins-Authentication-Token': 'test',
                             'Content-Type': 'application/json'
                         },
                         data: {
-                            id: troop.id,
-                            name: troop.name
+                            id: scoutGroup.id,
+                            name: scoutGroup.name
                         }
                     }).then(response => {
                         console.log(response)

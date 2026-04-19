@@ -15,17 +15,17 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
 
     [Theory]
     [InlineData(1, "A", 5)]
-    public void GenerateNextMemberCode(int troopNumber, string sectionCode, int expectedStartingMemberNumber)
+    public void GenerateNextMemberCode(int scoutGroupNumber, string sectionCode, int expectedStartingMemberNumber)
     {
         databaseFixture.RestoreBaseTestData();
         
-        var member = appDbContext.CreateMember("any", "any", troopNumber, sectionCode, false);
+        var member = appDbContext.CreateMember("any", "any", scoutGroupNumber, sectionCode, false);
         member.Number.ShouldBe(expectedStartingMemberNumber);
 
-        member = appDbContext.CreateMember("any", "any", troopNumber, sectionCode, false);
+        member = appDbContext.CreateMember("any", "any", scoutGroupNumber, sectionCode, false);
         member.Number.ShouldBe(expectedStartingMemberNumber + 1);
         
-        member = appDbContext.CreateMember("any", "any", troopNumber, sectionCode, false);
+        member = appDbContext.CreateMember("any", "any", scoutGroupNumber, sectionCode, false);
         member.Number.ShouldBe(expectedStartingMemberNumber + 2);
 
         var codes = appDbContext.Members!.Select(x => x.Code).ToList();
@@ -65,8 +65,8 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
     {
         databaseFixture.RestoreBaseTestData();
         
-        var troop = appDbContext.CreateTroop(int.MaxValue,"Troop 1");
-        appDbContext.CreateMember("any", "any", troop.Id, "A", false);
+        var scoutGroup = appDbContext.CreateScoutGroup(int.MaxValue,"ScoutGroup 1");
+        appDbContext.CreateMember("any", "any", scoutGroup.Id, "A", false);
         
         var member = appDbContext.Members!.Include(x => x.Section).First();
         member.Section.ShouldNotBeNull();

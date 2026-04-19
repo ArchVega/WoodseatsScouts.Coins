@@ -1,6 +1,6 @@
 $payload = @{
     name = "Name"
-    troopId = 123
+    scoutGroupId = 123
     section = "S"
     # DayVisitor = $false
 }

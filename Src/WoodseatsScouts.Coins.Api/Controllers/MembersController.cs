@@ -20,7 +20,7 @@ public class MembersController(
         return Ok(appDbContext.Members!
             .Include(x => x.ScavengeResults)
             .ThenInclude(x => x.ScavengedCoins)
-            .Include(x => x.Troop)
+            .Include(x => x.ScoutGroup)
             .Include(x => x.Section)
             .ToList()
             .Select(x => new MembersWithPointsViewModel(x))
@@ -44,10 +44,10 @@ public class MembersController(
         }
 
         var member = appDbContext.Members!
-            .Include(x => x.Troop)
+            .Include(x => x.ScoutGroup)
             .Include(x => x.Section)
             .Single(x => x.Number == translationResult.MemberNumber
-                         && x.TroopId == translationResult.TroopNumber
+                         && x.ScoutGroupId == translationResult.ScoutGroupNumber
                          && x.SectionId == translationResult.Section);
 
         /* The QRScanner for coins becomes active after 500ms after a member has logged in.

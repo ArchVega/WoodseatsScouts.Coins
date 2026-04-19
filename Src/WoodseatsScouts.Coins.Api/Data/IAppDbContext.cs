@@ -12,7 +12,7 @@ public interface IAppDbContext
     
     public DbSet<ScavengeResult>? ScavengeResults { get; set; }
     
-    public DbSet<Troop>? Troops { get; set; }
+    public DbSet<ScoutGroup>? ScoutGroups { get; set; }
     
     public DbSet<Section>? Sections { get; set; }
     
@@ -22,7 +22,7 @@ public interface IAppDbContext
 
     int SaveChanges();
     
-    int GenerateNextMemberCode(int troopId, string section);
+    int GenerateNextMemberCode(int scoutGroupId, string section);
     
     List<Member> GetLastThreeUsersToScanPoints();
     
@@ -32,7 +32,7 @@ public interface IAppDbContext
     
     List<GroupPoints> GetGroupsWithMostPoints();
 
-    Troop CreateTroop(int id, string name);
+    ScoutGroup CreateScoutGroup(int id, string name);
     
     ScavengeResult CreateScavengeResult(Member member);
     
@@ -42,7 +42,7 @@ public interface IAppDbContext
     
     DbSet<ActivityBase> ActivityBases { get; set; }
 
-    Member? CreateMember(string firstName, string lastName, int troopId, string section, bool isDayVisitor);
+    Member? CreateMember(string firstName, string lastName, int scoutGroupId, string section, bool isDayVisitor);
     
     Member UpdateMemberName(int memberId, string firstName, string lastName);
     

@@ -28,17 +28,17 @@ public class MembersControllerTests
         var imagePersisterMock = new Mock<IImagePersister>();
         var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
 
-        var troop = new Troop { Id = 1 };
+        var scoutGroup = new ScoutGroup { Id = 1 };
         var section = new Section { Code = "A" };
         var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
         var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };
 
-        SetupDbMock(appDbContextMock, x => x.Troops!, [troop]);
+        SetupDbMock(appDbContextMock, x => x.ScoutGroups!, [scoutGroup]);
         SetupDbMock(appDbContextMock, x => x.Sections!, [section]);
         SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
         SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);
         SetupDbMock(appDbContextMock, x => x.Members!, [
-            new Member { TroopId = 1, Troop = troop, SectionId = "A", Section = section, ScavengeResults = scavengeResults }
+            new Member { ScoutGroupId = 1, ScoutGroup = scoutGroup, SectionId = "A", Section = section, ScavengeResults = scavengeResults }
         ]);
 
         var results = membersController.GetMembersWithPoints();
@@ -72,13 +72,13 @@ public class MembersControllerTests
         var imagePersisterMock = new Mock<IImagePersister>();
         var membersController = new MembersController(appDbContextMock.Object, imagePersisterMock.Object);
 
-        var troop = new Troop { Id = 1 };
+        var scoutGroup = new ScoutGroup { Id = 1 };
         var section = new Section { Code = "A" };
 
-        SetupDbMock(appDbContextMock, x => x.Troops!, [troop]);
+        SetupDbMock(appDbContextMock, x => x.ScoutGroups!, [scoutGroup]);
         SetupDbMock(appDbContextMock, x => x.Sections!, [section]);
         SetupDbMock(appDbContextMock, x => x.Members!, [
-            new Member { TroopId = 1, Troop = troop, SectionId = "A", Section = section, Number = 3 }
+            new Member { ScoutGroupId = 1, ScoutGroup = scoutGroup, SectionId = "A", Section = section, Number = 3 }
         ]);
 
         var result = membersController.GetMemberInfoFromCode("M001A003");

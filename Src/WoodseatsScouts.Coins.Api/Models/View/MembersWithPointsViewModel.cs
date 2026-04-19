@@ -14,7 +14,7 @@ public class MembersWithPointsViewModel
         FirstName = member.FirstName;
         LastName = member.LastName;
         FullName = member.FullName;
-        TroopName = member.Troop.Name;
+        ScoutGroupName = member.ScoutGroup.Name;
         Section = member.SectionId;
         SectionName = member.Section.Name;
         TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.PointValue)).Sum();
@@ -32,7 +32,7 @@ public class MembersWithPointsViewModel
 
     public string? LastName { get; set; }
 
-    public string TroopName { get; set; }
+    public string ScoutGroupName { get; set; }
 
     public string Section { get; set; } // Todo Section is now "SectionId". Rename
     public string SectionName { get; set; }

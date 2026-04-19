@@ -93,7 +93,7 @@ export default function NavMenu() {
                    src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.memberId) : "/images/unknown-member-image.png"}></Image>
             <div id="member-details" className="flex-fill">
               <div><span>Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
-              <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberTroopName}</div>
+              <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberScoutGroupName}</div>
             </div>
           </div>
         )

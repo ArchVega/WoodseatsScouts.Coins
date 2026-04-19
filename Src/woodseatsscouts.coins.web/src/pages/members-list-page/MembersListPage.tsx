@@ -55,11 +55,11 @@ export default function MembersListPage() {
 
     const firstNameMatch = member.firstName.toLowerCase().includes(filterText.toLowerCase());
     const lastNameMatch = (member.lastName !== null && member.lastName.toLowerCase().includes(filterText.toLowerCase()));
-    const troopNameMatch = member.troopName.toString().toLowerCase().includes(filterText.toLowerCase());
+    const scoutGroupNameMatch = member.scoutGroupName.toString().toLowerCase().includes(filterText.toLowerCase());
     const sectionMatch = member.sectionName.toString().toLowerCase().includes(filterText.toLowerCase())
     const memberCodeMatch = member.memberCode.toLowerCase().includes(filterText.toLowerCase());
 
-    return firstNameMatch || lastNameMatch || troopNameMatch || sectionMatch || memberCodeMatch
+    return firstNameMatch || lastNameMatch || scoutGroupNameMatch || sectionMatch || memberCodeMatch
   }
 
   function RenderMember(member) {
@@ -89,7 +89,7 @@ export default function MembersListPage() {
           </div>
           <div className="row pb-2">
             <div className="members-list-item-section">
-              <div className="tile">{member.troopName}</div>
+              <div className="tile">{member.scoutGroupName}</div>
             </div>
           </div>
           <div className="row pb-2 g-1">

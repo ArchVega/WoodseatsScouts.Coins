@@ -6,7 +6,7 @@ public class CreateMemberViewModel
     
     public string LastName{ get; set; }
 
-    public int TroopId{ get; set; } 
+    public int ScoutGroupId{ get; set; } 
     
     public string Section{ get; set; }
 

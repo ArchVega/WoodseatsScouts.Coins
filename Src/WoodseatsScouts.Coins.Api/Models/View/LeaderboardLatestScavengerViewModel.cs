@@ -15,7 +15,7 @@ public class LeaderboardLatestScavengerViewModel
         MemberNumber = domain.Number;
         FirstName = domain.FirstName;
         LastName = domain.LastName;
-        TroopName = domain.Troop.Name;
+        ScoutGroupName = domain.ScoutGroup.Name;
         Section = domain.SectionId;
         SectionName = domain.Section.Name;
         TotalPoints = domain.ScavengeResults.Last().ScavengedCoins.Sum(y => y.PointValue);
@@ -27,7 +27,7 @@ public class LeaderboardLatestScavengerViewModel
 
     public string Section { get; set; }
 
-    public string TroopName { get; set; }
+    public string ScoutGroupName { get; set; }
 
     public string? LastName { get; set; }
 

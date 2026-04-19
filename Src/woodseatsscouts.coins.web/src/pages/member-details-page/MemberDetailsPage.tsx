@@ -73,7 +73,7 @@ function MemberDetailsPage() {
             </div>
             <div className="row mb-2">
               <div className="members-list-item-section">
-                <div className="tile">{member.memberTroopName}</div>
+                <div className="tile">{member.memberScoutGroupName}</div>
               </div>
             </div>
           </div>

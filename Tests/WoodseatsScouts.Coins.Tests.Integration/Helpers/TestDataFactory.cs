@@ -5,18 +5,18 @@ namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
 
 public class TestDataFactory(IAppDbContext appDbContext)
 {
-    public TroopsCollection Troops => new TroopsCollection(appDbContext);
+    public ScoutGroupsCollection ScoutGroups => new ScoutGroupsCollection(appDbContext);
 
     public MembersCollection Members => new MembersCollection(appDbContext);
 
-    public class TroopsCollection(IAppDbContext appDbContext)
+    public class ScoutGroupsCollection(IAppDbContext appDbContext)
     {
-        public Troop Crimson => appDbContext.Troops!.Single(x => x.Name == "Crimson");
-        public Troop Jet => appDbContext.Troops!.Single(x => x.Name == "Jet");
-        public Troop Royal => appDbContext.Troops!.Single(x => x.Name == "Royal");
-        public Troop Saffron => appDbContext.Troops!.Single(x => x.Name == "Saffron");
+        public ScoutGroup Crimson => appDbContext.ScoutGroups!.Single(x => x.Name == "Crimson");
+        public ScoutGroup Jet => appDbContext.ScoutGroups!.Single(x => x.Name == "Jet");
+        public ScoutGroup Royal => appDbContext.ScoutGroups!.Single(x => x.Name == "Royal");
+        public ScoutGroup Saffron => appDbContext.ScoutGroups!.Single(x => x.Name == "Saffron");
 
-        public List<Troop> GetKnownTroops()
+        public List<ScoutGroup> GetKnownScoutGroups()
         {
             return
             [
@@ -73,13 +73,13 @@ public class TestDataFactory(IAppDbContext appDbContext)
         }
     }
 
-    public static Member CreateTroopMember(int number, Troop troop, char section) =>
+    public static Member CreateScoutGroupMember(int number, ScoutGroup scoutGroup, char section) =>
         new()
         {
             FirstName = "Member" + number,
             LastName = "Member" + number,
             Number = number,
-            Troop = troop,
+            ScoutGroup = scoutGroup,
             SectionId = section.ToString()
         };
 }

@@ -39,7 +39,7 @@
                 {
                     TokenIdentifier = code[..1],
                     Section = code.Substring(4, 1),
-                    TroopNumber = Convert.ToInt32(code.Substring(1, 3)),
+                    ScoutGroupNumber = Convert.ToInt32(code.Substring(1, 3)),
                     MemberNumber = Convert.ToInt32(code[5..])
                 };
 

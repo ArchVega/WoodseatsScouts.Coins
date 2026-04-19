@@ -19,7 +19,7 @@ function RestoreBaseTestData {
         }        
     }
     
-    $tables = @("ScavengeResults", "ScavengedCoins", "Coins", "Members", "Sections", "Troops")
+    $tables = @("ScavengeResults", "ScavengedCoins", "Coins", "Members", "Sections", "ScoutGroups")
     Write-Host "Inserting data from '$Path' into '$DatabaseName'..."
     $tables | ForEach-Object { 
         _ExecuteQuery "DELETE FROM $_" $DatabaseName

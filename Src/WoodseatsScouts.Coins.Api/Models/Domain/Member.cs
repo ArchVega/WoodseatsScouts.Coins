@@ -24,9 +24,9 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
 
         public string? LastName { get; set; }
         
-        public int TroopId { get; init; }
+        public int ScoutGroupId { get; init; }
         
-        public Troop Troop { get; init; }
+        public ScoutGroup ScoutGroup { get; init; }
         
         public string SectionId { get; init; }
         

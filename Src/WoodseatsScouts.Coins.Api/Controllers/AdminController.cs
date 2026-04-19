@@ -15,12 +15,12 @@ public class AdminController(IAppDbContext appDbContext) : ControllerBase
     private static readonly object Locker = new();
 
     [HttpPost]
-    [Route("Troop")]
-    public ActionResult CreateTroop([FromBody] CreateTroopViewModel createTroopViewModel)
+    [Route("ScoutGroup")]
+    public ActionResult CreateScoutGroup([FromBody] CreateScoutGroupViewModel createScoutGroupViewModel)
     {
-        var troop = appDbContext.CreateTroop(createTroopViewModel.Id, createTroopViewModel.Name);
+        var scoutGroup = appDbContext.CreateScoutGroup(createScoutGroupViewModel.Id, createScoutGroupViewModel.Name);
 
-        return Ok($"Troop {troop.Name} added");
+        return Ok($"ScoutGroup {scoutGroup.Name} added");
     }
 
     [HttpPost]
@@ -32,7 +32,7 @@ public class AdminController(IAppDbContext appDbContext) : ControllerBase
             return Ok(appDbContext.CreateMember(
                 createMemberViewModel.FirstName,
                 createMemberViewModel.LastName,
-                createMemberViewModel.TroopId,
+                createMemberViewModel.ScoutGroupId,
                 createMemberViewModel.Section, // Todo: Client sends "section" but this is really "sectionId"
                 createMemberViewModel.IsDayVisitor));
         }

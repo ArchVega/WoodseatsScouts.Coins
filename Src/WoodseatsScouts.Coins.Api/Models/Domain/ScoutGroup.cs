@@ -1,6 +1,6 @@
 ﻿namespace WoodseatsScouts.Coins.Api.Models.Domain;
 
-public class Troop
+public class ScoutGroup
 {
     public int Id { get; set; }
     

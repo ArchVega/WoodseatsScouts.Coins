@@ -28,7 +28,7 @@ const ReportPage = (page) => {
                 return {
                     // userId: Number(await member.getAttribute("data-userid")),
                     userName: await member.getByTestId("latest-3-scanned-user-name").textContent(),
-                    troopName: await member.getByTestId("latest-3-scanned-troop-name").textContent(),
+                    scoutGroupName: await member.getByTestId("latest-3-scanned-scoutGroup-name").textContent(),
                     sectionName: await member.getByTestId("latest-3-scanned-section-name").textContent(),
                     userPoints: Number(await member.getByTestId("latest-3-scanned-user-points").textContent())
                 }

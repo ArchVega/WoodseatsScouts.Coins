@@ -20,7 +20,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public DbSet<Member>? Members { get; set; }
 
-        public DbSet<Troop>? Troops { get; set; }
+        public DbSet<ScoutGroup>? ScoutGroups { get; set; }
 
         public DbSet<Section>? Sections { get; set; }
 
@@ -37,7 +37,7 @@ namespace WoodseatsScouts.Coins.Api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             const string coinCodeFormat = "'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))";
-            const string memberCodeFormat = "'M' + (FORMAT(TroopId, '000'))  + [SectionId] + (FORMAT(Number, '000'))";
+            const string memberCodeFormat = "'M' + (FORMAT(ScoutGroupId, '000'))  + [SectionId] + (FORMAT(Number, '000'))";
 
             /* As of the v2024, Coins data is generated externally and the Id value is predetermined and inserted. */
             modelBuilder.Entity<Coin>()
@@ -77,9 +77,9 @@ namespace WoodseatsScouts.Coins.Api.Data
             modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 99, Name = "Misc" });
         }
 
-        public int GenerateNextMemberCode(int troopId, string section)
+        public int GenerateNextMemberCode(int scoutGroupId, string section)
         {
-            var matchingMembers = Members!.Where(x => x.TroopId == troopId && x.SectionId == section).ToList();
+            var matchingMembers = Members!.Where(x => x.ScoutGroupId == scoutGroupId && x.SectionId == section).ToList();
 
             var nextMemberNumber = 1;
             if (matchingMembers.Count > 0)
@@ -154,15 +154,15 @@ namespace WoodseatsScouts.Coins.Api.Data
         {
             var now = TimeProvider.GetLocalNow().DateTime;
             var startDateTime = now.AddHours(-1);
-            return TopXTroopsSinceY(3, startDateTime, now);
+            return TopXScoutGroupsSinceY(3, startDateTime, now);
         }
 
         public List<GroupPoints> GetGroupsWithMostPoints()
         {
-            return TopXTroopsSinceY(10, leaderboardSettings.ScavengerHuntStartTime, leaderboardSettings.ScavengerHuntDeadline);
+            return TopXScoutGroupsSinceY(10, leaderboardSettings.ScavengerHuntStartTime, leaderboardSettings.ScavengerHuntDeadline);
         }
 
-        private List<GroupPoints> TopXTroopsSinceY(int count, DateTime startDateTime, DateTime endDateTime)
+        private List<GroupPoints> TopXScoutGroupsSinceY(int count, DateTime startDateTime, DateTime endDateTime)
         {
             var memberIds = ScavengeResults!
                 .Include(x => x.Member)
@@ -170,29 +170,29 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .Select(x => x.MemberId)
                 .ToList();
 
-            var memberGroupedByTroop = Members!
-                .Include(x => x.Troop)
+            var memberGroupedByScoutGroup = Members!
+                .Include(x => x.ScoutGroup)
                 .Include(x => x.ScavengeResults)
                 .ThenInclude(x => x.ScavengedCoins)
                 .Where(x => memberIds.Contains(x.Id))
                 .ToList()
-                .GroupBy(x => x.TroopId)
+                .GroupBy(x => x.ScoutGroupId)
                 .ToList();
 
             var topXGroupsInLastYHours = (
-                from grouping in memberGroupedByTroop
+                from grouping in memberGroupedByScoutGroup
                 let sum =
                     grouping.SelectMany(x => x.ScavengeResults).SelectMany(x => x.ScavengedCoins).Sum(x => x.PointValue)
                 select new GroupPoints
                 {
-                    Id = grouping.First().Troop.Id,
-                    Name = grouping.First().Troop.Name,
+                    Id = grouping.First().ScoutGroup.Id,
+                    Name = grouping.First().ScoutGroup.Name,
                     TotalPoints = sum
                 }).ToList();
 
-            var allTroopsWithMembers = Troops!.Include(x => x.Members).ToList();
+            var allScoutGroupsWithMembers = ScoutGroups!.Include(x => x.Members).ToList();
             topXGroupsInLastYHours.ForEach(x =>
-                x.MemberCount = allTroopsWithMembers.Single(y => y.Id == x.Id).Members.Count);
+                x.MemberCount = allScoutGroupsWithMembers.Single(y => y.Id == x.Id).Members.Count);
 
             topXGroupsInLastYHours
                 = topXGroupsInLastYHours.OrderByDescending(x => x.AveragePoints).Take(count).ToList();
@@ -200,24 +200,24 @@ namespace WoodseatsScouts.Coins.Api.Data
             return topXGroupsInLastYHours;
         }
 
-        public Troop CreateTroop(int id, string name)
+        public ScoutGroup CreateScoutGroup(int id, string name)
         {
             using var transaction = Database.BeginTransaction();
-            Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops ON");
+            Database.ExecuteSqlRaw("SET IDENTITY_INSERT ScoutGroups ON");
 
-            var troop = new Troop
+            var scoutGroup = new ScoutGroup
             {
                 Id = id,
                 Name = name
             };
-            Troops?.Add(troop);
+            ScoutGroups?.Add(scoutGroup);
 
             SaveChanges();
 
-            Database.ExecuteSqlRaw("SET IDENTITY_INSERT Troops OFF");
+            Database.ExecuteSqlRaw("SET IDENTITY_INSERT ScoutGroups OFF");
             transaction.Commit();
 
-            return troop;
+            return scoutGroup;
         }
 
         public ScavengeResult CreateScavengeResult(Member member)
@@ -279,16 +279,16 @@ namespace WoodseatsScouts.Coins.Api.Data
             return alreadyScavengedCoins;
         }
 
-        public Member CreateMember(string firstName, string lastName, int troopId, string sectionId, bool isDayVisitor)
+        public Member CreateMember(string firstName, string lastName, int scoutGroupId, string sectionId, bool isDayVisitor)
         {
             var member = new Member
             {
                 FirstName = firstName,
                 LastName = lastName,
-                TroopId = troopId,
+                ScoutGroupId = scoutGroupId,
                 SectionId = sectionId,
                 IsDayVisitor = isDayVisitor,
-                Number = GenerateNextMemberCode(troopId, sectionId)
+                Number = GenerateNextMemberCode(scoutGroupId, sectionId)
             };
 
             Members?.Add(member);
