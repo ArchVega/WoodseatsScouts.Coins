@@ -73,7 +73,6 @@ export default function MembersListPage() {
           <div className="row pb-2">
             <div className="col">
               <img key={Date.now()}
-                   onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}
                    title={"User id: " + member.id}
                    src={member.hasImage ? Uris.memberPhoto(member.id) : "/images/unknown-member-image.png"} alt=""/>
             </div>
@@ -103,7 +102,7 @@ export default function MembersListPage() {
               <Button onClick={() => navigate(`/member/${member.memberCode}`)}>EDIT</Button>
             </div>
             <div className=" col-6 members-list-item-section">
-              <Button onClick={() => showEditUserModal(member)}>PHOTO</Button>
+              <Button disabled={!useAppCamera} onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}>PHOTO</Button>
             </div>
           </div>
         </div>
