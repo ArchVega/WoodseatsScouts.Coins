@@ -1,8 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
+using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.View;
 
@@ -12,6 +14,7 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [Route("[controller]")]
 public class MembersController(
     IAppDbContext appDbContext,
+    IOptions<LeaderboardSettings> leaderboardSettingsOptions,
     IImagePersister imagePersister) : ControllerBase
 {
     [HttpGet]
@@ -107,5 +110,12 @@ public class MembersController(
         appDbContext.SaveChanges();
 
         return Ok();
+    }
+    
+    [HttpGet]
+    [Route("RefreshSecondsForLatestScans")]
+    public ActionResult RefreshSecondsForLatestScans()
+    {
+        return Ok(leaderboardSettingsOptions.Value.Last6ScavengersPageRefreshSeconds);
     }
 }

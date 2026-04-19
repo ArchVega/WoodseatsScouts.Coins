@@ -13,3 +13,5 @@
  the member photos - are they large? could slow down the site when all are loaded in memory
 
  scores are shown always now - is this ok?
+
+ in the future, rename Member to Participant

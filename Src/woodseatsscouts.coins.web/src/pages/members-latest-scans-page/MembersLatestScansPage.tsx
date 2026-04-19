@@ -1,17 +1,17 @@
-import "./MemberLeaderboardPage.scss"
+import "./MembersLatestScans.scss"
 import {useEffect, useState} from "react";
 import Uris from "../../services/Uris";
 import axios from "axios";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 
-export default function MemberLeaderboardPage() {
+export default function MembersLatestScansPage() {
   const [members, setMembers] = useState([])
 
   useEffect(() => {
     loadData()
 
     axios
-      .get(Uris.leaderboardLast6ScavengersPageRefreshSeconds)
+      .get(Uris.refreshSecondsForLatestScans)
       .then(async response => {
         const seconds = Number(await response.data)
         setInterval(() => {

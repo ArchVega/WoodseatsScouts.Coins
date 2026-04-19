@@ -48,11 +48,4 @@ public class LeaderboardController(IAppDbContext appDbContext, IOptions<Leaderbo
         
         return Ok(latest6Scavengers);
     }
-    
-    [HttpGet]
-    [Route("Last6ScavengersPageRefreshSeconds")]
-    public ActionResult GetLast6ScavengersPageRefreshSeconds()
-    {
-        return Ok(leaderboardSettingsOptions.Value.Last6ScavengersPageRefreshSeconds);
-    }
 }

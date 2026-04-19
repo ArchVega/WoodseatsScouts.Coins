@@ -12,11 +12,7 @@ using WoodseatsScouts.Coins.Api.Data;
 namespace WoodseatsScouts.Coins.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-<<<<<<<< HEAD:Src/WoodseatsScouts.Coins.Api/Migrations/20260419154922_Initial.Designer.cs
-    [Migration("20260419154922_Initial")]
-========
-    [Migration("20260419152923_Initial")]
->>>>>>>> dcaebde9ac5ebbbcc6eda83f13d51ed63bd824f3:Src/WoodseatsScouts.Coins.Api/Migrations/20260419152923_Initial.Designer.cs
+    [Migration("20260419155500_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

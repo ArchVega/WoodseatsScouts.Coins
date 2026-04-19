@@ -5,7 +5,7 @@ const Uris = {
   appVersion: `${baseUri}/AppState/AppVersion`,
   members: `${baseUri}/Members`,
   leaderboard: `${baseUri}/Leaderboard/Report`,
-  leaderboardLast6ScavengersPageRefreshSeconds: `${baseUri}/Leaderboard/Last6ScavengersPageRefreshSeconds`,
+  refreshSecondsForLatestScans: `${baseUri}/Members/RefreshSecondsForLatestScans`,
   testDataCoins: `${baseUri}/Sut/Coins`,
   countries: `${baseUri}/Countries`,
   voteResults: `${baseUri}/Vote/Results`,

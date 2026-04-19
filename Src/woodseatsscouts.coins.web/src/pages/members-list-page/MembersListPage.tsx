@@ -94,7 +94,7 @@ export default function MembersListPage() {
           </div>
           <div className="row pb-2 g-1">
             <div className="col-6 members-list-item-section">
-              <Button onClick={() => navigate(`/member-details/${member.memberCode}`)}>EDIT</Button>
+              <Button onClick={() => navigate(`/member/${member.memberCode}`)}>EDIT</Button>
             </div>
             <div className=" col-6 members-list-item-section">
               <Button onClick={() => showEditUserModal(member)}>PHOTO</Button>

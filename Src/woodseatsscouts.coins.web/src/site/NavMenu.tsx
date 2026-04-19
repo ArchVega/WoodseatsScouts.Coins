@@ -60,7 +60,7 @@ export default function NavMenu() {
       return (
         <>
           {MenuNavLink("Participants", "members", "/members", "nav-members-page")}
-          {MenuNavLink("Secondary Dashboard", "leaderboard-members", "/leaderboard/members", "nav-report-page-leaderboard-members")}
+          {MenuNavLink("Secondary Dashboard", "leaderboard-members", "/members/latest-scans", "nav-report-page-leaderboard-members")}
           <div className={"ms-auto"}>
             {RenderAppSettingsGearIcon()}
           </div>
