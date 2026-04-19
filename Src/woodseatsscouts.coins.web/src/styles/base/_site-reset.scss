@@ -7,7 +7,7 @@ html, body {
 }
 
 html * {
-  color: map.get(colours.$colours, purple);
+  color: map.get(colours.$colours, black);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: Nunito, serif;

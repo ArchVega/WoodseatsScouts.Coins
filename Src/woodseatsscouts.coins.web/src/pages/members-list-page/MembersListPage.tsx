@@ -1,6 +1,6 @@
 import './MembersListPage.scss'
 
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 // import MemberPhotoModal from "../../components/modals/MemberPhotoModal";
 // import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal";
@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";
 import {getSectionBranding} from "../../utilities/branding.ts";
+import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 
 export default function MembersListPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -153,6 +154,7 @@ export default function MembersListPage() {
           </div>
         </div>
       </div>
+      <EditMemberPhotoModal editUsersModal={editUserModal} setEditUsersModal={setEditUserModal} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
     </div>
   )
 }

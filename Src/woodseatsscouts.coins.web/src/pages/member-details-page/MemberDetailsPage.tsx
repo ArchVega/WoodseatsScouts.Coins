@@ -11,6 +11,7 @@ import ScoutsLogo from "../../images/fleur-de-lis-marque-white.png";
 import Uris from "../../services/apis/Uris.ts";
 import type {Member, MembersWithPoints} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
+import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 
 function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -30,8 +31,6 @@ function MemberDetailsPage() {
   // todo: these are what we need to hook up
   // <EditMemberNameModal editMembersModal={editMemberNameModal} setEditMembersModal={setEditMemberNameModal} selectedMember={selectedUser}
   //                      setSelectedMember={setSelectedUser}/>
-  // <EditMemberPhotoModal editUsersModal={editUserModal} setEditUsersModal={setEditUserModal} selectedUser={selectedUser}
-  //                       setSelectedUser={setSelectedUser}/>
 
   useEffect(() => {
     if (memberCode) {
@@ -251,6 +250,7 @@ function MemberDetailsPage() {
             {RenderMemberActivitySummary()}
           </div>
         </div>
+         <EditMemberPhotoModal editUsersModal={editUserModal} setEditUsersModal={setEditUserModal} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
       </div>
     )
   }
