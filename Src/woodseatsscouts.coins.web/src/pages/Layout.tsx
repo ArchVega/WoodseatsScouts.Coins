@@ -8,7 +8,7 @@ export default function Layout({children}) {
     <div className="site-container d-flex flex-column">
       <SiteDevBar/>
       <NavMenu/>
-      <div className="page-container container">
+      <div className="page-container container-fluid m-0">
         {children}
         <ToastContainer/>
       </div>

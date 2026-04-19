@@ -112,25 +112,54 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .ToList();
         }
 
-        public List<MembersWithPointsViewModel> GetLastSixScavengers()
+        public List<MembersWithPointsViewModel> GetLatestScans(int numberOfScans)
         {
-            var last6MembersIds = ScavengeResults!
+            var last6MembersIdsWithCompletedAtTimes = ScavengeResults!
+                .Include(x => x.Member)
                 .OrderByDescending(x => x.CompletedAt)
-                .Take(6)
-                .Select(x => x.MemberId)
+                .Take(numberOfScans)
                 .ToList();
 
-            
-            var last6MembersAndTotalCoins = Members!
-                .Where(x => last6MembersIds.Contains(x.Id))
-                .Include(x => x.Section)
-                .Include(x => x.ScoutGroup)
-                .Include(x => x.ScavengeResults)
-                .ThenInclude(x => x.ScavengedCoins)
-                .Select(x => new MembersWithPointsViewModel(x))
-                .ToList();
+            var f = last6MembersIdsWithCompletedAtTimes.Select(scavengeResult =>
+            {
+                var member = Members!
+                    .Include(x => x.Section)
+                    .Include(x => x.ScoutGroup)
+                    .Include(x => x.ScavengeResults)
+                    .ThenInclude(x => x.ScavengedCoins)
+                    .Single(x => x.Id == scavengeResult.MemberId);
 
-            return last6MembersAndTotalCoins;
+                var viewModel = new MembersWithPointsViewModel(member)
+                {
+                    SelectedHaulResultId = scavengeResult.Id
+                };
+                
+                return viewModel;
+            }).ToList();
+
+            return f;
+
+            // var list = new List<MembersWithPointsViewModel>();
+            //
+            // foreach (var projection in last6MembersIdsWithCompletedAtTimes)
+            // {
+            //     var member = Members!
+            //         .Include(x => x.Section)
+            //         .Include(x => x.ScoutGroup)
+            //         .Include(x => x.ScavengeResults)
+            //         .ThenInclude(x => x.ScavengedCoins)
+            //         .Single(x => x.Id == projection.MemberId);
+            //         
+            //         var scavengeResult = ScavengeResults!.Single(x => x.Id == projection.ScavengeResultId);
+            //         var viewModel = new MembersWithPointsViewModel(member)
+            //         {
+            //             LatestCompletedAtTime = scavengeResult.CompletedAt
+            //         };
+            //         
+            //         list.Add(viewModel); 
+            // }
+            //
+            // return list;
 
             // var members = new List<Object>();
             //

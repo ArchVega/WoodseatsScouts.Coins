@@ -18,8 +18,8 @@ const Uris = {
   member: function (memberQrCode) {
     return `${baseUri}/Members/${memberQrCode}`
   },
-  memberForVoting: function (memberQrCode) {
-    return `${baseUri}/Members/${memberQrCode}/Vote`
+  memberWithPoints: function (memberQrCode) {
+    return `${baseUri}/Members/${memberQrCode}/WithPoints`
   },
   memberPhoto: function (id) {
     return `${baseUri}/Members/${id}/Photo?${new Date()}`

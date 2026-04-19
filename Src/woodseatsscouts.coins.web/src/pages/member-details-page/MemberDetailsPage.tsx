@@ -9,7 +9,8 @@ import QRScanCodeType from "../../components/io/qr-input-devices/QRScanCodeType.
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import ScoutsLogo from "../../images/fleur-de-lis-marque-white.png";
 import Uris from "../../services/apis/Uris.ts";
-import type {Member} from "../../types/ServerTypes.ts";
+import type {Member, MembersWithPoints} from "../../types/ServerTypes.ts";
+import {getSectionBranding} from "../../utilities/branding.ts";
 
 function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -35,7 +36,11 @@ function MemberDetailsPage() {
   useEffect(() => {
     if (memberCode) {
       setLoading(true)
-      MemberApiService().fetchMember(memberCode).then(response => response.data).then(member => setMember(member)).finally(() => setLoading(false));
+      MemberApiService()
+        .fetchMemberWithPoints(memberCode)
+        .then(response => response.data)
+        .then(member => setMember(member))
+        .finally(() => setLoading(false));
     }
   }, [memberCode])
 
@@ -48,7 +53,9 @@ function MemberDetailsPage() {
     setEditUserModal(true)
   }
 
-  function RenderMemberDetails(member: Member) {
+  function RenderMemberDetails(member: MembersWithPoints) {
+    const sectionBranding = getSectionBranding(member.sectionId)
+
     return (
       <>
         <div className="card member-details-member-card flex-shrink-0 sticky-top mb-3">
@@ -56,8 +63,8 @@ function MemberDetailsPage() {
             <Image key={Date.now()}
                    className="mb-2"
                    onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}
-                   title={"User id: " + member.memberId}
-                   src={member.hasImage ? Uris.memberPhoto(member.memberId) : "images/unknown-member-image.png"} alt=""/>
+                   title={"User id: " + member.id}
+                   src={member.hasImage ? Uris.memberPhoto(member.id) : "/images/unknown-member-image.png"} alt=""/>
             <div className="row mb-2">
               <div className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}>
                 <strong className="tile d-flex flex-column justify-content-center h-100">{member.firstName + " " + member.lastName}</strong>
@@ -68,12 +75,14 @@ function MemberDetailsPage() {
                 <div className="tile" style={{fontSize: "12px"}}>{member.memberCode}</div>
               </div>
               <div className="col-6 members-list-item-section">
-                <div className="tile" style={{fontSize: "12px"}}>todo-pts</div>
+                <div className="tile" style={{fontSize: "12px"}}>{member.totalPoints}</div>
               </div>
             </div>
             <div className="row mb-2">
               <div className="members-list-item-section">
-                <div className="tile">{member.memberScoutGroupName}</div>
+                <div className="tile" style={{backgroundColor: sectionBranding.backgroundColour, color: sectionBranding.foregroundColour}}>
+                  {member.sectionName}
+                </div>
               </div>
             </div>
           </div>

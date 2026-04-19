@@ -11,6 +11,12 @@ export type Member = {
   memberScoutGroupName: string
 }
 
+export type HaulResult = {
+  scavengerResultId: number
+  hauledAtIso8601: string
+  totalPoints: number
+}
+
 export type MembersWithPoints = {
   id: number
   firstName: string
@@ -23,4 +29,8 @@ export type MembersWithPoints = {
   sectionId: string
   sectionName: string
   totalPoints: number
+  haulResult: HaulResult[]
+  latestHaulResult?: HaulResult | undefined
+  selectedHaulResultId: number | undefined
+  selectedHaulResult?: HaulResult | undefined
 }

@@ -63,6 +63,27 @@ public class MembersController(
         return Ok(memberViewModel);
     }
 
+    [HttpGet]
+    [Route("{code}/WithPoints")]
+    public MembersWithPointsViewModel GetMemberWithPoints(string code)
+    {
+        var member = appDbContext.Members!
+            .Include(x => x.Section)
+            .Include(x => x.ScoutGroup)
+            .Include(x => x.ScavengeResults)
+            .ThenInclude(x => x.ScavengedCoins)
+            .Single(x => x.Code == code);
+
+        var viewModel = new MembersWithPointsViewModel(member);
+
+        if (member.ScavengeResults.Any())
+        {
+            viewModel.LatestCompletedAtTime = member.ScavengeResults.MaxBy(x => x.CompletedAt).CompletedAt;
+        }
+        
+        return viewModel;
+    }
+
     [HttpPut]
     [Route("{id:int}/Coins")]
     public ActionResult AddPointsToMember(int id, [FromBody] PointsForMemberViewModel viewModel)
@@ -112,20 +133,20 @@ public class MembersController(
 
         return Ok();
     }
-    
+
     [HttpGet]
     [Route("RefreshSecondsForLatestScans")]
     public ActionResult RefreshSecondsForLatestScans()
     {
         return Ok(leaderboardSettingsOptions.Value.Last6ScavengersPageRefreshSeconds);
     }
-    
+
     [HttpGet]
     [Route("LatestScans")]
     public ActionResult LatestScans()
     {
-        var latest6Scavengers = appDbContext.GetLastSixScavengers();
-        
+        var latest6Scavengers = appDbContext.GetLatestScans(leaderboardSettingsOptions.Value.NumberOfLatestScansToDisplay);
+
         return Ok(latest6Scavengers);
     }
 }

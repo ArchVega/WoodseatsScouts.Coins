@@ -12,4 +12,5 @@ public class LeaderboardSettings
     public int PageRefreshSeconds { get; set; }
     
     public int Last6ScavengersPageRefreshSeconds { get; set; }
+    public int NumberOfLatestScansToDisplay { get; set; }
 }

@@ -10,9 +10,8 @@ function MemberApiService() {
             return await axios.get(uri);
         },
 
-        async fetchMemberForVoting(memberQrCode) {
-            const uri = Uris.memberForVoting(memberQrCode);
-            // logApi(uri)
+        async fetchMemberWithPoints(memberQrCode) {
+            const uri = Uris.memberWithPoints(memberQrCode);
             return await axios.get(uri);
         },
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import type {MembersWithPoints} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
+import { format } from 'timeago.js';
 
 export default function MembersLatestScansPage() {
   const [members, setMembers] = useState([])
@@ -35,21 +36,23 @@ export default function MembersLatestScansPage() {
 
   function RenderMember(member: MembersWithPoints) {
     const sectionBranding = getSectionBranding(member.sectionId)
-    console.log(sectionBranding)
 
     return (
       <div className="card members-list-item-card flex-shrink-0" >
         <div className="card-body">
           <div className="row">
             <div className="col">
-              <Image style={{height: "150px"}} key={member.id} src={member.hasImage ? Uris.memberPhoto(member.id) : "images/unknown-member-image.png"}/>
+              <Image style={{height: "150px"}} key={member.id} src={member.hasImage ? Uris.memberPhoto(member.id) : "/images/unknown-member-image.png"}/>
             </div>
           </div>
           <div className="first-name mt-2 m-0">
             <strong>{member.firstName}</strong>
           </div>
           <div className="points m-0">
-            <strong>{member.totalPoints}</strong>
+            <strong>{member.selectedHaulResult.totalPoints}</strong>
+          </div>
+          <div className="time m-0">
+            <em>{format(member.selectedHaulResult.hauledAtIso8601)}</em>
           </div>
           <div className="group mt-2">
             <div style={{backgroundColor: sectionBranding.backgroundColour}}>

@@ -9,6 +9,7 @@ import Uris from "../../services/apis/Uris.ts";
 import {useNavigate} from "react-router-dom";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";
+import {getSectionBranding} from "../../utilities/branding.ts";
 
 export default function MembersListPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -63,6 +64,8 @@ export default function MembersListPage() {
   }
 
   function RenderMember(member) {
+    const sectionBranding = getSectionBranding(member.sectionId)
+
     return (
       <div key={member.memberCode} className="card members-list-item-card flex-shrink-0">
         <div className="card-body">
@@ -71,7 +74,7 @@ export default function MembersListPage() {
               <img key={Date.now()}
                    onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}
                    title={"User id: " + member.id}
-                   src={member.hasImage ? Uris.memberPhoto(member.id) : "images/unknown-member-image.png"} alt=""/>
+                   src={member.hasImage ? Uris.memberPhoto(member.id) : "/images/unknown-member-image.png"} alt=""/>
             </div>
           </div>
           <div className="row pb-2 member-name-row">
@@ -89,7 +92,9 @@ export default function MembersListPage() {
           </div>
           <div className="row pb-2">
             <div className="members-list-item-section">
-              <div className="tile">{member.scoutGroupName}</div>
+              <div className="tile" style={{color: sectionBranding.foregroundColour, backgroundColor: sectionBranding.backgroundColour, fontWeight: "bold"}}>
+                {member.scoutGroupName}
+              </div>
             </div>
           </div>
           <div className="row pb-2 g-1">

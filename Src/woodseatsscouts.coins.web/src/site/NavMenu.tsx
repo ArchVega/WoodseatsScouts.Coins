@@ -75,7 +75,7 @@ export default function NavMenu() {
 
     return (
       <div className="container-fluid scouts-navbar-sub-menu">
-        <div className="container">
+        <div className="container-fluid">
           <div className="d-sm-inline-flex w-100 align-items-center">
             {RenderNavBarSubmenuItems()}
           </div>
