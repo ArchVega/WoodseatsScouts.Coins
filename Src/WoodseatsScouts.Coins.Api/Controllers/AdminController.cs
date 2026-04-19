@@ -87,7 +87,7 @@ public class AdminController(IAppDbContext appDbContext) : ControllerBase
 
         var baseId = string.IsNullOrWhiteSpace(createCoinViewModel.BaseName)
             ? createCoinViewModel.BaseId!.Value
-            : appDbContext.Bases!.Single(x => x.Name == createCoinViewModel.BaseName).Id!;
+            : appDbContext.ActivityBases!.Single(x => x.Name == createCoinViewModel.BaseName).Id!;
 
         var coins = appDbContext.CreateCoins(baseId!, createCoinViewModel.Points, createCoinViewModel.Count);
 

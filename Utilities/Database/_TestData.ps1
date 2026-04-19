@@ -19,7 +19,7 @@ function RestoreBaseTestData {
         }        
     }
     
-    $tables = @("ScavengeResults", "ScavengedCoins", "MemberCountryVotes", "Coins", "Members", "Sections", "Troops")
+    $tables = @("ScavengeResults", "ScavengedCoins", "Coins", "Members", "Sections", "Troops")
     Write-Host "Inserting data from '$Path' into '$DatabaseName'..."
     $tables | ForEach-Object { 
         _ExecuteQuery "DELETE FROM $_" $DatabaseName
@@ -46,6 +46,7 @@ function RestoreBaseTestData {
         }        
 
         $insertQuery = $insertQueryStringBuilder.ToString();
+        Write-Host "Inserting data into '$tableName'..."
         _ExecuteQuery $insertQuery $DatabaseName 
     }    
 

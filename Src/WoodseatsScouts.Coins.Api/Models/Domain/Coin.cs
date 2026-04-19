@@ -14,11 +14,11 @@ public class Coin
     /// has already been used in printed QR codes, we have to retain it for v2024.
     /// Todo: v2025+, remove this property and instead just use Id 
     /// </summary>
-    public int BaseValueId { get; set; }
+    public int ActivityBaseSequenceNumber { get; set; }
     
-    public int Base { get; set; }
+    public int ActivityBaseId { get; set; }
     
-    public Base BaseEntity { get; set; }
+    public ActivityBase ActivityBase { get; set; }
 
     public int Value { get; set; }
 

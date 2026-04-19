@@ -40,11 +40,7 @@ public interface IAppDbContext
     
     List<Coin> RecordMemberAgainstUnscavengedCoins(Member member, List<string> coinCodes);
     
-    DbSet<Country>? Countries { get; set; }
-        
-    DbSet<MemberCountryVote>? MemberCountryVotes { get; set; }
-    
-    DbSet<Base> Bases { get; set; }
+    DbSet<ActivityBase> ActivityBases { get; set; }
 
     Member? CreateMember(string firstName, string lastName, int troopId, string section, bool isDayVisitor);
     

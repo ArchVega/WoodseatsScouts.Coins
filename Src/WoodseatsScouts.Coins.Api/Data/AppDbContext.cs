@@ -26,28 +26,24 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public DbSet<Coin>? Coins { get; set; }
         
-        public DbSet<Base>? Bases { get; set; }
+        public DbSet<ActivityBase>? ActivityBases { get; set; }
 
         public DbSet<ScavengedCoin>? ScavengedCoins { get; set; }
 
         public DbSet<ScavengeResult>? ScavengeResults { get; set; }
 
-        public DbSet<Country>? Countries { get; set; }
-
-        public DbSet<MemberCountryVote>? MemberCountryVotes { get; set; }
-
         public DbSet<ErrorLog>? ErrorLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            const string coinCodeFormat = "'C' + (FORMAT([BaseValueId], '0000'))  + (FORMAT([Base], '000')) + (FORMAT([Value], '000'))";
+            const string coinCodeFormat = "'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))";
             const string memberCodeFormat = "'M' + (FORMAT(TroopId, '000'))  + [SectionId] + (FORMAT(Number, '000'))";
 
             /* As of the v2024, Coins data is generated externally and the Id value is predetermined and inserted. */
             modelBuilder.Entity<Coin>()
                 .Property(x => x.Code).HasComputedColumnSql(coinCodeFormat);
 
-            modelBuilder.Entity<Coin>().HasOne(x => x.BaseEntity).WithMany().HasForeignKey(x => x.Base);
+            modelBuilder.Entity<Coin>().HasOne(x => x.ActivityBase).WithMany().HasForeignKey(x => x.ActivityBaseId);
             
             /* See property notes */
             modelBuilder.Entity<Member>()
@@ -58,38 +54,27 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .HasIndex(u => u.Code)
                 .IsUnique();
 
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 1, Name = "Italy" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 2, Name = "Germany" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 3, Name = "France" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 4, Name = "Belgium" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 5, Name = "Ireland" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 6, Name = "Poland" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 7, Name = "Australia" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 8, Name = "Finland" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 9, Name = "Norway" });
-            modelBuilder.Entity<Country>().HasData(new Country { Id = 10, Name = "Spain" });
-            
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 1, Name = "Archery" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 2, Name = "Abseiling" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 3, Name = "Aerial Trek" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 4, Name = "Aeroball" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 5, Name = "Bouldering" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 6, Name = "Bushcraft" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 7, Name = "Campfire" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 8, Name = "Canoeing" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 9, Name = "Caving" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 10, Name = "Fencing" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 11, Name = "Hike" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 12, Name = "Hillwalking" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 13, Name = "Kayaking" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 14, Name = "Orienteering" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 15, Name = "Pioneering" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 16, Name = "Powerboating" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 17, Name = "Raft Building" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 18, Name = "Sailing" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 19, Name = "Tomahawk throwing" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 20, Name = "Zip wire" });
-            modelBuilder.Entity<Base>().HasData(new Base { Id = 99, Name = "Misc" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 1, Name = "Archery" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 2, Name = "Abseiling" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 3, Name = "Aerial Trek" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 4, Name = "Aeroball" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 5, Name = "Bouldering" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 6, Name = "Bushcraft" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 7, Name = "Campfire" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 8, Name = "Canoeing" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 9, Name = "Caving" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 10, Name = "Fencing" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 11, Name = "Hike" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 12, Name = "Hillwalking" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 13, Name = "Kayaking" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 14, Name = "Orienteering" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 15, Name = "Pioneering" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 16, Name = "Powerboating" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 17, Name = "Raft Building" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 18, Name = "Sailing" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 19, Name = "Tomahawk throwing" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 20, Name = "Zip wire" });
+            modelBuilder.Entity<ActivityBase>().HasData(new ActivityBase { Id = 99, Name = "Misc" });
         }
 
         public int GenerateNextMemberCode(int troopId, string section)
@@ -326,14 +311,14 @@ namespace WoodseatsScouts.Coins.Api.Data
         
         public List<Coin> CreateCoins(int baseId, int points, int count)
         {
-            var maxBaseValueId = Coins!.Where(x => x.Base == baseId).Max(x => x.BaseValueId);
+            var maxBaseValueId = Coins!.Where(x => x.ActivityBaseId == baseId).Max(x => x.ActivityBaseSequenceNumber);
             var newCoins = new List<Coin>();
             for (var i = maxBaseValueId + 1; i < maxBaseValueId + 1 + count; i++)
             {
                 newCoins.Add(new Coin
                 {
-                    Base = baseId,
-                    BaseValueId = i,
+                    ActivityBaseId = baseId,
+                    ActivityBaseSequenceNumber = i,
                     Value = points
                 });
             }

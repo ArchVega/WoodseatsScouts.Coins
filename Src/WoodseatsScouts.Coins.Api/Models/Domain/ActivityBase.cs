@@ -1,6 +1,6 @@
 namespace WoodseatsScouts.Coins.Api.Models.Domain;
 
-public class Base
+public class ActivityBase
 {
     public int Id { get; set; }
     

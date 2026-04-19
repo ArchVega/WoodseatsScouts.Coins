@@ -14,7 +14,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Bases",
+                name: "ActivityBases",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -23,20 +23,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bases", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Countries",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Countries", x => x.Id);
+                    table.PrimaryKey("PK_ActivityBases", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,10 +107,10 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BaseValueId = table.Column<int>(type: "int", nullable: false),
-                    Base = table.Column<int>(type: "int", nullable: false),
+                    ActivityBaseSequenceNumber = table.Column<int>(type: "int", nullable: false),
+                    ActivityBaseId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<int>(type: "int", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false, computedColumnSql: "'C' + (FORMAT([BaseValueId], '0000'))  + (FORMAT([Base], '000')) + (FORMAT([Value], '000'))"),
+                    Code = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false, computedColumnSql: "'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))"),
                     MemberId = table.Column<int>(type: "int", nullable: true),
                     LockUntil = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -131,9 +118,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 {
                     table.PrimaryKey("PK_Coins", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Coins_Bases_Base",
-                        column: x => x.Base,
-                        principalTable: "Bases",
+                        name: "FK_Coins_ActivityBases_ActivityBaseId",
+                        column: x => x.ActivityBaseId,
+                        principalTable: "ActivityBases",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -141,31 +128,6 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MemberCountryVotes",
-                columns: table => new
-                {
-                    MemberId = table.Column<int>(type: "int", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: false),
-                    VotedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MemberCountryVotes", x => new { x.MemberId, x.CountryId });
-                    table.ForeignKey(
-                        name: "FK_MemberCountryVotes_Countries_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MemberCountryVotes_Members_MemberId",
-                        column: x => x.MemberId,
-                        principalTable: "Members",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,7 +173,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Bases",
+                table: "ActivityBases",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
@@ -238,37 +200,15 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     { 99, "Misc" }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Italy" },
-                    { 2, "Germany" },
-                    { 3, "France" },
-                    { 4, "Belgium" },
-                    { 5, "Ireland" },
-                    { 6, "Poland" },
-                    { 7, "Australia" },
-                    { 8, "Finland" },
-                    { 9, "Norway" },
-                    { 10, "Spain" }
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_Coins_Base",
+                name: "IX_Coins_ActivityBaseId",
                 table: "Coins",
-                column: "Base");
+                column: "ActivityBaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Coins_MemberId",
                 table: "Coins",
                 column: "MemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MemberCountryVotes_CountryId",
-                table: "MemberCountryVotes",
-                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Members_SectionId",
@@ -307,16 +247,10 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 name: "ErrorLogs");
 
             migrationBuilder.DropTable(
-                name: "MemberCountryVotes");
-
-            migrationBuilder.DropTable(
                 name: "ScavengedCoins");
 
             migrationBuilder.DropTable(
-                name: "Bases");
-
-            migrationBuilder.DropTable(
-                name: "Countries");
+                name: "ActivityBases");
 
             migrationBuilder.DropTable(
                 name: "ScavengeResults");
