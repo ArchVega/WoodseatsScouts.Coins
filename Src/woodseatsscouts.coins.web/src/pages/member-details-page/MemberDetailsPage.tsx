@@ -9,7 +9,7 @@ import QRScanCodeType from "../../components/io/qr-input-devices/QRScanCodeType.
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import ScoutsLogo from "../../images/fleur-de-lis-marque-white.png";
 import Uris from "../../services/apis/Uris.ts";
-import type {Member, MembersWithPoints} from "../../types/ServerTypes.ts";
+import type {Member, MemberPointsSummaryDto, MembersWithPoints} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 
@@ -17,7 +17,7 @@ function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
   const {memberCode} = useParams();
   const [loading, setLoading] = useState(false)
-  const [member, setMember] = useState(null);
+  const [member, setMember] = useState<MemberPointsSummaryDto | null>(null); // todo: ended here apr 20 - need a new model, for 'complex'
   const [selectedSession, setSelectedSession] = useState(null);
   const [userModal, setUserModal] = useState(false);
   const [editUserModal, setEditUserModal] = useState(false);
@@ -25,8 +25,6 @@ function MemberDetailsPage() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [filterText, setFilterText] = useState(null);
   const [showScores, setShowScores] = useState(true);
-
-  // showMemberNameModal(member)}
 
   // todo: these are what we need to hook up
   // <EditMemberNameModal editMembersModal={editMemberNameModal} setEditMembersModal={setEditMemberNameModal} selectedMember={selectedUser}
@@ -37,7 +35,10 @@ function MemberDetailsPage() {
       setLoading(true)
       MemberApiService()
         .fetchMemberWithPoints(memberCode)
-        .then(response => response.data)
+        .then(response => {
+          response.data.clientComputedImageUri = Uris.memberPhoto(response.data.computedImagePath) // todo: is there an axios way to do this automatically?
+          return response.data
+        })
         .then(member => setMember(member))
         .finally(() => setLoading(false));
     }
@@ -52,7 +53,7 @@ function MemberDetailsPage() {
     setEditUserModal(true)
   }
 
-  function RenderMemberDetails(member: MembersWithPoints) {
+  function RenderMemberDetails(member: MemberPointsSummaryDto) {
     const sectionBranding = getSectionBranding(member.sectionId)
 
     return (
@@ -63,7 +64,7 @@ function MemberDetailsPage() {
                    className="mb-2"
                    onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}
                    title={"User id: " + member.id}
-                   src={member.hasImage ? Uris.memberPhoto(member.id) : "/images/unknown-member-image.png"} />
+                   src={member.clientComputedImageUri } />
             <div className="row mb-2">
               <div className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}>
                 <strong className="tile d-flex flex-column justify-content-center h-100">{member.firstName + " " + member.lastName}</strong>

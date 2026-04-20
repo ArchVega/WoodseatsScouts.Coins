@@ -5,6 +5,7 @@ using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.View;
 using WoodseatsScouts.Coins.Api.Models.View.Members;
@@ -82,7 +83,7 @@ public class MemberController(
 
     [HttpGet]
     [Route("{code}/WithPoints")]
-    public MembersWithPointsViewModel GetMemberWithPoints(string code)
+    public MemberPointsSummaryDto GetMemberWithPoints(string code)
     {
         var member = appDbContext.Members!
             .Include(x => x.Section)
@@ -91,7 +92,7 @@ public class MemberController(
             .ThenInclude(x => x.ScavengedCoins)
             .Single(x => x.Code == code);
 
-        var viewModel = new MembersWithPointsViewModel(member);
+        var viewModel = new MemberPointsSummaryDto(member);
 
         if (member.ScavengeResults.Any())
         {
