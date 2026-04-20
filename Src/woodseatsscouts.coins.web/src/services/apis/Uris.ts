@@ -21,12 +21,12 @@ const Uris = {
   pointValueFromCode: function (coinCode: string, memberCode: string) {
     return `${baseUri}/Coins/${coinCode}/Scan/${memberCode}`
   },
-
-
-
-  addPointsToMember: function (id) {
-    return `${baseUri}/Members/${id}/Coins`
+  addPointsToMember: function (memberId: number) {
+    return `${baseUri}/Members/${memberId}/Coins`
   },
+
+
+
   memberWithPoints: function (memberQrCode) {
     return `${baseUri}/Members/${memberQrCode}/WithPoints`
   },

@@ -20,11 +20,10 @@ interface ScanCoinsSectionProps {
 export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSectionProps) {
   const audioFx = AudioFx();
   const [coinQrCode, setCoinQrCode] = useState<string>("");
-  const [coins, setCoins] = useState<CoinDto[]>([]);
+  const [coinDtos, setCoinDtos] = useState<CoinDto[]>([]);
   const [coinTotal, setCoinTotal] = useState<number>(0);
 
   useEffect(() => {
-    console.log('Coin qr code:', coinQrCode)
     if (coinQrCode != null && coinQrCode.trim().length > 0) {
       logDebug(`Fetching coin data for code ${coinQrCode}`)
 
@@ -33,7 +32,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
       }
 
       function isDuplicateCoin(coin) {
-        return coins.filter(x => x.code === coin.code).length > 0
+        return coinDtos.filter(x => x.code === coin.code).length > 0
       }
 
       fetchData()
@@ -42,7 +41,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
           logObject("coinDto", coinDto)
 
           if (!isDuplicateCoin((coinDto))) {
-            setCoins([...coins, coinDto])
+            setCoinDtos([...coinDtos, coinDto])
             audioFx.playCoinScannedSuccessAudio()
             logDebug('Resetting coin QR code to null. Was: ', coinQrCode)
             setCoinQrCode(null)
@@ -60,22 +59,20 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
   }, [coinQrCode]);
 
   useEffect(() => {
-    setCoinTotal(coins.reduce((n, {pointValue}) => n + pointValue, 0))
-  }, [coins]);
+    setCoinTotal(coinDtos.reduce((n, {pointValue}) => n + pointValue, 0))
+  }, [coinDtos]);
 
-  function removeCoin(coin) {
-    setCoins((current) => current.filter((c) => c !== coin));
+  function removeCoin(coin: CoinDto) {
+    setCoinDtos((current) => current.filter((c) => c !== coin));
   }
 
   async function onFinished() {
-    if (coins.length === 0) {
-      toast("Add at least one coin for this member", {
-        position: 'top-center'
-      })
+    if (coinDtos.length === 0) {
+      toast("Add at least one coin for this member", {position: 'top-center'})
       return
     }
 
-    await CoinApiService().addPointsToMember(member, coins).then(async (response: any) => {
+    await CoinApiService().addPointsToMember(member, coinDtos).then(async (response: any) => {
       const additionalData = await response.data
 
       let finalTotal = coinTotal;
@@ -110,10 +107,10 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
   function RenderLeftPanel() {
     return (
       <div className="coins-grid-2026 mt-3" data-testid="div-scanned-coins">
-        {coins.map((coin, index) =>
+        {coinDtos.map((coin, index) =>
           (
-            <div>
-              <ScannedCoin key={index} coin={coin} isLast={index + 1 === coins.length} removeCoin={coinToRemove => removeCoin(coinToRemove)}/>
+            <div key={index}>
+              <ScannedCoin coin={coin} isLast={index + 1 === coinDtos.length} removeCoin={coinToRemove => removeCoin(coinToRemove)}/>
             </div>
           ))}
       </div>
@@ -143,7 +140,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
         </div>
         <div className="row mb-2 g-2">
           <div className="col">
-            {RenderTrackerCard("Tokens scanned", coins.length)}
+            {RenderTrackerCard("Tokens scanned", coinDtos.length)}
           </div>
           <div className="col">
             {RenderTrackerCard("Points this scan", coinTotal)}
