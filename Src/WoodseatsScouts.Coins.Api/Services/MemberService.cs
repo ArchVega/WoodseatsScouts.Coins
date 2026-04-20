@@ -36,7 +36,7 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
             Clue2State = member.Clue2State,
             Clue3State = member.Clue3State,
             IsDayVisitor = member.IsDayVisitor,
-            HasImage = member.HasImage
+            HasImage = member.HasImage,
         };
     }
 

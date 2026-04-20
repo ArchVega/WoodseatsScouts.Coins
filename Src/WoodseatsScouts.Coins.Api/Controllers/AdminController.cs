@@ -8,7 +8,7 @@ using WoodseatsScouts.Coins.Api.Models.View;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [AdminAuth]
 public class AdminController(IAppDbContext appDbContext) : ControllerBase
 {

@@ -7,7 +7,7 @@ using WoodseatsScouts.Coins.Api.Config;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AppStateController(IScoutsAppEnvironment scoutsAppEnvironment, IOptions<AppSettings> appSettingsOptions) : ControllerBase
 {
     [HttpGet]

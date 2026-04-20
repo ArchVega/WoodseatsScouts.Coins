@@ -90,7 +90,7 @@ export default function NavMenu() {
         return (
           <div className="d-flex h-100 p-2">
             <Image className="member-image h-100 w-auto me-3"
-                   src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.memberId) : "/images/unknown-member-image.png"}></Image>
+                   src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.id) : "/images/unknown-member-image.png"}></Image>
             <div id="member-details" className="flex-fill">
               <div><span>Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
               <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberScoutGroupName}</div>

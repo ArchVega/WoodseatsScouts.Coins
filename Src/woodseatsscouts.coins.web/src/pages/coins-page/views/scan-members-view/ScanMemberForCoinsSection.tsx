@@ -9,6 +9,8 @@ import QRCodeInputDevices from "../../../../components/io/qr-input-devices/QRCod
 import QRScanCodeType from "../../../../components/io/qr-input-devices/QRScanCodeType.ts";
 import {logError} from "../../../../components/logging/Logger.ts";
 import {toastError} from "../../../../components/toaster/toaster.ts";
+import type {AxiosResponse} from "axios";
+import type {Member} from "../../../../types/ServerTypes.ts";
 
 export default function ScanMemberForCoinsSection({setMember}) {
   const {setActiveScanningMember} = useContext(PageActionMenuAreaContext)
@@ -35,7 +37,7 @@ export default function ScanMemberForCoinsSection({setMember}) {
     if (memberQrCode != null && memberQrCode.trim().length > 0) {
       setLoading(true)
 
-      async function fetchData() {
+      async function fetchData(): Promise<AxiosResponse<Member>> {
         audioFx.playMemberScannedAudio()
         return await MemberApiService().fetchMember(memberQrCode)
       }

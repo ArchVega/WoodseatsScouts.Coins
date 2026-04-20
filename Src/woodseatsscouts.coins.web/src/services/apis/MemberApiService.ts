@@ -5,7 +5,7 @@ import Uris from "./Uris.ts";
 function MemberApiService() {
     return {
         async fetchMember(memberQrCode) {
-            const uri = Uris.member(memberQrCode);
+            const uri = Uris.memberByCode(memberQrCode);
             // logApi(uri)
             return await axios.get(uri);
         },
@@ -16,7 +16,7 @@ function MemberApiService() {
         },
 
         async fetchMembers() {
-            const uri = Uris.members
+            const uri = Uris.member
             return await axios.get(uri);
         }
     }

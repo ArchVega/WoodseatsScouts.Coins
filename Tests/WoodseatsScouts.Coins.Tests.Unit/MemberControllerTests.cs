@@ -19,7 +19,7 @@ using Xunit;
 
 namespace WoodseatsScouts.Coins.Tests;
 
-public class MembersControllerTests
+public class MemberControllerTests
 {
     private readonly Mock<IMemberService> memberServiceMock = new();
     private readonly Mock<IAppDbContext> appDbContextMock = new();
@@ -27,9 +27,9 @@ public class MembersControllerTests
     private readonly Mock<IOptions<LeaderboardSettings>> leaderboardSettingsOptions = new();
     private readonly Mock<IOptions<AppSettings>> appSettingsOptions = new();
 
-    private MembersController CreateCut()
+    private MemberController CreateCut()
     {
-        return new MembersController(memberServiceMock.Object, appDbContextMock.Object, imagePersisterMock.Object, appSettingsOptions.Object, leaderboardSettingsOptions.Object);
+        return new MemberController(memberServiceMock.Object, appDbContextMock.Object, imagePersisterMock.Object, appSettingsOptions.Object, leaderboardSettingsOptions.Object);
     }
 
     [Fact]

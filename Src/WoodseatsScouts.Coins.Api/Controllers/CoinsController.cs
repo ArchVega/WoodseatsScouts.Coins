@@ -6,7 +6,7 @@ using WoodseatsScouts.Coins.Api.Data;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class CoinsController(
     IAppDbContext appDbContext,
     SystemDateTimeProvider systemDateTimeProvider) : ControllerBase

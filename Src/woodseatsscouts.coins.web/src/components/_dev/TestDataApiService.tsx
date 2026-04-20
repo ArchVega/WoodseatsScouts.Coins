@@ -11,7 +11,7 @@ export default function TestDataApiService() {
         },
 
         async getMembers() {
-            const uri = Uris.members
+            const uri = Uris.member
             const response = await axios.get(uri);
 
             return response.data

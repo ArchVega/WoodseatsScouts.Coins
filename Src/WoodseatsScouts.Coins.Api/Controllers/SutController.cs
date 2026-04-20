@@ -10,7 +10,7 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class SutController(
     IAppDbContext appDbContext,
     SystemDateTimeProvider systemDateTimeProvider,

@@ -12,8 +12,8 @@ using WoodseatsScouts.Coins.Api.Models.View.Members;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class MembersController(
+[Route("api/members")]
+public class MemberController(
     IMemberService memberService,
     IAppDbContext appDbContext,
     IImagePersister imagePersister,
@@ -47,9 +47,9 @@ public class MembersController(
                 /*  The QRScanner for coins becomes active after 500ms after a member has logged in.
                     Slight delay to allow the admin to shift focus away. */
                 Thread.Sleep(appSettingsOptions.Value.LoginPauseDurationSeconds * 1000);
-                return Ok(memberId);
+                return Ok(memberService.GetMemberDto(memberId));
             case MemberQueryView.Basic:
-                return Ok(memberId);
+                return Ok(memberService.GetMemberDto(memberId));
             case MemberQueryView.PointsSummary:
                 return Ok(memberService.MemberPointsSummaryDto(memberId));
             case MemberQueryView.Complete:
@@ -117,9 +117,10 @@ public class MembersController(
     [Route("{id:int}/Photo")]
     public IActionResult Get(int id)
     {
-        var bytes = imagePersister.RetrieveImageBytes(id);
+        var stream = imagePersister.RetrieveImageBytes(id);
 
-        return File(bytes, "image/jpeg", $"{id}.jpg");
+        // return File(bytes, "image/jpeg", $"{id}.jpg");
+        return File(stream, "image/jpeg", enableRangeProcessing: true);
     }
 
     [HttpPut]

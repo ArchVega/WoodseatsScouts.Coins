@@ -9,7 +9,7 @@ using WoodseatsScouts.Coins.Api.Models.View;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class LeaderboardController(IAppDbContext appDbContext, IOptions<LeaderboardSettings> leaderboardSettingsOptions)
     : ControllerBase
 {

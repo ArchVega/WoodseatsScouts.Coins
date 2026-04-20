@@ -1,3 +1,22 @@
+export type MemberDto = {
+  id: number;
+  code: string
+  number: number
+  firstName: string
+  lastName: string
+  fullName: string
+  scoutGroupId: number
+  scoutGroupName: string
+  sectionId: string
+  sectionName: string
+  clue1State: string
+  clue2State: string
+  clue3State: string
+  isDayVisitor: boolean
+  hasImage: boolean
+}
+
+// old ---------------------------------------------------------------------------v
 export type Member = {
   firstName: string
   lastName: string
