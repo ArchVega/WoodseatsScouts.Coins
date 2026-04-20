@@ -12,5 +12,9 @@ public class AppSettings
 
     public int MinutesToLockScavengedCoins { get; set; }
     
+    // todo: ?
     public string AuthenticationToken { get; set; }
+    
+    public int LoginPauseDurationSeconds { get; set; }
+    
 }

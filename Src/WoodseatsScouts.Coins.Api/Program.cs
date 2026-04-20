@@ -1,8 +1,10 @@
 // dotcover disable
 
 using Microsoft.OpenApi.Models;
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Middleware;
+using WoodseatsScouts.Coins.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allOrigins, policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
 });
+
+builder.Services.AddScoped<IMemberService, MemberService>();
 
 builder.Services.AddControllers();
 ServicesRegistration.RegisterAll(builder.Services, builder.Configuration, builder.Environment);

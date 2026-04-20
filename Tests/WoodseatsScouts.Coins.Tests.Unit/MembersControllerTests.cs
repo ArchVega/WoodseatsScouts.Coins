@@ -1,21 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq.Expressions;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
 using WoodseatsScouts.Coins.Api.Abstractions;
-using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
+using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.View;
 using WoodseatsScouts.Coins.Api.Models.View.Members;
 using Xunit;
@@ -24,13 +21,21 @@ namespace WoodseatsScouts.Coins.Tests;
 
 public class MembersControllerTests
 {
+    private readonly Mock<IMemberService> memberServiceMock = new();
+    private readonly Mock<IAppDbContext> appDbContextMock = new();
+    private readonly Mock<IImagePersister> imagePersisterMock = new();
+    private readonly Mock<IOptions<LeaderboardSettings>> leaderboardSettingsOptions = new();
+    private readonly Mock<IOptions<AppSettings>> appSettingsOptions = new();
+
+    private MembersController CreateCut()
+    {
+        return new MembersController(memberServiceMock.Object, appDbContextMock.Object, imagePersisterMock.Object, appSettingsOptions.Object, leaderboardSettingsOptions.Object);
+    }
+
     [Fact]
     public void GetMembersWithPoints_ReturnsValidViewModel()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var imagePersisterMock = new Mock<IImagePersister>();
-        var leaderboardSettingsOptions = new Mock<IOptions<LeaderboardSettings>>();
-        var membersController = new MembersController(appDbContextMock.Object, leaderboardSettingsOptions.Object, imagePersisterMock.Object);
+        var membersController = CreateCut();
 
         var scoutGroup = new ScoutGroup { Id = 1 };
         var section = new Section { Code = "A" };
@@ -60,13 +65,9 @@ public class MembersControllerTests
     [Fact]
     public void GetMemberInfoFromCode_InvalidCode_ThrowsException()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var imagePersisterMock = new Mock<IImagePersister>();
-        var leaderboardSettingsOptions = new Mock<IOptions<LeaderboardSettings>>();
-        
-        var membersController = new MembersController(appDbContextMock.Object, leaderboardSettingsOptions.Object, imagePersisterMock.Object);
+        var membersController = CreateCut();
 
-        var result = membersController.GetMemberInfoFromCode("invalid");
+        var result = membersController.GetMemberByCode("invalid", null);
         result.ShouldBeOfType<BadRequestObjectResult>();
         ((BadRequestObjectResult)result).Value.ShouldBe("Oops, we can't find your profile - please speak to a District Camp Leader");
     }
@@ -74,35 +75,17 @@ public class MembersControllerTests
     [Fact]
     public void GetMemberInfoFromCode_ValidCode_OkResult()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var imagePersisterMock = new Mock<IImagePersister>();
-        var leaderboardSettingsOptions = new Mock<IOptions<LeaderboardSettings>>();
-        
-        var membersController = new MembersController(appDbContextMock.Object,leaderboardSettingsOptions.Object,  imagePersisterMock.Object);
+        var membersController = CreateCut();
 
-        var scoutGroup = new ScoutGroup { Id = 1 };
-        var section = new Section { Code = "A" };
-
-        SetupDbMock(appDbContextMock, x => x.ScoutGroups!, [scoutGroup]);
-        SetupDbMock(appDbContextMock, x => x.Sections!, [section]);
-        SetupDbMock(appDbContextMock, x => x.Members!, [
-            new Member { ScoutGroupId = 1, ScoutGroup = scoutGroup, SectionId = "A", Section = section, Number = 3 }
-        ]);
-
-        var result = membersController.GetMemberInfoFromCode("M001A003");
+        var result = membersController.GetMemberByCode("M001A003", new MemberQuery { MemberQueryView = MemberQueryView.Basic });
         result.ShouldBeOfType<OkObjectResult>();
-        var viewModel = (MemberViewModel)((OkObjectResult)result).Value!;
-        viewModel.MemberSection.ShouldBe("A");
+        memberServiceMock.Verify(x => x.GetMember(3, 1, "A"), Times.Once);
     }
 
     [Fact]
     public void SaveMemberPhoto_UpdatesHasImageProperty()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var imagePersisterMock = new Mock<IImagePersister>();
-        var leaderboardSettingsOptions = new Mock<IOptions<LeaderboardSettings>>();
-        
-        var membersController = new MembersController(appDbContextMock.Object, leaderboardSettingsOptions.Object, imagePersisterMock.Object);
+        var membersController = CreateCut();
 
         SetupDbMock(appDbContextMock, x => x.Members!, [
             new Member { Id = 9 }
@@ -119,11 +102,7 @@ public class MembersControllerTests
     [Fact]
     public void GetPhoto()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var imagePersisterMock = new Mock<IImagePersister>();
-        var leaderboardSettingsOptions = new Mock<IOptions<LeaderboardSettings>>();
-        
-        var membersController = new MembersController(appDbContextMock.Object, leaderboardSettingsOptions.Object, imagePersisterMock.Object);
+        var membersController = CreateCut();
 
         membersController.Get(1);
     }
@@ -131,11 +110,7 @@ public class MembersControllerTests
     [Fact]
     public void AddPointsToMember_Todo1()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var imagePersisterMock = new Mock<IImagePersister>();
-        var leaderboardSettingsOptions = new Mock<IOptions<LeaderboardSettings>>();
-        
-        var membersController = new MembersController(appDbContextMock.Object, leaderboardSettingsOptions.Object, imagePersisterMock.Object);
+        var membersController = CreateCut();
 
         var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
         var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };

@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -6,6 +5,7 @@ using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.View;
 using WoodseatsScouts.Coins.Api.Models.View.Members;
 
@@ -14,10 +14,51 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
 public class MembersController(
+    IMemberService memberService,
     IAppDbContext appDbContext,
-    IOptions<LeaderboardSettings> leaderboardSettingsOptions,
-    IImagePersister imagePersister) : ControllerBase
+    IImagePersister imagePersister,
+    IOptions<AppSettings> appSettingsOptions,
+    IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase
 {
+    [HttpGet]
+    [Route("{code}")]
+    public IActionResult GetMemberByCode(string code, [FromQuery] MemberQuery? memberQuery)
+    {
+        MemberCodeTranslationResult translationResult;
+        try
+        {
+            translationResult = CodeTranslator.TranslateMemberCode(code);
+        }
+        catch (CodeTranslationException e)
+        {
+            return BadRequest(e.Message);
+        }
+
+        var member = memberService.GetMember(translationResult.MemberNumber, translationResult.ScoutGroupNumber, translationResult.Section);
+
+        memberQuery ??= new MemberQuery
+        {
+            MemberQueryView = MemberQueryView.Basic
+        };
+
+        switch (memberQuery.MemberQueryView)
+        {
+            case MemberQueryView.Login:
+                /*  The QRScanner for coins becomes active after 500ms after a member has logged in.
+                    Slight delay to allow the admin to shift focus away. */
+                Thread.Sleep(appSettingsOptions.Value.LoginPauseDurationSeconds * 1000);
+                return Ok(member);
+            case MemberQueryView.Basic:
+                return Ok(member);
+            case MemberQueryView.PointsSummary:
+                return Ok(memberService.MemberPointsSummaryDto(member));
+            case MemberQueryView.Complete:
+                return Ok(memberService.MemberCompleteSummaryDto(member));
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
     [HttpGet]
     public ActionResult GetMembersWithPoints()
     {
@@ -31,36 +72,6 @@ public class MembersController(
             .OrderBy(x => x.FirstName)
             .ThenBy(x => x.LastName)
             .ToList());
-    }
-
-    [HttpGet]
-    [Route("{code}")]
-    public IActionResult GetMemberInfoFromCode(string code)
-    {
-        MemberCodeTranslationResult translationResult;
-        try
-        {
-            translationResult = CodeTranslator.TranslateMemberCode(code);
-        }
-        catch (CodeTranslationException e)
-        {
-            return BadRequest(e.Message);
-        }
-
-        var member = appDbContext.Members!
-            .Include(x => x.ScoutGroup)
-            .Include(x => x.Section)
-            .Single(x => x.Number == translationResult.MemberNumber
-                         && x.ScoutGroupId == translationResult.ScoutGroupNumber
-                         && x.SectionId == translationResult.Section);
-
-        /* The QRScanner for coins becomes active after 500ms after a member has logged in.
-           Slight delay to allow the admin to shift focus away.*/
-        // Todo: We don't need to wait between member code QR calls unless we're running in release. Either turn off or reduce.
-        Thread.Sleep(2000);
-
-        var memberViewModel = new MemberViewModel(member);
-        return Ok(memberViewModel);
     }
 
     [HttpGet]
@@ -80,7 +91,7 @@ public class MembersController(
         {
             viewModel.LatestCompletedAtTime = member.ScavengeResults.MaxBy(x => x.CompletedAt).CompletedAt;
         }
-        
+
         return viewModel;
     }
 
