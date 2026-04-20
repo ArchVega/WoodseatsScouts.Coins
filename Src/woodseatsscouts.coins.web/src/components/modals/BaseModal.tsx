@@ -21,7 +21,7 @@ export function BaseModal({
                           }: BaseModalProps) {
   return (
     <div className={`modal fade ${show ? "show d-block" : ""}`} id={id}>
-      <div className={`modal-dialog ${size ? `modal-${size}` : ""}`}>
+      <div className={`modal-dialog modal-dialog-scrollable ${size ? `modal-${size}` : ""}`}>
         <div className="modal-content">
 
           <div className="modal-header">
