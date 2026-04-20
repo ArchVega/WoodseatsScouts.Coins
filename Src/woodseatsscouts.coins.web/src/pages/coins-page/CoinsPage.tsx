@@ -5,12 +5,13 @@ import ScanMemberForCoinsSection from "./views/scan-members-view/ScanMemberForCo
 import ScanCoinsSection from "./views/scan-coins-view/ScanCoinsSection.tsx";
 import HaulResultsSection from "./views/haul-summary-view/HaulSummarySection.tsx";
 import AudioFx from "../../components/fx/AudioFx.ts";
+import type {MemberDto} from "../../types/ServerTypes.ts";
 
 export default function CoinsPage() {
   const {setPageActionMenuAreaAction} = useContext(PageActionMenuAreaContext)
   const [sectionName, setSectionName] = useState(CoinsPageViewName.ScanMember)
   const [section, setSection] = useState(null);
-  const [member, setMember] = useState(null)
+  const [member, setMember] = useState<MemberDto | null>(null)
   const [haulResult, setHaulResult] = useState(null)
 
   useEffect(() => {

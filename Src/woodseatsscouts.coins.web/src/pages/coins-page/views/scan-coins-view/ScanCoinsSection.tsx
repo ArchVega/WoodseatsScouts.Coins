@@ -1,27 +1,35 @@
 import {toast} from "react-toastify";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import ScannedCoin from "./ScannedCoin.tsx";
 import QRCodeInputDevices from "../../../../components/io/qr-input-devices/QRCodeInputDevices";
 import AudioFx from "../../../../components/fx/AudioFx";
 import CoinApiService from "../../../../services/apis/CoinApiService.tsx";
 import QRScanCodeType from "../../../../components/io/qr-input-devices/QRScanCodeType.ts";
-import {logDebug, logError, logReactSet} from "../../../../components/logging/Logger.ts";
+import {logDebug, logError, logObject, logReactSet} from "../../../../components/logging/Logger.ts";
 import {toastError} from "../../../../components/toaster/toaster.ts";
 import './ScanCoinsSection.scss'
+import type {AxiosResponse} from "axios";
+import type {CoinDto, Member, MemberDto} from "../../../../types/ServerTypes.ts";
+import type {HaulResult} from "../../../../types/ClientTypes.ts";
 
-export default function ScanCoinsSection({member, setHaulResult}) {
+interface ScanCoinsSectionProps {
+  member: MemberDto;
+  setHaulResult: React.Dispatch<React.SetStateAction<HaulResult>>
+}
+
+export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSectionProps) {
   const audioFx = AudioFx();
-  const [coinQrCode, setCoinQrCode] = useState("");
-  const [coins, setCoins] = useState([]);
-  const [coinTotal, setCoinTotal] = useState(0);
+  const [coinQrCode, setCoinQrCode] = useState<string>("");
+  const [coins, setCoins] = useState<CoinDto[]>([]);
+  const [coinTotal, setCoinTotal] = useState<number>(0);
 
   useEffect(() => {
     console.log('Coin qr code:', coinQrCode)
     if (coinQrCode != null && coinQrCode.trim().length > 0) {
       logDebug(`Fetching coin data for code ${coinQrCode}`)
 
-      async function fetchData() {
-        return await CoinApiService().fetchCoin(coinQrCode, member.memberCode)
+      async function fetchData(): Promise<AxiosResponse<CoinDto>> {
+        return await CoinApiService().fetchCoin(coinQrCode, member.code)
       }
 
       function isDuplicateCoin(coin) {
@@ -29,14 +37,14 @@ export default function ScanCoinsSection({member, setHaulResult}) {
       }
 
       fetchData()
-        .then(async value => {
-          const coin = (await value.data)
-          logReactSet("Set Coins", coin)
+        .then(async coinDtoResponse => {
+          const coinDto = coinDtoResponse.data
+          logObject("coinDto", coinDto)
 
-          if (!isDuplicateCoin((coin))) {
-            setCoins([...coins, coin])
+          if (!isDuplicateCoin((coinDto))) {
+            setCoins([...coins, coinDto])
             audioFx.playCoinScannedSuccessAudio()
-            console.log('Resetting coin QR code to null. Was: ', coinQrCode)
+            logDebug('Resetting coin QR code to null. Was: ', coinQrCode)
             setCoinQrCode(null)
           } else {
             audioFx.playCoinScannedErrorAudio()

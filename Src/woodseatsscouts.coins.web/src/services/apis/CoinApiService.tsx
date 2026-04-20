@@ -1,12 +1,13 @@
-import axios from "axios";
+import axios, {type AxiosResponse} from "axios";
 import Uris from "./Uris.ts";
+import type {CoinDto} from "../../types/ServerTypes.ts";
 // import {logApi} from "../components/logging/Logger";
 
 function CoinApiService() {
     return {
-        async fetchCoin(coinQrCode, memberQrCode) {
-            const uri = Uris.pointValueFromCode(coinQrCode, memberQrCode)
-            // logApi(uri)
+        async fetchCoin(coinCode: string, memberCode: string): Promise<AxiosResponse<CoinDto>> {
+            const uri = Uris.pointValueFromCode(coinCode, memberCode)
+
             return await axios.get(uri);
         },
 

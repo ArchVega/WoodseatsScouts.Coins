@@ -18,6 +18,12 @@ export type MemberDto = {
   clientComputedImageUri: string
 }
 
+export type CoinDto = {
+  code: string
+  baseNumber: number
+  pointValue: number
+}
+
 // old ---------------------------------------------------------------------------v
 export type Member = {
   firstName: string

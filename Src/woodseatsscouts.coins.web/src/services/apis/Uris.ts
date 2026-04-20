@@ -18,13 +18,14 @@ const Uris = {
   memberPhoto: function (photoImagePath: string) {
     return `${baseUri}/${photoImagePath}`
   },
+  pointValueFromCode: function (coinCode: string, memberCode: string) {
+    return `${baseUri}/Coins/${coinCode}/Scan/${memberCode}`
+  },
+
 
 
   addPointsToMember: function (id) {
     return `${baseUri}/Members/${id}/Coins`
-  },
-  pointValueFromCode: function (coinQrCode, memberQrCode) {
-    return `${baseUri}/Coins/${coinQrCode}/Scan/${memberQrCode}`
   },
   memberWithPoints: function (memberQrCode) {
     return `${baseUri}/Members/${memberQrCode}/WithPoints`

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -40,17 +41,17 @@ public class CoinsController(
         if (dbCoin.MemberId.HasValue && systemDateTimeProvider.Now < dbCoin.LockUntil)
         {
             var memberWhoScavengedCoin = appDbContext.Members!.Single(x => x.Id == dbCoin.MemberId);
-            // return base.Conflict($"The coin with code '{code}' has already been scavenged by {memberWhoScavengedCoin.FullName}!");
+            
             var message = $"This points token has already been used by {memberWhoScavengedCoin.FullName}. Please hand it to a District Camp Leader";
             return base.Conflict(message);
         }
 
-        /* The coin has either never been scavenged, or it has but enough time has passed to allow it to be scavenged again.
-         These properties will be set in the AddPointsToMember method. */
+        /*  The coin has either never been scavenged, or it has but enough time has passed to allow it to be scavenged again.
+            These properties will be set in the AddPointsToMember method. */
         dbCoin.MemberId = null;
         dbCoin.LockUntil = null;
         appDbContext.SaveChanges();
 
-        return Ok(new CoinViewModel(result.PointValue, result.BaseNumber, code));
+        return Ok(new CoinDto(result.PointValue, result.BaseNumber, code));
     }
 }
