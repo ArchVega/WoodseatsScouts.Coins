@@ -28,7 +28,6 @@ public class MembersWithPointsViewModel
         TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.PointValue)).Sum();
         HaulResults = member.ScavengeResults.Select(x =>
         {
-            
             return new HaulResult
             {
                 ScavengerResultId = x.Id,

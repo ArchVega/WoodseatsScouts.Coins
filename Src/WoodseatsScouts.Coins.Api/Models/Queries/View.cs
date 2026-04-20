@@ -1,6 +1,6 @@
 namespace WoodseatsScouts.Coins.Api.Models.Queries;
 
-public enum MemberQueryView
+public enum View
 {
     Login,
     Basic,

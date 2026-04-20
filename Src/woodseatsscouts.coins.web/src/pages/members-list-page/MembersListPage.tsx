@@ -2,21 +2,20 @@ import './MembersListPage.scss'
 
 import React, {useContext, useEffect, useState} from "react";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
-// import MemberPhotoModal from "../../components/modals/MemberPhotoModal";
-// import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal";
-// import EditMemberNameModal from "../../components/modals/EditMemberNameModal";
 import Uris from "../../services/apis/Uris.ts";
 import {useNavigate} from "react-router-dom";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
+import type {AxiosResponse} from "axios";
+import type {MemberDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 
 export default function MembersListPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
   const navigate = useNavigate();
 
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState<MemberPointsSummaryDto[]>([]);
   const [userModal, setUserModal] = useState(false);
   const [editUserModal, setEditUserModal] = useState(false);
   const [editMemberNameModal, setEditMemberNameModal] = useState(false);
@@ -24,10 +23,15 @@ export default function MembersListPage() {
   const [filterText, setFilterText] = useState(null);
 
   useEffect(() => {
-    const fetchMembers = async () => {
+    const fetchMembers = async (): Promise<AxiosResponse<MemberPointsSummaryDto[]>> => {
       return await MemberApiService().fetchMembers();
     }
-    fetchMembers().then(response => setMembers(response.data));
+    fetchMembers().then(response => {
+      response.data.forEach(memberPointsSummaryDto => {
+        memberPointsSummaryDto.clientComputedImageUri = Uris.memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
+      })
+      setMembers(response.data)
+    });
   }, [])
 
   function sectionClassName(sectionName) {
@@ -64,7 +68,7 @@ export default function MembersListPage() {
     return firstNameMatch || lastNameMatch || scoutGroupNameMatch || sectionMatch || memberCodeMatch
   }
 
-  function RenderMember(member) {
+  function RenderMember(member: MemberPointsSummaryDto) {
     const sectionBranding = getSectionBranding(member.sectionId)
 
     return (
@@ -74,7 +78,7 @@ export default function MembersListPage() {
             <div className="col">
               <img key={Date.now()}
                    title={"User id: " + member.id}
-                   src={member.hasImage ? Uris.memberPhoto(member.id) : "/images/unknown-member-image.png"} alt=""/>
+                   src={member.clientComputedImageUri} alt=""/>
             </div>
           </div>
           <div className="row pb-2 member-name-row">
@@ -102,7 +106,8 @@ export default function MembersListPage() {
               <Button onClick={() => navigate(`/member/${member.memberCode}`)}>EDIT</Button>
             </div>
             <div className=" col-6 members-list-item-section">
-              <Button disabled={!useAppCamera} onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}>PHOTO</Button>
+              <Button disabled={!useAppCamera}
+                      onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}>PHOTO</Button>
             </div>
           </div>
         </div>

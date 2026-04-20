@@ -13,4 +13,6 @@ public interface IMemberService
     MemberCompleteSummaryDto MemberCompleteSummaryDto(int memberId);
     
     MemberPointsSummaryDto MemberPointsSummaryDto(int memberId);
+    
+    List<MemberPointsSummaryDto> GetMemberWithPointsSummaryDtos();
 }

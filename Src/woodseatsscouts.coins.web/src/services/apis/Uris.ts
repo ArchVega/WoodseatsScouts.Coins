@@ -3,7 +3,8 @@ import {logApi} from "../../components/logging/Logger.ts";
 const baseUri = import.meta.env.VITE_WEB_API_URI + "/api"
 
 const Uris = {
-  member: `${baseUri}/members`,
+  members: `${baseUri}/members`,
+  coins: `${baseUri}/coins`,
 
   appState: `${baseUri}/AppState`,
   appVersion: `${baseUri}/AppState/AppVersion`,
@@ -13,16 +14,19 @@ const Uris = {
   latest6Scavengers: `${baseUri}/Members/LatestScans`,
 
   memberByCode: function (memberCode: string) {
-    return logApi(`${this.member}/${memberCode}`)
+    return logApi(`${this.members}/${memberCode}`)
   },
   memberPhoto: function (photoImagePath: string) {
     return `${baseUri}/${photoImagePath}`
   },
+  membersWithPointSummary: function() {
+    return logApi(`${this.members}?view=PointsSummary`);
+  },
   pointValueFromCode: function (coinCode: string, memberCode: string) {
-    return `${baseUri}/Coins/${coinCode}/Scan/${memberCode}`
+    return `${this.coins}/${coinCode}/Scan/${memberCode}`
   },
   addPointsToMember: function (memberId: number) {
-    return `${baseUri}/Members/${memberId}/Coins`
+    return `${this.members}/${memberId}/Coins`
   },
 
 

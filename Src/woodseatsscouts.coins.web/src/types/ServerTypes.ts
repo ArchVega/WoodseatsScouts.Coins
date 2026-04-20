@@ -14,7 +14,7 @@ export type MemberDto = {
   clue3State: string
   isDayVisitor: boolean
   hasImage: boolean
-  imagePath: string
+  computedImagePath: string
   clientComputedImageUri: string
 }
 
@@ -22,6 +22,33 @@ export type CoinDto = {
   code: string
   baseNumber: number
   pointValue: number
+}
+
+export type HaulResultDto = {
+  scavengerResultId: number
+  hauledAtIso8601: string
+  totalPoints: number
+}
+
+export type MemberPointsSummaryDto = {
+  id: number
+  fullName: string
+  memberCode: string
+  hasImage: boolean
+  memberNumber: number
+  firstName: string
+  lastName: string
+  scoutGroupName: string
+  sectionId: string
+  sectionName: string
+  totalPoints: number
+  latestCompletedAtTime: string
+  selectedHaulResultId: number | null
+  haulResults: HaulResultDto[]
+  selectedHaulResult: HaulResultDto | null
+  latestHaulResult: HaulResultDto | null
+  computedImagePath: string
+  clientComputedImageUri: string
 }
 
 // old ---------------------------------------------------------------------------v

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
+using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Services;
 
@@ -24,27 +25,8 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
     public MemberDto GetMemberDto(int memberId)
     {
         var member = appDbContext.Members!.Single(x => x.Id == memberId);
-        var cacheBuster = DateTime.Now.Ticks;
 
-        return new MemberDto
-        {
-            Id = member.Id,
-            Code = member.Code,
-            Number = member.Number,
-            FirstName = member.FirstName,
-            LastName = member.LastName,
-            FullName = member.FullName,
-            ScoutGroupId = member.ScoutGroupId,
-            ScoutGroupName = member.ScoutGroup.Name,
-            SectionId = member.SectionId,
-            SectionName = member.Section.Name,
-            Clue1State = member.Clue1State,
-            Clue2State = member.Clue2State,
-            Clue3State = member.Clue3State,
-            IsDayVisitor = member.IsDayVisitor,
-            HasImage = member.HasImage,
-            ImagePath = member.HasImage ? $"Members/{member.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder" 
-        };
+        return new MemberDto(member);
     }
 
     public MemberCompleteSummaryDto MemberCompleteSummaryDto(int memberId)
@@ -54,6 +36,21 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
 
     public MemberPointsSummaryDto MemberPointsSummaryDto(int memberId)
     {
-        return new MemberPointsSummaryDto();
+        throw new NotImplementedException();
+        // return new MemberPointsSummaryDto();
+    }
+
+    public List<MemberPointsSummaryDto> GetMemberWithPointsSummaryDtos()
+    {
+        return appDbContext.Members!
+            .Include(x => x.ScavengeResults)
+            .ThenInclude(x => x.ScavengedCoins)
+            .Include(x => x.ScoutGroup)
+            .Include(x => x.Section)
+            .ToList()
+            .Select(x => new MemberPointsSummaryDto(x))
+            .OrderBy(x => x.FirstName)
+            .ThenBy(x => x.LastName)
+            .ToList();
     }
 }

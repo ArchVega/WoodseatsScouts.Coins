@@ -16,6 +16,7 @@ using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.View;
 using WoodseatsScouts.Coins.Api.Models.View.Members;
 using Xunit;
+using Member = WoodseatsScouts.Coins.Api.Models.Queries.Member;
 
 namespace WoodseatsScouts.Coins.Tests;
 
@@ -47,10 +48,10 @@ public class MemberControllerTests
         SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
         SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);
         SetupDbMock(appDbContextMock, x => x.Members!, [
-            new Member { ScoutGroupId = 1, ScoutGroup = scoutGroup, SectionId = "A", Section = section, ScavengeResults = scavengeResults }
+            new Api.Models.Domain.Member { ScoutGroupId = 1, ScoutGroup = scoutGroup, SectionId = "A", Section = section, ScavengeResults = scavengeResults }
         ]);
 
-        var results = membersController.GetMembersWithPoints();
+        var results = membersController.GetAllMembers(null);
 
         results.ShouldNotBeNull();
         results.ShouldBeOfType<OkObjectResult>();
@@ -77,7 +78,7 @@ public class MemberControllerTests
     {
         var membersController = CreateCut();
 
-        var result = membersController.GetMemberByCode("M001A003", new MemberQuery { MemberQueryView = MemberQueryView.Basic });
+        var result = membersController.GetMemberByCode("M001A003", new Member { View = View.Basic });
         result.ShouldBeOfType<OkObjectResult>();
         memberServiceMock.Verify(x => x.GetMemberId(3, 1, "A"), Times.Once);
     }
@@ -88,7 +89,7 @@ public class MemberControllerTests
         var membersController = CreateCut();
 
         SetupDbMock(appDbContextMock, x => x.Members!, [
-            new Member { Id = 9 }
+            new Api.Models.Domain.Member { Id = 9 }
         ]);
 
         var saveMemberPhotoViewModel = new SaveMemberPhotoViewModel { Photo = "test-image-string" };
@@ -117,11 +118,11 @@ public class MemberControllerTests
         SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
         SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);
         SetupDbMock(appDbContextMock, x => x.Members!, [
-            new Member { Id = 9 }
+            new Api.Models.Domain.Member { Id = 9 }
         ]);
 
         appDbContextMock
-            .Setup(x => x.RecordMemberAgainstUnscavengedCoins(It.IsAny<Member>(), It.IsAny<List<string>>()))
+            .Setup(x => x.RecordMemberAgainstUnscavengedCoins(It.IsAny<Api.Models.Domain.Member>(), It.IsAny<List<string>>()))
             .Returns(new List<Coin>());
 
         var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["C0001001010", "C0001001020"] };

@@ -16,14 +16,14 @@ using Xunit;
 
 namespace WoodseatsScouts.Coins.Tests;
 
-public class CoinsControllerTests
+public class CoinControllerTests
 {
     [Fact]
     public void GetCoin_MemberCodeSuppliedInsteadOfCoinCode_ThrowsException()
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinsController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
         const string memberCode = "M045B019";
 
         appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
@@ -38,7 +38,7 @@ public class CoinsControllerTests
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinsController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
         const string memberCode = "test-any-member-code";
         const string coinCode = "test-any-coin-code";
 
@@ -54,7 +54,7 @@ public class CoinsControllerTests
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinsController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
         const string memberCode = "test-valid-member-code";
         const string coinCode = "C9999999999";
 
@@ -72,7 +72,7 @@ public class CoinsControllerTests
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinsController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
 
@@ -90,7 +90,7 @@ public class CoinsControllerTests
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinsController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
         const int memberId = 1;
@@ -112,7 +112,7 @@ public class CoinsControllerTests
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinsController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
         const int memberId = 1;
@@ -139,7 +139,7 @@ public class CoinsControllerTests
     {
         var appDbContextMock = new Mock<IAppDbContext>();
         var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinsController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
         const int memberId = 1;

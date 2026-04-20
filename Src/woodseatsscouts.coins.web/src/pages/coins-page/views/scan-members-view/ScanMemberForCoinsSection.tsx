@@ -45,7 +45,7 @@ export default function ScanMemberForCoinsSection({setMember}) {
 
       fetchData()
         .then(async member => {
-          member.data.clientComputedImageUri = Uris.memberPhoto(member.data.imagePath)
+          member.data.clientComputedImageUri = Uris.memberPhoto(member.data.computedImagePath) // todo: is there an axios way to do this automatically?
           logObject("memberDto", member.data)
           setMember(member.data);
           setActiveScanningMember(member.data)

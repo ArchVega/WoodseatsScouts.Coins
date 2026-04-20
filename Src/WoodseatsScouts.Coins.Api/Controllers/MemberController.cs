@@ -22,11 +22,11 @@ public class MemberController(
 {
     [HttpGet]
     [Route("{code}")]
-    public IActionResult GetMemberByCode(string code, [FromQuery] MemberQuery? memberQuery)
+    public IActionResult GetMemberByCode(string code, [FromQuery] Member? memberQuery)
     {
-        memberQuery ??= new MemberQuery
+        memberQuery ??= new Member
         {
-            MemberQueryView = MemberQueryView.Basic
+            View = View.Basic
         };
 
         MemberCodeTranslationResult translationResult;
@@ -41,18 +41,18 @@ public class MemberController(
 
         var memberId = memberService.GetMemberId(translationResult.MemberNumber, translationResult.ScoutGroupNumber, translationResult.Section);
 
-        switch (memberQuery.MemberQueryView)
+        switch (memberQuery.View)
         {
-            case MemberQueryView.Login:
+            case View.Login:
                 /*  The QRScanner for coins becomes active after 500ms after a member has logged in.
                     Slight delay to allow the admin to shift focus away. */
                 Thread.Sleep(appSettingsOptions.Value.LoginPauseDurationSeconds * 1000);
                 return Ok(memberService.GetMemberDto(memberId));
-            case MemberQueryView.Basic:
+            case View.Basic:
                 return Ok(memberService.GetMemberDto(memberId));
-            case MemberQueryView.PointsSummary:
+            case View.PointsSummary:
                 return Ok(memberService.MemberPointsSummaryDto(memberId));
-            case MemberQueryView.Complete:
+            case View.Complete:
                 return Ok(memberService.MemberCompleteSummaryDto(memberId));
             default:
                 throw new ArgumentOutOfRangeException(nameof(memberQuery));
@@ -60,18 +60,24 @@ public class MemberController(
     }
 
     [HttpGet]
-    public ActionResult GetMembersWithPoints()
+    [Route("")]
+    public ActionResult GetAllMembers([FromQuery] Member? memberQuery)
     {
-        return Ok(appDbContext.Members!
-            .Include(x => x.ScavengeResults)
-            .ThenInclude(x => x.ScavengedCoins)
-            .Include(x => x.ScoutGroup)
-            .Include(x => x.Section)
-            .ToList()
-            .Select(x => new MembersWithPointsViewModel(x))
-            .OrderBy(x => x.FirstName)
-            .ThenBy(x => x.LastName)
-            .ToList());
+        memberQuery ??= new Member
+        {
+            View = View.Basic
+        };
+        
+        switch (memberQuery.View)
+        {
+            case View.PointsSummary:
+                return Ok(memberService.GetMemberWithPointsSummaryDtos());
+            case View.Login:
+            case View.Basic:
+            case View.Complete:
+            default:
+                throw new ArgumentOutOfRangeException(nameof(memberQuery));
+        }
     }
 
     [HttpGet]

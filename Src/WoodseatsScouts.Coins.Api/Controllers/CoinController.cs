@@ -7,8 +7,8 @@ using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class CoinsController(
+[Route("api/coins")]
+public class CoinController(
     IAppDbContext appDbContext,
     SystemDateTimeProvider systemDateTimeProvider) : ControllerBase
 {

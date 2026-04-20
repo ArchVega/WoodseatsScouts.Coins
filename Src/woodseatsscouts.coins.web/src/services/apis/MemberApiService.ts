@@ -1,6 +1,6 @@
 import axios, {type AxiosResponse} from "axios";
 import Uris from "./Uris.ts";
-import type {MemberDto} from "../../types/ServerTypes.ts";
+import type {MemberDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 
 function MemberApiService() {
   return {
@@ -13,8 +13,8 @@ function MemberApiService() {
       return await axios.get(uri);
     },
 
-    async fetchMembers() {
-      const uri = Uris.member
+    async fetchMembers(): Promise<AxiosResponse<MemberPointsSummaryDto[]>> {
+      const uri = Uris.membersWithPointSummary()
       return await axios.get(uri);
     }
   }
