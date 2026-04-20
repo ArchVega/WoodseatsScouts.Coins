@@ -23,7 +23,7 @@ public class MemberDto
         Clue3State = member.Clue3State;
         IsDayVisitor = member.IsDayVisitor;
         HasImage = member.HasImage;
-        ImagePath = member.HasImage ? $"Members/{member.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
+        ComputedImagePath = member.HasImage ? $"Members/{member.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
     }
 
     public int Id { get; set; }
@@ -41,5 +41,5 @@ public class MemberDto
     public string? Clue3State { get; init; }
     public bool IsDayVisitor { get; set; }
     public bool HasImage { get; set; }
-    public string ImagePath { get; set; }
+    public string ComputedImagePath { get; set; }
 }

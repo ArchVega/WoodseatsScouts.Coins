@@ -9,18 +9,18 @@ import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import type {AxiosResponse} from "axios";
-import type {MemberDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import type { MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 
 export default function MembersListPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
   const navigate = useNavigate();
 
   const [members, setMembers] = useState<MemberPointsSummaryDto[]>([]);
-  const [userModal, setUserModal] = useState(false);
-  const [editUserModal, setEditUserModal] = useState(false);
-  const [editMemberNameModal, setEditMemberNameModal] = useState(false);
+  const [userModal, setUserModal] = useState<boolean>(false);
+  const [editUserModal, setEditUserModal] = useState<boolean>(false);
+  const [editMemberNameModal, setEditMemberNameModal] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [filterText, setFilterText] = useState(null);
+  const [filterText, setFilterText] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMembers = async (): Promise<AxiosResponse<MemberPointsSummaryDto[]>> => {

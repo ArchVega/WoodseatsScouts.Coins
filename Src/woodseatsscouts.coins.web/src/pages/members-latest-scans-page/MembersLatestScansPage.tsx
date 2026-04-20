@@ -1,23 +1,27 @@
 import "./MembersLatestScans.scss"
 import {useEffect, useState} from "react";
 import Uris from "../../services/apis/Uris.ts";
-import axios from "axios";
+import axios, {type AxiosResponse} from "axios";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import type {MembersWithPoints} from "../../types/ServerTypes.ts";
+import type {MemberPointsSummaryDto, MembersWithPoints} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import { format } from 'timeago.js';
 
 export default function MembersLatestScansPage() {
-  const [members, setMembers] = useState([])
+  const [members, setMembers] = useState<MemberPointsSummaryDto[]>([])
 
   useEffect(() => {
     function loadData() {
       setMembers([])
 
       axios
-        .get(Uris.latest6Scavengers)
-        .then(async response => {
-          const members = await response.data
+        .get(Uris.memberLatestScans())
+        .then(async (response: AxiosResponse<MemberPointsSummaryDto[]>) => {
+          const members = response.data
+          response.data.forEach(memberPointsSummaryDto => {
+            memberPointsSummaryDto.clientComputedImageUri = Uris.memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
+          })
+
           setMembers(members)
         })
     }
@@ -34,7 +38,7 @@ export default function MembersLatestScansPage() {
       })
   }, []);
 
-  function RenderMember(member: MembersWithPoints) {
+  function RenderMember(member: MemberPointsSummaryDto) {
     const sectionBranding = getSectionBranding(member.sectionId)
 
     return (
@@ -42,7 +46,7 @@ export default function MembersLatestScansPage() {
         <div className="card-body">
           <div className="row">
             <div className="col">
-              <Image style={{height: "150px"}} key={member.id} src={member.hasImage ? Uris.memberPhoto(member.id) : "/images/unknown-member-image.png"}/>
+              <Image style={{height: "150px"}} key={member.id} src={member.clientComputedImageUri}/>
             </div>
           </div>
           <div className="first-name mt-2 m-0">

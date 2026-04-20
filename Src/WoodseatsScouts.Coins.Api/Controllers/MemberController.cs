@@ -168,8 +168,8 @@ public class MemberController(
     [Route("LatestScans")]
     public ActionResult LatestScans()
     {
-        var latest6Scavengers = appDbContext.GetLatestScans(leaderboardSettingsOptions.Value.NumberOfLatestScansToDisplay);
+        var latestScans = appDbContext.GetLatestScans(leaderboardSettingsOptions.Value.NumberOfLatestScansToDisplay);
 
-        return Ok(latest6Scavengers);
+        return Ok(latestScans);
     }
 }

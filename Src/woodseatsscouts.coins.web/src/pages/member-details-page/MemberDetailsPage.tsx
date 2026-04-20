@@ -63,7 +63,7 @@ function MemberDetailsPage() {
                    className="mb-2"
                    onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}
                    title={"User id: " + member.id}
-                   src={member.hasImage ? Uris.memberPhoto(member.id) : "/images/unknown-member-image.png"} alt=""/>
+                   src={member.hasImage ? Uris.memberPhoto(member.id) : "/images/unknown-member-image.png"} />
             <div className="row mb-2">
               <div className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}>
                 <strong className="tile d-flex flex-column justify-content-center h-100">{member.firstName + " " + member.lastName}</strong>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Models;
 using WoodseatsScouts.Coins.Api.Models.Domain;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Data;
@@ -27,7 +28,7 @@ public interface IAppDbContext
     
     List<Member> GetLastThreeUsersToScanPoints();
     
-    List<MembersWithPointsViewModel> GetLatestScans(int numberOfScans);
+    List<MemberPointsSummaryDto> GetLatestScans(int numberOfScans);
     
     List<GroupPoints> GetTopThreeGroupsInLastHour();
     

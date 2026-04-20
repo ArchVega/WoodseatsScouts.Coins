@@ -5,6 +5,7 @@ using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Models.Domain;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Data
@@ -26,7 +27,7 @@ namespace WoodseatsScouts.Coins.Api.Data
         public DbSet<Section>? Sections { get; set; }
 
         public DbSet<Coin>? Coins { get; set; }
-        
+
         public DbSet<ActivityBase>? ActivityBases { get; set; }
 
         public DbSet<ScavengedCoin>? ScavengedCoins { get; set; }
@@ -45,7 +46,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .Property(x => x.Code).HasComputedColumnSql(coinCodeFormat);
 
             modelBuilder.Entity<Coin>().HasOne(x => x.ActivityBase).WithMany().HasForeignKey(x => x.ActivityBaseId);
-            
+
             /* See property notes */
             modelBuilder.Entity<Member>()
                 .Property(p => p.Code)
@@ -112,7 +113,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .ToList();
         }
 
-        public List<MembersWithPointsViewModel> GetLatestScans(int numberOfScans)
+        public List<MemberPointsSummaryDto> GetLatestScans(int numberOfScans)
         {
             var last6MembersIdsWithCompletedAtTimes = ScavengeResults!
                 .Include(x => x.Member)
@@ -129,63 +130,15 @@ namespace WoodseatsScouts.Coins.Api.Data
                     .ThenInclude(x => x.ScavengedCoins)
                     .Single(x => x.Id == scavengeResult.MemberId);
 
-                var viewModel = new MembersWithPointsViewModel(member)
+                var viewModel = new MemberPointsSummaryDto(member)
                 {
                     SelectedHaulResultId = scavengeResult.Id
                 };
-                
+
                 return viewModel;
             }).ToList();
 
             return f;
-
-            // var list = new List<MembersWithPointsViewModel>();
-            //
-            // foreach (var projection in last6MembersIdsWithCompletedAtTimes)
-            // {
-            //     var member = Members!
-            //         .Include(x => x.Section)
-            //         .Include(x => x.ScoutGroup)
-            //         .Include(x => x.ScavengeResults)
-            //         .ThenInclude(x => x.ScavengedCoins)
-            //         .Single(x => x.Id == projection.MemberId);
-            //         
-            //         var scavengeResult = ScavengeResults!.Single(x => x.Id == projection.ScavengeResultId);
-            //         var viewModel = new MembersWithPointsViewModel(member)
-            //         {
-            //             LatestCompletedAtTime = scavengeResult.CompletedAt
-            //         };
-            //         
-            //         list.Add(viewModel); 
-            // }
-            //
-            // return list;
-
-            // var members = new List<Object>();
-            //
-            // foreach (var memberAndTotalCoins in last6MembersAndTotalCoins)
-            // {
-            //     var member = Members
-            //         .Include(x => x.Section)
-            //         .Single(x => memberAndTotalCoins.MemberId == x.Id);
-            //
-            //     var item = new
-            //     {
-            //         member.Id,
-            //         MemberCode = member.Code,
-            //         member.HasImage,
-            //         MemberNumber = member.Number,
-            //         member.FirstName,
-            //         member.LastName,
-            //         Section = member.SectionId,
-            //         SectionName = member.Section.Name,
-            //         memberAndTotalCoins.TotalPoints
-            //     };
-            //
-            //     members.Add(item);
-            // }
-
-            // return members;
         }
 
         public List<GroupPoints> GetTopThreeGroupsInLastHour()
@@ -346,7 +299,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
             return member;
         }
-        
+
         public List<Coin> CreateCoins(int baseId, int points, int count)
         {
             var maxBaseValueId = Coins!.Where(x => x.ActivityBaseId == baseId).Max(x => x.ActivityBaseSequenceNumber);
@@ -360,6 +313,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                     Value = points
                 });
             }
+
             Coins!.AddRange(newCoins);
             SaveChanges();
 

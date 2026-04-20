@@ -9,9 +9,8 @@ const Uris = {
   appState: `${baseUri}/AppState`,
   appVersion: `${baseUri}/AppState/AppVersion`,
   leaderboard: `${baseUri}/Leaderboard/Report`,
-  refreshSecondsForLatestScans: `${baseUri}/Members/RefreshSecondsForLatestScans`,
+  refreshSecondsForLatestScans: `${baseUri}/Members/RefreshSecondsForLatestScans`, // todo
   testDataCoins: `${baseUri}/Sut/Coins`,
-  latest6Scavengers: `${baseUri}/Members/LatestScans`,
 
   memberByCode: function (memberCode: string) {
     return logApi(`${this.members}/${memberCode}`)
@@ -21,6 +20,9 @@ const Uris = {
   },
   membersWithPointSummary: function() {
     return logApi(`${this.members}?view=PointsSummary`);
+  },
+  memberLatestScans: function() {
+   return logApi(`${this.members}/LatestScans`)
   },
   pointValueFromCode: function (coinCode: string, memberCode: string) {
     return `${this.coins}/${coinCode}/Scan/${memberCode}`
