@@ -7,10 +7,11 @@ import AudioFx from "../../../../components/fx/AudioFx.ts";
 import Spinner from "../../../../components/widgets/Spinner.tsx";
 import QRCodeInputDevices from "../../../../components/io/qr-input-devices/QRCodeInputDevices.tsx";
 import QRScanCodeType from "../../../../components/io/qr-input-devices/QRScanCodeType.ts";
-import {logError} from "../../../../components/logging/Logger.ts";
+import {logDebug, logError, logObject} from "../../../../components/logging/Logger.ts";
 import {toastError} from "../../../../components/toaster/toaster.ts";
 import type {AxiosResponse} from "axios";
-import type {Member} from "../../../../types/ServerTypes.ts";
+import type {Member, MemberDto} from "../../../../types/ServerTypes.ts";
+import Uris from "../../../../services/apis/Uris.ts";
 
 export default function ScanMemberForCoinsSection({setMember}) {
   const {setActiveScanningMember} = useContext(PageActionMenuAreaContext)
@@ -37,16 +38,17 @@ export default function ScanMemberForCoinsSection({setMember}) {
     if (memberQrCode != null && memberQrCode.trim().length > 0) {
       setLoading(true)
 
-      async function fetchData(): Promise<AxiosResponse<Member>> {
+      async function fetchData(): Promise<AxiosResponse<MemberDto>> {
         audioFx.playMemberScannedAudio()
         return await MemberApiService().fetchMember(memberQrCode)
       }
 
       fetchData()
-        .then(async value => {
-          const data = (await value.data)
-          setMember(data);
-          setActiveScanningMember(data)
+        .then(async member => {
+          member.data.clientComputedImageUri = Uris.memberPhoto(member.data.imagePath)
+          logObject("memberDto", member.data)
+          setMember(member.data);
+          setActiveScanningMember(member.data)
         })
         .catch(async axiosReason => {
           logError("Setting member", axiosReason)

@@ -89,11 +89,10 @@ export default function NavMenu() {
       case CoinsPageViewName.ScanCoins:
         return (
           <div className="d-flex h-100 p-2">
-            <Image className="member-image h-100 w-auto me-3"
-                   src={activeScanningMember && activeScanningMember.hasImage ? Uris.memberPhoto(activeScanningMember.id) : "/images/unknown-member-image.png"}></Image>
+            <Image className="member-image h-100 w-auto me-3" src={activeScanningMember.clientComputedImageUri}></Image>
             <div id="member-details" className="flex-fill">
               <div><span>Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
-              <div>{activeScanningMember.memberSectionName}, {activeScanningMember.memberScoutGroupName}</div>
+              <div>{activeScanningMember.sectionName}, {activeScanningMember.scoutGroupName}</div>
             </div>
           </div>
         )

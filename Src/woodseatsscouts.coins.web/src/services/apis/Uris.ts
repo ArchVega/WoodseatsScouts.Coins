@@ -1,3 +1,5 @@
+import {logApi} from "../../components/logging/Logger.ts";
+
 const baseUri = import.meta.env.VITE_WEB_API_URI + "/api"
 
 const Uris = {
@@ -11,10 +13,10 @@ const Uris = {
   latest6Scavengers: `${baseUri}/Members/LatestScans`,
 
   memberByCode: function (memberCode: string) {
-    return `${this.member}/${memberCode}`
+    return logApi(`${this.member}/${memberCode}`)
   },
-  memberPhoto: function (id: number) {
-    return `${baseUri}/Members/${id}/Photo?${new Date().toISOString()}`
+  memberPhoto: function (photoImagePath: string) {
+    return `${baseUri}/${photoImagePath}`
   },
 
 

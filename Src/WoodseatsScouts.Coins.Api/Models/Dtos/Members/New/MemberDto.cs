@@ -17,4 +17,6 @@ public class MemberDto
     public string? Clue3State { get; init; }
     public bool IsDayVisitor { get; set; }
     public bool HasImage { get; set; }
+    public string ImagePath { get; set; }
+    
 }

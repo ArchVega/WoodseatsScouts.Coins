@@ -24,6 +24,7 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
     public MemberDto GetMemberDto(int memberId)
     {
         var member = appDbContext.Members!.Single(x => x.Id == memberId);
+        var cacheBuster = DateTime.Now.Ticks;
 
         return new MemberDto
         {
@@ -42,6 +43,7 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
             Clue3State = member.Clue3State,
             IsDayVisitor = member.IsDayVisitor,
             HasImage = member.HasImage,
+            ImagePath = member.HasImage ? $"Members/{member.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder" 
         };
     }
 

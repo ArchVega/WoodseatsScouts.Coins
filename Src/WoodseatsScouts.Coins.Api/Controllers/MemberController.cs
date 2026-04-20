@@ -28,7 +28,7 @@ public class MemberController(
         {
             MemberQueryView = MemberQueryView.Basic
         };
-        
+
         MemberCodeTranslationResult translationResult;
         try
         {
@@ -114,16 +114,16 @@ public class MemberController(
     }
 
     [HttpGet]
+    [Route("Photo/Placeholder")]
+    public IActionResult Get()
+    {
+        return File(imagePersister.PlaceholderImageStream(), "image/png", enableRangeProcessing: true);
+    }
+
+    [HttpGet]
     [Route("{id:int}/Photo")]
     public IActionResult Get(int id)
     {
-        var hasMemberImage = memberService.HasMemberImage(id);
-
-        if (!hasMemberImage)
-        {
-            return File(imagePersister.PlaceholderImageStream(), "image/png", enableRangeProcessing: true);
-        }
-        
         var stream = imagePersister.RetrieveImageBytes(id);
         return File(stream, "image/jpeg", enableRangeProcessing: true);
     }

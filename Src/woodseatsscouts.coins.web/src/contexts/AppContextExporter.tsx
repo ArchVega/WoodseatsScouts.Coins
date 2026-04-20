@@ -1,6 +1,7 @@
 import {createContext} from "react";
 import * as React from "react";
 import type {AppSettings} from "../AppSettings.ts";
+import type {MemberDto} from "../types/ServerTypes.ts";
 
 const cameraAvailable = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 
@@ -26,7 +27,7 @@ type AppModeContextType = {
 type PageActionMenuAreaContextType = {
     pageActionMenuAreaAction: string
     setPageActionMenuAreaAction: React.Dispatch<React.SetStateAction<string>>;
-    activeScanningMember: any;
+    activeScanningMember: MemberDto;
     setActiveScanningMember: React.Dispatch<React.SetStateAction<any>>; // todo: rename to member
 }
 

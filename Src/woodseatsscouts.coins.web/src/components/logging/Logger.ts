@@ -10,8 +10,14 @@ function logGeneral(message, ...optionalParams) {
     console.log(message, ...optionalParams)
 }
 
-function logApi(message, ...optionalParams) {
-    console.log("☎", message, ...optionalParams)
+function logObject(message, ...optionalParams) {
+    console.log("📦", message, ...optionalParams)
+}
+
+function logApi(uri: string, ...optionalParams: any[]): string {
+    console.log("☎", uri, ...optionalParams)
+
+    return uri;
 }
 
 function logReactSet(message, ...optionalParams) {
@@ -38,4 +44,4 @@ function logError(message, ...optionalParams) {
     console.log(`%c🌠 ${message}`, 'color: #d70000', ...optionalParams);
 }
 
-export { logAttention, logGeneral, logApi, logInfo, logReactSet, logReactUseEffect, logDebug, logWarning, logError }
+export { logAttention, logGeneral, logApi, logInfo, logReactSet, logReactUseEffect, logDebug, logWarning, logError, logObject }

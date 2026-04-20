@@ -17,3 +17,5 @@
  in the future, rename Member to Participant
 
  put in a thumbnail creator class. make it generate a few different sizes and pick the right one
+
+ fix navmenu, Beavers, Greenhill Methodist splits 

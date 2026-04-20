@@ -14,6 +14,8 @@ export type MemberDto = {
   clue3State: string
   isDayVisitor: boolean
   hasImage: boolean
+  imagePath: string
+  clientComputedImageUri: string
 }
 
 // old ---------------------------------------------------------------------------v
