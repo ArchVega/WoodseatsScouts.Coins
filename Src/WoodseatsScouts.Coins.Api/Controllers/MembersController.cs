@@ -24,6 +24,11 @@ public class MembersController(
     [Route("{code}")]
     public IActionResult GetMemberByCode(string code, [FromQuery] MemberQuery? memberQuery)
     {
+        memberQuery ??= new MemberQuery
+        {
+            MemberQueryView = MemberQueryView.Basic
+        };
+        
         MemberCodeTranslationResult translationResult;
         try
         {
@@ -34,12 +39,7 @@ public class MembersController(
             return BadRequest(e.Message);
         }
 
-        var member = memberService.GetMember(translationResult.MemberNumber, translationResult.ScoutGroupNumber, translationResult.Section);
-
-        memberQuery ??= new MemberQuery
-        {
-            MemberQueryView = MemberQueryView.Basic
-        };
+        var memberId = memberService.GetMemberIdFromFragments(translationResult.MemberNumber, translationResult.ScoutGroupNumber, translationResult.Section);
 
         switch (memberQuery.MemberQueryView)
         {
@@ -47,15 +47,15 @@ public class MembersController(
                 /*  The QRScanner for coins becomes active after 500ms after a member has logged in.
                     Slight delay to allow the admin to shift focus away. */
                 Thread.Sleep(appSettingsOptions.Value.LoginPauseDurationSeconds * 1000);
-                return Ok(member);
+                return Ok(memberId);
             case MemberQueryView.Basic:
-                return Ok(member);
+                return Ok(memberId);
             case MemberQueryView.PointsSummary:
-                return Ok(memberService.MemberPointsSummaryDto(member));
+                return Ok(memberService.MemberPointsSummaryDto(memberId));
             case MemberQueryView.Complete:
-                return Ok(memberService.MemberCompleteSummaryDto(member));
+                return Ok(memberService.MemberCompleteSummaryDto(memberId));
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(memberQuery));
         }
     }
 

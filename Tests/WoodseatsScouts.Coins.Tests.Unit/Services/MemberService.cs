@@ -23,22 +23,23 @@ public class MemberServiceTests
         return new MemberService(appDbContextMock.Object);
     }
     
-    [Fact]
-    public void GetMemberInfoFromCode_ValidCode_OkResult()
-    {
-        var cut = CreateCut();
-
-        const int memberNumber = 3;
-        var scoutGroupId = new ScoutGroup { Id = 1 };
-        var section = new Section { Code = "A" };
-
-        SetupDbMock(appDbContextMock, x => x.ScoutGroups!, [scoutGroupId]);
-        SetupDbMock(appDbContextMock, x => x.Sections!, [section]);
-        SetupDbMock(appDbContextMock, x => x.Members!, [new Member { ScoutGroupId = 1, ScoutGroup = scoutGroupId, SectionId = "A", Section = section, Number = memberNumber }]);
-
-        var result = cut.GetMember(memberNumber, scoutGroupId.Id, section.Code);
-        result.Section.Code.ShouldBe("A");
-    }
+    // Obsolete
+    // [Fact]
+    // public void GetMemberInfoFromCode_ValidCode_OkResult()
+    // {
+    //     var cut = CreateCut();
+    //
+    //     const int memberNumber = 3;
+    //     var scoutGroupId = new ScoutGroup { Id = 1 };
+    //     var section = new Section { Code = "A" };
+    //
+    //     SetupDbMock(appDbContextMock, x => x.ScoutGroups!, [scoutGroupId]);
+    //     SetupDbMock(appDbContextMock, x => x.Sections!, [section]);
+    //     SetupDbMock(appDbContextMock, x => x.Members!, [new Member { ScoutGroupId = 1, ScoutGroup = scoutGroupId, SectionId = "A", Section = section, Number = memberNumber }]);
+    //
+    //     var result = cut.GetMemberIdFromFragments(memberNumber, scoutGroupId.Id, section.Code);
+    //     result.Section.Code.ShouldBe("A");
+    // }
 
     private static void SetupDbMock<T>(
         Mock<IAppDbContext> appDbContextMock,

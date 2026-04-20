@@ -79,7 +79,7 @@ public class MembersControllerTests
 
         var result = membersController.GetMemberByCode("M001A003", new MemberQuery { MemberQueryView = MemberQueryView.Basic });
         result.ShouldBeOfType<OkObjectResult>();
-        memberServiceMock.Verify(x => x.GetMember(3, 1, "A"), Times.Once);
+        memberServiceMock.Verify(x => x.GetMemberIdFromFragments(3, 1, "A"), Times.Once);
     }
 
     [Fact]
