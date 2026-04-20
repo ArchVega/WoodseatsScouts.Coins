@@ -4,7 +4,9 @@ namespace WoodseatsScouts.Coins.Api.Abstractions;
 
 public interface IMemberService
 {
-    int GetMemberIdFromFragments(int memberNumber, int scoutGroupNumber, string? sectionId);
+    bool HasMemberImage(int memberId);
+    
+    int GetMemberId(int memberNumber, int scoutGroupNumber, string? sectionId);
     
     MemberDto GetMemberDto(int member);
     

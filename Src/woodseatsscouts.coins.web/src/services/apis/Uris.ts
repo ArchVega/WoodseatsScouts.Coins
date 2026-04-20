@@ -14,7 +14,7 @@ const Uris = {
     return `${this.member}/${memberCode}`
   },
   memberPhoto: function (id: number) {
-    return `${baseUri}/Members/${id}/Photo?${new Date()}`
+    return `${baseUri}/Members/${id}/Photo?${new Date().toISOString()}`
   },
 
 

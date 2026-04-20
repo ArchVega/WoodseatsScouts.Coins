@@ -39,7 +39,7 @@ public class MemberController(
             return BadRequest(e.Message);
         }
 
-        var memberId = memberService.GetMemberIdFromFragments(translationResult.MemberNumber, translationResult.ScoutGroupNumber, translationResult.Section);
+        var memberId = memberService.GetMemberId(translationResult.MemberNumber, translationResult.ScoutGroupNumber, translationResult.Section);
 
         switch (memberQuery.MemberQueryView)
         {
@@ -117,9 +117,14 @@ public class MemberController(
     [Route("{id:int}/Photo")]
     public IActionResult Get(int id)
     {
-        var stream = imagePersister.RetrieveImageBytes(id);
+        var hasMemberImage = memberService.HasMemberImage(id);
 
-        // return File(bytes, "image/jpeg", $"{id}.jpg");
+        if (!hasMemberImage)
+        {
+            return File(imagePersister.PlaceholderImageStream(), "image/png", enableRangeProcessing: true);
+        }
+        
+        var stream = imagePersister.RetrieveImageBytes(id);
         return File(stream, "image/jpeg", enableRangeProcessing: true);
     }
 

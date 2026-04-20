@@ -16,4 +16,7 @@ public class AppSettings
     public string AuthenticationToken { get; set; }
     
     public int LoginPauseDurationSeconds { get; set; }
+
+    public string ParticipantPlaceholderImagePath { get; set; }
+    
 }

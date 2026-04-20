@@ -15,3 +15,5 @@
  scores are shown always now - is this ok?
 
  in the future, rename Member to Participant
+
+ put in a thumbnail creator class. make it generate a few different sizes and pick the right one

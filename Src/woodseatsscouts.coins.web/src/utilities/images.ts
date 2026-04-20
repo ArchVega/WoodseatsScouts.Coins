@@ -1,3 +1,3 @@
-export function getMemberPhoto() {
+export function getMemberPhoto(hasImage: boolean) {
 
 }
