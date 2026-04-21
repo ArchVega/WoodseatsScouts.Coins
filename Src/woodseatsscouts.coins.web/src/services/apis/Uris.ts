@@ -21,6 +21,9 @@ const Uris = {
   membersWithPointSummary: function() {
     return logApi(`${this.members}?view=PointsSummary`);
   },
+  fetchMemberComplete: function(memberCode: string) {
+    return logApi(`${this.members}/${memberCode}?view=3`);
+  },
   memberLatestScans: function() {
    return logApi(`${this.members}/LatestScans`)
   },

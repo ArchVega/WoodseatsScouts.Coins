@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
-using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Services;
 
@@ -29,11 +28,6 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
         return new MemberDto(member);
     }
 
-    public MemberCompleteSummaryDto MemberCompleteSummaryDto(int memberId)
-    {
-        return new MemberCompleteSummaryDto();
-    }
-
     public MemberPointsSummaryDto MemberPointsSummaryDto(int memberId)
     {
         throw new NotImplementedException();
@@ -52,5 +46,18 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
             .OrderBy(x => x.FirstName)
             .ThenBy(x => x.LastName)
             .ToList();
+    }
+
+    public MemberCompleteSummaryDto MemberCompleteSummaryDto(int memberId)
+    {
+        return appDbContext.Members!
+            .Include(x => x.ScavengeResults)
+            .ThenInclude(x => x.ScavengedCoins)
+            .Include(x => x.ScoutGroup)
+            .Include(x => x.Section)
+            .Where(x => x.Id == memberId)
+            .ToList()
+            .Select(x => new MemberCompleteSummaryDto(x))
+            .First();
     }
 }

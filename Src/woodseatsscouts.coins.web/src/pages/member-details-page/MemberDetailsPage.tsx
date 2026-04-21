@@ -9,9 +9,10 @@ import QRScanCodeType from "../../components/io/qr-input-devices/QRScanCodeType.
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import ScoutsLogo from "../../images/fleur-de-lis-marque-white.png";
 import Uris from "../../services/apis/Uris.ts";
-import type {Member, MemberPointsSummaryDto, MembersWithPoints} from "../../types/ServerTypes.ts";
+import type {Member, MemberCompleteDto, MemberPointsSummaryDto, MembersWithPoints} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
+import {logObject} from "../../components/logging/Logger.ts";
 
 function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -34,19 +35,18 @@ function MemberDetailsPage() {
     if (memberCode) {
       setLoading(true)
       MemberApiService()
-        .fetchMemberWithPoints(memberCode)
+        .fetchMemberComplete(memberCode)
         .then(response => {
           response.data.clientComputedImageUri = Uris.memberPhoto(response.data.computedImagePath) // todo: is there an axios way to do this automatically?
           return response.data
         })
-        .then(member => setMember(member))
+        .then((memberCompleteDto: MemberCompleteDto) => {
+          logObject("memberCompleteDto", memberCompleteDto)
+          setMember(memberCompleteDto)
+        })
         .finally(() => setLoading(false));
     }
   }, [memberCode])
-
-  useEffect(() => {
-    console.log('member', member);
-  }, [member])
 
   function showEditUserModal(user1) {
     setSelectedUser(user1)

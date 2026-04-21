@@ -1,6 +1,6 @@
 import axios, {type AxiosResponse} from "axios";
 import Uris from "./Uris.ts";
-import type {MemberDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import type {MemberCompleteDto, MemberDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 
 function MemberApiService() {
   return {
@@ -8,8 +8,13 @@ function MemberApiService() {
       return await axios.get(Uris.memberByCode(memberCode));
     },
 
-    async fetchMemberWithPoints(memberQrCode) {
-      const uri = Uris.memberWithPoints(memberQrCode);
+    async fetchMemberWithPoints(memberCode: string) {
+      const uri = Uris.memberWithPoints(memberCode);
+      return await axios.get(uri);
+    },
+
+    async fetchMemberComplete(memberCode: string): Promise<AxiosResponse<MemberCompleteDto>> {
+      const uri = Uris.fetchMemberComplete(memberCode);
       return await axios.get(uri);
     },
 

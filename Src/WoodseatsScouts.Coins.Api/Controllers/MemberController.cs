@@ -146,6 +146,15 @@ public class MemberController(
         return Ok();
     }
 
+    [HttpGet]
+    [Route("LatestScans")]
+    public ActionResult LatestScans()
+    {
+        var latestScans = appDbContext.GetLatestScans(leaderboardSettingsOptions.Value.NumberOfLatestScansToDisplay);
+
+        return Ok(latestScans);
+    }
+    
     [HttpPost]
     [Route("{id:int}/Name")]
     public ActionResult Name(int id, [FromBody] UpdateMemberNameViewModel updateMemberNameViewModel)
@@ -158,19 +167,11 @@ public class MemberController(
         return Ok();
     }
 
+    // move
     [HttpGet]
     [Route("RefreshSecondsForLatestScans")]
     public ActionResult RefreshSecondsForLatestScans()
     {
         return Ok(leaderboardSettingsOptions.Value.Last6ScavengersPageRefreshSeconds);
-    }
-
-    [HttpGet]
-    [Route("LatestScans")]
-    public ActionResult LatestScans()
-    {
-        var latestScans = appDbContext.GetLatestScans(leaderboardSettingsOptions.Value.NumberOfLatestScansToDisplay);
-
-        return Ok(latestScans);
     }
 }

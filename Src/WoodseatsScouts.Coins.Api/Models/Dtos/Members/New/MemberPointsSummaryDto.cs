@@ -24,7 +24,7 @@ public class MemberPointsSummaryDto
         TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.PointValue)).Sum();
         HaulResults = member.ScavengeResults.Select(x =>
         {
-            return new HaulResult
+            return new HaulResultDto
             {
                 ScavengerResultId = x.Id,
                 HauledAtIso8601 = x.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
@@ -60,9 +60,9 @@ public class MemberPointsSummaryDto
     
     public int? SelectedHaulResultId { get; set; }
     
-    public List<HaulResult> HaulResults { get; set; }
+    public List<HaulResultDto> HaulResults { get; set; }
 
-    public HaulResult? LatestHaulResult
+    public HaulResultDto? LatestHaulResult
     {
         get
         {
@@ -75,7 +75,7 @@ public class MemberPointsSummaryDto
         }
     }
     
-    public HaulResult? SelectedHaulResult
+    public HaulResultDto? SelectedHaulResult
     {
         get
         {
