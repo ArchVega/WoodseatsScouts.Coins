@@ -15,9 +15,6 @@ const Uris = {
   memberByCode: function (memberCode: string) {
     return logApi(`${this.members}/${memberCode}`)
   },
-  memberPhoto: function (photoImagePath: string) {
-    return `${baseUri}/${photoImagePath}`
-  },
   membersWithPointSummary: function() {
     return logApi(`${this.members}?view=PointsSummary`);
   },
@@ -33,9 +30,13 @@ const Uris = {
   addPointsToMember: function (memberId: number) {
     return `${this.members}/${memberId}/Coins`
   },
+  updateMemberPhoto: function(memberId: number) {
+    return `${this.members}/${memberId}/Photo`
+  },
 
-
-
+  memberPhoto: function (photoImagePath: string) {
+    return `${baseUri}/${photoImagePath}`
+  },
   memberWithPoints: function (memberQrCode) {
     return `${baseUri}/Members/${memberQrCode}/WithPoints`
   },

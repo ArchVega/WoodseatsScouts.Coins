@@ -4,8 +4,16 @@ import React, {useCallback, useContext, useEffect, useRef, useState} from "react
 import {BaseModal} from "./BaseModal.tsx";
 import Uris from "../../services/apis/Uris.ts";
 import {Button} from "../widgets/HtmlControlWrappers.tsx";
+import type {Member, MemberCompleteDto, MemberDto} from "../../types/ServerTypes.ts";
 
-export default function EditMemberPhotoModal({editUsersModal, setEditUsersModal, selectedUser, setSelectedUser}) {
+interface EditMemberPhotoModal {
+  showEditMemberPhotoModal: boolean;
+  setShowEditMemberPhotoModal: React.Dispatch<React.SetStateAction<boolean>>
+  memberCompleteDto: MemberCompleteDto;
+  setMemberCompleteDto: React.Dispatch<React.SetStateAction<MemberCompleteDto>>
+}
+
+export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowEditMemberPhotoModal, memberCompleteDto, setMemberCompleteDto}: EditMemberPhotoModal) {
   const webcamRef = useRef<Webcam>(null);
 
   const [screenshot, setScreenshot] = useState<string | null>(null);
@@ -20,7 +28,7 @@ export default function EditMemberPhotoModal({editUsersModal, setEditUsersModal,
   }, [webcamRef]);
 
   function saveImage(base64Image: any) {
-    if (!selectedUser) {
+    if (!memberCompleteDto) {
       return
     }
 
@@ -34,23 +42,25 @@ export default function EditMemberPhotoModal({editUsersModal, setEditUsersModal,
       body: JSON.stringify(payload)
     };
 
-    fetch(Uris.memberPhoto(selectedUser.id), requestOptions).then(() => {
-      const updatedSelectedMember = ({...selectedUser})
+    fetch(Uris.updateMemberPhoto(memberCompleteDto.id), requestOptions).then(() => {
+      const updatedSelectedMember = ({...memberCompleteDto})
       updatedSelectedMember.hasImage = true;
-      setSelectedUser(updatedSelectedMember)
-      setEditUsersModal(false);
+      setMemberCompleteDto(updatedSelectedMember)
+      setShowEditMemberPhotoModal(false);
     });
   }
 
   useEffect(() => {
-    saveImage(screenshot)
+    if (screenshot) {
+      saveImage(screenshot)
+    }
   }, [screenshot]);
 
   const videoConstraints = {
     facingMode: "environment"
   };
 
-  if (selectedUser == null) {
+  if (memberCompleteDto == null) {
     return null
   }
 
@@ -58,13 +68,13 @@ export default function EditMemberPhotoModal({editUsersModal, setEditUsersModal,
     <BaseModal
       id={"app-settings-modal"}
       title="Update participant's photo"
-      show={editUsersModal}
+      show={showEditMemberPhotoModal}
       onClose={() => {
-        setEditUsersModal(false)
+        setShowEditMemberPhotoModal(false)
       }}>
       <div className="row mb-3 mt-2">
         <div className="col text-center fs-3">
-          Take a photo of <strong>{selectedUser.firstName}</strong>
+          Take a photo of <strong>{memberCompleteDto.firstName}</strong>
         </div>
       </div>
       <div className="row mb-2">

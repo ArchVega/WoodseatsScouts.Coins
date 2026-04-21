@@ -4,12 +4,9 @@ import React, {type ReactNode, useContext, useEffect, useState} from "react";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
-import QRCodeInputDevices from "../../components/io/qr-input-devices/QRCodeInputDevices.tsx";
-import QRScanCodeType from "../../components/io/qr-input-devices/QRScanCodeType.ts";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import ScoutsLogo from "../../images/fleur-de-lis-marque-white.png";
 import Uris from "../../services/apis/Uris.ts";
-import type {Member, MemberCompleteDto, MemberPointsSummaryDto, MembersWithPoints} from "../../types/ServerTypes.ts";
+import type {MemberCompleteDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
@@ -18,18 +15,9 @@ function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
   const {memberCode} = useParams();
   const [loading, setLoading] = useState(false)
-  const [member, setMember] = useState<MemberPointsSummaryDto | null>(null); // todo: ended here apr 20 - need a new model, for 'complex'
-  const [selectedSession, setSelectedSession] = useState(null);
-  const [userModal, setUserModal] = useState(false);
-  const [editUserModal, setEditUserModal] = useState(false);
-  const [editMemberNameModal, setEditMemberNameModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [filterText, setFilterText] = useState(null);
-  const [showScores, setShowScores] = useState(true);
+  const [showEditMemberPhotoModal, setShowEditMemberPhotoModal] = useState<boolean>(false);
 
-  // todo: these are what we need to hook up
-  // <EditMemberNameModal editMembersModal={editMemberNameModal} setEditMembersModal={setEditMemberNameModal} selectedMember={selectedUser}
-  //                      setSelectedMember={setSelectedUser}/>
+  const [memberCompleteDto, setMemberCompleteDto] = useState<MemberCompleteDto | null>(null);
 
   useEffect(() => {
     if (memberCode) {
@@ -42,19 +30,14 @@ function MemberDetailsPage() {
         })
         .then((memberCompleteDto: MemberCompleteDto) => {
           logObject("memberCompleteDto", memberCompleteDto)
-          setMember(memberCompleteDto)
+          setMemberCompleteDto(memberCompleteDto)
         })
         .finally(() => setLoading(false));
     }
   }, [memberCode])
 
-  function showEditUserModal(user1) {
-    setSelectedUser(user1)
-    setEditUserModal(true)
-  }
-
-  function RenderMemberDetails(member: MemberPointsSummaryDto) {
-    const sectionBranding = getSectionBranding(member.sectionId)
+  function RenderMemberDetails() {
+    const sectionBranding = getSectionBranding(memberCompleteDto.sectionId)
 
     return (
       <>
@@ -62,26 +45,26 @@ function MemberDetailsPage() {
           <div className="card-body">
             <Image key={Date.now()}
                    className="mb-2"
-                   onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}
-                   title={"User id: " + member.id}
-                   src={member.clientComputedImageUri } />
+                   onClick={() => useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')}
+                   title={"User id: " + memberCompleteDto.id}
+                   src={memberCompleteDto.clientComputedImageUri}/>
             <div className="row mb-2">
               <div className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}>
-                <strong className="tile d-flex flex-column justify-content-center h-100">{member.firstName + " " + member.lastName}</strong>
+                <strong className="tile d-flex flex-column justify-content-center h-100">{memberCompleteDto.firstName + " " + memberCompleteDto.lastName}</strong>
               </div>
             </div>
             <div className="row  mb-2 g-1">
               <div className="col-6 members-list-item-section">
-                <div className="tile" style={{fontSize: "12px"}}>{member.memberCode}</div>
+                <div className="tile" style={{fontSize: "12px"}}>{memberCompleteDto.memberCode}</div>
               </div>
               <div className="col-6 members-list-item-section">
-                <div className="tile" style={{fontSize: "12px"}}>{member.totalPoints}</div>
+                <div className="tile" style={{fontSize: "12px"}}>{memberCompleteDto.totalPoints}</div>
               </div>
             </div>
             <div className="row mb-2">
               <div className="members-list-item-section">
                 <div className="tile" style={{backgroundColor: sectionBranding.backgroundColour, color: sectionBranding.foregroundColour}}>
-                  {member.sectionName}
+                  {memberCompleteDto.sectionName}
                 </div>
               </div>
             </div>
@@ -108,13 +91,11 @@ function MemberDetailsPage() {
     )
   }
 
-  const rows = Array.from({length: 200}); // 👈 controls height
-
-  function formatDateTime(date: Date) {
+  function formatDateTime(isoDateString: string) {
     return new Intl.DateTimeFormat("en-GB", {
       dateStyle: "short",
       timeStyle: "short", // ← this omits seconds
-    }).format(date);
+    }).format(new Date(isoDateString));
   }
 
   function RenderMemberScanSessions() {
@@ -135,9 +116,9 @@ function MemberDetailsPage() {
           </tr>
           </thead>
           <tbody>
-          {rows.map((_, i) => (
+          {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, i) => (
             <tr key={i}>
-              <td>{formatDateTime(new Date())}</td>
+              <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
               <td>{i + 1}</td>
               <td>
                 <span>✏️</span>
@@ -173,18 +154,18 @@ function MemberDetailsPage() {
           </thead>
 
           <tbody>
-          {rows.map((_, i) => (
-            <tr key={i}>
-              <td>{['Archery', 'Shooting', "Cave Bus", "Arts and Crafts"][Math.floor(Math.random() * 4)]}</td>
-              <td>{i + 1}</td>
-              <td>
-                <span>✏️</span>
-              </td>
-              <td>
-                <span>🗑️</span>
-              </td>
-            </tr>
-          ))}
+          {/*{rows.map((_, i) => (*/}
+          {/*  <tr key={i}>*/}
+          {/*    <td>{['Archery', 'Shooting', "Cave Bus", "Arts and Crafts"][Math.floor(Math.random() * 4)]}</td>*/}
+          {/*    <td>{i + 1}</td>*/}
+          {/*    <td>*/}
+          {/*      <span>✏️</span>*/}
+          {/*    </td>*/}
+          {/*    <td>*/}
+          {/*      <span>🗑️</span>*/}
+          {/*    </td>*/}
+          {/*  </tr>*/}
+          {/*))}*/}
           </tbody>
         </table>
       </div>
@@ -229,12 +210,12 @@ function MemberDetailsPage() {
     return <Spinner/>
   }
 
-  if (member) {
+  if (memberCompleteDto) {
     return (
       <div id="member-details-page">
         <div className="row mt-1 g-3">
           <div className={"col-2"}>
-            {RenderMemberDetails(member)}
+            {RenderMemberDetails()}
           </div>
           <div className={"col-4"}>
             {RenderMemberScanSessions()}
@@ -251,7 +232,11 @@ function MemberDetailsPage() {
             {RenderMemberActivitySummary()}
           </div>
         </div>
-         <EditMemberPhotoModal editUsersModal={editUserModal} setEditUsersModal={setEditUserModal} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+        <EditMemberPhotoModal
+          showEditMemberPhotoModal={showEditMemberPhotoModal}
+          setShowEditMemberPhotoModal={setShowEditMemberPhotoModal}
+          memberCompleteDto={memberCompleteDto}
+          setMemberCompleteDto={setMemberCompleteDto}/>
       </div>
     )
   }
@@ -260,3 +245,7 @@ function MemberDetailsPage() {
 }
 
 export default MemberDetailsPage;
+
+// todo: these are what we need to hook up
+// <EditMemberNameModal editMembersModal={editMemberNameModal} setEditMembersModal={setEditMemberNameModal} selectedMember={selectedUser}
+//                      setSelectedMember={setSelectedUser}/>
