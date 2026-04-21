@@ -157,13 +157,17 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ScavengeResultId = table.Column<int>(type: "int", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BaseNumber = table.Column<int>(type: "int", nullable: false),
-                    PointValue = table.Column<int>(type: "int", nullable: false)
+                    CoinId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ScavengedCoins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ScavengedCoins_Coins_CoinId",
+                        column: x => x.CoinId,
+                        principalTable: "Coins",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ScavengedCoins_ScavengeResults_ScavengeResultId",
                         column: x => x.ScavengeResultId,
@@ -221,6 +225,11 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 column: "SectionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ScavengedCoins_CoinId",
+                table: "ScavengedCoins",
+                column: "CoinId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ScavengedCoins_ScavengeResultId",
                 table: "ScavengedCoins",
                 column: "ScavengeResultId");
@@ -241,19 +250,19 @@ namespace WoodseatsScouts.Coins.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Coins");
-
-            migrationBuilder.DropTable(
                 name: "ErrorLogs");
 
             migrationBuilder.DropTable(
                 name: "ScavengedCoins");
 
             migrationBuilder.DropTable(
-                name: "ActivityBases");
+                name: "Coins");
 
             migrationBuilder.DropTable(
                 name: "ScavengeResults");
+
+            migrationBuilder.DropTable(
+                name: "ActivityBases");
 
             migrationBuilder.DropTable(
                 name: "Members");

@@ -184,7 +184,7 @@ function CreateAdditionalDbObjects {
         join Sections
         on Sections.Code = Members.SectionId
         join Coins
-        on Coins.Code = ScavengedCoins.Code
+        on Coins.Id = ScavengedCoins.CoinId
         join ActivityBases
         on ActivityBases.Id = Coins.ActivityBaseId
         "

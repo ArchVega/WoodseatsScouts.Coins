@@ -172,8 +172,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
             var topXGroupsInLastYHours = (
                 from grouping in memberGroupedByScoutGroup
-                let sum =
-                    grouping.SelectMany(x => x.ScavengeResults).SelectMany(x => x.ScavengedCoins).Sum(x => x.PointValue)
+                let sum = grouping.SelectMany(x => x.ScavengeResults).SelectMany(x => x.ScavengedCoins).Sum(x => x.Coin.Value) // changed
                 select new GroupPoints
                 {
                     Id = grouping.First().ScoutGroup.Id,
@@ -228,16 +227,25 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public void CreateScavengedCoins(ScavengeResult scavengeResult, List<string> coinCodes)
         {
+            // changed
             foreach (var coinCode in coinCodes)
             {
-                var result = CodeTranslator.TranslateCoinCode(coinCode);
+                // var result = CodeTranslator.TranslateCoinCode(coinCode);
+                //
+                // ScavengedCoins!.Add(new ScavengedCoin
+                // {
+                //     ScavengeResultId = scavengeResult.Id,
+                //     BaseNumber = result.BaseNumber,
+                //     PointValue = result.PointValue,
+                //     Code = coinCode
+                // });
+
+                var coin = Coins!.Single(x => x.Code == coinCode);
 
                 ScavengedCoins!.Add(new ScavengedCoin
                 {
                     ScavengeResultId = scavengeResult.Id,
-                    BaseNumber = result.BaseNumber,
-                    PointValue = result.PointValue,
-                    Code = coinCode
+                    CoinId = coin.Id
                 });
             }
         }

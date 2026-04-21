@@ -21,14 +21,15 @@ public class MemberPointsSummaryDto
         ScoutGroupName = member.ScoutGroup.Name;
         SectionId = member.SectionId;
         SectionName = member.Section.Name;
-        TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.PointValue)).Sum();
+        // changed
+        TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.Coin.Value)).Sum();
         HaulResults = member.ScavengeResults.Select(x =>
         {
             return new HaulResultDto
             {
                 ScavengerResultId = x.Id,
                 HauledAtIso8601 = x.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
-                TotalPoints = x.ScavengedCoins.Sum(x => x.PointValue)
+                TotalPoints = x.ScavengedCoins.Sum(x => x.Coin.Value) // changed
             };
         }).ToList();
     }

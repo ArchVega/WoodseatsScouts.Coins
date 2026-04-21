@@ -39,6 +39,7 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
         return appDbContext.Members!
             .Include(x => x.ScavengeResults)
             .ThenInclude(x => x.ScavengedCoins)
+            .ThenInclude(x => x.Coin)
             .Include(x => x.ScoutGroup)
             .Include(x => x.Section)
             .ToList()
@@ -53,6 +54,7 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
         return appDbContext.Members!
             .Include(x => x.ScavengeResults)
             .ThenInclude(x => x.ScavengedCoins)
+            .ThenInclude(x => x.Coin)
             .Include(x => x.ScoutGroup)
             .Include(x => x.Section)
             .Where(x => x.Id == memberId)

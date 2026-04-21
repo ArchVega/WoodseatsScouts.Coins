@@ -279,9 +279,15 @@ public class AppDbContextLeaderboardsTests
 
             var scavengedCoin = new ScavengedCoin
             {
-                Code = "C0010" + p,
-                BaseNumber = 1,
-                PointValue = point,
+                Coin = new Coin()
+                {
+                    Code = "C0010" + p,
+                    ActivityBaseId = 1,
+                    Value = point
+                },
+                // Code = "C0010" + p,
+                // BaseNumber = 1,
+                // PointValue = point,
                 ScavengeResult = scavengeResults
             };
 

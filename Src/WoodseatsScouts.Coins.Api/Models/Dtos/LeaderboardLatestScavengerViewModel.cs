@@ -18,7 +18,9 @@ public class LeaderboardLatestScavengerViewModel
         ScoutGroupName = domain.ScoutGroup.Name;
         Section = domain.SectionId;
         SectionName = domain.Section.Name;
-        TotalPoints = domain.ScavengeResults.Last().ScavengedCoins.Sum(y => y.PointValue);
+        // changed
+        // TotalPoints = domain.ScavengeResults.Last().ScavengedCoins.Sum(y => y.PointValue);
+        TotalPoints = domain.ScavengeResults.Last().ScavengedCoins.Sum(y => y.Coin.Value);
     }
 
     public int TotalPoints { get; set; }

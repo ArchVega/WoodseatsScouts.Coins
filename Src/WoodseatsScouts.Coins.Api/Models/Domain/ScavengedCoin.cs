@@ -9,15 +9,19 @@
         
         public ScavengeResult ScavengeResult { get; set; }
         
-        public string Code { get; set; }
+        public int CoinId { get; set;  }
         
-        public int BaseNumber { get; set; }
+        public Coin Coin { get; set; }
         
-        public int PointValue { get; set; }
+        // public string Code { get; set; }
+        //
+        // public int BaseNumber { get; set; }
+        //
+        // public int PointValue { get; set; }
 
         public override string ToString()
         {
-            return $"{nameof(Code)}: {Code}, {nameof(PointValue)}: {PointValue}";
+            return $"{nameof(Coin.Code)}: {Coin.Code}, {nameof(Coin.Value)}: {Coin.Value}";
         }
     }
 }

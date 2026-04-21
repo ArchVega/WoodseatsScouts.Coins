@@ -40,7 +40,7 @@ public class MemberControllerTests
 
         var scoutGroup = new ScoutGroup { Id = 1 };
         var section = new Section { Code = "A" };
-        var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
+        var scavengedCoins = new List<ScavengedCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6}} }; // changed
         var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };
 
         SetupDbMock(appDbContextMock, x => x.ScoutGroups!, [scoutGroup]);
@@ -113,7 +113,8 @@ public class MemberControllerTests
     {
         var membersController = CreateCut();
 
-        var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
+        // var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
+        var scavengedCoins = new List<ScavengedCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6}} }; // changed
         var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };
         SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
         SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);

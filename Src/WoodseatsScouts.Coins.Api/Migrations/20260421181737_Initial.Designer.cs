@@ -12,7 +12,7 @@ using WoodseatsScouts.Coins.Api.Data;
 namespace WoodseatsScouts.Coins.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260420200839_Initial")]
+    [Migration("20260421181737_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -295,20 +295,15 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BaseNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PointValue")
+                    b.Property<int>("CoinId")
                         .HasColumnType("int");
 
                     b.Property<int>("ScavengeResultId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoinId");
 
                     b.HasIndex("ScavengeResultId");
 
@@ -398,11 +393,19 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengedCoin", b =>
                 {
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Coin", "Coin")
+                        .WithMany()
+                        .HasForeignKey("CoinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", "ScavengeResult")
                         .WithMany("ScavengedCoins")
                         .HasForeignKey("ScavengeResultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Coin");
 
                     b.Navigation("ScavengeResult");
                 });
