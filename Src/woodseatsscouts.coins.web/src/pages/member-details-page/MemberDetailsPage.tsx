@@ -10,12 +10,14 @@ import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteDto, Member
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
+import EditMemberDetailsModal from "../../components/modals/EditMemberDetailsModal.tsx";
 
-function MemberDetailsPage() {
+export default function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
   const {memberCode} = useParams();
   const [loading, setLoading] = useState(false)
   const [showEditMemberPhotoModal, setShowEditMemberPhotoModal] = useState<boolean>(false);
+  const [showEditMemberDetailsModal, setShowEditMemberDetailsModal] = useState<boolean>(false);
 
   const [memberCompleteDto, setMemberCompleteDto] = useState<MemberCompleteDto | null>(null);
   const [activeHaulResultDto, setActiveHaulResultDto] = useState<HaulResultDto | null>(null);
@@ -55,13 +57,14 @@ function MemberDetailsPage() {
       <>
         <div className="card member-details-member-card flex-shrink-0 sticky-top mb-3">
           <div className="card-body">
-            <Image key={Date.now()}
+            <Image
                    className="mb-2"
                    onClick={() => useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')}
                    title={"User id: " + memberCompleteDto.id}
                    src={memberCompleteDto.clientComputedImageUri}/>
             <div className="row mb-2">
-              <div className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}>
+              <div role="button" className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}
+                   onClick={() => setShowEditMemberDetailsModal(true)}>
                 <strong className="tile d-flex flex-column justify-content-center h-100">{memberCompleteDto.firstName + " " + memberCompleteDto.lastName}</strong>
               </div>
             </div>
@@ -75,7 +78,8 @@ function MemberDetailsPage() {
             </div>
             <div className="row mb-2">
               <div className="members-list-item-section">
-                <div className="tile" style={{backgroundColor: sectionBranding.backgroundColour, color: sectionBranding.foregroundColour}}>
+                <div role="button" className="tile" style={{backgroundColor: sectionBranding.backgroundColour, color: sectionBranding.foregroundColour}}
+                onClick={() => setShowEditMemberDetailsModal(true)}>
                   {memberCompleteDto.sectionName}
                 </div>
               </div>
@@ -89,14 +93,6 @@ function MemberDetailsPage() {
           </div>
           <div className={"member-action-button-container"}>
             <button id="remove-points-button">Remove fixed amount points</button>
-          </div>
-        </div>
-        <div className="row g-1">
-          <div className={"member-action-button-container"}>
-            <button className={"text-black"}>Change Group</button>
-          </div>
-          <div className={"member-action-button-container"}>
-            <button className={"text-black"}>Change Section</button>
           </div>
         </div>
       </>
@@ -125,7 +121,6 @@ function MemberDetailsPage() {
           <tr>
             <th>Time</th>
             <th>Total Points</th>
-            <th>Edit</th>
             <th>Delete</th>
           </tr>
           </thead>
@@ -137,9 +132,6 @@ function MemberDetailsPage() {
                 }}>
               <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
               <td>{haulResultDto.totalPoints}</td>
-              <td>
-                <span>✏️</span>
-              </td>
               <td>
                 <span>🗑️</span>
               </td>
@@ -175,7 +167,6 @@ function MemberDetailsPage() {
           <tr>
             <th scope="col">Base</th>
             <th scope="col">Points</th>
-            {/*<th>Coins Scanned</th>*/}
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
           </tr>
@@ -183,7 +174,7 @@ function MemberDetailsPage() {
           <tbody>
           {activeHaulResultDto && activeHaulResultDto.activityBaseHaulResultDtos.map((activityBaseHaulResultDto: ActivityBaseHaulResultDto, haulIndex) =>
               activityBaseHaulResultDto.coins && activityBaseHaulResultDto.coins.map((coin, coinIndex) => (
-                <tr key={haulIndex}>
+                <tr key={`${haulIndex}-${coinIndex}`}>
                   {coinIndex === 0 && (
                       <td rowSpan={activityBaseHaulResultDto.coins.length}>
                         <div className="pe-2" style={{ display: "flex", justifyContent: "space-between" }}>
@@ -290,15 +281,14 @@ function MemberDetailsPage() {
           setShowEditMemberPhotoModal={setShowEditMemberPhotoModal}
           memberCompleteDto={memberCompleteDto}
           setMemberCompleteDto={setMemberCompleteDto}/>
+        <EditMemberDetailsModal
+          showModal={showEditMemberDetailsModal}
+          setShowModal={setShowEditMemberDetailsModal}
+          memberCompleteDto={memberCompleteDto}
+          setMemberCompleteDto={setMemberCompleteDto}/>
       </div>
     )
   }
 
   return null
 }
-
-export default MemberDetailsPage;
-
-// todo: these are what we need to hook up
-// <EditMemberNameModal editMembersModal={editMemberNameModal} setEditMembersModal={setEditMemberNameModal} selectedMember={selectedUser}
-//                      setSelectedMember={setSelectedUser}/>

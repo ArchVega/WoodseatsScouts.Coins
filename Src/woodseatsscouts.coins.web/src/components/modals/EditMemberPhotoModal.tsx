@@ -6,14 +6,14 @@ import Uris from "../../services/apis/Uris.ts";
 import {Button} from "../widgets/HtmlControlWrappers.tsx";
 import type {Member, MemberCompleteDto, MemberDto} from "../../types/ServerTypes.ts";
 
-interface EditMemberPhotoModal {
+interface EditMemberPhotoModalProps {
   showEditMemberPhotoModal: boolean;
   setShowEditMemberPhotoModal: React.Dispatch<React.SetStateAction<boolean>>
   memberCompleteDto: MemberCompleteDto;
   setMemberCompleteDto: React.Dispatch<React.SetStateAction<MemberCompleteDto>>
 }
 
-export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowEditMemberPhotoModal, memberCompleteDto, setMemberCompleteDto}: EditMemberPhotoModal) {
+export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowEditMemberPhotoModal, memberCompleteDto, setMemberCompleteDto}: EditMemberPhotoModalProps) {
   const webcamRef = useRef<Webcam>(null);
 
   const [screenshot, setScreenshot] = useState<string | null>(null);
@@ -95,24 +95,4 @@ export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowE
       <Button className="btn btn-success" onClick={capture}>Capture photo</Button>
     </BaseModal>
   )
-}
-
-{/*{imageSrc && (*/
-}
-{/*  <div>*/
-}
-{/*    <h2>Captured Image:</h2>*/
-}
-{/*    <img src={imageSrc} alt="Captured"/>*/
-}
-{/*  </div>*/
-}
-{/*)}*/
-}
-
-{/*<div className="overlay-container">*/
-}
-{/*  {hasOverlay ? overlay : null}*/
-}
-{/*</div>*/
 }

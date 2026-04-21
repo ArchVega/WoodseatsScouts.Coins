@@ -43,6 +43,7 @@ public class MemberCompleteSummaryDto
         FirstName = member.FirstName;
         LastName = member.LastName;
         FullName = member.FullName;
+        ScoutGroupId = member.ScoutGroup.Id;
         ScoutGroupName = member.ScoutGroup.Name;
         SectionId = member.SectionId;
         SectionName = member.Section.Name;
@@ -57,8 +58,8 @@ public class MemberCompleteSummaryDto
             .GroupBy(x => x.ActivityBaseName)
             .ToList();
 
-        var maxCount = grouping.Max(x => x.Count());
-        var minCount = grouping.Min(x => x.Count());
+        var maxCount = grouping.Any() ? grouping.Max(x => x.Count()) : 0;
+        var minCount = grouping.Any() ? grouping.Min(x => x.Count()) : 0;
 
         MemberCompleteSummaryStatsDto.MostVisitedActivityBase = new MemberCompleteSummaryStatsActivityBaseInfoDto
         {
@@ -71,8 +72,14 @@ public class MemberCompleteSummaryDto
             TimesVisited = minCount,
         };
 
-        MemberCompleteSummaryStatsDto.MostScans = member.ScavengeResults.Max(x => x.ScavengedCoins.Count);
-        MemberCompleteSummaryStatsDto.TotalTokensScanned = member.ScavengeResults.SelectMany(x => x.ScavengedCoins).Count();
+        MemberCompleteSummaryStatsDto.MostScans = member.ScavengeResults
+            .Select(x => x.ScavengedCoins.Count)
+            .DefaultIfEmpty(0)
+            .Max() ;
+        MemberCompleteSummaryStatsDto.TotalTokensScanned = member.ScavengeResults
+            .Select(x => x.ScavengedCoins.Count)
+            .DefaultIfEmpty(0)
+            .Min() ;
     }
 
     public int Id { get; set; }
@@ -90,6 +97,8 @@ public class MemberCompleteSummaryDto
     public string FirstName { get; set; }
 
     public string? LastName { get; set; }
+
+    public int ScoutGroupId { get; init; }
 
     public string ScoutGroupName { get; set; }
 

@@ -158,7 +158,7 @@ export default function MembersListPage() {
           </div>
         </div>
       </div>
-      <EditMemberPhotoModal editUsersModal={editUserModal} setEditUsersModal={setEditUserModal} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+      <EditMemberPhotoModal showEditMemberPhotoModal={editUserModal} setShowEditMemberPhotoModal={setEditUserModal} memberCompleteDto={selectedUser} setMemberCompleteDto={setSelectedUser}/>
     </div>
   )
 }

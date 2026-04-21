@@ -34,6 +34,16 @@ const Uris = {
     return `${this.members}/${memberId}/Photo`
   },
 
+  scoutGroups: function() {
+    return `${this.appState}/ScoutGroups`
+  },
+  sections: function() {
+    return `${this.appState}/Sections`
+  },
+
+
+
+
   memberPhoto: function (photoImagePath: string) {
     return `${baseUri}/${photoImagePath}`
   },

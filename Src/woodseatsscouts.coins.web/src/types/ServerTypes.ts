@@ -47,6 +47,7 @@ export type MemberPointsSummaryDto = {
   memberNumber: number
   firstName: string
   lastName: string
+  scoutGroupId: number
   scoutGroupName: string
   sectionId: string
   sectionName: string
@@ -80,6 +81,7 @@ export type MemberCompleteDto = {
   memberNumber: number
   firstName: string
   lastName: string
+  scoutGroupId: number
   scoutGroupName: string
   sectionId: string
   sectionName: string
@@ -91,6 +93,25 @@ export type MemberCompleteDto = {
 
   memberCompleteSummaryStatsDto: MemberCompleteSummaryStatsDto
 }
+
+export type ScoutGroupDto = {
+  id: number
+  name: string
+}
+
+export type ActivityGroupDto = {
+  id: number
+  name: string
+}
+
+
+
+
+
+
+
+
+
 
 // old ---------------------------------------------------------------------------v
 export type Member = {

@@ -128,6 +128,8 @@ namespace WoodseatsScouts.Coins.Api.Data
                     .Include(x => x.ScoutGroup)
                     .Include(x => x.ScavengeResults)
                     .ThenInclude(x => x.ScavengedCoins)
+                    .ThenInclude(x => x.Coin)
+                    .ThenInclude(x => x.ActivityBase)
                     .Single(x => x.Id == scavengeResult.MemberId);
 
                 var viewModel = new MemberPointsSummaryDto(member)

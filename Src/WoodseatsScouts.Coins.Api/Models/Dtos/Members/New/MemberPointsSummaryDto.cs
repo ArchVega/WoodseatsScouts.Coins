@@ -18,6 +18,7 @@ public class MemberPointsSummaryDto
         FirstName = member.FirstName;
         LastName = member.LastName;
         FullName = member.FullName;
+        ScoutGroupId = member.ScoutGroup.Id;
         ScoutGroupName = member.ScoutGroup.Name;
         SectionId = member.SectionId;
         SectionName = member.Section.Name;
@@ -50,6 +51,7 @@ public class MemberPointsSummaryDto
 
     public string? LastName { get; set; }
 
+    public int ScoutGroupId { get; init; }
     public string ScoutGroupName { get; set; }
 
     public string SectionId { get; set; } // Todo Section is now "SectionId". Rename

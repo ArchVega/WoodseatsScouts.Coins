@@ -29,10 +29,5 @@ The members details page DEFINITELY needs memoization, search filtering is impac
 When a scavenged coin is deleted, do we remove it from the scavenged coin table (making it effectively reusable) or do we mark it as deleted? Going
 with removing it from the table
 
-easiest to hardest to implment (remember - if the page is to be updated in real time, the "stats cards" (right side) and total points (left side) would have to be reactive - not trivial)
-* deleting base points
-* deleting scan sessions
-* adding and removing "generic" scan session point, eg "a scan session of type "adjustment" (and so we'd need a default scan session type of "participant" for regular scans)
-* edit scan points - would need an 'override' column on the table
-* edit base points - we dont' group by bases in the db, would need a special table
-* 
+add / remove fixed points. If we were to have a single field to store a "master" value. eg +20, -10 woudl this work?
+admin could edit. eg. "I've added +20, but now I'm going to deduct 10, so I'll reopen the dialog that now has +20 and change to 10. 
