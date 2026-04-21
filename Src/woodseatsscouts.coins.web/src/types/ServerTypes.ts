@@ -29,6 +29,7 @@ export type ActivityBaseHaulResultDto = {
   activityBaseName: string
   totalPoints: number
   coinsScanned: number
+  coins: CoinDto[]
 }
 
 export type HaulResultDto = {

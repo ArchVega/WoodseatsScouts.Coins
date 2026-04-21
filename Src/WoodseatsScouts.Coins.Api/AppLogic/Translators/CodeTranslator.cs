@@ -14,8 +14,8 @@
                 return new CoinPointTranslationResult
                 {
                     TokenIdentifier = code[..1],
-                    Id = Convert.ToInt32(code.Substring(1, 4)),
-                    BaseNumber = Convert.ToInt32(code.Substring(5, 3)),
+                    ActivityBaseSequenceNumber = Convert.ToInt32(code.Substring(1, 4)),
+                    ActivityBaseId = Convert.ToInt32(code.Substring(5, 3)),
                     PointValue = Convert.ToInt32(code[8..])
                 };
             }

@@ -1,4 +1,5 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
 using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
@@ -18,7 +19,8 @@ public class MemberCompleteSummaryDto
                     ActivityBaseId = x.Key,
                     ActivityBaseName = x.ElementAt(0).Coin.ActivityBase.Name,
                     TotalPoints = x.Sum(y => y.Coin.Value),
-                    CoinsScanned = x.Count()
+                    CoinsScanned = x.Count(),
+                    Coins = x.Select(y => new CoinDto(y.Coin.Value, y.Coin.ActivityBase.Id, y.Coin.Code)).ToList()
                 };
             }).ToList();
 

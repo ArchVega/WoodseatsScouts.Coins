@@ -1,3 +1,5 @@
+using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
+
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 
 public class ActivityBaseHaulResultDto
@@ -6,4 +8,5 @@ public class ActivityBaseHaulResultDto
     public string ActivityBaseName { get; set; }
     public int TotalPoints { get; set; }
     public int CoinsScanned { get; set; }
+    public List<CoinDto> Coins { get; set; }
 }

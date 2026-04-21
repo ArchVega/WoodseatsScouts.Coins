@@ -52,6 +52,6 @@ public class CoinController(
         dbCoin.LockUntil = null;
         appDbContext.SaveChanges();
 
-        return Ok(new CoinDto(result.PointValue, result.BaseNumber, code));
+        return Ok(new CoinDto(result.PointValue, result.ActivityBaseId, code));
     }
 }

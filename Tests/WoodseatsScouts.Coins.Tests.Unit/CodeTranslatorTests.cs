@@ -46,9 +46,9 @@ public class CodeTranslatorTests
     public void TranslatingPoints(string code, int id, string tokenIdentifier, int baseNumber, int pointValue)
     {   
         var pointTranslationResult = CodeTranslator.TranslateCoinCode(code);
-        pointTranslationResult.Id.ShouldBe(id);
+        pointTranslationResult.ActivityBaseSequenceNumber.ShouldBe(id);
         pointTranslationResult.TokenIdentifier.ShouldBe(tokenIdentifier);
-        pointTranslationResult.BaseNumber.ShouldBe(baseNumber);
+        pointTranslationResult.ActivityBaseId.ShouldBe(baseNumber);
         pointTranslationResult.PointValue.ShouldBe(pointValue);
     }
     

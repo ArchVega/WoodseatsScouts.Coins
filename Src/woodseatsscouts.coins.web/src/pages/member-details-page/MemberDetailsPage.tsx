@@ -173,33 +173,43 @@ function MemberDetailsPage() {
         <table className="table table-bordered">
           <thead className="table-dark">
           <tr>
-            <th>Base</th>
-            <th>Total Points</th>
-            <th>Coins Scanned</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th scope="col">Base</th>
+            <th scope="col">Points</th>
+            {/*<th>Coins Scanned</th>*/}
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
           </tr>
           </thead>
-
           <tbody>
-          {activeHaulResultDto && activeHaulResultDto.activityBaseHaulResultDtos.map((activityBaseHaulResultDto: ActivityBaseHaulResultDto, i) => (
-            <tr key={i}>
-              <td>{activityBaseHaulResultDto.activityBaseName}</td>
-              <td>{activityBaseHaulResultDto.totalPoints}</td>
-              <td>{activityBaseHaulResultDto.coinsScanned}</td>
-              <td>
-                <span>✏️</span>
-              </td>
-              <td>
-                <span>🗑️</span>
-              </td>
-            </tr>
-          ))}
+          {activeHaulResultDto && activeHaulResultDto.activityBaseHaulResultDtos.map((activityBaseHaulResultDto: ActivityBaseHaulResultDto, haulIndex) =>
+              activityBaseHaulResultDto.coins && activityBaseHaulResultDto.coins.map((coin, coinIndex) => (
+                <tr key={haulIndex}>
+                  {coinIndex === 0 && (
+                      <td rowSpan={activityBaseHaulResultDto.coins.length}>
+                        <div className="pe-2" style={{ display: "flex", justifyContent: "space-between" }}>
+                          <span>{activityBaseHaulResultDto.activityBaseName}</span>
+                          <span>(x {activityBaseHaulResultDto.coins.length})</span>
+                        </div>
+                      </td>
+                  )}
+                  <td>{coin.pointValue}</td>
+                  <td>
+                    <span>✏️</span>
+                  </td>
+                  <td>
+                    <span>🗑️</span>
+                  </td>
+                </tr>
+              ))
+          )}
           </tbody>
         </table>
       </div>
     )
   }
+
+  {/*<td>{activityBaseHaulResultDto.totalPoints}</td>*/}
+  {/*<td>{activityBaseHaulResultDto.coinsScanned}</td>*/}
 
   function RenderMemberActivitySummary() {
     function RenderActivityCard(title: string, node: ReactNode) {
@@ -217,21 +227,23 @@ function MemberDetailsPage() {
 
     return (
       <div id="recent-member-activity-summary-cards" className="row g-1 sticky-top">
-        {RenderActivityCard("Most Visited Base", <>
-          {memberCompleteDto.memberCompleteSummaryStatsDto
-            && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase
-            && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.names.map(x => (
-            <div>
-              <strong className="fs-3">{x}</strong>
-            </div>
-          ))}
-          <div><em>{memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</em></div>
-        </>)}
+        {RenderActivityCard("Most Visited Base", (
+          <>
+            {memberCompleteDto.memberCompleteSummaryStatsDto
+              && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase
+              && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.names.map((x, i) => (
+                <div key={i}>
+                  <strong className="fs-3">{x}</strong>
+                </div>
+              ))}
+            <div><em>{memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</em></div>
+          </>
+        ))}
         {RenderActivityCard("Least Visited Base", <>
           {memberCompleteDto.memberCompleteSummaryStatsDto
             && memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase
-            && memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase.names.map(x => (
-              <div>
+            && memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase.names.map((x, i) => (
+              <div key={i}>
                 <strong className="fs-3">{x}</strong>
               </div>
             ))}
