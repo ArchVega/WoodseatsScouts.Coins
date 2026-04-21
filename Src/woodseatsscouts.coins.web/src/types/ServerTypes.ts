@@ -28,6 +28,7 @@ export type ActivityBaseHaulResultDto = {
   activityBaseId: number
   activityBaseName: string
   totalPoints: number
+  coinsScanned: number
 }
 
 export type HaulResultDto = {
@@ -58,6 +59,18 @@ export type MemberPointsSummaryDto = {
   clientComputedImageUri: string
 }
 
+export type MemberCompleteSummaryStatsActivityBaseInfoDto = {
+  names: string[]
+  timesVisited: number
+}
+
+export type MemberCompleteSummaryStatsDto = {
+ mostVisitedActivityBase: MemberCompleteSummaryStatsActivityBaseInfoDto
+ leastVisitedActivityBase: MemberCompleteSummaryStatsActivityBaseInfoDto
+ mostScans: number
+ totalTokensScanned: number
+}
+
 export type MemberCompleteDto = {
   id: number
   fullName: string
@@ -74,6 +87,8 @@ export type MemberCompleteDto = {
   computedImagePath: string
   clientComputedImageUri: string
   haulResults: HaulResultDto[]
+
+  memberCompleteSummaryStatsDto: MemberCompleteSummaryStatsDto
 }
 
 // old ---------------------------------------------------------------------------v

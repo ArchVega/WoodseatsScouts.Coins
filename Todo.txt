@@ -29,7 +29,7 @@ The members details page DEFINITELY needs memoization, search filtering is impac
 When a scavenged coin is deleted, do we remove it from the scavenged coin table (making it effectively reusable) or do we mark it as deleted? Going
 with removing it from the table
 
-easiest to hardest to implment
+easiest to hardest to implment (remember - if the page is to be updated in real time, the "stats cards" (right side) and total points (left side) would have to be reactive - not trivial)
 * deleting base points
 * deleting scan sessions
 * adding and removing "generic" scan session point, eg "a scan session of type "adjustment" (and so we'd need a default scan session type of "participant" for regular scans)

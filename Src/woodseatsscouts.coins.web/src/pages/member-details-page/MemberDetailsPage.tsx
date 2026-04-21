@@ -175,6 +175,7 @@ function MemberDetailsPage() {
           <tr>
             <th>Base</th>
             <th>Total Points</th>
+            <th>Coins Scanned</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
@@ -185,6 +186,7 @@ function MemberDetailsPage() {
             <tr key={i}>
               <td>{activityBaseHaulResultDto.activityBaseName}</td>
               <td>{activityBaseHaulResultDto.totalPoints}</td>
+              <td>{activityBaseHaulResultDto.coinsScanned}</td>
               <td>
                 <span>✏️</span>
               </td>
@@ -216,18 +218,30 @@ function MemberDetailsPage() {
     return (
       <div id="recent-member-activity-summary-cards" className="row g-1 sticky-top">
         {RenderActivityCard("Most Visited Base", <>
-          <div><strong className="fs-3">Archery</strong></div>
-          <div><em>54 visits</em></div>
+          {memberCompleteDto.memberCompleteSummaryStatsDto
+            && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase
+            && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.names.map(x => (
+            <div>
+              <strong className="fs-3">{x}</strong>
+            </div>
+          ))}
+          <div><em>{memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</em></div>
         </>)}
         {RenderActivityCard("Least Visited Base", <>
-          <div><strong className="fs-3">229th Greenhill</strong></div>
-          <div><em>2 Visits</em></div>
+          {memberCompleteDto.memberCompleteSummaryStatsDto
+            && memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase
+            && memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase.names.map(x => (
+              <div>
+                <strong className="fs-3">{x}</strong>
+              </div>
+            ))}
+          <div><em>{memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase.timesVisited} visits</em></div>
         </>)}
         {RenderActivityCard("Most Scans", <>
-          <div><strong className="fs-3">44 Tokens</strong></div>
+          <div><strong className="fs-3">{memberCompleteDto.memberCompleteSummaryStatsDto.mostScans} Tokens</strong></div>
         </>)}
         {RenderActivityCard("Total tokens scanned", <>
-          <div><strong className="fs-3">412</strong></div>
+          <div><strong className="fs-3">{memberCompleteDto.memberCompleteSummaryStatsDto.totalTokensScanned}</strong></div>
         </>)}
       </div>
     )

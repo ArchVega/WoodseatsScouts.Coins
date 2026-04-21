@@ -7,8 +7,32 @@ public class MemberCompleteSummaryDto
 {
     public MemberCompleteSummaryDto(Member member)
     {
+        var haulResults = member.ScavengeResults.Select(scavengeResult =>
+        {
+            var groupedByActivityBase = scavengeResult.ScavengedCoins.GroupBy(x => x.Coin.ActivityBaseId).ToList();
+
+            var activityBaseResults = groupedByActivityBase.Select(x =>
+            {
+                return new ActivityBaseHaulResultDto
+                {
+                    ActivityBaseId = x.Key,
+                    ActivityBaseName = x.ElementAt(0).Coin.ActivityBase.Name,
+                    TotalPoints = x.Sum(y => y.Coin.Value),
+                    CoinsScanned = x.Count()
+                };
+            }).ToList();
+
+            return new HaulResultDto
+            {
+                ScavengerResultId = scavengeResult.Id,
+                HauledAtIso8601 = scavengeResult.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
+                TotalPoints = scavengeResult.ScavengedCoins.Sum(x => x.Coin.Value), // changed
+                ActivityBaseHaulResultDtos = activityBaseResults
+            };
+        }).ToList();
+
         var cacheBuster = DateTime.UtcNow.Ticks;
-        
+
         Id = member.Id;
         MemberCode = member.Code;
         HasImage = member.HasImage;
@@ -22,28 +46,31 @@ public class MemberCompleteSummaryDto
         SectionName = member.Section.Name;
         // changed
         TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.Coin.Value)).Sum();
-        HaulResults = member.ScavengeResults.Select(scavengeResult =>
-        {
-            var groupedByActivityBase = scavengeResult.ScavengedCoins.GroupBy(x => x.Coin.ActivityBaseId).ToList();
+        HaulResults = haulResults;
 
-            var activityBaseResults = groupedByActivityBase.Select(x =>
-            {
-                return new ActivityBaseHaulResultDto
-                {
-                    ActivityBaseId = x.Key,
-                    ActivityBaseName = x.ElementAt(0).Coin.ActivityBase.Name,
-                    TotalPoints = x.Sum(y => y.Coin.Value)
-                };
-            }).ToList();
-            
-            return new HaulResultDto
-            {
-                ScavengerResultId = scavengeResult.Id,
-                HauledAtIso8601 = scavengeResult.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
-                TotalPoints = scavengeResult.ScavengedCoins.Sum(x => x.Coin.Value), // changed
-                ActivityBaseHaulResultDtos = activityBaseResults
-            };
-        }).ToList();
+        MemberCompleteSummaryStatsDto = new MemberCompleteSummaryStatsDto();
+
+        var grouping = haulResults
+            .SelectMany(x => x.ActivityBaseHaulResultDtos)
+            .GroupBy(x => x.ActivityBaseName)
+            .ToList();
+
+        var maxCount = grouping.Max(x => x.Count());
+        var minCount = grouping.Min(x => x.Count());
+
+        MemberCompleteSummaryStatsDto.MostVisitedActivityBase = new MemberCompleteSummaryStatsActivityBaseInfoDto
+        {
+            Names = grouping.Where(x => x.Count() == maxCount).Select(x => x.Key).ToList(),
+            TimesVisited = maxCount,
+        };
+        MemberCompleteSummaryStatsDto.LeastVisitedActivityBase = new MemberCompleteSummaryStatsActivityBaseInfoDto
+        {
+            Names = grouping.Where(x => x.Count() == minCount).Select(x => x.Key).ToList(),
+            TimesVisited = minCount,
+        };
+
+        MemberCompleteSummaryStatsDto.MostScans = member.ScavengeResults.Max(x => x.ScavengedCoins.Count);
+        MemberCompleteSummaryStatsDto.TotalTokensScanned = member.ScavengeResults.SelectMany(x => x.ScavengedCoins).Count();
     }
 
     public int Id { get; set; }
@@ -53,7 +80,7 @@ public class MemberCompleteSummaryDto
     public string MemberCode { get; set; }
 
     public bool HasImage { get; set; }
-    
+
     public string ComputedImagePath { get; set; }
 
     public int MemberNumber { get; set; }
@@ -65,11 +92,14 @@ public class MemberCompleteSummaryDto
     public string ScoutGroupName { get; set; }
 
     public string SectionId { get; set; } // Todo Section is now "SectionId". Rename
+
     public string SectionName { get; set; }
 
     public int TotalPoints { get; set; }
 
     public DateTime? LatestCompletedAtTime { get; set; }
-    
+
     public List<HaulResultDto> HaulResults { get; set; }
+
+    public MemberCompleteSummaryStatsDto MemberCompleteSummaryStatsDto { get; set; }
 }

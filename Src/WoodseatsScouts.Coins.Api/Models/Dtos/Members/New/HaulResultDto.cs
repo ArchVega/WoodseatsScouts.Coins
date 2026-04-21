@@ -8,10 +8,3 @@ public class HaulResultDto
 
     public List<ActivityBaseHaulResultDto> ActivityBaseHaulResultDtos { get; set; }
 }
-
-public class ActivityBaseHaulResultDto
-{
-    public int ActivityBaseId { get; set; }
-    public string ActivityBaseName { get; set; }
-    public int TotalPoints { get; set; }
-}
