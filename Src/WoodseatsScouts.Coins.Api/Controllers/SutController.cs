@@ -44,7 +44,7 @@ public class SutController(
     [Route("Leaderboard/Deadline/{minutesToAdd:int}")]
     public IActionResult SetReportDeadline(int minutesToAdd)
     {
-        leaderboardSettings.ScavengerHuntDeadline = DateTime.Now.AddMinutes(minutesToAdd);
+        leaderboardSettings.ScavengerHuntDeadline = DateTime.UtcNow.AddMinutes(minutesToAdd);
 
         return Ok($"Report deadline datetime set to '{leaderboardSettings.ScavengerHuntDeadline}'");
     }
@@ -55,7 +55,7 @@ public class SutController(
     {
         if (minutesToAdd.HasValue)
         {
-            systemDateTimeProvider.SetDateTimeToSetTime(DateTime.Now.AddMinutes(minutesToAdd.Value));
+            systemDateTimeProvider.SetDateTimeToSetTime(DateTime.UtcNow.AddMinutes(minutesToAdd.Value));
         }
         else
         {

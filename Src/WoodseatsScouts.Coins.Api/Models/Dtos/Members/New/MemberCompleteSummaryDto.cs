@@ -7,7 +7,7 @@ public class MemberCompleteSummaryDto
 {
     public MemberCompleteSummaryDto(Member member)
     {
-        var cacheBuster = DateTime.Now.Ticks;
+        var cacheBuster = DateTime.UtcNow.Ticks;
         
         Id = member.Id;
         MemberCode = member.Code;

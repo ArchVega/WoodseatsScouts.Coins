@@ -6,7 +6,7 @@ public class MemberDto
 {
     public MemberDto(Member member)
     {
-        var cacheBuster = DateTime.Now.Ticks;
+        var cacheBuster = DateTime.UtcNow.Ticks;
 
         Id = member.Id;
         Code = member.Code;

@@ -98,7 +98,7 @@ public class CoinControllerTests
         appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { member }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>
         {
-            new() { Code = coinCode, MemberId = memberId, LockUntil = DateTime.Now.AddHours(1) }
+            new() { Code = coinCode, MemberId = memberId, LockUntil = DateTime.UtcNow.AddHours(1) }
         }));
 
         var result = coinsController.GetCoin(coinCode, memberCode);
@@ -124,7 +124,7 @@ public class CoinControllerTests
         appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { currentMember, otherMember }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>
         {
-            new() { Code = coinCode, MemberId = otherMemberId, LockUntil = DateTime.Now.AddHours(1) }
+            new() { Code = coinCode, MemberId = otherMemberId, LockUntil = DateTime.UtcNow.AddHours(1) }
         }));
 
         var result = coinsController.GetCoin(coinCode, memberCode);

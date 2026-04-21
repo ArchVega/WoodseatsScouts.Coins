@@ -22,9 +22,9 @@ public class LeaderboardController(IAppDbContext appDbContext, IOptions<Leaderbo
         var top3MembersWithPointsAttached = appDbContext.GetLastThreeUsersToScanPoints()
             .Select(x => new LeaderboardLatestScavengerViewModel(x));
 
-        // Todo: DateTime.Now should be replaced with ITimeProvider
-        var secondsUntilDeadline = leaderboardSettings.ScavengerHuntDeadline > DateTime.Now
-            ? (leaderboardSettings.ScavengerHuntDeadline - DateTime.Now).TotalSeconds
+        // Todo: DateTime.UtcNow should be replaced with ITimeProvider
+        var secondsUntilDeadline = leaderboardSettings.ScavengerHuntDeadline > DateTime.UtcNow
+            ? (leaderboardSettings.ScavengerHuntDeadline - DateTime.UtcNow).TotalSeconds
             : 0;
 
         var reportViewModel = new LeaderboardViewModel

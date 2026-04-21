@@ -6,7 +6,7 @@ import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import Uris from "../../services/apis/Uris.ts";
-import type {MemberCompleteDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import type {HaulResultDto, MemberCompleteDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
@@ -18,6 +18,7 @@ function MemberDetailsPage() {
   const [showEditMemberPhotoModal, setShowEditMemberPhotoModal] = useState<boolean>(false);
 
   const [memberCompleteDto, setMemberCompleteDto] = useState<MemberCompleteDto | null>(null);
+  const [activeHaulResultDto, setActiveHaulResultDto] = useState<HaulResultDto | null>(null);
 
   useEffect(() => {
     if (memberCode) {
@@ -117,9 +118,9 @@ function MemberDetailsPage() {
           </thead>
           <tbody>
           {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, i) => (
-            <tr key={i}>
+            <tr key={i} role="button" onClick={() => setActiveHaulResultDto(haulResultDto)}>
               <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
-              <td>{i + 1}</td>
+              <td>{haulResultDto.totalPoints}</td>
               <td>
                 <span>✏️</span>
               </td>
@@ -154,7 +155,7 @@ function MemberDetailsPage() {
           </thead>
 
           <tbody>
-          {/*{rows.map((_, i) => (*/}
+          {/*{activeHaulResultDto && activeHaulResultDto.map((_, i) => (*/}
           {/*  <tr key={i}>*/}
           {/*    <td>{['Archery', 'Shooting', "Cave Bus", "Arts and Crafts"][Math.floor(Math.random() * 4)]}</td>*/}
           {/*    <td>{i + 1}</td>*/}

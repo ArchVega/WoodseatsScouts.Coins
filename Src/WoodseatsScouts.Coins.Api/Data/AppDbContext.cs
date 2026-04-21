@@ -216,7 +216,7 @@ namespace WoodseatsScouts.Coins.Api.Data
             var scavengeResult = new ScavengeResult
             {
                 MemberId = member.Id,
-                CompletedAt = DateTime.Now
+                CompletedAt = DateTime.UtcNow
             };
 
             ScavengeResults!.Add(scavengeResult);
@@ -252,7 +252,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                 if (coinToAdd.MemberId == null)
                 {
                     coinToAdd.MemberId = member.Id;
-                    coinToAdd.LockUntil = DateTime.Now.AddMinutes(appSettingsOptions.Value.MinutesToLockScavengedCoins);
+                    coinToAdd.LockUntil = DateTime.UtcNow.AddMinutes(appSettingsOptions.Value.MinutesToLockScavengedCoins);
                 }
                 else
                 {

@@ -172,7 +172,8 @@ function CreateAdditionalDbObjects {
             ScoutGroups.Name as 'Scout Group',
             Sections.Name as 'Section',
             Coins.Code as 'Coin Code',
-            Coins.Value as 'Coin Value'
+            Coins.Value as 'Coin Value',
+            ActivityBases.Name as 'Activity Base'
         FROM Members
         join ScavengeResults
         on ScavengeResults.MemberId = Members.Id
@@ -184,6 +185,8 @@ function CreateAdditionalDbObjects {
         on Sections.Code = Members.SectionId
         join Coins
         on Coins.Code = ScavengedCoins.Code
+        join ActivityBases
+        on ActivityBases.Id = Coins.ActivityBaseId
         "
         
         _ExecuteQuery $viewQuery $DatabaseName

@@ -23,8 +23,8 @@ public class AppDbContextLeaderboardsTests
         testDataFactory = new TestDataFactory(appDbContext);
         
         /* Setting arbitrary start and end dates*/
-        databaseFixture.LeaderboardSettings.ScavengerHuntStartTime = DateTime.Now.AddDays(-1);
-        databaseFixture.LeaderboardSettings.ScavengerHuntDeadline = DateTime.Now.AddDays(1);
+        databaseFixture.LeaderboardSettings.ScavengerHuntStartTime = DateTime.UtcNow.AddDays(-1);
+        databaseFixture.LeaderboardSettings.ScavengerHuntDeadline = DateTime.UtcNow.AddDays(1);
     }
 
     #region GetTopThreeGroupsInLastHour
@@ -43,7 +43,7 @@ public class AppDbContextLeaderboardsTests
     {
         databaseFixture.RestoreBaseTestData();
         
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var points = new List<int> { 20 };
         var expectedSum = points.Sum();
         CreateScavengedResult(testDataFactory.Members.AsparagusRoyal, now, points);
@@ -70,7 +70,7 @@ public class AppDbContextLeaderboardsTests
         
         for (var i = 0; i < differentGroupMembers.Count; i++)
         {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var points = new List<int> { 20, 10 * i };
             expectedSums.Add(differentGroupMembers[i], points.Sum());
             CreateScavengedResult(differentGroupMembers[i], now, points);
@@ -110,7 +110,7 @@ public class AppDbContextLeaderboardsTests
         
         for (int i = 0; i < differentGroupMembers.Count; i++)
         {
-            var now = i % 2 == 0 ? DateTime.Now : DateTime.Now.AddMinutes(-61);
+            var now = i % 2 == 0 ? DateTime.UtcNow : DateTime.UtcNow.AddMinutes(-61);
             
             var points = new List<int> { 10 };
             CreateScavengedResult(differentGroupMembers[i], now, points);
@@ -136,7 +136,7 @@ public class AppDbContextLeaderboardsTests
         
         for (var i = 0; i < differentGroupMembers.Count; i++)
         {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var points = new List<int> { eachMemberPoint };
             CreateScavengedResult(differentGroupMembers[i], now, points);
         }
@@ -242,7 +242,7 @@ public class AppDbContextLeaderboardsTests
             testDataFactory.Members.JasperRoyal,
         };
         
-        var dateTime = DateTime.Now;
+        var dateTime = DateTime.UtcNow;
         for (int i = 0; i < members.Count; i++)
         {
             var now = dateTime.AddMinutes(i);

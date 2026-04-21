@@ -23,3 +23,5 @@ The members details page DEFINITELY needs memoization, search filtering is impac
  fix navmenu, Beavers, Greenhill Methodist splits 
 
  do we still need MemberId and LockUntil?
+
+ be sure to check DateTime.UtcNow usage
