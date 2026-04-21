@@ -22,13 +22,26 @@ public class MemberCompleteSummaryDto
         SectionName = member.Section.Name;
         // changed
         TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.Coin.Value)).Sum();
-        HaulResults = member.ScavengeResults.Select(x =>
+        HaulResults = member.ScavengeResults.Select(scavengeResult =>
         {
+            var groupedByActivityBase = scavengeResult.ScavengedCoins.GroupBy(x => x.Coin.ActivityBaseId).ToList();
+
+            var activityBaseResults = groupedByActivityBase.Select(x =>
+            {
+                return new ActivityBaseHaulResultDto
+                {
+                    ActivityBaseId = x.Key,
+                    ActivityBaseName = x.ElementAt(0).Coin.ActivityBase.Name,
+                    TotalPoints = x.Sum(y => y.Coin.Value)
+                };
+            }).ToList();
+            
             return new HaulResultDto
             {
-                ScavengerResultId = x.Id,
-                HauledAtIso8601 = x.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
-                TotalPoints = x.ScavengedCoins.Sum(x => x.Coin.Value) // changed
+                ScavengerResultId = scavengeResult.Id,
+                HauledAtIso8601 = scavengeResult.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
+                TotalPoints = scavengeResult.ScavengedCoins.Sum(x => x.Coin.Value), // changed
+                ActivityBaseHaulResultDtos = activityBaseResults
             };
         }).ToList();
     }
@@ -58,33 +71,5 @@ public class MemberCompleteSummaryDto
 
     public DateTime? LatestCompletedAtTime { get; set; }
     
-    public int? SelectedHaulResultId { get; set; }
-    
     public List<HaulResultDto> HaulResults { get; set; }
-
-    public HaulResultDto? LatestHaulResult
-    {
-        get
-        {
-            if (HaulResults.Count > 0)
-            {
-                return HaulResults.OrderByDescending(x => x.HauledAtIso8601).First();
-            }
-
-            return null;
-        }
-    }
-    
-    public HaulResultDto? SelectedHaulResult
-    {
-        get
-        {
-            if (SelectedHaulResultId.HasValue)
-            {
-                return HaulResults.Single(x => x.ScavengerResultId == SelectedHaulResultId);
-            }
-
-            return null;
-        }
-    }
 }

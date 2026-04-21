@@ -25,3 +25,14 @@ The members details page DEFINITELY needs memoization, search filtering is impac
  do we still need MemberId and LockUntil?
 
  be sure to check DateTime.UtcNow usage
+
+When a scavenged coin is deleted, do we remove it from the scavenged coin table (making it effectively reusable) or do we mark it as deleted? Going
+with removing it from the table
+
+easiest to hardest to implment
+* deleting base points
+* deleting scan sessions
+* adding and removing "generic" scan session point, eg "a scan session of type "adjustment" (and so we'd need a default scan session type of "participant" for regular scans)
+* edit scan points - would need an 'override' column on the table
+* edit base points - we dont' group by bases in the db, would need a special table
+* 

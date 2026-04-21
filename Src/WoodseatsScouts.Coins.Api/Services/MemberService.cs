@@ -55,6 +55,7 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
             .Include(x => x.ScavengeResults)
             .ThenInclude(x => x.ScavengedCoins)
             .ThenInclude(x => x.Coin)
+            .ThenInclude(x => x.ActivityBase)
             .Include(x => x.ScoutGroup)
             .Include(x => x.Section)
             .Where(x => x.Id == memberId)

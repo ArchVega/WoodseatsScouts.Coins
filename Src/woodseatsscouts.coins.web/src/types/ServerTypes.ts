@@ -24,10 +24,17 @@ export type CoinDto = {
   pointValue: number
 }
 
+export type ActivityBaseHaulResultDto = {
+  activityBaseId: number
+  activityBaseName: string
+  totalPoints: number
+}
+
 export type HaulResultDto = {
   scavengerResultId: number
   hauledAtIso8601: string
   totalPoints: number
+  activityBaseHaulResultDtos: ActivityBaseHaulResultDto[]
 }
 
 export type MemberPointsSummaryDto = {
@@ -64,12 +71,9 @@ export type MemberCompleteDto = {
   sectionName: string
   totalPoints: number
   latestCompletedAtTime: string
-  selectedHaulResultId: number | null
-  haulResults: HaulResultDto[]
-  selectedHaulResult: HaulResultDto | null
-  latestHaulResult: HaulResultDto | null
   computedImagePath: string
   clientComputedImageUri: string
+  haulResults: HaulResultDto[]
 }
 
 // old ---------------------------------------------------------------------------v

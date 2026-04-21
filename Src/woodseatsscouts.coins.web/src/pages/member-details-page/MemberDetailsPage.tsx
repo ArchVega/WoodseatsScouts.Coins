@@ -6,7 +6,7 @@ import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import Uris from "../../services/apis/Uris.ts";
-import type {HaulResultDto, MemberCompleteDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
@@ -19,6 +19,7 @@ function MemberDetailsPage() {
 
   const [memberCompleteDto, setMemberCompleteDto] = useState<MemberCompleteDto | null>(null);
   const [activeHaulResultDto, setActiveHaulResultDto] = useState<HaulResultDto | null>(null);
+  const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
 
   useEffect(() => {
     if (memberCode) {
@@ -32,10 +33,20 @@ function MemberDetailsPage() {
         .then((memberCompleteDto: MemberCompleteDto) => {
           logObject("memberCompleteDto", memberCompleteDto)
           setMemberCompleteDto(memberCompleteDto)
+          if (memberCompleteDto.haulResults.length >= 0) {
+            setSelectedScanSessionId(memberCompleteDto.haulResults[0].scavengerResultId)
+          }
         })
         .finally(() => setLoading(false));
     }
   }, [memberCode])
+
+  useEffect(() => {
+    if (selectedScanSessionId !== null) {
+      const selectedHaulResultDto = memberCompleteDto.haulResults.find(x => x.scavengerResultId == selectedScanSessionId);
+      setActiveHaulResultDto(selectedHaulResultDto);
+    }
+  }, [selectedScanSessionId, memberCompleteDto]);
 
   function RenderMemberDetails() {
     const sectionBranding = getSectionBranding(memberCompleteDto.sectionId)
@@ -94,8 +105,10 @@ function MemberDetailsPage() {
 
   function formatDateTime(isoDateString: string) {
     return new Intl.DateTimeFormat("en-GB", {
-      dateStyle: "short",
-      timeStyle: "short", // ← this omits seconds
+      weekday: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
     }).format(new Date(isoDateString));
   }
 
@@ -104,7 +117,7 @@ function MemberDetailsPage() {
       <div className="member-details-table-container card">
         <div className="row">
           <div className="col-12 mt-1">
-            <h4>Member's Scan Sessions</h4>
+            <h4>{memberCompleteDto.firstName}'s Scan Sessions</h4>
           </div>
         </div>
         <table className="table table-bordered">
@@ -117,8 +130,11 @@ function MemberDetailsPage() {
           </tr>
           </thead>
           <tbody>
-          {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, i) => (
-            <tr key={i} role="button" onClick={() => setActiveHaulResultDto(haulResultDto)}>
+          {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, index) => (
+            <tr key={index} role="button" onClick={() => setSelectedScanSessionId(haulResultDto.scavengerResultId)}
+                style={{
+                  backgroundColor: selectedScanSessionId === haulResultDto.scavengerResultId ? "#d3e5ff" : "transparent"
+                }}>
               <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
               <td>{haulResultDto.totalPoints}</td>
               <td>
@@ -136,12 +152,22 @@ function MemberDetailsPage() {
   }
 
   function RenderSelectedScanSessions() {
+    if (!activeHaulResultDto) {
+      return (
+        <div className="card">
+          <div className="card-body text-center">
+            Select a Session
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="member-details-table-container card">
         <div className="row">
           <div className="col-12 mt-1">
-            <h4 className="mb-0">Edit Member's Scan Points</h4>
-            <small>Session: 10/03/2026 10:45</small>
+            <h4 className="mb-0">Edit {memberCompleteDto.firstName}'s Scan Points</h4>
+            <small>Session: {formatDateTime(activeHaulResultDto.hauledAtIso8601)}</small>
           </div>
         </div>
         <table className="table table-bordered">
@@ -155,18 +181,18 @@ function MemberDetailsPage() {
           </thead>
 
           <tbody>
-          {/*{activeHaulResultDto && activeHaulResultDto.map((_, i) => (*/}
-          {/*  <tr key={i}>*/}
-          {/*    <td>{['Archery', 'Shooting', "Cave Bus", "Arts and Crafts"][Math.floor(Math.random() * 4)]}</td>*/}
-          {/*    <td>{i + 1}</td>*/}
-          {/*    <td>*/}
-          {/*      <span>✏️</span>*/}
-          {/*    </td>*/}
-          {/*    <td>*/}
-          {/*      <span>🗑️</span>*/}
-          {/*    </td>*/}
-          {/*  </tr>*/}
-          {/*))}*/}
+          {activeHaulResultDto && activeHaulResultDto.activityBaseHaulResultDtos.map((activityBaseHaulResultDto: ActivityBaseHaulResultDto, i) => (
+            <tr key={i}>
+              <td>{activityBaseHaulResultDto.activityBaseName}</td>
+              <td>{activityBaseHaulResultDto.totalPoints}</td>
+              <td>
+                <span>✏️</span>
+              </td>
+              <td>
+                <span>🗑️</span>
+              </td>
+            </tr>
+          ))}
           </tbody>
         </table>
       </div>
