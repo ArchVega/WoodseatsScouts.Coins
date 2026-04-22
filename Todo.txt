@@ -44,3 +44,5 @@ I managed to double click a button - check the fix
 the filter members page should work with the scanner, but is it the ipad ie the webcam it needs to work with?
 
 Would have gone with ScanPoints but singular would be ScanPoint and that's no good. ScanCoin.
+
+home page is calling https://release-scouts-webapi.azurewebsites.net/api/members?view=PointsSummary

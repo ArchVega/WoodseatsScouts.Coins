@@ -1,6 +1,7 @@
 import {logApi} from "../../components/logging/Logger.ts";
 
-const baseUri = import.meta.env.VITE_WEB_API_URI + "/api"
+// const baseUri = import.meta.env.VITE_WEB_API_URI + "/api"
+const baseUri = "https://release-scouts-webapi.azurewebsites.net/api"
 
 const Uris = {
   members: `${baseUri}/members`,
