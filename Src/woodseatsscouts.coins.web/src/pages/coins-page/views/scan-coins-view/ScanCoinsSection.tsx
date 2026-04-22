@@ -151,7 +151,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
             <div className="d-grid">
               <button id="finish-scanning-button" data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success btn-lg">
                 <div>
-                  <div style={{fontSize: "6em"}}>🎉</div>
+                  <div style={{fontSize: "4em"}}>🎉</div>
                   <em className="text-white" style={{fontSize: "4em"}}>SAVE POINTS</em>
                 </div>
               </button>
