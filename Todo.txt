@@ -31,3 +31,5 @@ with removing it from the table
 
 add / remove fixed points. If we were to have a single field to store a "master" value. eg +20, -10 woudl this work?
 admin could edit. eg. "I've added +20, but now I'm going to deduct 10, so I'll reopen the dialog that now has +20 and change to 10. 
+
+how do we prevent members from accessing the admin screens and modifying data?

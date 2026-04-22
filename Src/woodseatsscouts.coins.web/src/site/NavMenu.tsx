@@ -26,7 +26,7 @@ export default function NavMenu() {
         return (
           <NavLink
             data-testid={dataTestId}
-            className={"scouts-nav-link m-3"}
+            className={"scouts-nav-link m-3 me-4 fs-3"}
             to={targetLocation}>
             {text}
           </NavLink>
@@ -36,9 +36,13 @@ export default function NavMenu() {
       const RenderAppSettingsGearIcon = () => {
         if (appCameraAvailable) {
           return (
-            <span id="app-settings-gear" data-testid="nav-settings-modal" onClick={() => setAppSettingsModal(true)}>
+            <div id="app-settings-gear"
+                  className={"me-5 mt-2"}
+                 style={{fontSize: "2.5em"}}
+                  data-testid="nav-settings-modal"
+                  onClick={() => setAppSettingsModal(true)}>
               ⛭
-            </span>
+            </div>
           )
         }
 
@@ -49,7 +53,7 @@ export default function NavMenu() {
         return (
           <div>
             <span data-testid="nav-coins-page" onClick={() => navigate("/")} className={"scouts-nav-link m-3"}>
-              <div className={"px-3 py-1 scouts-borders-white"}>
+              <div className={"fs-3 px-3 py-1 scouts-borders-white"}>
                 Return to Main Screen
               </div>
             </span>
@@ -128,7 +132,7 @@ export default function NavMenu() {
 
   return (
     <header className={"scouts-navbar"}>
-      <div className="container" style={{height: "100px"}}>
+      <div className="container" style={{height: "100px", maxWidth: "100%"}}>
         <div id="left-column">
           {RenderLeftSideHeaderSection()}
         </div>

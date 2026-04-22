@@ -72,16 +72,16 @@ export default function ScanMemberForCoinsSection({setMember}) {
   }
 
   return (
-    <div className="row text-center page">
+    <div className="row text-center page mt-5">
       <div className="col">
-        <div className="mt-3">
+        <div className="mt-5">
           <span className="page-hello-text">Hello</span>
           <img id="scan-member-section-wave-image" src={wave} alt=""/>
-          <h1 className="mb-5">
+          <div className="mb-5" style={{fontSize: "2.5em"}}>
             <strong>
               Scan your wristband with the scanner to start saving points…
             </strong>
-          </h1>
+          </div>
         </div>
 
         {loading
