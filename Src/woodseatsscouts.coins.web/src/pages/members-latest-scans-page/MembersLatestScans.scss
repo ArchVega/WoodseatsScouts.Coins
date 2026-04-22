@@ -5,6 +5,7 @@
 #latest-scans-page {
   .card {
     background-color: map.get(colours.$colours, grey-light);
+    height: 300px
   }
 
   * {

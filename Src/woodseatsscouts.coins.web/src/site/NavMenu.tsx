@@ -137,7 +137,8 @@ export default function NavMenu() {
           {RenderLeftSideHeaderSection()}
         </div>
         <div id="middle-column">
-          <Image role="button" src={ScoutsLogo} style={{height: "60px", width: "100%"}} onClick={() => setShowNavBarMenu(!showNavBarMenu)}/>
+          <Image role="button" src={ScoutsLogo}
+                 style={{height: "70px", width: "100%"}} onClick={() => setShowNavBarMenu(!showNavBarMenu)}/>
         </div>
         <div id="right-column">
           {RenderRightSideHeaderSection()}

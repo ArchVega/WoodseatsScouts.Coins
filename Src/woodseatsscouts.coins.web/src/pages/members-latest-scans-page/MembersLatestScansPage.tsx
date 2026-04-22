@@ -42,7 +42,7 @@ export default function MembersLatestScansPage() {
     const sectionBranding = getSectionBranding(member.sectionId)
 
     return (
-      <div className="card members-list-item-card flex-shrink-0" >
+      <div className="card latest-scans-item-card flex-shrink-0" >
         <div className="card-body">
           <div className="row">
             <div className="col">

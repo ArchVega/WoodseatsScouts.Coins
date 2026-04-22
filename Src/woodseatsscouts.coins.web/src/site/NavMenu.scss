@@ -4,7 +4,7 @@
 .scouts-navbar {
   min-height: 100px;
   height: auto;
-  $left-right-column-width: 200px;
+  $left-right-column-width: 500px;
 
   .container {
     display: flex;
@@ -48,7 +48,7 @@
 
   #right-column {
     width: $left-right-column-width;
-    text-align: center;
+    text-align: right;
   }
 
   &-sub-menu {

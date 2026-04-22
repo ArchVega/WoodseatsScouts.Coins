@@ -106,7 +106,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
 
   function RenderLeftPanel() {
     return (
-      <div className="coins-grid-2026 mt-3" data-testid="div-scanned-coins">
+      <div className="coins-grid mt-3" data-testid="div-scanned-coins">
         {coinDtos.map((coin, index) =>
           (
             <div key={index}>
@@ -122,7 +122,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
       <>
         <div className="row mb-1">
           <div className="col">
-            <div className="mt-3 mb-2 text-black fs-3 fw-semibold">Now scan your points tokens...</div>
+            <div className="mt-3 mb-2 text-black fw-semibold text-center" style={{fontSize: "5em"}}>Now scan your points tokens...</div>
           </div>
         </div>
         <div className="row mb-3">
@@ -138,7 +138,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
             />
           </div>
         </div>
-        <div className="row mb-2 g-2">
+        <div className="row mb-2">
           <div className="col">
             {RenderTrackerCard("Tokens scanned", coinDtos.length)}
           </div>
@@ -151,8 +151,8 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
             <div className="d-grid">
               <button id="finish-scanning-button" data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success btn-lg">
                 <div>
-                  <div style={{fontSize: "3em"}}>🎉</div>
-                  <em className="text-white">SAVE POINTS</em>
+                  <div style={{fontSize: "6em"}}>🎉</div>
+                  <em className="text-white" style={{fontSize: "4em"}}>SAVE POINTS</em>
                 </div>
               </button>
             </div>
