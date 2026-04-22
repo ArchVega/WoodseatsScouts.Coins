@@ -39,6 +39,6 @@ public class AppStateController(IAppDbContext appDbContext, IScoutsAppEnvironmen
     [Route("Sections")]
     public ActionResult Sections()
     {
-        return Ok(appDbContext.Sections.Select(x => new SectionDto(x)));
+        return Ok(appDbContext.ScoutSections.Select(x => new SectionDto(x)));
     }
 }

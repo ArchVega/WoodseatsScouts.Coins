@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WoodseatsScouts.Coins.Api.Models.Domain;
 
 // dotcover disable
-public class Section
+public class ScoutSection
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -13,11 +13,11 @@ public class Section
 
     public string Name { get; set; }
 
-    public Section()
+    public ScoutSection()
     {
     }
     
-    public Section(string code, string name)
+    public ScoutSection(string code, string name)
     {
         Code = code;
         Name = name;

@@ -6,11 +6,11 @@ namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 
 public class MemberCompleteSummaryDto
 {
-    public MemberCompleteSummaryDto(Member member)
+    public MemberCompleteSummaryDto(ScoutMember scoutMember)
     {
-        var haulResults = member.ScavengeResults.Select(scavengeResult =>
+        var haulResults = scoutMember.ScavengeResults.Select(scavengeResult =>
         {
-            var groupedByActivityBase = scavengeResult.ScavengedCoins.GroupBy(x => x.Coin.ActivityBaseId).ToList();
+            var groupedByActivityBase = scavengeResult.ScanCoins.GroupBy(x => x.Coin.ActivityBaseId).ToList();
 
             var activityBaseResults = groupedByActivityBase.Select(x =>
             {
@@ -28,27 +28,27 @@ public class MemberCompleteSummaryDto
             {
                 ScavengerResultId = scavengeResult.Id,
                 HauledAtIso8601 = scavengeResult.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
-                TotalPoints = scavengeResult.ScavengedCoins.Sum(x => x.Coin.Value), // changed
+                TotalPoints = scavengeResult.ScanCoins.Sum(x => x.Coin.Value), // changed
                 ActivityBaseHaulResultDtos = activityBaseResults
             };
         }).ToList();
 
         var cacheBuster = DateTime.UtcNow.Ticks;
 
-        Id = member.Id;
-        MemberCode = member.Code;
-        HasImage = member.HasImage;
-        ComputedImagePath = member.HasImage ? $"Members/{member.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
-        MemberNumber = member.Number;
-        FirstName = member.FirstName;
-        LastName = member.LastName;
-        FullName = member.FullName;
-        ScoutGroupId = member.ScoutGroup.Id;
-        ScoutGroupName = member.ScoutGroup.Name;
-        SectionId = member.SectionId;
-        SectionName = member.Section.Name;
+        Id = scoutMember.Id;
+        MemberCode = scoutMember.Code;
+        HasImage = scoutMember.HasImage;
+        ComputedImagePath = scoutMember.HasImage ? $"Members/{scoutMember.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
+        MemberNumber = scoutMember.Number;
+        FirstName = scoutMember.FirstName;
+        LastName = scoutMember.LastName;
+        FullName = scoutMember.FullName;
+        ScoutGroupId = scoutMember.ScoutGroup.Id;
+        ScoutGroupName = scoutMember.ScoutGroup.Name;
+        SectionId = scoutMember.ScoutSectionId;
+        SectionName = scoutMember.ScoutSection.Name;
         // changed
-        TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.Coin.Value)).Sum();
+        TotalPoints = scoutMember.ScavengeResults.SelectMany(y => y.ScanCoins.Select(z => z.Coin.Value)).Sum();
         HaulResults = haulResults;
 
         MemberCompleteSummaryStatsDto = new MemberCompleteSummaryStatsDto();
@@ -72,12 +72,12 @@ public class MemberCompleteSummaryDto
             TimesVisited = minCount,
         };
 
-        MemberCompleteSummaryStatsDto.MostScans = member.ScavengeResults
-            .Select(x => x.ScavengedCoins.Count)
+        MemberCompleteSummaryStatsDto.MostScans = scoutMember.ScavengeResults
+            .Select(x => x.ScanCoins.Count)
             .DefaultIfEmpty(0)
             .Max() ;
-        MemberCompleteSummaryStatsDto.TotalTokensScanned = member.ScavengeResults
-            .Select(x => x.ScavengedCoins.Count)
+        MemberCompleteSummaryStatsDto.TotalTokensScanned = scoutMember.ScavengeResults
+            .Select(x => x.ScanCoins.Count)
             .DefaultIfEmpty(0)
             .Min() ;
     }

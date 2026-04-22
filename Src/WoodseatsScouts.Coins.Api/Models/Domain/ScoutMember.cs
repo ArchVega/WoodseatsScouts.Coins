@@ -7,7 +7,7 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
     /// Member photos are stored on disk in the ClientApp/public/member-images directory and the files must be a jpg file whose name
     /// matches the Number field
     /// </summary>
-    public class Member
+    public class ScoutMember
     {
         public int Id { get; set; }
 
@@ -28,9 +28,9 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
         
         public ScoutGroup ScoutGroup { get; init; }
         
-        public string SectionId { get; init; }
+        public string ScoutSectionId { get; init; }
         
-        public Section Section { get; set; }
+        public ScoutSection ScoutSection { get; set; }
         
         public string? Clue1State { get; init; }
 
@@ -42,7 +42,7 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
         
         public bool HasImage { get; set; }
         
-        public List<ScavengeResult> ScavengeResults { get; set; }
+        public List<ScanSession> ScavengeResults { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
 

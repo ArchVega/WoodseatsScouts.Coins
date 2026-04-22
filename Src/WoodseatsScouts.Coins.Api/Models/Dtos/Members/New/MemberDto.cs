@@ -4,26 +4,26 @@ namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 
 public class MemberDto
 {
-    public MemberDto(Member member)
+    public MemberDto(ScoutMember scoutMember)
     {
         var cacheBuster = DateTime.UtcNow.Ticks;
 
-        Id = member.Id;
-        Code = member.Code;
-        Number = member.Number;
-        FirstName = member.FirstName;
-        LastName = member.LastName;
-        FullName = member.FullName;
-        ScoutGroupId = member.ScoutGroupId;
-        ScoutGroupName = member.ScoutGroup.Name;
-        SectionId = member.SectionId;
-        SectionName = member.Section.Name;
-        Clue1State = member.Clue1State;
-        Clue2State = member.Clue2State;
-        Clue3State = member.Clue3State;
-        IsDayVisitor = member.IsDayVisitor;
-        HasImage = member.HasImage;
-        ComputedImagePath = member.HasImage ? $"Members/{member.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
+        Id = scoutMember.Id;
+        Code = scoutMember.Code;
+        Number = scoutMember.Number;
+        FirstName = scoutMember.FirstName;
+        LastName = scoutMember.LastName;
+        FullName = scoutMember.FullName;
+        ScoutGroupId = scoutMember.ScoutGroupId;
+        ScoutGroupName = scoutMember.ScoutGroup.Name;
+        SectionId = scoutMember.ScoutSectionId;
+        SectionName = scoutMember.ScoutSection.Name;
+        Clue1State = scoutMember.Clue1State;
+        Clue2State = scoutMember.Clue2State;
+        Clue3State = scoutMember.Clue3State;
+        IsDayVisitor = scoutMember.IsDayVisitor;
+        HasImage = scoutMember.HasImage;
+        ComputedImagePath = scoutMember.HasImage ? $"Members/{scoutMember.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
     }
 
     public int Id { get; set; }

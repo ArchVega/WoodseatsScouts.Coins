@@ -9,21 +9,21 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
 {
     public bool HasMemberImage(int memberId)
     {
-        return appDbContext.Members!.Single(x => x.Id == memberId).HasImage;
+        return appDbContext.ScoutMembers!.Single(x => x.Id == memberId).HasImage;
     }
 
     public int GetMemberId(int memberNumber, int scoutGroupNumber, string? sectionId)
     {
-        return appDbContext.Members!
+        return appDbContext.ScoutMembers!
             .Include(x => x.ScoutGroup)
-            .Include(x => x.Section)
-            .Single(x => x.Number == memberNumber && x.ScoutGroupId == scoutGroupNumber && x.SectionId == sectionId)
+            .Include(x => x.ScoutSection)
+            .Single(x => x.Number == memberNumber && x.ScoutGroupId == scoutGroupNumber && x.ScoutSectionId == sectionId)
             .Id;
     }
 
     public MemberDto GetMemberDto(int memberId)
     {
-        var member = appDbContext.Members!.Single(x => x.Id == memberId);
+        var member = appDbContext.ScoutMembers!.Single(x => x.Id == memberId);
 
         return new MemberDto(member);
     }
@@ -36,12 +36,12 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
 
     public List<MemberPointsSummaryDto> GetMemberWithPointsSummaryDtos()
     {
-        return appDbContext.Members!
+        return appDbContext.ScoutMembers!
             .Include(x => x.ScavengeResults)
-            .ThenInclude(x => x.ScavengedCoins)
+            .ThenInclude(x => x.ScanCoins)
             .ThenInclude(x => x.Coin)
             .Include(x => x.ScoutGroup)
-            .Include(x => x.Section)
+            .Include(x => x.ScoutSection)
             .ToList()
             .Select(x => new MemberPointsSummaryDto(x))
             .OrderBy(x => x.FirstName)
@@ -51,13 +51,13 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
 
     public MemberCompleteSummaryDto MemberCompleteSummaryDto(int memberId)
     {
-        return appDbContext.Members!
+        return appDbContext.ScoutMembers!
             .Include(x => x.ScavengeResults)
-            .ThenInclude(x => x.ScavengedCoins)
+            .ThenInclude(x => x.ScanCoins)
             .ThenInclude(x => x.Coin)
             .ThenInclude(x => x.ActivityBase)
             .Include(x => x.ScoutGroup)
-            .Include(x => x.Section)
+            .Include(x => x.ScoutSection)
             .Where(x => x.Id == memberId)
             .ToList()
             .Select(x => new MemberCompleteSummaryDto(x))

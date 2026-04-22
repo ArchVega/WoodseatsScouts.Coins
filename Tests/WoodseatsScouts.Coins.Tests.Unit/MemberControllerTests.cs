@@ -39,16 +39,16 @@ public class MemberControllerTests
         var membersController = CreateCut();
 
         var scoutGroup = new ScoutGroup { Id = 1 };
-        var section = new Section { Code = "A" };
-        var scavengedCoins = new List<ScavengedCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6}} }; // changed
-        var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };
+        var section = new ScoutSection { Code = "A" };
+        var scavengedCoins = new List<ScanCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6}} }; // changed
+        var scavengeResults = new List<ScanSession> { new() { ScanCoins = scavengedCoins } };
 
         SetupDbMock(appDbContextMock, x => x.ScoutGroups!, [scoutGroup]);
-        SetupDbMock(appDbContextMock, x => x.Sections!, [section]);
-        SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
-        SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);
-        SetupDbMock(appDbContextMock, x => x.Members!, [
-            new Api.Models.Domain.Member { ScoutGroupId = 1, ScoutGroup = scoutGroup, SectionId = "A", Section = section, ScavengeResults = scavengeResults }
+        SetupDbMock(appDbContextMock, x => x.ScoutSections!, [section]);
+        SetupDbMock(appDbContextMock, x => x.ScanCoins!, scavengedCoins);
+        SetupDbMock(appDbContextMock, x => x.ScanSessions!, scavengeResults);
+        SetupDbMock(appDbContextMock, x => x.ScoutMembers!, [
+            new Api.Models.Domain.ScoutMember { ScoutGroupId = 1, ScoutGroup = scoutGroup, ScoutSectionId = "A", ScoutSection = section, ScavengeResults = scavengeResults }
         ]);
 
         var results = membersController.GetAllMembers(null);
@@ -88,8 +88,8 @@ public class MemberControllerTests
     {
         var membersController = CreateCut();
 
-        SetupDbMock(appDbContextMock, x => x.Members!, [
-            new Api.Models.Domain.Member { Id = 9 }
+        SetupDbMock(appDbContextMock, x => x.ScoutMembers!, [
+            new Api.Models.Domain.ScoutMember { Id = 9 }
         ]);
 
         var saveMemberPhotoViewModel = new SaveMemberPhotoViewModel { Photo = "test-image-string" };
@@ -114,16 +114,16 @@ public class MemberControllerTests
         var membersController = CreateCut();
 
         // var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
-        var scavengedCoins = new List<ScavengedCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6}} }; // changed
-        var scavengeResults = new List<ScavengeResult> { new() { ScavengedCoins = scavengedCoins } };
-        SetupDbMock(appDbContextMock, x => x.ScavengedCoins!, scavengedCoins);
-        SetupDbMock(appDbContextMock, x => x.ScavengeResults!, scavengeResults);
-        SetupDbMock(appDbContextMock, x => x.Members!, [
-            new Api.Models.Domain.Member { Id = 9 }
+        var scavengedCoins = new List<ScanCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6}} }; // changed
+        var scavengeResults = new List<ScanSession> { new() { ScanCoins = scavengedCoins } };
+        SetupDbMock(appDbContextMock, x => x.ScanCoins!, scavengedCoins);
+        SetupDbMock(appDbContextMock, x => x.ScanSessions!, scavengeResults);
+        SetupDbMock(appDbContextMock, x => x.ScoutMembers!, [
+            new Api.Models.Domain.ScoutMember { Id = 9 }
         ]);
 
         appDbContextMock
-            .Setup(x => x.RecordMemberAgainstUnscavengedCoins(It.IsAny<Api.Models.Domain.Member>(), It.IsAny<List<string>>()))
+            .Setup(x => x.RecordMemberAgainstUnscavengedCoins(It.IsAny<Api.Models.Domain.ScoutMember>(), It.IsAny<List<string>>()))
             .Returns(new List<Coin>());
 
         var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["C0001001010", "C0001001020"] };

@@ -55,7 +55,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sections",
+                name: "ScoutSections",
                 columns: table => new
                 {
                     Code = table.Column<string>(type: "char(1)", nullable: false),
@@ -63,21 +63,21 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sections", x => x.Code);
+                    table.PrimaryKey("PK_ScoutSections", x => x.Code);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Members",
+                name: "ScoutMembers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false, computedColumnSql: "'M' + (FORMAT(ScoutGroupId, '000'))  + [SectionId] + (FORMAT(Number, '000'))"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false, computedColumnSql: "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionId] + (FORMAT(Number, '000'))"),
                     Number = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScoutGroupId = table.Column<int>(type: "int", nullable: false),
-                    SectionId = table.Column<string>(type: "char(1)", nullable: false),
+                    ScoutSectionId = table.Column<string>(type: "char(1)", nullable: false),
                     Clue1State = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Clue2State = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Clue3State = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -86,17 +86,17 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Members", x => x.Id);
+                    table.PrimaryKey("PK_ScoutMembers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Members_ScoutGroups_ScoutGroupId",
+                        name: "FK_ScoutMembers_ScoutGroups_ScoutGroupId",
                         column: x => x.ScoutGroupId,
                         principalTable: "ScoutGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Members_Sections_SectionId",
-                        column: x => x.SectionId,
-                        principalTable: "Sections",
+                        name: "FK_ScoutMembers_ScoutSections_ScoutSectionId",
+                        column: x => x.ScoutSectionId,
+                        principalTable: "ScoutSections",
                         principalColumn: "Code",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -124,54 +124,54 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Coins_Members_MemberId",
+                        name: "FK_Coins_ScoutMembers_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "Members",
+                        principalTable: "ScoutMembers",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScavengeResults",
+                name: "ScanSessions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MemberId = table.Column<int>(type: "int", nullable: false),
+                    ScoutMemberId = table.Column<int>(type: "int", nullable: false),
                     CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScavengeResults", x => x.Id);
+                    table.PrimaryKey("PK_ScanSessions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ScavengeResults_Members_MemberId",
-                        column: x => x.MemberId,
-                        principalTable: "Members",
+                        name: "FK_ScanSessions_ScoutMembers_ScoutMemberId",
+                        column: x => x.ScoutMemberId,
+                        principalTable: "ScoutMembers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScavengedCoins",
+                name: "ScanCoins",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ScavengeResultId = table.Column<int>(type: "int", nullable: false),
+                    ScanSessionId = table.Column<int>(type: "int", nullable: false),
                     CoinId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScavengedCoins", x => x.Id);
+                    table.PrimaryKey("PK_ScanCoins", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ScavengedCoins_Coins_CoinId",
+                        name: "FK_ScanCoins_Coins_CoinId",
                         column: x => x.CoinId,
                         principalTable: "Coins",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ScavengedCoins_ScavengeResults_ScavengeResultId",
-                        column: x => x.ScavengeResultId,
-                        principalTable: "ScavengeResults",
+                        name: "FK_ScanCoins_ScanSessions_ScanSessionId",
+                        column: x => x.ScanSessionId,
+                        principalTable: "ScanSessions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -215,33 +215,33 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Members_ScoutGroupId",
-                table: "Members",
-                column: "ScoutGroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Members_SectionId",
-                table: "Members",
-                column: "SectionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ScavengedCoins_CoinId",
-                table: "ScavengedCoins",
+                name: "IX_ScanCoins_CoinId",
+                table: "ScanCoins",
                 column: "CoinId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScavengedCoins_ScavengeResultId",
-                table: "ScavengedCoins",
-                column: "ScavengeResultId");
+                name: "IX_ScanCoins_ScanSessionId",
+                table: "ScanCoins",
+                column: "ScanSessionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScavengeResults_MemberId",
-                table: "ScavengeResults",
-                column: "MemberId");
+                name: "IX_ScanSessions_ScoutMemberId",
+                table: "ScanSessions",
+                column: "ScoutMemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sections_Code",
-                table: "Sections",
+                name: "IX_ScoutMembers_ScoutGroupId",
+                table: "ScoutMembers",
+                column: "ScoutGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScoutMembers_ScoutSectionId",
+                table: "ScoutMembers",
+                column: "ScoutSectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScoutSections_Code",
+                table: "ScoutSections",
                 column: "Code",
                 unique: true);
         }
@@ -253,25 +253,25 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 name: "ErrorLogs");
 
             migrationBuilder.DropTable(
-                name: "ScavengedCoins");
+                name: "ScanCoins");
 
             migrationBuilder.DropTable(
                 name: "Coins");
 
             migrationBuilder.DropTable(
-                name: "ScavengeResults");
+                name: "ScanSessions");
 
             migrationBuilder.DropTable(
                 name: "ActivityBases");
 
             migrationBuilder.DropTable(
-                name: "Members");
+                name: "ScoutMembers");
 
             migrationBuilder.DropTable(
                 name: "ScoutGroups");
 
             migrationBuilder.DropTable(
-                name: "Sections");
+                name: "ScoutSections");
         }
     }
 }

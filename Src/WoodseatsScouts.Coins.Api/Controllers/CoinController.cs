@@ -25,7 +25,7 @@ public class CoinController(
             return NotFound($"A coin with the code '{code}' was not found in the database.");
         }
 
-        var member = appDbContext.Members!.SingleOrDefault(x => x.Code == memberCode);
+        var member = appDbContext.ScoutMembers!.SingleOrDefault(x => x.Code == memberCode);
 
         if (member == null)
         {
@@ -40,7 +40,7 @@ public class CoinController(
         // ReSharper disable once InvertIf
         if (dbCoin.MemberId.HasValue && systemDateTimeProvider.Now < dbCoin.LockUntil)
         {
-            var memberWhoScavengedCoin = appDbContext.Members!.Single(x => x.Id == dbCoin.MemberId);
+            var memberWhoScavengedCoin = appDbContext.ScoutMembers!.Single(x => x.Id == dbCoin.MemberId);
             
             var message = $"This points token has already been used by {memberWhoScavengedCoin.FullName}. Please hand it to a District Camp Leader";
             return base.Conflict(message);

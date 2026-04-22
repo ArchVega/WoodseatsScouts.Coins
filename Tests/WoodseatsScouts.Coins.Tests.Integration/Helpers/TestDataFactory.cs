@@ -30,26 +30,26 @@ public class TestDataFactory(IAppDbContext appDbContext)
 
     public class MembersCollection(IAppDbContext appDbContext)
     {
-        public Member CharcoalCrimson => appDbContext.Members!.Single(x => x.FirstName == "Charcoal" && x.LastName == "Crimson");
-        public Member OlivineCrimson => appDbContext.Members!.Single(x => x.FirstName == "Olivine" && x.LastName == "Crimson");
-        public Member IcterineCrimson => appDbContext.Members!.Single(x => x.FirstName == "Icterine" && x.LastName == "Crimson");
-        public Member TurquoiseCrimson => appDbContext.Members!.Single(x => x.FirstName == "Turquoise" && x.LastName == "Crimson");
-        public Member PumpkinJet => appDbContext.Members!.Single(x => x.FirstName == "Pumpkin" && x.LastName == "Jet");
-        public Member GlaucousJet => appDbContext.Members!.Single(x => x.FirstName == "Glaucous" && x.LastName == "Jet");
-        public Member PistachioJet => appDbContext.Members!.Single(x => x.FirstName == "Pistachio" && x.LastName == "Jet");
-        public Member RedJet => appDbContext.Members!.Single(x => x.FirstName == "Red" && x.LastName == "Jet");
-        public Member AsparagusRoyal => appDbContext.Members!.Single(x => x.FirstName == "Asparagus" && x.LastName == "Royal");
-        public Member JasperRoyal => appDbContext.Members!.Single(x => x.FirstName == "Jasper" && x.LastName == "Royal");
-        public Member GhostRoyal => appDbContext.Members!.Single(x => x.FirstName == "Ghost" && x.LastName == "Royal");
-        public Member CeriseRoyal => appDbContext.Members!.Single(x => x.FirstName == "Cerise" && x.LastName == "Royal");
-        public Member HunterSaffron => appDbContext.Members!.Single(x => x.FirstName == "Hunter" && x.LastName == "Saffron");
-        public Member OxfordSaffron => appDbContext.Members!.Single(x => x.FirstName == "Oxford" && x.LastName == "Saffron");
-        public Member RosewoodSaffron => appDbContext.Members!.Single(x => x.FirstName == "Rosewood" && x.LastName == "Saffron");
-        public Member VioletSaffron => appDbContext.Members!.Single(x => x.FirstName == "Violet" && x.LastName == "Saffron");
+        public ScoutMember CharcoalCrimson => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Charcoal" && x.LastName == "Crimson");
+        public ScoutMember OlivineCrimson => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Olivine" && x.LastName == "Crimson");
+        public ScoutMember IcterineCrimson => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Icterine" && x.LastName == "Crimson");
+        public ScoutMember TurquoiseCrimson => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Turquoise" && x.LastName == "Crimson");
+        public ScoutMember PumpkinJet => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Pumpkin" && x.LastName == "Jet");
+        public ScoutMember GlaucousJet => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Glaucous" && x.LastName == "Jet");
+        public ScoutMember PistachioJet => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Pistachio" && x.LastName == "Jet");
+        public ScoutMember RedJet => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Red" && x.LastName == "Jet");
+        public ScoutMember AsparagusRoyal => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Asparagus" && x.LastName == "Royal");
+        public ScoutMember JasperRoyal => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Jasper" && x.LastName == "Royal");
+        public ScoutMember GhostRoyal => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Ghost" && x.LastName == "Royal");
+        public ScoutMember CeriseRoyal => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Cerise" && x.LastName == "Royal");
+        public ScoutMember HunterSaffron => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Hunter" && x.LastName == "Saffron");
+        public ScoutMember OxfordSaffron => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Oxford" && x.LastName == "Saffron");
+        public ScoutMember RosewoodSaffron => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Rosewood" && x.LastName == "Saffron");
+        public ScoutMember VioletSaffron => appDbContext.ScoutMembers!.Single(x => x.FirstName == "Violet" && x.LastName == "Saffron");
 
-        public List<Member> GetKnownMembers()
+        public List<ScoutMember> GetKnownMembers()
         {
-            var members = new List<Member>
+            var members = new List<ScoutMember>
             {
                 CharcoalCrimson,
                 OlivineCrimson,
@@ -73,13 +73,13 @@ public class TestDataFactory(IAppDbContext appDbContext)
         }
     }
 
-    public static Member CreateScoutGroupMember(int number, ScoutGroup scoutGroup, char section) =>
+    public static ScoutMember CreateScoutGroupMember(int number, ScoutGroup scoutGroup, char section) =>
         new()
         {
             FirstName = "Member" + number,
             LastName = "Member" + number,
             Number = number,
             ScoutGroup = scoutGroup,
-            SectionId = section.ToString()
+            ScoutSectionId = section.ToString()
         };
 }

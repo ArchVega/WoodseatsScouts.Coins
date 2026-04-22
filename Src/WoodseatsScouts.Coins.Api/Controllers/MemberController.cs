@@ -85,11 +85,11 @@ public class MemberController(
     [Route("{code}/WithPoints")]
     public MemberPointsSummaryDto GetMemberWithPoints(string code)
     {
-        var member = appDbContext.Members!
-            .Include(x => x.Section)
+        var member = appDbContext.ScoutMembers!
+            .Include(x => x.ScoutSection)
             .Include(x => x.ScoutGroup)
             .Include(x => x.ScavengeResults)
-            .ThenInclude(x => x.ScavengedCoins)
+            .ThenInclude(x => x.ScanCoins)
             .Single(x => x.Code == code);
 
         var viewModel = new MemberPointsSummaryDto(member);
@@ -107,7 +107,7 @@ public class MemberController(
     public ActionResult AddPointsToMember(int id, [FromBody] PointsForMemberViewModel viewModel)
     {
         // Todo: wrap in a transaction
-        var member = appDbContext.Members!.Single(x => x.Id == id);
+        var member = appDbContext.ScoutMembers!.Single(x => x.Id == id);
 
         var tallyHistoryItem = appDbContext.CreateScavengeResult(member);
 
@@ -140,7 +140,7 @@ public class MemberController(
     public ActionResult SaveMemberPhoto(int id, [FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
     {
         imagePersister.Persist(id.ToString(), saveMemberPhotoViewModel.Photo);
-        appDbContext.Members!.Single(x => x.Id == id).HasImage = true;
+        appDbContext.ScoutMembers!.Single(x => x.Id == id).HasImage = true;
         appDbContext.SaveChanges();
 
         return Ok();
@@ -159,7 +159,7 @@ public class MemberController(
     [Route("{id:int}/Name")]
     public ActionResult Name(int id, [FromBody] UpdateMemberNameViewModel updateMemberNameViewModel)
     {
-        var member = appDbContext.Members!.Single(x => x.Id == id);
+        var member = appDbContext.ScoutMembers!.Single(x => x.Id == id);
         member.FirstName = updateMemberNameViewModel.FirstName;
         member.LastName = updateMemberNameViewModel.LastName;
         appDbContext.SaveChanges();

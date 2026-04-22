@@ -6,31 +6,31 @@ namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 // Src/WoodseatsScouts.Coins.Api/Models/Dtos/Members/MembersWithPointsViewModel.cs
 public class MemberPointsSummaryDto
 {
-    public MemberPointsSummaryDto(Member member)
+    public MemberPointsSummaryDto(ScoutMember scoutMember)
     {
         var cacheBuster = DateTime.UtcNow.Ticks;
         
-        Id = member.Id;
-        MemberCode = member.Code;
-        HasImage = member.HasImage;
-        ComputedImagePath = member.HasImage ? $"Members/{member.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
-        MemberNumber = member.Number;
-        FirstName = member.FirstName;
-        LastName = member.LastName;
-        FullName = member.FullName;
-        ScoutGroupId = member.ScoutGroup.Id;
-        ScoutGroupName = member.ScoutGroup.Name;
-        SectionId = member.SectionId;
-        SectionName = member.Section.Name;
+        Id = scoutMember.Id;
+        MemberCode = scoutMember.Code;
+        HasImage = scoutMember.HasImage;
+        ComputedImagePath = scoutMember.HasImage ? $"Members/{scoutMember.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
+        MemberNumber = scoutMember.Number;
+        FirstName = scoutMember.FirstName;
+        LastName = scoutMember.LastName;
+        FullName = scoutMember.FullName;
+        ScoutGroupId = scoutMember.ScoutGroup.Id;
+        ScoutGroupName = scoutMember.ScoutGroup.Name;
+        SectionId = scoutMember.ScoutSectionId;
+        SectionName = scoutMember.ScoutSection.Name;
         // changed
-        TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.Coin.Value)).Sum();
-        HaulResults = member.ScavengeResults.Select(x =>
+        TotalPoints = scoutMember.ScavengeResults.SelectMany(y => y.ScanCoins.Select(z => z.Coin.Value)).Sum();
+        HaulResults = scoutMember.ScavengeResults.Select(x =>
         {
             return new HaulResultDto
             {
                 ScavengerResultId = x.Id,
                 HauledAtIso8601 = x.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
-                TotalPoints = x.ScavengedCoins.Sum(x => x.Coin.Value) // changed
+                TotalPoints = x.ScanCoins.Sum(x => x.Coin.Value) // changed
             };
         }).ToList();
     }

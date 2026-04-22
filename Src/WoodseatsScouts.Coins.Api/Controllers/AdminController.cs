@@ -55,7 +55,7 @@ public class AdminController(IAppDbContext appDbContext) : ControllerBase
     [Route("ClueStatus")]
     public object GetClueStatus(int memberId)
     {
-        var member = appDbContext.Members!.Single(x => x.Id == memberId);
+        var member = appDbContext.ScoutMembers!.Single(x => x.Id == memberId);
 
         return new
         {

@@ -28,7 +28,7 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
         member = appDbContext.CreateMember("any", "any", scoutGroupNumber, sectionCode, false);
         member.Number.ShouldBe(expectedStartingMemberNumber + 2);
 
-        var codes = appDbContext.Members!.Select(x => x.Code).ToList();
+        var codes = appDbContext.ScoutMembers!.Select(x => x.Code).ToList();
         var distinctCodes = codes.Distinct().ToList();
         
         distinctCodes.Count.ShouldBe(codes.Count, "Codes are not all distinct");
@@ -39,7 +39,7 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
     {
         databaseFixture.RestoreBaseTestData();
         
-        var sections = appDbContext.Sections!.ToList();
+        var sections = appDbContext.ScoutSections!.ToList();
         sections.Count.ShouldBe(5);
     }
     
@@ -48,12 +48,12 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
     {
         databaseFixture.RestoreBaseTestData();
         
-        appDbContext.Sections!.Add(new Section("X", "Duplicate"));
+        appDbContext.ScoutSections!.Add(new ScoutSection("X", "Duplicate"));
         appDbContext.SaveChanges();
         
         appDbContext.ChangeTracker.Clear();
         
-        appDbContext.Sections!.Add(new Section("X", "Duplicate"));
+        appDbContext.ScoutSections!.Add(new ScoutSection("X", "Duplicate"));
         var exception = Should.Throw<Exception>(() => appDbContext.SaveChanges());
 
         const string expectedErrorMessage = "Violation of PRIMARY KEY constraint 'PK_Sections'. Cannot insert duplicate key in object 'dbo.Sections'";
@@ -68,8 +68,8 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
         var scoutGroup = appDbContext.CreateScoutGroup(int.MaxValue,"ScoutGroup 1");
         appDbContext.CreateMember("any", "any", scoutGroup.Id, "A", false);
         
-        var member = appDbContext.Members!.Include(x => x.Section).First();
-        member.Section.ShouldNotBeNull();
+        var member = appDbContext.ScoutMembers!.Include(x => x.ScoutSection).First();
+        member.ScoutSection.ShouldNotBeNull();
     }
 
     [Fact]
@@ -77,7 +77,7 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
     {
         databaseFixture.RestoreBaseTestData();
 
-        var member = appDbContext.Members!.First();
+        var member = appDbContext.ScoutMembers!.First();
         Should.NotThrow(() => appDbContext.UpdateMemberName(member.Id, "test-first-name", "test-last-name"));
     }
 }

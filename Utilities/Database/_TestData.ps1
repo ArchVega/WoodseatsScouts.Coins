@@ -19,13 +19,13 @@ function RestoreBaseTestData {
         }        
     }
     
-    $tables = @("ScavengeResults", "ScavengedCoins", "Coins", "Members", "Sections", "ScoutGroups")
+    $tables = @("ScanSessions", "ScanCoins", "Coins", "ScoutMembers", "ScoutSections", "ScoutGroups")
     Write-Host "Inserting data from '$Path' into '$DatabaseName'..."
     $tables | ForEach-Object { 
         _ExecuteQuery "DELETE FROM $_" $DatabaseName
     }
 
-    $tablesWithoutIdentities = @("Sections")
+    $tablesWithoutIdentities = @("ScoutSections")
 
     foreach ($dataSet in $dataSets) {
         $tableName = $dataSet.Table
@@ -36,6 +36,7 @@ function RestoreBaseTestData {
         $insertQueryStringBuilder = [System.Text.StringBuilder]::new()
         
         if (!$tablesWithoutIdentities.Contains($tableName)) {
+            Write-Host "Turning on insert identity for $tableName"
             $insertQueryStringBuilder.AppendLine("SET IDENTITY_INSERT $tableName ON;")
         }
         $dataSet.Data | ForEach-Object { 

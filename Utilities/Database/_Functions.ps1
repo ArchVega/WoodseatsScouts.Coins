@@ -162,29 +162,29 @@ function CreateAdditionalDbObjects {
     
     try {
         $viewQuery = "
-        CREATE VIEW [MembersScavengedCoins] AS
+        CREATE VIEW [ScoutMembersSessionCoins] AS
         SELECT 
-            Members.FirstName as 'Member First Name',
-            Members.LastName as 'Member Last Name', 
-            Members.Code as 'Member Code',
-            Members.Number as 'Member Number',
-            Members.HasImage as 'Member Image Exists?',
+            ScoutMembers.FirstName as 'Scout Member First Name',
+            ScoutMembers.LastName as 'Scout Member Last Name', 
+            ScoutMembers.Code as 'Scout Member Code',
+            ScoutMembers.Number as 'Scout Member Number',
+            ScoutMembers.HasImage as 'Scout Member Has Image',
             ScoutGroups.Name as 'Scout Group',
-            Sections.Name as 'Section',
+            ScoutSections.Name as 'Scout Section',
             Coins.Code as 'Coin Code',
             Coins.Value as 'Coin Value',
             ActivityBases.Name as 'Activity Base'
-        FROM Members
-        join ScavengeResults
-        on ScavengeResults.MemberId = Members.Id
-        join ScavengedCoins
-        on ScavengedCoins.ScavengeResultId = ScavengeResults.Id
+        FROM ScoutMembers
+        join ScanSessions
+        on ScanSessions.ScoutMemberId = ScoutMembers.Id
+        join ScanCoins
+        on ScanCoins.ScanSessionId = ScanSessions.Id
         join ScoutGroups
-        on ScoutGroups.Id = Members.ScoutGroupId
-        join Sections
-        on Sections.Code = Members.SectionId
+        on ScoutGroups.Id = ScoutMembers.ScoutGroupId
+        join ScoutSections
+        on ScoutSections.Code = ScoutMembers.ScoutSectionId
         join Coins
-        on Coins.Id = ScavengedCoins.CoinId
+        on Coins.Id = ScanCoins.CoinId
         join ActivityBases
         on ActivityBases.Id = Coins.ActivityBaseId
         "

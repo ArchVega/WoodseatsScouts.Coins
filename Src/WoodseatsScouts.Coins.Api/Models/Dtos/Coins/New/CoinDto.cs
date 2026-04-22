@@ -18,9 +18,9 @@ public class ScoutGroupDto(ScoutGroup scoutGroup)
     public string Name { get; set; } = scoutGroup.Name;
 }
 
-public class SectionDto(Section section)
+public class SectionDto(ScoutSection scoutSection)
 {
-    public string Id { get; set; } = section.Code; // make consistent - Code or Id??
+    public string Id { get; set; } = scoutSection.Code; // make consistent - Code or Id??
     
-    public string Name { get; set; } = section.Name;
+    public string Name { get; set; } = scoutSection.Name;
 }

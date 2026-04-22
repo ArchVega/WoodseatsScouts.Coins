@@ -20,16 +20,16 @@ public class SutController(
 
     [HttpGet]
     [Route("Members")]
-    public List<Member> GetMembers()
+    public List<ScoutMember> GetMembers()
     {
-        return appDbContext.Members!.ToList();
+        return appDbContext.ScoutMembers!.ToList();
     }
 
     [HttpPut]
     [Route("Members/HasImage/True")]
     public IActionResult SetAllMemberHasImagePropertyToTrue()
     {
-        var members = appDbContext.Members!.ToList();
+        var members = appDbContext.ScoutMembers!.ToList();
         foreach (var member in members)
         {
             member.HasImage = true;
@@ -82,8 +82,8 @@ public class SutController(
     [Route("ResetData")]
     public ActionResult ResetData()
     {
-        appDbContext.ScavengeResults.ExecuteDelete();
-        appDbContext.ScavengedCoins.ExecuteDelete();
+        appDbContext.ScanSessions.ExecuteDelete();
+        appDbContext.ScanCoins.ExecuteDelete();
         
         foreach (var coin in appDbContext.Coins)
         {

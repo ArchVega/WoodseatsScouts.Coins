@@ -6,5 +6,5 @@ public class ScoutGroup
     
     public string Name { get; set; }
     
-    public List<Member> Members { get; set; }
+    public List<ScoutMember> ScoutMembers { get; set; }
 }

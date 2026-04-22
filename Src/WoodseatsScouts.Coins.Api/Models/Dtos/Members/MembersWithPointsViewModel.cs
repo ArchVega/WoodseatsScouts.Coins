@@ -7,28 +7,28 @@ namespace WoodseatsScouts.Coins.Api.Models.View.Members;
 
 public class MembersWithPointsViewModel
 {
-    public MembersWithPointsViewModel(Member member)
+    public MembersWithPointsViewModel(ScoutMember scoutMember)
     {
-        Id = member.Id;
-        MemberCode = member.Code;
-        HasImage = member.HasImage;
-        MemberNumber = member.Number;
-        FirstName = member.FirstName;
-        LastName = member.LastName;
-        FullName = member.FullName;
-        ScoutGroupName = member.ScoutGroup.Name;
-        SectionId = member.SectionId;
-        SectionName = member.Section.Name;
+        Id = scoutMember.Id;
+        MemberCode = scoutMember.Code;
+        HasImage = scoutMember.HasImage;
+        MemberNumber = scoutMember.Number;
+        FirstName = scoutMember.FirstName;
+        LastName = scoutMember.LastName;
+        FullName = scoutMember.FullName;
+        ScoutGroupName = scoutMember.ScoutGroup.Name;
+        SectionId = scoutMember.ScoutSectionId;
+        SectionName = scoutMember.ScoutSection.Name;
         // changed
         // TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.PointValue)).Sum();
-        TotalPoints = member.ScavengeResults.SelectMany(y => y.ScavengedCoins.Select(z => z.Coin.Value)).Sum();
-        HaulResults = member.ScavengeResults.Select(x =>
+        TotalPoints = scoutMember.ScavengeResults.SelectMany(y => y.ScanCoins.Select(z => z.Coin.Value)).Sum();
+        HaulResults = scoutMember.ScavengeResults.Select(x =>
         {
             return new HaulResultDto
             {
                 ScavengerResultId = x.Id,
                 HauledAtIso8601 = x.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
-                TotalPoints = x.ScavengedCoins.Sum(x => x.Coin.Value) // changed
+                TotalPoints = x.ScanCoins.Sum(x => x.Coin.Value) // changed
             };
         }).ToList();
     }

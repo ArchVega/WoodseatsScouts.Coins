@@ -26,7 +26,7 @@ public class CoinControllerTests
         var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
         const string memberCode = "M045B019";
 
-        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
+        appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember { Code = memberCode } }));
 
         var exception = Should.Throw<CodeTranslationException>(() => coinsController.GetCoin(memberCode, It.IsAny<string>()));
 
@@ -42,7 +42,7 @@ public class CoinControllerTests
         const string memberCode = "test-any-member-code";
         const string coinCode = "test-any-coin-code";
 
-        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
+        appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember { Code = memberCode } }));
 
         var exception = Should.Throw<CodeTranslationException>(() => coinsController.GetCoin(coinCode, memberCode));
 
@@ -58,7 +58,7 @@ public class CoinControllerTests
         const string memberCode = "test-valid-member-code";
         const string coinCode = "C9999999999";
 
-        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member { Code = memberCode } }));
+        appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember { Code = memberCode } }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>()));
 
         var result = coinsController.GetCoin(coinCode, memberCode);
@@ -76,7 +76,7 @@ public class CoinControllerTests
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
 
-        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { new Member() }));
+        appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember() }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin() { Code = coinCode } }));
 
         var result = coinsController.GetCoin(coinCode, memberCode);
@@ -94,8 +94,8 @@ public class CoinControllerTests
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
         const int memberId = 1;
-        var member = new Member { Code = memberCode, Id = memberId, FirstName = "test-first-name" };
-        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { member }));
+        var member = new ScoutMember { Code = memberCode, Id = memberId, FirstName = "test-first-name" };
+        appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { member }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>
         {
             new() { Code = coinCode, MemberId = memberId, LockUntil = DateTime.UtcNow.AddHours(1) }
@@ -116,12 +116,12 @@ public class CoinControllerTests
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
         const int memberId = 1;
-        var currentMember = new Member { Code = memberCode, Id = memberId, FirstName = "test-first-name" };
+        var currentMember = new ScoutMember { Code = memberCode, Id = memberId, FirstName = "test-first-name" };
 
         const int otherMemberId = 2;
-        var otherMember = new Member { Id = otherMemberId, FirstName = "test-other-first-name", LastName = "test-other-last-name" };
+        var otherMember = new ScoutMember { Id = otherMemberId, FirstName = "test-other-first-name", LastName = "test-other-last-name" };
 
-        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { currentMember, otherMember }));
+        appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { currentMember, otherMember }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>
         {
             new() { Code = coinCode, MemberId = otherMemberId, LockUntil = DateTime.UtcNow.AddHours(1) }
@@ -143,9 +143,9 @@ public class CoinControllerTests
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
         const int memberId = 1;
-        var currentMember = new Member { Code = memberCode, Id = memberId, FirstName = "test-first-name" };
+        var currentMember = new ScoutMember { Code = memberCode, Id = memberId, FirstName = "test-first-name" };
 
-        appDbContextMock.Setup(x => x.Members).ReturnsDbSet((new List<Member> { currentMember }));
+        appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { currentMember }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new() { Code = coinCode } }));
 
         var result = Should.NotThrow(() => coinsController.GetCoin(coinCode, memberCode));

@@ -6,7 +6,7 @@ namespace WoodseatsScouts.Coins.Api.Models.View;
 
 public class LeaderboardLatestScavengerViewModel
 {
-    public LeaderboardLatestScavengerViewModel(Member domain)
+    public LeaderboardLatestScavengerViewModel(ScoutMember domain)
 
     {
         Id = domain.Id;
@@ -16,11 +16,11 @@ public class LeaderboardLatestScavengerViewModel
         FirstName = domain.FirstName;
         LastName = domain.LastName;
         ScoutGroupName = domain.ScoutGroup.Name;
-        Section = domain.SectionId;
-        SectionName = domain.Section.Name;
+        Section = domain.ScoutSectionId;
+        SectionName = domain.ScoutSection.Name;
         // changed
         // TotalPoints = domain.ScavengeResults.Last().ScavengedCoins.Sum(y => y.PointValue);
-        TotalPoints = domain.ScavengeResults.Last().ScavengedCoins.Sum(y => y.Coin.Value);
+        TotalPoints = domain.ScavengeResults.Last().ScanCoins.Sum(y => y.Coin.Value);
     }
 
     public int TotalPoints { get; set; }
