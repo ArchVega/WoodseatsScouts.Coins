@@ -46,7 +46,7 @@ export default function ScanMemberForCoinsSection({setMember}) {
       fetchData()
         .then(value => {
           const member: MemberDto = value.data;
-          member.clientComputedImageUri = Uris.scouts().members().memberPhoto(member.computedImagePath) // todo: is there an axios way to do this automatically?
+          // member.clientComputedImageUri = Uris.scouts().members().memberPhoto(member.computedImagePath) // todo: is there an axios way to do this automatically?
           logObject("memberDto", member)
           setMember(member);
           setActiveScanningMember(member)

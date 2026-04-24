@@ -1,13 +1,10 @@
 import {logApi} from "../../components/logging/Logger.ts";
-import getAppSettings from "../../AppSettings.ts";
-
-const baseUri: string = getAppSettings().VITE_WEB_API_URI + "/api"
 
 const Uris = {
-  testDataCoins: `${baseUri}/system/tests/coins`,
+  testDataCoins: `system/tests/coins`,
 
   application: () => {
-    const resourcePath = `${baseUri}/application`
+    const resourcePath = `application`
 
     return {
       appVersion: () => logApi(`${resourcePath}/app-version`),
@@ -16,15 +13,15 @@ const Uris = {
   },
 
   activities: () => {
-    const resourcePath = `${baseUri}/application`
+    const resourcePath = `application`
 
     return {
-      bases: () => logApi(`${baseUri}/activities/bases`),
+      bases: () => logApi(`activities/bases`),
     }
   },
 
   coins: () => {
-    const resourcePath = `${baseUri}/coins`
+    const resourcePath = `coins`
 
     return {
       resourcePath: resourcePath,
@@ -33,7 +30,7 @@ const Uris = {
   },
 
   scouts: () => {
-    const scoutsResourcePath = `${baseUri}/scouts`
+    const scoutsResourcePath = `scouts`
 
     return {
       members: () => {
@@ -81,7 +78,7 @@ const Uris = {
   },
 
   scans: () => {
-    const resourcePath = `${baseUri}/scans`
+    const resourcePath = `scans`
     return {
       sessionsLatest: function () {
         return logApi(`${resourcePath}/sessions/latest`)

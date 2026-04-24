@@ -1,10 +1,9 @@
 ﻿import "./EditMemberPhotoModal.scss"
-import Webcam from "react-webcam";
-import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {BaseModal} from "./BaseModal.tsx";
 import Uris from "../../services/apis/Uris.ts";
 import {Button} from "../widgets/HtmlControlWrappers.tsx";
-import type {ActivityGroupDto, Member, MemberCompleteDto, MemberDto, ScoutGroupDto} from "../../types/ServerTypes.ts";
+import type {ActivityGroupDto, MemberCompleteDto, ScoutGroupDto} from "../../types/ServerTypes.ts";
 import AppStateApiService from "../../services/apis/AppStateApiService.tsx";
 
 interface EditMemberDetailsModalProps {

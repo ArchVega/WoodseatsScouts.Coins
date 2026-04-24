@@ -1,10 +1,10 @@
 ﻿import "./EditMemberPhotoModal.scss"
 import Webcam from "react-webcam";
-import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {BaseModal} from "./BaseModal.tsx";
 import Uris from "../../services/apis/Uris.ts";
 import {Button} from "../widgets/HtmlControlWrappers.tsx";
-import type {Member, MemberCompleteDto, MemberDto} from "../../types/ServerTypes.ts";
+import type {MemberCompleteDto} from "../../types/ServerTypes.ts";
 
 interface EditMemberPhotoModalProps {
   showEditMemberPhotoModal: boolean;

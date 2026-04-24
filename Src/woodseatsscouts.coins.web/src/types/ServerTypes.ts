@@ -1,4 +1,4 @@
-export type MemberDto = {
+export type MemberBase = {
   id: number;
   code: string
   number: number
@@ -6,16 +6,44 @@ export type MemberDto = {
   lastName: string
   fullName: string
   scoutGroupId: number
-  scoutGroupName: string
   sectionId: string
+  computedImagePath: string
+  clientComputedImageUri: string
+  memberCode: string
+  hasImage: boolean
+  memberNumber: number
+}
+
+export type MemberDto = MemberBase & {
+  scoutGroupName: string
   sectionName: string
   clue1State: string
   clue2State: string
   clue3State: string
   isDayVisitor: boolean
   hasImage: boolean
+}
+
+export type MemberPointsSummaryDto = {
+  scoutGroupName: string
+  sectionName: string
+  totalPoints: number
+  latestCompletedAtTime: string
+  selectedHaulResultId: number | null
+  haulResults: HaulResultDto[]
+  selectedHaulResult: HaulResultDto | null
+  latestHaulResult: HaulResultDto | null
+}
+
+export type MemberCompleteDto = {
+  scoutGroupName: string
+  sectionName: string
+  totalPoints: number
+  latestCompletedAtTime: string
   computedImagePath: string
   clientComputedImageUri: string
+  haulResults: HaulResultDto[]
+  memberCompleteSummaryStatsDto: MemberCompleteSummaryStatsDto
 }
 
 export type CoinDto = {
@@ -39,28 +67,6 @@ export type HaulResultDto = {
   activityBaseHaulResultDtos: ActivityBaseHaulResultDto[]
 }
 
-export type MemberPointsSummaryDto = {
-  id: number
-  fullName: string
-  memberCode: string
-  hasImage: boolean
-  memberNumber: number
-  firstName: string
-  lastName: string
-  scoutGroupId: number
-  scoutGroupName: string
-  sectionId: string
-  sectionName: string
-  totalPoints: number
-  latestCompletedAtTime: string
-  selectedHaulResultId: number | null
-  haulResults: HaulResultDto[]
-  selectedHaulResult: HaulResultDto | null
-  latestHaulResult: HaulResultDto | null
-  computedImagePath: string
-  clientComputedImageUri: string
-}
-
 export type MemberCompleteSummaryStatsActivityBaseInfoDto = {
   names: string[]
   timesVisited: number
@@ -71,27 +77,6 @@ export type MemberCompleteSummaryStatsDto = {
  leastVisitedActivityBase: MemberCompleteSummaryStatsActivityBaseInfoDto
  mostScans: number
  totalTokensScanned: number
-}
-
-export type MemberCompleteDto = {
-  id: number
-  fullName: string
-  memberCode: string
-  hasImage: boolean
-  memberNumber: number
-  firstName: string
-  lastName: string
-  scoutGroupId: number
-  scoutGroupName: string
-  sectionId: string
-  sectionName: string
-  totalPoints: number
-  latestCompletedAtTime: string
-  computedImagePath: string
-  clientComputedImageUri: string
-  haulResults: HaulResultDto[]
-
-  memberCompleteSummaryStatsDto: MemberCompleteSummaryStatsDto
 }
 
 export type ScoutGroupDto = {

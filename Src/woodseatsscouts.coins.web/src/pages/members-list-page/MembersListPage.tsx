@@ -1,5 +1,4 @@
 import './MembersListPage.scss'
-
 import React, {useContext, useEffect, useState} from "react";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Uris from "../../services/apis/Uris.ts";
@@ -9,7 +8,7 @@ import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import type {AxiosResponse} from "axios";
-import type { MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import type {MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 
 export default function MembersListPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -28,7 +27,7 @@ export default function MembersListPage() {
     }
     fetchMembers().then(response => {
       response.data.forEach(memberPointsSummaryDto => {
-        memberPointsSummaryDto.clientComputedImageUri = Uris.scouts().members().memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
+        // memberPointsSummaryDto.clientComputedImageUri = Uris.scouts().members().memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
       })
       setMembers(response.data)
     });

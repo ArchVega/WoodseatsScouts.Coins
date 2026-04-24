@@ -38,7 +38,7 @@ public class MemberCompleteSummaryDto
         Id = scoutMember.Id;
         MemberCode = scoutMember.Code;
         HasImage = scoutMember.HasImage;
-        ComputedImagePath = scoutMember.HasImage ? $"Members/{scoutMember.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
+        ComputedImagePath = scoutMember.HasImage ? $"{scoutMember.Id}/photo?{cacheBuster}" : "photo/placeholder";
         MemberNumber = scoutMember.Number;
         FirstName = scoutMember.FirstName;
         LastName = scoutMember.LastName;

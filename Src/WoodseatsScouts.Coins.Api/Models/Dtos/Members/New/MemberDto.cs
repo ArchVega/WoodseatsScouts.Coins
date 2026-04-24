@@ -2,14 +2,10 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 
-public class MemberDto
+public class MemberDto : MemberBaseDto
 {
-    public MemberDto(ScoutMember scoutMember)
+    public MemberDto(ScoutMember scoutMember) : base(scoutMember)
     {
-        var cacheBuster = DateTime.UtcNow.Ticks;
-
-        Id = scoutMember.Id;
-        Code = scoutMember.Code;
         Number = scoutMember.Number;
         FirstName = scoutMember.FirstName;
         LastName = scoutMember.LastName;
@@ -23,11 +19,8 @@ public class MemberDto
         Clue3State = scoutMember.Clue3State;
         IsDayVisitor = scoutMember.IsDayVisitor;
         HasImage = scoutMember.HasImage;
-        ComputedImagePath = scoutMember.HasImage ? $"Members/{scoutMember.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
     }
 
-    public int Id { get; set; }
-    public string Code { get; set; }
     public int Number { get; set; }
     public string FirstName { get; set; }
     public string? LastName { get; set; }
@@ -41,5 +34,4 @@ public class MemberDto
     public string? Clue3State { get; init; }
     public bool IsDayVisitor { get; set; }
     public bool HasImage { get; set; }
-    public string ComputedImagePath { get; set; }
 }

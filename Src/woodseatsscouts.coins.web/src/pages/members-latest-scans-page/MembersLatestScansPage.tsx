@@ -1,12 +1,13 @@
 import "./MembersLatestScans.scss"
 import {useContext, useEffect, useState} from "react";
 import Uris from "../../services/apis/Uris.ts";
-import axios, {type AxiosResponse} from "axios";
+import {type AxiosResponse} from "axios";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import type {MemberPointsSummaryDto, MembersWithPoints} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import { format } from 'timeago.js';
 import {AppSettingsContext} from "../../contexts/AppContextExporter.tsx";
+import {apiClient} from "../../services/apis/apiClient.ts";
 
 export default function MembersLatestScansPage() {
   const {appSettings} = useContext(AppSettingsContext)
@@ -16,12 +17,12 @@ export default function MembersLatestScansPage() {
     function loadData() {
       setMembers([])
 
-      axios
+      apiClient
         .get(Uris.scans().sessionsLatest())
         .then(async (response: AxiosResponse<MemberPointsSummaryDto[]>) => {
           const members = response.data
           response.data.forEach(memberPointsSummaryDto => {
-            memberPointsSummaryDto.clientComputedImageUri = Uris.scouts().members().memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
+            // memberPointsSummaryDto.clientComputedImageUri = Uris.scouts().members().memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
           })
 
           setMembers(members)

@@ -1,9 +1,7 @@
 import ScoutsLogo from '../images/fleur-de-lis-marque-white.png'
 import './NavMenu.scss';
-import React, {useContext, useEffect, useState} from 'react';
-import {NavLink, Link, useLocation, useNavigate} from 'react-router-dom';
-import './NavMenu.scss';
-import Uris from "../services/apis/Uris.ts";
+import React, {useContext, useState} from 'react';
+import {NavLink, useNavigate} from 'react-router-dom';
 import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../contexts/AppContextExporter.tsx";
 import CoinsPageViewName from "../pages/coins-page/CoinsPageViewName.ts";
 import {Button, Image} from "../components/widgets/HtmlControlWrappers.tsx";
