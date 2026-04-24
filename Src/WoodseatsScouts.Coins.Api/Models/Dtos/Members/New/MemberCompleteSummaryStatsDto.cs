@@ -10,11 +10,3 @@ public class MemberCompleteSummaryStatsDto
 
     public int TotalTokensScanned { get; set; }
 }
-
-public class MemberCompleteSummaryStatsActivityBaseInfoDto
-{
-    public List<string> Names { get; set; }
-
-    public int TimesVisited { get; set; }
-
-}
