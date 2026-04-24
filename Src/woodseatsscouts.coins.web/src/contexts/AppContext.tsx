@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {AppCameraAvailableContext, AppModeContext, AppSettingsContext, AppTestModeContext, PageActionMenuAreaContext, UseAppCameraContext} from "./AppContextExporter";
 import AppStateApiService from "../services/apis/AppStateApiService.tsx";
 import AppLocalStorage from "../components/storage/AppLocalStorage.ts";
-import getAppSettings from "../AppSettings.ts";
+import getAppSettings, {type AppSettings} from "../AppSettings.ts";
 
 const cameraAvailable = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 
@@ -13,7 +13,7 @@ const AppContext = ({children}) => {
   const [appMode, setAppMode] = useState("");
   const [activeScanningMember, setActiveScanningMember] = useState(null);
   const [pageActionMenuAreaAction, setPageActionMenuAreaAction] = useState("");
-  const [appSettings] = useState(getAppSettings());
+  const [appSettings] = useState<AppSettings>(() => AppLocalStorage().getAppSettings());
 
   useEffect(() => {
     AppStateApiService().getAppSate(response => {

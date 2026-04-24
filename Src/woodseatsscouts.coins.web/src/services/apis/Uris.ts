@@ -10,7 +10,6 @@ const Uris = {
   appState: `${baseUri}/AppState`,
   appVersion: `${baseUri}/AppState/AppVersion`,
   leaderboard: `${baseUri}/Leaderboard/Report`,
-  refreshSecondsForLatestScans: `${baseUri}/Members/RefreshSecondsForLatestScans`, // todo
   testDataCoins: `${baseUri}/Sut/Coins`,
 
   memberByCode: function (memberCode: string) {

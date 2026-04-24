@@ -1,13 +1,15 @@
 import "./MembersLatestScans.scss"
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Uris from "../../services/apis/Uris.ts";
 import axios, {type AxiosResponse} from "axios";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import type {MemberPointsSummaryDto, MembersWithPoints} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import { format } from 'timeago.js';
+import {AppSettingsContext} from "../../contexts/AppContextExporter.tsx";
 
 export default function MembersLatestScansPage() {
+  const {appSettings} = useContext(AppSettingsContext)
   const [members, setMembers] = useState<MemberPointsSummaryDto[]>([])
 
   useEffect(() => {
@@ -28,14 +30,9 @@ export default function MembersLatestScansPage() {
 
     loadData()
 
-    axios
-      .get(Uris.refreshSecondsForLatestScans)
-      .then(async response => {
-        const seconds = Number(await response.data)
-        setInterval(() => {
-          loadData()
-        }, seconds * 1000)
-      })
+    setInterval(() => {
+      loadData()
+    }, appSettings.VITE_RECENT_SCANS_REFRESH_INTERVAL_SECONDS * 1000)
   }, []);
 
   function RenderMember(member: MemberPointsSummaryDto) {

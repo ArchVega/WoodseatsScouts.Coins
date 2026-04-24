@@ -2,6 +2,7 @@ import "./HaulSummarySection.scss"
 import {useContext, useEffect} from "react";
 import {AppSettingsContext} from "../../../../contexts/AppContextExporter.tsx";
 import {logInfo} from "../../../../components/logging/Logger.ts";
+import getAppSettings from "../../../../AppSettings.ts";
 
 export default function HaulResultsSection({member, haulResult}) {
   const {appSettings} = useContext(AppSettingsContext)
@@ -22,12 +23,9 @@ export default function HaulResultsSection({member, haulResult}) {
     window.location.reload()
   }
 
-  useEffect(() => {
-    logInfo(`Timeout seconds for page is: ${appSettings.VITE_SCAN_COINS_COMPLETED_REDIRECT_AFTER_MS}`)
-    setTimeout(() => {
-      reloadPage()
-    }, appSettings.VITE_SCAN_COINS_COMPLETED_REDIRECT_AFTER_MS)
-  }, []);
+  setTimeout(() => {
+    reloadPage()
+  }, appSettings.VITE_SCAN_COINS_REDIRECT_DELAY_SECONDS * 1000)
 
   return (
     <>
