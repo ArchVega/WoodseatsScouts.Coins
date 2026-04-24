@@ -13,14 +13,17 @@ using WoodseatsScouts.Coins.Api.Models.View.Members;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("api/members")]
-public class MemberController(
+[Tags("Scout Members")]
+[Route("api/scouts/members")]
+public class ScoutMemberController(
     IMemberService memberService,
     IAppDbContext appDbContext,
     IImagePersister imagePersister,
     IOptions<AppSettings> appSettingsOptions,
     IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase
 {
+    private static readonly object Locker = new();
+    
     [HttpGet]
     [Route("{code}")]
     public IActionResult GetMemberByCode(string code, [FromQuery] Member? memberQuery)
@@ -59,6 +62,21 @@ public class MemberController(
                 throw new ArgumentOutOfRangeException(nameof(memberQuery));
         }
     }
+    
+    [HttpPost]
+    [Route("")]
+    public object CreateMember([FromBody] CreateMemberViewModel createMemberViewModel)
+    {
+        lock (Locker)
+        {
+            return Ok(appDbContext.CreateMember(
+                createMemberViewModel.FirstName,
+                createMemberViewModel.LastName,
+                createMemberViewModel.ScoutGroupId,
+                createMemberViewModel.Section, // Todo: Client sends "section" but this is really "sectionId"
+                createMemberViewModel.IsDayVisitor));
+        }
+    }
 
     [HttpGet]
     [Route("")]
@@ -81,29 +99,29 @@ public class MemberController(
         }
     }
 
-    [HttpGet]
-    [Route("{code}/WithPoints")]
-    public MemberPointsSummaryDto GetMemberWithPoints(string code)
-    {
-        var member = appDbContext.ScoutMembers!
-            .Include(x => x.ScoutSection)
-            .Include(x => x.ScoutGroup)
-            .Include(x => x.ScavengeResults)
-            .ThenInclude(x => x.ScanCoins)
-            .Single(x => x.Code == code);
-
-        var viewModel = new MemberPointsSummaryDto(member);
-
-        if (member.ScavengeResults.Any())
-        {
-            viewModel.LatestCompletedAtTime = member.ScavengeResults.MaxBy(x => x.CompletedAt).CompletedAt;
-        }
-
-        return viewModel;
-    }
+    // [HttpGet]
+    // [Route("{code}/WithPoints")]
+    // public MemberPointsSummaryDto GetMemberWithPoints(string code)
+    // {
+    //     var member = appDbContext.ScoutMembers!
+    //         .Include(x => x.ScoutSection)
+    //         .Include(x => x.ScoutGroup)
+    //         .Include(x => x.ScavengeResults)
+    //         .ThenInclude(x => x.ScanCoins)
+    //         .Single(x => x.Code == code);
+    //
+    //     var viewModel = new MemberPointsSummaryDto(member);
+    //
+    //     if (member.ScavengeResults.Any())
+    //     {
+    //         viewModel.LatestCompletedAtTime = member.ScavengeResults.MaxBy(x => x.CompletedAt).CompletedAt;
+    //     }
+    //
+    //     return viewModel;
+    // }
 
     [HttpPut]
-    [Route("{id:int}/Coins")]
+    [Route("{id:int}/coins")]
     public ActionResult AddPointsToMember(int id, [FromBody] PointsForMemberViewModel viewModel)
     {
         // Todo: wrap in a transaction
@@ -121,14 +139,14 @@ public class MemberController(
     }
 
     [HttpGet]
-    [Route("Photo/Placeholder")]
+    [Route("photo/placeholder")]
     public IActionResult Get()
     {
         return File(imagePersister.PlaceholderImageStream(), "image/png", enableRangeProcessing: true);
     }
 
     [HttpGet]
-    [Route("{id:int}/Photo")]
+    [Route("{id:int}/photo")]
     public IActionResult Get(int id)
     {
         var stream = imagePersister.RetrieveImageBytes(id);
@@ -136,7 +154,7 @@ public class MemberController(
     }
 
     [HttpPut]
-    [Route("{id:int}/Photo")]
+    [Route("{id:int}/photo")]
     public ActionResult SaveMemberPhoto(int id, [FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
     {
         imagePersister.Persist(id.ToString(), saveMemberPhotoViewModel.Photo);
@@ -145,18 +163,9 @@ public class MemberController(
 
         return Ok();
     }
-
-    [HttpGet]
-    [Route("LatestScans")]
-    public ActionResult LatestScans()
-    {
-        var latestScans = appDbContext.GetLatestScans(leaderboardSettingsOptions.Value.NumberOfLatestScansToDisplay);
-
-        return Ok(latestScans);
-    }
     
     [HttpPost]
-    [Route("{id:int}/Name")]
+    [Route("{id:int}/name")]
     public ActionResult Name(int id, [FromBody] UpdateMemberNameViewModel updateMemberNameViewModel)
     {
         var member = appDbContext.ScoutMembers!.Single(x => x.Id == id);
@@ -166,12 +175,32 @@ public class MemberController(
 
         return Ok();
     }
-
-    // move
-    [HttpGet]
-    [Route("RefreshSecondsForLatestScans")]
-    public ActionResult RefreshSecondsForLatestScans()
+    
+    [HttpPut]
+    [Route("{memberId:int}")]
+    public object UpdateMemberName(int memberId, [FromBody] UpdateMemberViewModel updateMemberViewModel)
     {
-        return Ok(leaderboardSettingsOptions.Value.Last6ScavengersPageRefreshSeconds);
+        var member = appDbContext.UpdateMemberName(memberId, updateMemberViewModel.FirstName, updateMemberViewModel.LastName);
+        
+        return new
+        {
+            MemberNumber = member.Number,
+            MemberID = member.Id,
+        };
+    }
+
+    [HttpGet]
+    [Route("clues/status")]
+    public object GetClueStatus(int memberId)
+    {
+        var member = appDbContext.ScoutMembers!.Single(x => x.Id == memberId);
+
+        return new
+        {
+            MemberId = memberId,
+            member.Clue1State,
+            member.Clue2State,
+            member.Clue3State
+        };
     }
 }

@@ -48,9 +48,9 @@ const Uris = {
   memberPhoto: function (photoImagePath: string) {
     return `${baseUri}/${photoImagePath}`
   },
-  memberWithPoints: function (memberQrCode) {
-    return `${baseUri}/Members/${memberQrCode}/WithPoints`
-  },
+  // memberWithPoints: function (memberQrCode) {
+  //   return `${baseUri}/Members/${memberQrCode}/WithPoints`
+  // },
   memberName: function (id) {
     return `${baseUri}/Members/${id}/Name?`
   }

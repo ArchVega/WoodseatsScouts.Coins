@@ -1,5 +1,6 @@
 // dotcover disable
 
+using System.Reflection;
 using Microsoft.OpenApi.Models;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Config;
@@ -13,10 +14,7 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
 const string allOrigins = "_allOrigins";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: allOrigins, policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
-});
+builder.Services.AddCors(options => { options.AddPolicy(name: allOrigins, policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); }); });
 
 builder.Services.AddScoped<IMemberService, MemberService>();
 
@@ -33,7 +31,7 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Description = "Enter your authentication token for the Scouts Coin API service"
     });
-    
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -51,6 +49,10 @@ builder.Services.AddSwaggerGen(c =>
             []
         }
     });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 
 var app = builder.Build();
@@ -58,8 +60,8 @@ var app = builder.Build();
 // Todo: consider uncommenting in staging / release
 // if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "AcceptanceTest")
 // {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 // }
 
 // Todo: consider uncommenting in staging / release

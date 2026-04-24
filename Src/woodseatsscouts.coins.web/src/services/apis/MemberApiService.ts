@@ -8,10 +8,10 @@ function MemberApiService() {
       return await axios.get(Uris.memberByCode(memberCode));
     },
 
-    async fetchMemberWithPoints(memberCode: string) {
-      const uri = Uris.memberWithPoints(memberCode);
-      return await axios.get(uri);
-    },
+    // async fetchMemberWithPoints(memberCode: string) {
+    //   const uri = Uris.memberWithPoints(memberCode);
+    //   return await axios.get(uri);
+    // },
 
     async fetchMemberComplete(memberCode: string): Promise<AxiosResponse<MemberCompleteDto>> {
       const uri = Uris.fetchMemberComplete(memberCode);

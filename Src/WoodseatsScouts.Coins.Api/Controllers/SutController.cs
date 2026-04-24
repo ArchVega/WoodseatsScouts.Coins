@@ -10,7 +10,8 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Tags("System Testing")]
+[Route("api/system/tests")]
 public class SutController(
     IAppDbContext appDbContext,
     SystemDateTimeProvider systemDateTimeProvider,
@@ -19,14 +20,14 @@ public class SutController(
     private readonly LeaderboardSettings leaderboardSettings = leaderboardSettingsOptions.Value;
 
     [HttpGet]
-    [Route("Members")]
+    [Route("members")]
     public List<ScoutMember> GetMembers()
     {
         return appDbContext.ScoutMembers!.ToList();
     }
 
     [HttpPut]
-    [Route("Members/HasImage/True")]
+    [Route("members/has-image/true")]
     public IActionResult SetAllMemberHasImagePropertyToTrue()
     {
         var members = appDbContext.ScoutMembers!.ToList();
@@ -40,17 +41,17 @@ public class SutController(
         return Ok("Updated all members HasImage property to true");
     }
     
-    [HttpPut]
-    [Route("Leaderboard/Deadline/{minutesToAdd:int}")]
-    public IActionResult SetReportDeadline(int minutesToAdd)
-    {
-        leaderboardSettings.ScavengerHuntDeadline = DateTime.UtcNow.AddMinutes(minutesToAdd);
-
-        return Ok($"Report deadline datetime set to '{leaderboardSettings.ScavengerHuntDeadline}'");
-    }
+    // [HttpPut]
+    // [Route("Leaderboard/Deadline/{minutesToAdd:int}")]
+    // public IActionResult SetReportDeadline(int minutesToAdd)
+    // {
+    //     leaderboardSettings.ScavengerHuntDeadline = DateTime.UtcNow.AddMinutes(minutesToAdd);
+    //
+    //     return Ok($"Report deadline datetime set to '{leaderboardSettings.ScavengerHuntDeadline}'");
+    // }
     
     [HttpPut]
-    [Route("SystemDateTime/{minutesToAdd:int?}")]
+    [Route("datetime/{minutesToAdd:int?}")]
     public IActionResult SetSystemDateTime(int? minutesToAdd)
     {
         if (minutesToAdd.HasValue)
@@ -66,7 +67,7 @@ public class SutController(
     }
     
     [HttpGet]
-    [Route("Coins")]
+    [Route("coins")]
     public ActionResult GetAll()
     {
         return Ok(appDbContext.Coins!.Include(x => x.Member).Select(x => new
@@ -79,7 +80,7 @@ public class SutController(
     }
     
     [HttpGet]
-    [Route("ResetData")]
+    [Route("data/reset")]
     public ActionResult ResetData()
     {
         appDbContext.ScanSessions.ExecuteDelete();

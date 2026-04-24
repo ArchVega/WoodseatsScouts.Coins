@@ -3,6 +3,7 @@ using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
+using WoodseatsScouts.Coins.Api.Models.View;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -13,7 +14,7 @@ public class CoinController(
     SystemDateTimeProvider systemDateTimeProvider) : ControllerBase
 {
     [HttpGet]
-    [Route("{code}/Scan/{memberCode}")]
+    [Route("{code}/scans/{memberCode}")]
     public IActionResult GetCoin(string code, string memberCode)
     {
         var result = CodeTranslator.TranslateCoinCode(code);
@@ -53,5 +54,33 @@ public class CoinController(
         appDbContext.SaveChanges();
 
         return Ok(new CoinDto(result.PointValue, result.ActivityBaseId, code));
+    }
+    
+    [HttpPost]
+    [Route("")]
+    public ActionResult CreateCoins([FromBody] CreateCoinDto createCoinDto)
+    {
+        if (createCoinDto.ActivityBaseId.HasValue && !string.IsNullOrWhiteSpace(createCoinDto.ActivityBaseName))
+        {
+            return BadRequest("Both BaseId and BaseName were provided. Provide one.");
+        }
+
+        if (!createCoinDto.ActivityBaseId.HasValue && string.IsNullOrWhiteSpace(createCoinDto.ActivityBaseName))
+        {
+            return BadRequest("Either BaseId or BaseName is required.");
+        }
+
+        if (createCoinDto.PointsPerCoin == 0)
+        {
+            return BadRequest("Points must be provided.");
+        }
+
+        var baseId = string.IsNullOrWhiteSpace(createCoinDto.ActivityBaseName)
+            ? createCoinDto.ActivityBaseId!.Value
+            : appDbContext.ActivityBases!.Single(x => x.Name == createCoinDto.ActivityBaseName).Id!;
+
+        var coins = appDbContext.CreateCoins(baseId!, createCoinDto.PointsPerCoin, createCoinDto.NumberToCreate);
+
+        return Ok(coins);
     }
 }

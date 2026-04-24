@@ -21,7 +21,7 @@ using Member = WoodseatsScouts.Coins.Api.Models.Queries.Member;
 
 namespace WoodseatsScouts.Coins.Tests;
 
-public class MemberControllerTests
+public class ScoutMemberControllerTests
 {
     private readonly Mock<IMemberService> memberServiceMock = new();
     private readonly Mock<IAppDbContext> appDbContextMock = new();
@@ -29,9 +29,9 @@ public class MemberControllerTests
     private readonly Mock<IOptions<LeaderboardSettings>> leaderboardSettingsOptions = new();
     private readonly Mock<IOptions<AppSettings>> appSettingsOptions = new();
 
-    private MemberController CreateCut()
+    private ScoutMemberController CreateCut()
     {
-        return new MemberController(memberServiceMock.Object, appDbContextMock.Object, imagePersisterMock.Object, appSettingsOptions.Object, leaderboardSettingsOptions.Object);
+        return new ScoutMemberController(memberServiceMock.Object, appDbContextMock.Object, imagePersisterMock.Object, appSettingsOptions.Object, leaderboardSettingsOptions.Object);
     }
 
     // These need to go into a db test

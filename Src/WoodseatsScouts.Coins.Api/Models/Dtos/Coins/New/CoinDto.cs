@@ -18,7 +18,7 @@ public class ScoutGroupDto(ScoutGroup scoutGroup)
     public string Name { get; set; } = scoutGroup.Name;
 }
 
-public class SectionDto(ScoutSection scoutSection)
+public class ScoutSectionDto(ScoutSection scoutSection)
 {
     public string Id { get; set; } = scoutSection.Code; // make consistent - Code or Id??
     
