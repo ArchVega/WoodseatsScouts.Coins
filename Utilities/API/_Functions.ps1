@@ -2,7 +2,7 @@ $headers = @{
     "Content-Type" = "application/json"
 }
 
-function CreateTroop {
+function CreateScoutGroup {
     param(
         [Parameter(Mandatory)]
         [string] $BaseUri,
@@ -11,7 +11,7 @@ function CreateTroop {
         [string] $Name
     )
 
-    $uri = "Admin/Troop"
+    $uri = "Admin/ScoutGroup"
 
     $payload = @{
         id   = IntDefault $Id
@@ -27,7 +27,7 @@ function CreateMember {
         [string] $BaseUri,        
         [string] $FirstName, 
         [string] $LastName, 
-        [int] $TroopId, 
+        [int] $ScoutGroupId, 
         [string] $Section, 
         [bool] $IsDayVisitor
     )
@@ -37,7 +37,7 @@ function CreateMember {
     $payload = @{
         firstName    = StringDefault $FirstName
         lastName     = StringDefault $LastName
-        troopId      = IntDefault $TroopId
+        scoutGroupId      = IntDefault $ScoutGroupId
         section      = CharDefault $Section
         isDayVisitor = BoolDefault $IsDayVisitor
     } | ConvertTo-Json

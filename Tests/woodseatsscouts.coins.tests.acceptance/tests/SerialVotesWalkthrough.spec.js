@@ -28,7 +28,7 @@ function serialStep(name) {
     return `Step ${counter}: ${name}`
 }
 
-test(serialStep("Creating users"), async ({page}, testInfo) => {
+test("Creating users", async ({page}, testInfo) => {
     // screenshotsComparer =  ScreenshotsComparer("screenshots", runName); this deletes the existing master folder
     screenshotsComparer = ScreenshotsComparer("screenshots"); // this doesn't delete the folder
 
@@ -37,7 +37,7 @@ test(serialStep("Creating users"), async ({page}, testInfo) => {
     const membersPage = MembersPage(page);
     await membersPage.goTo()
 
-    await Helpers().createTroopsViaApi([
+    await Helpers().createScoutGroupsViaApi([
         {id: 1, name: "Crimson"},
         {id: 2, name: "Jet"},
         {id: 3, name: "Royal"},
@@ -48,28 +48,28 @@ test(serialStep("Creating users"), async ({page}, testInfo) => {
         {
             firstNames: ["Charcoal", "Icterine", "Olivine", "Turquoise"],
             lastName: "Crimson",
-            troopId: 1,
+            scoutGroupId: 1,
             section: "A",
             isDayVisitor: false
         },
         {
             firstNames: ["Glaucous", "Pistachio", "Pumpkin", "Red"],
             lastName: "Jet",
-            troopId: 2,
+            scoutGroupId: 2,
             section: "B",
             isDayVisitor: false
         },
         {
             firstNames: ["Asparagus", "Cerise", "Ghost", "Jasper"],
             lastName: "Royal",
-            troopId: 3,
+            scoutGroupId: 3,
             section: "C",
             isDayVisitor: false
         },
         {
             firstNames: ["Hunter", "Oxford", "Rosewood", "Violet"],
             lastName: "Saffron",
-            troopId: 4,
+            scoutGroupId: 4,
             section: "E",
             isDayVisitor: false
         },

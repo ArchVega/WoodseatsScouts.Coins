@@ -1,5 +1,32 @@
 Import-Module SqlServer
 
+function _ExecuteQuery {
+    param(
+        [Parameter(Mandatory)]
+        $Query,
+        [Parameter()]
+        $DatabaseName        
+    )
+    
+    Write-Warning "Executing Query. Query is shown in verbose"
+    Write-Verbose "Executing query $Query"
+
+    $arguments = @{
+        ServerInstance =  "localhost,1433"
+        Query =  $Query
+        Username =  "SA"
+        Password =  "Pa55w0rd123"
+        Encrypt =  "Optional"
+        TrustServerCertificate = $true
+    }
+
+    if ($null -ne $DatabaseName) {
+        $arguments.Database = $DatabaseName
+    }
+
+    return Invoke-Sqlcmd @arguments
+}
+
 function RecreateDb {
     param(        
         [Parameter(Mandatory)]
@@ -20,8 +47,8 @@ function RecreateDb {
     }
     Write-Host "Deleting Database"
     try {
-        Invoke-Sqlcmd -ServerInstance . -Query "alter database [$DatabaseName] set single_user with rollback immediate;" -TrustServerCertificate
-        Invoke-Sqlcmd -ServerInstance . -Query "Drop database [$DatabaseName];" -TrustServerCertificate
+        _ExecuteQuery "alter database [$DatabaseName] set single_user with rollback immediate;"
+        _ExecuteQuery "Drop database [$DatabaseName];"
     }
     catch {
         Write-Warning "Did not delete database $DatabaseName, it might not exist."
@@ -34,8 +61,8 @@ function RecreateDb {
     if ($null -ne $CloneSourceDatabaseName) {
         try {
             Write-Host "Deleting clone source db..."
-            Invoke-Sqlcmd -ServerInstance . -Query "alter database [$CloneSourceDatabaseName] set single_user with rollback immediate;" -TrustServerCertificate
-            Invoke-Sqlcmd -ServerInstance . -Query "Drop database [$CloneSourceDatabaseName];" -TrustServerCertificate        
+            _ExecuteQuery "alter database [$CloneSourceDatabaseName] set single_user with rollback immediate;"
+            _ExecuteQuery "Drop database [$CloneSourceDatabaseName];"
         }
         catch {
             Write-Warning "Did not delete clone source database $CloneSourceDatabaseName, it might not exist."
@@ -44,7 +71,7 @@ function RecreateDb {
 
         try {
             Write-Host "Creating TestDB Source"    
-            Invoke-Sqlcmd -ServerInstance . -Query "DBCC CLONEDATABASE ([$DatabaseName], [$CloneSourceDatabaseName]);" -TrustServerCertificate
+            _ExecuteQuery "DBCC CLONEDATABASE ([$DatabaseName], [$CloneSourceDatabaseName]);"
         
         }
         catch {
@@ -70,8 +97,8 @@ function CloneDb {
 
     try {
         Write-Output  "Deleting source db '$DatabaseName'..."
-        Invoke-Sqlcmd -ServerInstance . -Query "alter database [$DatabaseName] set single_user with rollback immediate;" -TrustServerCertificate
-        Invoke-Sqlcmd -ServerInstance . -Query "Drop database [$DatabaseName];" -TrustServerCertificate        
+        _ExecuteQuery "alter database [$DatabaseName] set single_user with rollback immediate;"
+        _ExecuteQuery "Drop database [$DatabaseName];"
     }
     catch {
         Write-Output "Did not delete clone source database $DatabaseName, it might not exist."
@@ -80,7 +107,7 @@ function CloneDb {
 
     try {
         Write-Output  "Creating $DatabaseName..."    
-        Invoke-Sqlcmd -ServerInstance . -Query "DBCC CLONEDATABASE ([$SourceDatabaseName], [$DatabaseName]);" -TrustServerCertificate
+        _ExecuteQuery "DBCC CLONEDATABASE ([$SourceDatabaseName], [$DatabaseName]);"
     
     }
     catch {
@@ -105,7 +132,7 @@ function CopyDbData {
         $tableName = $_
         Write-Output "Copying data, table: '$tableName'"
         $query = "INSERT INTO [$DatabaseToName].[dbo].[$tableName] SELECT * FROM [$DatabaseFromName].[dbo].[$tableName]"
-        Invoke-Sqlcmd -ServerInstance . -Query $query -TrustServerCertificate
+        _ExecuteQuery $query
     }
 
 }
@@ -116,10 +143,11 @@ function CreateCoinData {
         [string] $DatabaseName
     )
 
-    Push-Location "D:\Dev\Archvega\WoodseatsScouts\Utilities\QRCodes\WoodseatsScouts.QRCodes\WoodseatsScouts.QRCodes\bin\Debug"
+    Push-Location "../../Utilities/QRCodes/WoodseatsScouts.QRCodes.Net10/WoodseatsScouts.QRCodes.Net10/bin/Debug/net10.0"
     try {
-        .\WoodseatsScouts.QRCodes.exe $DatabaseName "D:\Temp\WoodseatsScouts.QRCodes"
-    } finally {
+        dotnet ./WoodseatsScouts.QRCodes.Net10.dll $DatabaseName "/home/developer/dev/temp/woodseats-scouts-qrcodes"
+    }
+    finally {
         Pop-Location
     }   
 }
@@ -134,31 +162,34 @@ function CreateAdditionalDbObjects {
     
     try {
         $viewQuery = "
-        CREATE VIEW [MembersScavengedCoins] AS
+        CREATE VIEW [ScoutMembersSessionCoins] AS
         SELECT 
-            Members.FirstName as 'Member First Name',
-            Members.LastName as 'Member Last Name', 
-            Members.Code as 'Member Code',
-            Members.Number as 'Member Number',
-            Members.HasImage as 'Member Image Exists?',
-            Troops.Name as 'Troop',
-            Sections.Name as 'Section',
+            ScoutMembers.FirstName as 'Scout Member First Name',
+            ScoutMembers.LastName as 'Scout Member Last Name', 
+            ScoutMembers.Code as 'Scout Member Code',
+            ScoutMembers.Number as 'Scout Member Number',
+            ScoutMembers.HasImage as 'Scout Member Has Image',
+            ScoutGroups.Name as 'Scout Group',
+            ScoutSections.Name as 'Scout Section',
             Coins.Code as 'Coin Code',
-            Coins.Value as 'Coin Value'
-        FROM Members
-        join ScavengeResults
-        on ScavengeResults.MemberId = Members.Id
-        join ScavengedCoins
-        on ScavengedCoins.ScavengeResultId = ScavengeResults.Id
-        join Troops
-        on Troops.Id = Members.TroopId
-        join Sections
-        on Sections.Code = Members.SectionId
+            Coins.Value as 'Coin Value',
+            ActivityBases.Name as 'Activity Base'
+        FROM ScoutMembers
+        join ScanSessions
+        on ScanSessions.ScoutMemberId = ScoutMembers.Id
+        join ScanCoins
+        on ScanCoins.ScanSessionId = ScanSessions.Id
+        join ScoutGroups
+        on ScoutGroups.Id = ScoutMembers.ScoutGroupId
+        join ScoutSections
+        on ScoutSections.Code = ScoutMembers.ScoutSectionId
         join Coins
-        on Coins.Code = ScavengedCoins.Code
+        on Coins.Id = ScanCoins.CoinId
+        join ActivityBases
+        on ActivityBases.Id = Coins.ActivityBaseId
         "
         
-        Invoke-Sqlcmd -ServerInstance . -Database $DatabaseName -Query $viewQuery -TrustServerCertificate
+        _ExecuteQuery $viewQuery $DatabaseName
     }
     catch {
         Write-Warning "Could not create Views"

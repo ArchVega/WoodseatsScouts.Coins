@@ -56,20 +56,20 @@ CREATE TABLE [Sections] (
 );
 GO
 
-CREATE TABLE [Troops] (
+CREATE TABLE [ScoutGroups] (
     [Id] int NOT NULL IDENTITY,
     [Name] nvarchar(max) NOT NULL,
-    CONSTRAINT [PK_Troops] PRIMARY KEY ([Id])
+    CONSTRAINT [PK_ScoutGroups] PRIMARY KEY ([Id])
 );
 GO
 
 CREATE TABLE [Members] (
     [Id] int NOT NULL IDENTITY,
-    [Code] AS 'M' + (FORMAT(TroopId, '000'))  + [SectionId] + (FORMAT(Number, '000')),
+    [Code] AS 'M' + (FORMAT(ScoutGroupId, '000'))  + [SectionId] + (FORMAT(Number, '000')),
     [Number] int NOT NULL,
     [FirstName] nvarchar(max) NOT NULL,
     [LastName] nvarchar(max) NULL,
-    [TroopId] int NOT NULL,
+    [ScoutGroupId] int NOT NULL,
     [SectionId] char(1) NOT NULL,
     [Clue1State] nvarchar(max) NULL,
     [Clue2State] nvarchar(max) NULL,
@@ -78,7 +78,7 @@ CREATE TABLE [Members] (
     [HasImage] bit NOT NULL,
     CONSTRAINT [PK_Members] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_Members_Sections_SectionId] FOREIGN KEY ([SectionId]) REFERENCES [Sections] ([Code]) ON DELETE CASCADE,
-    CONSTRAINT [FK_Members_Troops_TroopId] FOREIGN KEY ([TroopId]) REFERENCES [Troops] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [FK_Members_ScoutGroups_ScoutGroupId] FOREIGN KEY ([ScoutGroupId]) REFERENCES [ScoutGroups] ([Id]) ON DELETE CASCADE
 );
 GO
 
@@ -151,7 +151,7 @@ GO
 CREATE INDEX [IX_Members_SectionId] ON [Members] ([SectionId]);
 GO
 
-CREATE INDEX [IX_Members_TroopId] ON [Members] ([TroopId]);
+CREATE INDEX [IX_Members_ScoutGroupId] ON [Members] ([ScoutGroupId]);
 GO
 
 CREATE INDEX [IX_ScavengedCoins_ScavengeResultId] ON [ScavengedCoins] ([ScavengeResultId]);

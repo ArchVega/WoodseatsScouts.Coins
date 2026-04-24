@@ -1,25 +1,26 @@
 // dotcover disable
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Middleware;
 using WoodseatsScouts.Coins.Api.Models.View;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class AdminController(AppDbContext appDbContext) : ControllerBase
+[Route("api/[controller]")]
+[AdminAuth]
+public class AdminController(IAppDbContext appDbContext) : ControllerBase
 {
-    private static readonly object Locker = new();  
-    
-    [HttpPost]
-    [Route("Troop")]
-    public ActionResult CreateTroop([FromBody] CreateTroopViewModel createTroopViewModel)
-    {
-        var troop = appDbContext.CreateTroop(createTroopViewModel.Id, createTroopViewModel.Name);
+    private static readonly object Locker = new();
 
-        return Ok($"Troop {troop.Name} added");
+    [HttpPost]
+    [Route("ScoutGroup")]
+    public ActionResult CreateScoutGroup([FromBody] CreateScoutGroupViewModel createScoutGroupViewModel)
+    {
+        var scoutGroup = appDbContext.CreateScoutGroup(createScoutGroupViewModel.Id, createScoutGroupViewModel.Name);
+
+        return Ok($"ScoutGroup {scoutGroup.Name} added");
     }
 
     [HttpPost]
@@ -31,7 +32,7 @@ public class AdminController(AppDbContext appDbContext) : ControllerBase
             return Ok(appDbContext.CreateMember(
                 createMemberViewModel.FirstName,
                 createMemberViewModel.LastName,
-                createMemberViewModel.TroopId,
+                createMemberViewModel.ScoutGroupId,
                 createMemberViewModel.Section, // Todo: Client sends "section" but this is really "sectionId"
                 createMemberViewModel.IsDayVisitor));
         }
@@ -54,7 +55,7 @@ public class AdminController(AppDbContext appDbContext) : ControllerBase
     [Route("ClueStatus")]
     public object GetClueStatus(int memberId)
     {
-        var member = appDbContext.Members!.Single(x => x.Id == memberId);
+        var member = appDbContext.ScoutMembers!.Single(x => x.Id == memberId);
 
         return new
         {
@@ -63,5 +64,33 @@ public class AdminController(AppDbContext appDbContext) : ControllerBase
             member.Clue2State,
             member.Clue3State
         };
+    }
+
+    [HttpPost]
+    [Route("Coins")]
+    public ActionResult CreateCoins([FromBody] CreateCoinViewModel createCoinViewModel)
+    {
+        if (createCoinViewModel.BaseId.HasValue && !string.IsNullOrWhiteSpace(createCoinViewModel.BaseName))
+        {
+            return BadRequest("Both BaseId and BaseName were provided. Provide one.");
+        }
+
+        if (!createCoinViewModel.BaseId.HasValue && string.IsNullOrWhiteSpace(createCoinViewModel.BaseName))
+        {
+            return BadRequest("Either BaseId or BaseName is required.");
+        }
+
+        if (createCoinViewModel.Points == 0)
+        {
+            return BadRequest("Points must be provided.");
+        }
+
+        var baseId = string.IsNullOrWhiteSpace(createCoinViewModel.BaseName)
+            ? createCoinViewModel.BaseId!.Value
+            : appDbContext.ActivityBases!.Single(x => x.Name == createCoinViewModel.BaseName).Id!;
+
+        var coins = appDbContext.CreateCoins(baseId!, createCoinViewModel.Points, createCoinViewModel.Count);
+
+        return Ok(coins);
     }
 }

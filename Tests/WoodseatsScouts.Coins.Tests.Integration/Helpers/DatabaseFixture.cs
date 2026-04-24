@@ -37,6 +37,7 @@ public class DatabaseFixture
     {
         RecreateDbViaPowerShell();
 
+        // contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(SourceDatabaseConnectionString).Options;
         contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
 
         AppSettings = new AppSettings();
@@ -56,7 +57,7 @@ public class DatabaseFixture
         
         using var runspace = RunspaceFactory.CreateRunspace(initialSessionState);
         runspace.Open();
-        runspace.SessionStateProxy.Path.SetLocation(@"..\..\..\..\..");
+        runspace.SessionStateProxy.Path.SetLocation(@"../../../../..");
 
         using (var instance = PowerShell.Create(runspace))
         {

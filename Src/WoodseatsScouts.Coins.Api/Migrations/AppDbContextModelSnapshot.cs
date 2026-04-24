@@ -22,44 +22,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Coin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Base")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BaseValueId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)")
-                        .HasComputedColumnSql("'C' + (FORMAT([BaseValueId], '0000'))  + (FORMAT([Base], '000')) + (FORMAT([Value], '000'))");
-
-                    b.Property<DateTime?>("LockUntil")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("MemberId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("Coins");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Country", b =>
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ActivityBase", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,59 +36,153 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.ToTable("ActivityBases");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Name = "Italy"
+                            Name = "Archery"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Germany"
+                            Name = "Abseiling"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "France"
+                            Name = "Aerial Trek"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Belgium"
+                            Name = "Aeroball"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Ireland"
+                            Name = "Bouldering"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Poland"
+                            Name = "Bushcraft"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Australia"
+                            Name = "Campfire"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Finland"
+                            Name = "Canoeing"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "Norway"
+                            Name = "Caving"
                         },
                         new
                         {
                             Id = 10,
-                            Name = "Spain"
+                            Name = "Fencing"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Hike"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Hillwalking"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Kayaking"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Orienteering"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "Pioneering"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Name = "Powerboating"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Name = "Raft Building"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Name = "Sailing"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Name = "Tomahawk throwing"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Name = "Zip wire"
+                        },
+                        new
+                        {
+                            Id = 99,
+                            Name = "Misc"
                         });
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Coin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActivityBaseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ActivityBaseSequenceNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)")
+                        .HasComputedColumnSql("'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))");
+
+                    b.Property<DateTime?>("LockUntil")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityBaseId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("Coins");
                 });
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ErrorLog", b =>
@@ -151,7 +208,68 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.ToTable("ErrorLogs");
                 });
 
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Member", b =>
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScanCoin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CoinId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScanSessionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoinId");
+
+                    b.HasIndex("ScanSessionId");
+
+                    b.ToTable("ScanCoins");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScanSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ScoutMemberId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScoutMemberId");
+
+                    b.ToTable("ScanSessions");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScoutGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ScoutGroups");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScoutMember", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -172,7 +290,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("nvarchar(max)")
-                        .HasComputedColumnSql("'M' + (FORMAT(TroopId, '000'))  + [SectionId] + (FORMAT(Number, '000'))");
+                        .HasComputedColumnSql("'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionId] + (FORMAT(Number, '000'))");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -190,90 +308,23 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<string>("SectionId")
+                    b.Property<int>("ScoutGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ScoutSectionId")
                         .IsRequired()
                         .HasColumnType("char(1)");
 
-                    b.Property<int>("TroopId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SectionId");
+                    b.HasIndex("ScoutGroupId");
 
-                    b.HasIndex("TroopId");
+                    b.HasIndex("ScoutSectionId");
 
-                    b.ToTable("Members");
+                    b.ToTable("ScoutMembers");
                 });
 
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.MemberCountryVote", b =>
-                {
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("VotedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("MemberId", "CountryId");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("MemberCountryVotes");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CompletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("ScavengeResults");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengedCoin", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BaseNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PointValue")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ScavengeResultId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ScavengeResultId");
-
-                    b.ToTable("ScavengedCoins");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Section", b =>
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScoutSection", b =>
                 {
                     b.Property<string>("Code")
                         .HasColumnType("char(1)");
@@ -287,108 +338,88 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("Sections");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Troop", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Troops");
+                    b.ToTable("ScoutSections");
                 });
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Coin", b =>
                 {
-                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Member", "Member")
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ActivityBase", "ActivityBase")
+                        .WithMany()
+                        .HasForeignKey("ActivityBaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScoutMember", "Member")
                         .WithMany()
                         .HasForeignKey("MemberId");
 
-                    b.Navigation("Member");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Member", b =>
-                {
-                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Section", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Troop", "Troop")
-                        .WithMany("Members")
-                        .HasForeignKey("TroopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
-
-                    b.Navigation("Troop");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.MemberCountryVote", b =>
-                {
-                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Member", "Member")
-                        .WithMany()
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
+                    b.Navigation("ActivityBase");
 
                     b.Navigation("Member");
                 });
 
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", b =>
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScanCoin", b =>
                 {
-                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Member", "Member")
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.Coin", "Coin")
+                        .WithMany()
+                        .HasForeignKey("CoinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScanSession", "ScanSession")
+                        .WithMany("ScanCoins")
+                        .HasForeignKey("ScanSessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coin");
+
+                    b.Navigation("ScanSession");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScanSession", b =>
+                {
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScoutMember", "ScoutMember")
                         .WithMany("ScavengeResults")
-                        .HasForeignKey("MemberId")
+                        .HasForeignKey("ScoutMemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Member");
+                    b.Navigation("ScoutMember");
                 });
 
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengedCoin", b =>
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScoutMember", b =>
                 {
-                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", "ScavengeResult")
-                        .WithMany("ScavengedCoins")
-                        .HasForeignKey("ScavengeResultId")
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScoutGroup", "ScoutGroup")
+                        .WithMany("ScoutMembers")
+                        .HasForeignKey("ScoutGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ScavengeResult");
+                    b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScoutSection", "ScoutSection")
+                        .WithMany()
+                        .HasForeignKey("ScoutSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ScoutGroup");
+
+                    b.Navigation("ScoutSection");
                 });
 
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Member", b =>
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScanSession", b =>
+                {
+                    b.Navigation("ScanCoins");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScoutGroup", b =>
+                {
+                    b.Navigation("ScoutMembers");
+                });
+
+            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScoutMember", b =>
                 {
                     b.Navigation("ScavengeResults");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScavengeResult", b =>
-                {
-                    b.Navigation("ScavengedCoins");
-                });
-
-            modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.Troop", b =>
-                {
-                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

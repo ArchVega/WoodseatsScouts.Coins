@@ -2,7 +2,7 @@ namespace WoodseatsScouts.Coins.Api.AppLogic;
 
 public class SystemDateTimeProvider
 {
-    private Func<DateTime> dateTimeProviderFunc = () => DateTime.Now;
+    private Func<DateTime> dateTimeProviderFunc = () => DateTime.UtcNow;
 
     public DateTime Now => dateTimeProviderFunc.Invoke();
     
@@ -13,6 +13,6 @@ public class SystemDateTimeProvider
 
     public void SetDateTimeToSystemClock()
     {
-        dateTimeProviderFunc = () => DateTime.Now;
+        dateTimeProviderFunc = () => DateTime.UtcNow;
     }
 }

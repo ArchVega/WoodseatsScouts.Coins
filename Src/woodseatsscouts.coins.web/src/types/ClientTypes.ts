@@ -1,0 +1,14 @@
+export type SectionBranding = {
+  foregroundColour: string;
+  backgroundColour: string
+}
+
+export type AdditionalData = {
+  hasAnomalyOccurred: boolean
+  anomalousCoinsTotalValue: boolean
+}
+
+export type HaulResult = {
+  coinTotal: number,
+  additionalData: AdditionalData
+}

@@ -15,7 +15,7 @@ public class ErrorLog
     {
         return new ErrorLog()
         {
-            LoggedAt = DateTime.Now,
+            LoggedAt = DateTime.UtcNow,
             Message = e.Message,
             StackTrace = e.StackTrace
         };

@@ -1,0 +1,10 @@
+@use 'sass:map';
+@use '../../../../styles/abstract/site-colours' as colours;
+
+#usb-scanner-code-textbox {
+  border: 2px solid map.get(colours.$colours, grey-darker);
+  background-color: map.get(colours.$colours, grey-light);
+  width: 100%;
+  text-align: center;
+  font-size: 3em;
+}

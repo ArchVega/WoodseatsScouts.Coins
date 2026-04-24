@@ -2,7 +2,7 @@ const baseUri = "http://localhost:7167"
 
 const Uris = {
     adminCreateMember: `${baseUri}/Admin/Member`,
-    adminCreateTroop: `${baseUri}/Admin/Troop`,
+    adminCreateScoutGroup: `${baseUri}/Admin/ScoutGroup`,
     sutMembers: `${baseUri}/Sut/Members`,
     coinsGet: `${baseUri}/Sut/Coins`,
     sutSetMemberPropertyHasImageToTrue: `${baseUri}/Sut/Members/HasImage/True`,

@@ -10,7 +10,7 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class SutController(
     IAppDbContext appDbContext,
     SystemDateTimeProvider systemDateTimeProvider,
@@ -20,16 +20,16 @@ public class SutController(
 
     [HttpGet]
     [Route("Members")]
-    public List<Member> GetMembers()
+    public List<ScoutMember> GetMembers()
     {
-        return appDbContext.Members!.ToList();
+        return appDbContext.ScoutMembers!.ToList();
     }
 
     [HttpPut]
     [Route("Members/HasImage/True")]
     public IActionResult SetAllMemberHasImagePropertyToTrue()
     {
-        var members = appDbContext.Members!.ToList();
+        var members = appDbContext.ScoutMembers!.ToList();
         foreach (var member in members)
         {
             member.HasImage = true;
@@ -44,7 +44,7 @@ public class SutController(
     [Route("Leaderboard/Deadline/{minutesToAdd:int}")]
     public IActionResult SetReportDeadline(int minutesToAdd)
     {
-        leaderboardSettings.ScavengerHuntDeadline = DateTime.Now.AddMinutes(minutesToAdd);
+        leaderboardSettings.ScavengerHuntDeadline = DateTime.UtcNow.AddMinutes(minutesToAdd);
 
         return Ok($"Report deadline datetime set to '{leaderboardSettings.ScavengerHuntDeadline}'");
     }
@@ -55,7 +55,7 @@ public class SutController(
     {
         if (minutesToAdd.HasValue)
         {
-            systemDateTimeProvider.SetDateTimeToSetTime(DateTime.Now.AddMinutes(minutesToAdd.Value));
+            systemDateTimeProvider.SetDateTimeToSetTime(DateTime.UtcNow.AddMinutes(minutesToAdd.Value));
         }
         else
         {
@@ -82,9 +82,8 @@ public class SutController(
     [Route("ResetData")]
     public ActionResult ResetData()
     {
-        appDbContext.ScavengeResults.ExecuteDelete();
-        appDbContext.ScavengedCoins.ExecuteDelete();
-        appDbContext.MemberCountryVotes.ExecuteDelete();
+        appDbContext.ScanSessions.ExecuteDelete();
+        appDbContext.ScanCoins.ExecuteDelete();
         
         foreach (var coin in appDbContext.Coins)
         {

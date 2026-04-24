@@ -1,20 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Models;
 using WoodseatsScouts.Coins.Api.Models.Domain;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
+using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Data;
 
 public interface IAppDbContext
 {
-    public DbSet<ScavengedCoin>? ScavengedCoins { get; set; }
+    public DbSet<ScanCoin>? ScanCoins { get; set; }
 
-    public DbSet<Member>? Members { get; set; }
+    public DbSet<ScoutMember>? ScoutMembers { get; set; }
     
-    public DbSet<ScavengeResult>? ScavengeResults { get; set; }
+    public DbSet<ScanSession>? ScanSessions { get; set; }
     
-    public DbSet<Troop>? Troops { get; set; }
+    public DbSet<ScoutGroup>? ScoutGroups { get; set; }
     
-    public DbSet<Section>? Sections { get; set; }
+    public DbSet<ScoutSection>? ScoutSections { get; set; }
     
     public DbSet<Coin>? Coins { get; set; }
     
@@ -22,25 +24,29 @@ public interface IAppDbContext
 
     int SaveChanges();
     
-    int GenerateNextMemberCode(int troopId, string section);
+    int GenerateNextMemberCode(int scoutGroupId, string section);
     
-    List<Member> GetLastThreeUsersToScanPoints();
+    List<ScoutMember> GetLastThreeUsersToScanPoints();
     
-    List<object> GetLastSixScavengers();
+    List<MemberPointsSummaryDto> GetLatestScans(int numberOfScans);
     
-    List<GroupPoints> GetTopThreeGroupsInLastHour();
-    
-    List<GroupPoints> GetGroupsWithMostPoints();
+    // List<GroupPoints> GetTopThreeGroupsInLastHour();
+    //
+    // List<GroupPoints> GetGroupsWithMostPoints();
 
-    Troop CreateTroop(int id, string name);
+    ScoutGroup CreateScoutGroup(int id, string name);
     
-    ScavengeResult CreateScavengeResult(Member member);
+    ScanSession CreateScavengeResult(ScoutMember scoutMember);
     
-    void CreateScavengedCoins(ScavengeResult scavengeResult, List<string> coinCodes);
+    void CreateScavengedCoins(ScanSession scanSession, List<string> coinCodes);
     
-    List<Coin> RecordMemberAgainstUnscavengedCoins(Member member, List<string> coinCodes);
+    List<Coin> RecordMemberAgainstUnscavengedCoins(ScoutMember scoutMember, List<string> coinCodes);
     
-    DbSet<Country>? Countries { get; set; }
-        
-    DbSet<MemberCountryVote>? MemberCountryVotes { get; set; }
+    DbSet<ActivityBase> ActivityBases { get; set; }
+
+    ScoutMember? CreateMember(string firstName, string lastName, int scoutGroupId, string section, bool isDayVisitor);
+    
+    ScoutMember UpdateMemberName(int memberId, string firstName, string lastName);
+    
+    List<Coin> CreateCoins(int baseId, int points, int count);
 }

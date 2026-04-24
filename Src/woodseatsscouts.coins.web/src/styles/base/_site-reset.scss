@@ -1,0 +1,17 @@
+﻿@use "sass:map";
+@use '../abstract/site-variables' as variables;
+@use '../abstract/site-colours' as colours;
+
+html, body {
+  height: 100%;
+}
+
+html * {
+  color: map.get(colours.$colours, black);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: Nunito, serif;
+  -webkit-border-radius: 0 ;
+  -moz-border-radius: 0 ;
+  border-radius: 0 ;
+}

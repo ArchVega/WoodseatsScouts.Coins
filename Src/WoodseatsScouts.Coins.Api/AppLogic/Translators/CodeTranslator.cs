@@ -14,8 +14,8 @@
                 return new CoinPointTranslationResult
                 {
                     TokenIdentifier = code[..1],
-                    Id = Convert.ToInt32(code.Substring(1, 4)),
-                    BaseNumber = Convert.ToInt32(code.Substring(5, 3)),
+                    ActivityBaseSequenceNumber = Convert.ToInt32(code.Substring(1, 4)),
+                    ActivityBaseId = Convert.ToInt32(code.Substring(5, 3)),
                     PointValue = Convert.ToInt32(code[8..])
                 };
             }
@@ -39,7 +39,7 @@
                 {
                     TokenIdentifier = code[..1],
                     Section = code.Substring(4, 1),
-                    TroopNumber = Convert.ToInt32(code.Substring(1, 3)),
+                    ScoutGroupNumber = Convert.ToInt32(code.Substring(1, 3)),
                     MemberNumber = Convert.ToInt32(code[5..])
                 };
 

@@ -1,0 +1,9 @@
+﻿@use 'sass:map';
+@use '../abstract/site-colours' as colours;
+
+.member-image {
+  display: block;
+  margin: 0 auto;
+  border-radius: 50% !important;
+  border: 6px solid white;
+}

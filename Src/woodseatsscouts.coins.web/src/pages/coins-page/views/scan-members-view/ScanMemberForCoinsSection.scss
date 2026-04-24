@@ -1,0 +1,22 @@
+@use "sass:map";
+@use "../../../../styles/abstract/site-colours" as colours;
+
+.page {
+  &-hello-text {
+    color: transparent;
+    font-size: 10em;
+    font-weight: 800;
+    -webkit-text-stroke: 3px map.get(colours.$colours, purple);
+    margin-right: 40px;
+  }
+
+  img {
+    height: 130px;
+    vertical-align: baseline;
+  }
+
+  strong {
+    color: black;
+    font-size: 2em;
+  }
+}

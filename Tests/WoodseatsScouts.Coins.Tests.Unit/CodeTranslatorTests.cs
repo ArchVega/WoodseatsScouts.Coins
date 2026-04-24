@@ -46,9 +46,9 @@ public class CodeTranslatorTests
     public void TranslatingPoints(string code, int id, string tokenIdentifier, int baseNumber, int pointValue)
     {   
         var pointTranslationResult = CodeTranslator.TranslateCoinCode(code);
-        pointTranslationResult.Id.ShouldBe(id);
+        pointTranslationResult.ActivityBaseSequenceNumber.ShouldBe(id);
         pointTranslationResult.TokenIdentifier.ShouldBe(tokenIdentifier);
-        pointTranslationResult.BaseNumber.ShouldBe(baseNumber);
+        pointTranslationResult.ActivityBaseId.ShouldBe(baseNumber);
         pointTranslationResult.PointValue.ShouldBe(pointValue);
     }
     
@@ -58,13 +58,13 @@ public class CodeTranslatorTests
     [InlineData("M045B008", "M", 45, "B", 8)]
     [InlineData("M045B010", "M", 45, "B", 10)]
     [InlineData("M045B019", "M", 45, "B", 19)]
-    public void TranslatingMemberCode(string code, string tokenIdentifier, int troop, string section, int memberNumber)
+    public void TranslatingMemberCode(string code, string tokenIdentifier, int scoutGroup, string section, int memberNumber)
     {
         var memberCodeTranslationResult = CodeTranslator.TranslateMemberCode(code);
         
         memberCodeTranslationResult.TokenIdentifier.ShouldBe(tokenIdentifier);
         memberCodeTranslationResult.Section.ShouldBe(section);
-        memberCodeTranslationResult.TroopNumber.ShouldBe(troop);
+        memberCodeTranslationResult.ScoutGroupNumber.ShouldBe(scoutGroup);
         memberCodeTranslationResult.MemberNumber.ShouldBe(memberNumber);
     }
 }

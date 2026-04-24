@@ -1,0 +1,106 @@
+@use "sass:map";
+@use "sass:color";
+@use "./../../styles/abstract/_site-mixins" as mixins;
+@use "./../../styles/abstract/_site-colours" as colours;
+
+#member-details-page {
+  .member-details-member-card {
+    width: 100%;
+    border-radius: 10px !important;
+    border: 1px solid map.get(colours.$colours, grey-darker);;
+    background-color: map.get(colours.$colours, grey-light);;
+
+    * {
+      color: black;
+    }
+
+    .tile {
+      @include mixins.rounded-borders;
+      border: 1px solid map.get(colours.$colours, grey-dark);
+      padding: 5px;
+      width: 100%;
+      text-align: center;
+      background-color: map.get(colours.$colours, white);;
+    }
+
+    & img {
+      @include mixins.rounded-borders;
+      width: 100% !important;
+      height: 186px !important;
+      object-fit: cover !important;
+    }
+
+    .row:nth-child(1) {
+      min-height: 200px;
+    }
+  }
+
+  .member-action-button-container {
+    button {
+      @include mixins.rounded-borders;
+      border: none;
+      font-size: 12px !important;
+      font-weight: bold;
+      height: 40px;
+      width: 100%;
+    }
+
+    #add-points-button {
+      background-color: map.get(colours.$colours, green);
+      color: white;
+
+      &:hover {
+        background-color: color.adjust(map.get(colours.$colours, green), $lightness: -10%);
+      }
+    }
+
+    #remove-points-button {
+      background-color: map.get(colours.$colours, red);
+      color: white;
+
+      &:hover {
+        background-color: color.adjust(map.get(colours.$colours, red), $lightness: -10%);
+      }
+    }
+  }
+
+  #recent-member-activity-summary-cards {
+    .card {
+      border: 1px solid map.get(colours.$colours, grey-darker);;
+      margin-bottom: 10px;
+    }
+
+    * {
+      color: black;
+      text-align: center;
+    }
+
+    .title {
+      font-style: italic;
+    }
+
+    .children {
+    }
+  }
+
+  .member-details-table-container {
+    &.card {
+      border: 1px solid map.get(colours.$colours, grey-darker);;
+    }
+
+    div.row {
+      height: 60px;
+      text-align: center;
+    }
+    table {
+      * {
+        text-align: center;
+        color: black;
+      }
+
+      thead * {
+        color: white !important;
+      }
+    }
+  }
+}

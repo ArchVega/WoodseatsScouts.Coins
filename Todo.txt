@@ -1,1 +1,48 @@
- 
+ Notes
+
+The members details page DEFINITELY needs memoization, search filtering is impacted because of the re-renders (post schema change)
+
+ new update member name endpoint - does not check if names are duplicated, would have to put in client side handling for validation responses
+
+ coin grid left to right, newest lower right - not matching spec yet - will try at end. it's none standard and requires advanced css grid
+
+ for the member list page, not implementing the three filter boxes as the global one works fine, unless there's time
+
+ sticky footer ie fixed viewport height + a toggleable submenu was way too complex.
+
+ add a test if one doesn't exist to ensure that nothing is carried over from a previous member's haul
+
+ the member photos - are they large? could slow down the site when all are loaded in memory
+
+ scores are shown always now - is this ok?
+
+ in the future, rename Member to Participant
+
+ put in a thumbnail creator class. make it generate a few different sizes and pick the right one
+
+ fix navmenu, Beavers, Greenhill Methodist splits 
+
+ do we still need MemberId and LockUntil?
+
+ be sure to check DateTime.UtcNow usage
+
+When a scavenged coin is deleted, do we remove it from the scavenged coin table (making it effectively reusable) or do we mark it as deleted? Going
+with removing it from the table
+
+add / remove fixed points. If we were to have a single field to store a "master" value. eg +20, -10 woudl this work?
+admin could edit. eg. "I've added +20, but now I'm going to deduct 10, so I'll reopen the dialog that now has +20 and change to 10. 
+
+how do we prevent members from accessing the admin screens and modifying data?
+
+icons on coins to follow, same with + prefix
+do we make the Save points button larger? If it's too large, could that run the risk of accidental clicks?
+
+what do we do about the close buttons on the coins? When a coin is removed by it, can it be re-added?
+
+I managed to double click a button - check the fix
+
+the filter members page should work with the scanner, but is it the ipad ie the webcam it needs to work with?
+
+Would have gone with ScanPoints but singular would be ScanPoint and that's no good. ScanCoin.
+
+home page is calling https://release-scouts-webapi.azurewebsites.net/api/members?view=PointsSummary

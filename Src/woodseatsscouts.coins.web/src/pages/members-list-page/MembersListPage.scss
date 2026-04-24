@@ -1,0 +1,59 @@
+@use "sass:map";
+@use "./../../styles/abstract/_site-mixins" as mixins;
+@use "./../../styles/abstract/_site-colours" as colours;
+
+#members-list-page {
+  .members-list-item-card {
+    width: 220px;
+    border-radius: 10px !important;
+    border: 1px solid map.get(colours.$colours, black);
+    background-color: map.get(colours.$colours, grey-light);
+
+    * {
+      color: black;
+    }
+
+    & img {
+      @include mixins.rounded-borders;
+      width: 100% !important;
+      height: 186px !important;
+      object-fit: cover !important;
+    }
+
+    .tile {
+      @include mixins.rounded-borders;
+      border: 1px solid map.get(colours.$colours, grey-dark);
+      font-weight: 100;
+      padding: 5px;
+    }
+
+    .member-name-row {
+      margin-top: 5px;
+      min-height: 100px;
+
+      .tile {
+        font-weight: 800;
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    button {
+      border: 1px solid map.get(colours.$colours, grey-dark);
+      height: 60px
+    }
+
+    .members-list-item-section {
+      & * {
+        text-align: center;
+        width: 100% !important;
+        background-color: white;
+      }
+    }
+  }
+
+  input.filter-members {
+    @include mixins.rounded-borders
+  }
+}
+

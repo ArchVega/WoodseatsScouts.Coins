@@ -5,7 +5,7 @@ install-module sqlserver (for powershell db scripts)
 
 ## Database Schema
 
-Troops has many Members
+ScoutGroups has many Members
 
 Members has many ScavengeResults
 

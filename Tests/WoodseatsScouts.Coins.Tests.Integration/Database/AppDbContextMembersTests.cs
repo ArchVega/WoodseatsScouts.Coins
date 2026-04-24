@@ -21,8 +21,8 @@ public class AppDbContextMembersTests
         testDataFactory = new TestDataFactory(appDbContext);
         
         /* Setting arbitrary start and end dates*/
-        databaseFixture.LeaderboardSettings.ScavengerHuntStartTime = DateTime.Now.AddDays(-1);
-        databaseFixture.LeaderboardSettings.ScavengerHuntDeadline = DateTime.Now.AddDays(1);
+        databaseFixture.LeaderboardSettings.ScavengerHuntStartTime = DateTime.UtcNow.AddDays(-1);
+        databaseFixture.LeaderboardSettings.ScavengerHuntDeadline = DateTime.UtcNow.AddDays(1);
         databaseFixture.AppSettings.MinutesToLockScavengedCoins = 10;
     }
     
@@ -31,7 +31,7 @@ public class AppDbContextMembersTests
     {
         databaseFixture.RestoreBaseTestData();
         
-        var member = appDbContext.Members.First();
+        var member = appDbContext.ScoutMembers.First();
         var tallyHistoryItem = appDbContext.CreateScavengeResult(member);
     }
     
@@ -40,7 +40,7 @@ public class AppDbContextMembersTests
     {
         databaseFixture.RestoreBaseTestData();
         
-        var member = appDbContext.Members.First();
+        var member = appDbContext.ScoutMembers.First();
         var coins = appDbContext.Coins.Take(3);
         var tallyHistoryItem = appDbContext.CreateScavengeResult(member);
         appDbContext.CreateScavengedCoins(tallyHistoryItem, coins.Select(x => x.Code).ToList());
@@ -51,7 +51,7 @@ public class AppDbContextMembersTests
     {
         databaseFixture.RestoreBaseTestData();
         
-        var member = appDbContext.Members.First();
+        var member = appDbContext.ScoutMembers.First();
         var coins = appDbContext.Coins.Take(3);
         var tallyHistoryItem = appDbContext.CreateScavengeResult(member);
         appDbContext.CreateScavengedCoins(tallyHistoryItem, coins.Select(x => x.Code).ToList());
@@ -63,7 +63,7 @@ public class AppDbContextMembersTests
     {
         databaseFixture.RestoreBaseTestData();
         
-        var member = appDbContext!.Members!.First();
+        var member = appDbContext!.ScoutMembers!.First();
         
         var coins = appDbContext.Coins!.Take(3);
         var tallyHistoryItem = appDbContext.CreateScavengeResult(member);
