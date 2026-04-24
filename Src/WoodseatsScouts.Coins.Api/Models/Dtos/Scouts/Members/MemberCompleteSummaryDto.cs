@@ -1,5 +1,6 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 
@@ -44,7 +45,7 @@ public class MemberCompleteSummaryDto
         FullName = scoutMember.FullName;
         ScoutGroupId = scoutMember.ScoutGroup.Id;
         ScoutGroupName = scoutMember.ScoutGroup.Name;
-        SectionId = scoutMember.ScoutSectionId;
+        SectionCode = scoutMember.ScoutSectionId;
         SectionName = scoutMember.ScoutSection.Name;
         // changed
         TotalPoints = scoutMember.ScavengeResults.SelectMany(y => y.ScanCoins.Select(z => z.Coin.Value)).Sum();
@@ -101,7 +102,7 @@ public class MemberCompleteSummaryDto
 
     public string ScoutGroupName { get; set; }
 
-    public string SectionId { get; set; } // Todo Section is now "SectionId". Rename
+    public string SectionCode { get; set; }
 
     public string SectionName { get; set; }
 

@@ -3,6 +3,8 @@
 public class MemberCodeTranslationResult : TranslationResultBase
 {
     public int ScoutGroupNumber { get; init; }
-    public string? Section { get; init; }
-    public int MemberNumber { get; init; }
+    
+    public string? SectionCode { get; init; }
+    
+    public int ScoutMemberNumber { get; init; }
 }

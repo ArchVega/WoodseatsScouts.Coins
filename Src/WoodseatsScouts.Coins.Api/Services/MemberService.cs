@@ -16,11 +16,11 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
             .Id;
     }
 
-    public MemberDto GetMemberDto(int memberId)
+    public ScoutMemberDto GetMemberDto(int memberId)
     {
         var member = appDbContext.ScoutMembers!.Single(x => x.Id == memberId);
 
-        return new MemberDto(member);
+        return new ScoutMemberDto(member);
     }
 
     public MemberPointsSummaryDto MemberPointsSummaryDto(int memberId)

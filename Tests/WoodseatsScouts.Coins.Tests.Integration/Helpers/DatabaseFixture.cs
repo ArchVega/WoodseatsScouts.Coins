@@ -35,7 +35,15 @@ public class DatabaseFixture
         // contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(SourceDatabaseConnectionString).Options;
         contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
 
-        AppSettings = new AppSettings();
+        AppSettings = new AppSettings
+        {
+            AppVersion = "test",
+            ContentRootDirectory = "test",
+            MinutesToLockScavengedCoins = 10,
+            LoginPauseDurationSeconds = 10,
+            ParticipantPlaceholderImagePath = "test",
+            NumberOfLatestScansToDisplay = 10
+        };
         appSettingsOptions = Options.Create(AppSettings);
     }
 

@@ -6,7 +6,7 @@ public interface IMemberService
 {
     int GetMemberId(int memberNumber, int scoutGroupNumber, string? sectionId);
     
-    MemberDto GetMemberDto(int member);
+    ScoutMemberDto GetMemberDto(int member);
     
     MemberCompleteSummaryDto MemberCompleteSummaryDto(int memberId);
     

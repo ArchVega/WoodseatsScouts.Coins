@@ -1,9 +1,9 @@
-namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+namespace WoodseatsScouts.Coins.Api.Models.Requests.Coins;
 
 /// <summary>
 /// Either ActivityBaseId or ActivityBaseName must be supplied, not both.
 /// </summary>
-public class CreateCoinDto
+public class CreateCoinsRequest
 {
     public int PointsPerCoin { get; set; }
     

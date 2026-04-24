@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
-using WoodseatsScouts.Coins.Api.Models.Dtos.ScoutGroups;
+using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Groups;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -19,9 +19,9 @@ public class ScoutGroupController(IAppDbContext appDbContext) : ControllerBase
     
     [HttpPost]
     [Route("")]
-    public ActionResult CreateScoutGroup([FromBody] CreateScoutGroupRequestModel createScoutGroupRequestModel)
+    public ActionResult CreateScoutGroup([FromBody] CreateScoutGroupRequest createScoutGroupRequest)
     {
-        var scoutGroup = appDbContext.CreateScoutGroup(createScoutGroupRequestModel.Id, createScoutGroupRequestModel.Name);
+        var scoutGroup = appDbContext.CreateScoutGroup(createScoutGroupRequest.Id, createScoutGroupRequest.Name);
 
         return Ok($"ScoutGroup {scoutGroup.Name} added");
     }

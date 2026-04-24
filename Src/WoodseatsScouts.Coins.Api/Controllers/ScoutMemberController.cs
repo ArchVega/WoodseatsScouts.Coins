@@ -40,7 +40,7 @@ public class ScoutMemberController(
             return BadRequest(e.Message);
         }
 
-        var memberId = memberService.GetMemberId(translationResult.MemberNumber, translationResult.ScoutGroupNumber, translationResult.Section);
+        var memberId = memberService.GetMemberId(translationResult.ScoutMemberNumber, translationResult.ScoutGroupNumber, translationResult.SectionCode);
 
         switch (memberQuery.View)
         {
@@ -62,16 +62,16 @@ public class ScoutMemberController(
     
     [HttpPost]
     [Route("")]
-    public object CreateMember([FromBody] CreateMemberRequestModel createMemberRequestModel)
+    public object CreateMember([FromBody] CreateMemberRequest createMemberRequest)
     {
         lock (Locker)
         {
             return Ok(appDbContext.CreateMember(
-                createMemberRequestModel.FirstName,
-                createMemberRequestModel.LastName,
-                createMemberRequestModel.ScoutGroupId,
-                createMemberRequestModel.Section, // Todo: Client sends "section" but this is really "sectionId"
-                createMemberRequestModel.IsDayVisitor));
+                createMemberRequest.FirstName,
+                createMemberRequest.LastName,
+                createMemberRequest.ScoutGroupId,
+                createMemberRequest.SectionCode, // Todo: Client sends "section" but this is really "sectionId"
+                createMemberRequest.IsDayVisitor));
         }
     }
 

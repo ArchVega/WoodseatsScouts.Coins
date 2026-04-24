@@ -29,7 +29,7 @@ public class CoinControllerTests
 
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember { Code = memberCode } }));
 
-        var exception = Should.Throw<CodeTranslationException>(() => coinsController.GetCoin(memberCode, It.IsAny<string>()));
+        var exception = Should.Throw<CodeTranslationException>(() => coinsController.AssignCoinToScoutMember(memberCode, It.IsAny<string>()));
 
         exception.Message.ShouldBe("The code 'M045B019' is a Member code");
     }
@@ -45,7 +45,7 @@ public class CoinControllerTests
 
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember { Code = memberCode } }));
 
-        var exception = Should.Throw<CodeTranslationException>(() => coinsController.GetCoin(coinCode, memberCode));
+        var exception = Should.Throw<CodeTranslationException>(() => coinsController.AssignCoinToScoutMember(coinCode, memberCode));
 
         exception.Message.ShouldBe("Oops, we couldn't find that coin - please speak to a District Camp Leader");
     }
@@ -62,7 +62,7 @@ public class CoinControllerTests
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember { Code = memberCode } }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>()));
 
-        var result = coinsController.GetCoin(coinCode, memberCode);
+        var result = coinsController.AssignCoinToScoutMember(coinCode, memberCode);
 
         result.ShouldBeOfType<NotFoundObjectResult>();
         ((NotFoundObjectResult)result).Value.ShouldBe("A coin with the code 'C9999999999' was not found in the database.");
@@ -80,7 +80,7 @@ public class CoinControllerTests
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember() }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin() { Code = coinCode } }));
 
-        var result = coinsController.GetCoin(coinCode, memberCode);
+        var result = coinsController.AssignCoinToScoutMember(coinCode, memberCode);
 
         result.ShouldBeOfType<NotFoundObjectResult>();
         ((NotFoundObjectResult)result).Value.ShouldBe("A member with the code 'C0001010020' was not found in the database.");
@@ -102,7 +102,7 @@ public class CoinControllerTests
             new() { Code = coinCode, MemberId = memberId, LockUntil = DateTime.UtcNow.AddHours(1) }
         }));
 
-        var result = coinsController.GetCoin(coinCode, memberCode);
+        var result = coinsController.AssignCoinToScoutMember(coinCode, memberCode);
 
         result.ShouldBeOfType<ConflictObjectResult>();
         ((ConflictObjectResult)result).Value.ShouldBe("The coin has already been scavenged by test-first-name");
@@ -128,7 +128,7 @@ public class CoinControllerTests
             new() { Code = coinCode, MemberId = otherMemberId, LockUntil = DateTime.UtcNow.AddHours(1) }
         }));
 
-        var result = coinsController.GetCoin(coinCode, memberCode);
+        var result = coinsController.AssignCoinToScoutMember(coinCode, memberCode);
 
         result.ShouldBeOfType<ConflictObjectResult>();
         ((ConflictObjectResult)result).Value.ShouldBe(
@@ -149,7 +149,7 @@ public class CoinControllerTests
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { currentMember }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new() { Code = coinCode } }));
 
-        var result = Should.NotThrow(() => coinsController.GetCoin(coinCode, memberCode));
+        var result = Should.NotThrow(() => coinsController.AssignCoinToScoutMember(coinCode, memberCode));
 
         result.ShouldBeOfType<OkObjectResult>();
         var coin = (CoinDto)((OkObjectResult)result).Value!;

@@ -25,7 +25,7 @@ const Uris = {
 
     return {
       resourcePath: resourcePath,
-      scans: (coinCode: string, memberCode: string) => logApi(`${resourcePath}/${coinCode}/scans/${memberCode}`),
+      assign: (coinCode: string, memberCode: string) => logApi(`${resourcePath}/${coinCode}/assign/${memberCode}`),
     }
   },
 

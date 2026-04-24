@@ -2,5 +2,5 @@
 
 public abstract class TranslationResultBase
 {
-    public string TokenIdentifier { get; init; }
+    public string TokenIdentifier { get; init; } = null!;
 }

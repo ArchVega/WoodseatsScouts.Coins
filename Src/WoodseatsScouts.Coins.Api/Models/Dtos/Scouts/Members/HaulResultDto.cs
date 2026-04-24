@@ -1,3 +1,5 @@
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
+
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 
 public class HaulResultDto

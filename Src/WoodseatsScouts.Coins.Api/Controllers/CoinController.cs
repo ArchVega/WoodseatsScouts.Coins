@@ -3,6 +3,7 @@ using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+using WoodseatsScouts.Coins.Api.Models.Requests.Coins;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -12,24 +13,52 @@ public class CoinController(
     IAppDbContext appDbContext,
     SystemDateTimeProvider systemDateTimeProvider) : ControllerBase
 {
-    [HttpGet]
-    [Route("{code}/scans/{memberCode}")]
-    public IActionResult GetCoin(string code, string memberCode)
+    [HttpPost]
+    [Route("")]
+    public ActionResult CreateCoins([FromBody] CreateCoinsRequest createCoinsRequest)
     {
-        var result = CodeTranslator.TranslateCoinCode(code);
+        if (createCoinsRequest.ActivityBaseId.HasValue && !string.IsNullOrWhiteSpace(createCoinsRequest.ActivityBaseName))
+        {
+            return BadRequest("Both BaseId and BaseName were provided. Provide one.");
+        }
 
-        var dbCoin = appDbContext.Coins!.SingleOrDefault(x => x.Code == code);
+        if (!createCoinsRequest.ActivityBaseId.HasValue && string.IsNullOrWhiteSpace(createCoinsRequest.ActivityBaseName))
+        {
+            return BadRequest("Either BaseId or BaseName is required.");
+        }
+
+        if (createCoinsRequest.PointsPerCoin == 0)
+        {
+            return BadRequest("Points must be provided.");
+        }
+
+        var baseId = string.IsNullOrWhiteSpace(createCoinsRequest.ActivityBaseName)
+            ? createCoinsRequest.ActivityBaseId!.Value
+            : appDbContext.ActivityBases!.Single(x => x.Name == createCoinsRequest.ActivityBaseName).Id!;
+
+        var coins = appDbContext.CreateCoins(baseId!, createCoinsRequest.PointsPerCoin, createCoinsRequest.NumberToCreate);
+
+        return Ok(coins);
+    }
+    
+    [HttpPut]
+    [Route("{coinCode}/assign/{scoutMemberCode}")]
+    public IActionResult AssignCoinToScoutMember(string coinCode, string scoutMemberCode)
+    {
+        var result = CodeTranslator.TranslateCoinCode(coinCode);
+
+        var dbCoin = appDbContext.Coins!.SingleOrDefault(x => x.Code == coinCode);
 
         if (dbCoin == null)
         {
-            return NotFound($"A coin with the code '{code}' was not found in the database.");
+            return NotFound($"A coin with the code '{coinCode}' was not found in the database.");
         }
 
-        var member = appDbContext.ScoutMembers!.SingleOrDefault(x => x.Code == memberCode);
+        var member = appDbContext.ScoutMembers!.SingleOrDefault(x => x.Code == scoutMemberCode);
 
         if (member == null)
         {
-            return NotFound($"A member with the code '{code}' was not found in the database.");
+            return NotFound($"A member with the code '{coinCode}' was not found in the database.");
         }
 
         if (member.Id == dbCoin.MemberId && systemDateTimeProvider.Now < dbCoin.LockUntil)
@@ -52,34 +81,13 @@ public class CoinController(
         dbCoin.LockUntil = null;
         appDbContext.SaveChanges();
 
-        return Ok(new CoinDto(result.PointValue, result.ActivityBaseId, code));
+        return Ok(new CoinDto(result.PointValue, result.ActivityBaseId, coinCode));
     }
     
-    [HttpPost]
+    [HttpGet]
     [Route("")]
-    public ActionResult CreateCoins([FromBody] CreateCoinDto createCoinDto)
+    public IActionResult GetAll()
     {
-        if (createCoinDto.ActivityBaseId.HasValue && !string.IsNullOrWhiteSpace(createCoinDto.ActivityBaseName))
-        {
-            return BadRequest("Both BaseId and BaseName were provided. Provide one.");
-        }
-
-        if (!createCoinDto.ActivityBaseId.HasValue && string.IsNullOrWhiteSpace(createCoinDto.ActivityBaseName))
-        {
-            return BadRequest("Either BaseId or BaseName is required.");
-        }
-
-        if (createCoinDto.PointsPerCoin == 0)
-        {
-            return BadRequest("Points must be provided.");
-        }
-
-        var baseId = string.IsNullOrWhiteSpace(createCoinDto.ActivityBaseName)
-            ? createCoinDto.ActivityBaseId!.Value
-            : appDbContext.ActivityBases!.Single(x => x.Name == createCoinDto.ActivityBaseName).Id!;
-
-        var coins = appDbContext.CreateCoins(baseId!, createCoinDto.PointsPerCoin, createCoinDto.NumberToCreate);
-
-        return Ok(coins);
+        return Ok(appDbContext.Coins.ToList());
     }
 }
