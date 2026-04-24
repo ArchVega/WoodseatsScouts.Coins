@@ -6,6 +6,7 @@ using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 using WoodseatsScouts.Coins.Api.Models.Queries;
+using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Members;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 

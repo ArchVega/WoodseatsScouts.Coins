@@ -1,4 +1,4 @@
-namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
+namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 
 public class MemberCompleteSummaryStatsDto
 {

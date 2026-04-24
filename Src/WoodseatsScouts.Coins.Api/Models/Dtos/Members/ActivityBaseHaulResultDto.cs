@@ -1,6 +1,6 @@
-using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 
-namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
+namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 
 public class ActivityBaseHaulResultDto
 {

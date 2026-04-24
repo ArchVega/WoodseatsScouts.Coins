@@ -36,6 +36,8 @@
 
     <ItemGroup>
       <Folder Include="Migrations\" />
+      <Folder Include="Models\Requests\Coins\" />
+      <Folder Include="Models\Requests\Scouts\" />
     </ItemGroup>
 
 <!--    todo-->

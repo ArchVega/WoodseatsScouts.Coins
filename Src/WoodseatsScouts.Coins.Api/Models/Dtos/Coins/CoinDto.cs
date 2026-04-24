@@ -1,4 +1,4 @@
-namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
+namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 
 public class CoinDto(int pointValue, int activityBaseId, string code)
 {

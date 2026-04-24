@@ -1,6 +1,6 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
-namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
+namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 
 public abstract class MemberBaseDto
 {

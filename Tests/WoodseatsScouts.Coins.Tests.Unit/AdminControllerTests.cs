@@ -12,7 +12,6 @@ using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
 using Xunit;
 
 namespace WoodseatsScouts.Coins.Tests;

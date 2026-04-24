@@ -13,8 +13,8 @@ using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 using WoodseatsScouts.Coins.Api.Models.Queries;
+using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Members;
 using Xunit;
 
 namespace WoodseatsScouts.Coins.Tests;

@@ -1,6 +1,6 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
-namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
+namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 
 public class ScoutGroupDto(ScoutGroup scoutGroup)
 {

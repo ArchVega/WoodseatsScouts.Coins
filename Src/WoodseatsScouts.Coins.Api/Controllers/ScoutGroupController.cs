@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WoodseatsScouts.Coins.Api.Data;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 using WoodseatsScouts.Coins.Api.Models.Dtos.ScoutGroups;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;

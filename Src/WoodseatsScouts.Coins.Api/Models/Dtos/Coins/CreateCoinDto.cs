@@ -1,4 +1,4 @@
-namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
+namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 
 /// <summary>
 /// Either ActivityBaseId or ActivityBaseName must be supplied, not both.

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Models.Domain;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 
 namespace WoodseatsScouts.Coins.Api.Data
 {
