@@ -27,7 +27,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public DbSet<ScanSession>? ScanSessions { get; set; }
 
-        public DbSet<ErrorLog>? ErrorLogs { get; set; }
+        public DbSet<ErrorLog> ErrorLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

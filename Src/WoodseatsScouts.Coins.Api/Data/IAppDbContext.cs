@@ -20,7 +20,7 @@ public interface IAppDbContext
     
     public DbSet<Coin>? Coins { get; set; }
     
-    public DbSet<ErrorLog>? ErrorLogs { get; set; }
+    public DbSet<ErrorLog> ErrorLogs { get; set; }
 
     int SaveChanges();
     
