@@ -22,6 +22,12 @@ apiClient.interceptors.response.use(
 
     if (data?.computedImagePath) {
       data.clientComputedImageUri = response.config.baseURL + "/" + data.computedImagePath;
+    } else if (Array.isArray(data)) {
+      data.forEach((item) => {
+        if (item.computedImagePath) {
+          item.clientComputedImageUri = response.config.baseURL + "/" + item.computedImagePath;
+        }
+      })
     }
 
     return response;

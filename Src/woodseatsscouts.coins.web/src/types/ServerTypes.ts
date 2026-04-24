@@ -24,7 +24,7 @@ export type MemberDto = MemberBase & {
   hasImage: boolean
 }
 
-export type MemberPointsSummaryDto = {
+export type MemberPointsSummaryDto = MemberBase & {
   scoutGroupName: string
   sectionName: string
   totalPoints: number
@@ -35,7 +35,7 @@ export type MemberPointsSummaryDto = {
   latestHaulResult: HaulResultDto | null
 }
 
-export type MemberCompleteDto = {
+export type MemberCompleteDto = MemberBase & {
   scoutGroupName: string
   sectionName: string
   totalPoints: number

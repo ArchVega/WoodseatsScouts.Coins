@@ -26,9 +26,6 @@ export default function MembersListPage() {
       return await MemberApiService().fetchMembers();
     }
     fetchMembers().then(response => {
-      response.data.forEach(memberPointsSummaryDto => {
-        // memberPointsSummaryDto.clientComputedImageUri = Uris.scouts().members().memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
-      })
       setMembers(response.data)
     });
   }, [])
