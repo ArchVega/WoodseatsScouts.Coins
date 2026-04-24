@@ -53,7 +53,7 @@ export default function NavMenu() {
         return (
           <div>
             <span data-testid="nav-coins-page" onClick={() => navigate("/")} className={"scouts-nav-link m-3"}>
-              <div className={"fs-3 px-3 py-1 scouts-borders-white"}>
+              <div role="button" className={"fs-3 px-3 py-1 scouts-borders-white"}>
                 Return to Main Screen
               </div>
             </span>

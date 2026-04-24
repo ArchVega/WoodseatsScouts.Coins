@@ -23,10 +23,10 @@ export default function HaulResultsSection({member, haulResult}) {
   }
 
   useEffect(() => {
-    logInfo(`Timeout seconds for page is: ${appSettings.VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT}`)
+    logInfo(`Timeout seconds for page is: ${appSettings.VITE_SCAN_COINS_COMPLETED_REDIRECT_AFTER_MS}`)
     setTimeout(() => {
       reloadPage()
-    }, appSettings.VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT)
+    }, appSettings.VITE_SCAN_COINS_COMPLETED_REDIRECT_AFTER_MS)
   }, []);
 
   return (

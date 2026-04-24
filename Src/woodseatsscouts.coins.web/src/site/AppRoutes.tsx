@@ -2,6 +2,7 @@ import MemberDetailsPage from "../pages/member-details-page/MemberDetailsPage.ts
 import CoinsPage from "../pages/coins-page/CoinsPage.tsx";
 import MembersListPage from "../pages/members-list-page/MembersListPage.tsx";
 import MembersLatestScansPage from "../pages/members-latest-scans-page/MembersLatestScansPage.tsx";
+import AdminPage from "../pages/admin-page/AdminPage.tsx";
 
 const AppRoutes = [
     {
@@ -20,6 +21,10 @@ const AppRoutes = [
     {
         path: '/members/latest-scans',
         element: <MembersLatestScansPage/>
+    },
+    {
+        path: '/admin',
+        element: <AdminPage/>
     }
 ];
 

@@ -1,6 +1,6 @@
 export type AppSettings = {
   VITE_WEB_API_URI: string
-  VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT: number
+  VITE_SCAN_COINS_COMPLETED_REDIRECT_AFTER_MS: number
 }
 
 export default function getAppSettings(): AppSettings {
@@ -13,9 +13,7 @@ export default function getAppSettings(): AppSettings {
   }
 
   return {
-    // VITE_WEB_API_URI: tryGet("VITE_WEB_API_URI"),
-    // VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT: tryGet("VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT")
-    VITE_WEB_API_URI: "https://release-scouts-webapi.azurewebsites.net/api",
-    VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT: 5000
+    VITE_WEB_API_URI: tryGet("VITE_WEB_API_URI"),
+    VITE_SCAN_COINS_COMPLETED_REDIRECT_AFTER_MS: tryGet("VITE_SCAN_COINS_COMPLETED_REDIRECT_AFTER_MS")
   }
 }

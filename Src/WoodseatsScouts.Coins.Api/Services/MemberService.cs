@@ -7,11 +7,6 @@ namespace WoodseatsScouts.Coins.Api.Services;
 
 public class MemberService(IAppDbContext appDbContext) : IMemberService
 {
-    public bool HasMemberImage(int memberId)
-    {
-        return appDbContext.ScoutMembers!.Single(x => x.Id == memberId).HasImage;
-    }
-
     public int GetMemberId(int memberNumber, int scoutGroupNumber, string? sectionId)
     {
         return appDbContext.ScoutMembers!
