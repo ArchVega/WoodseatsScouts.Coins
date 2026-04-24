@@ -1,11 +1,8 @@
 // dotcover disable
 
-using System.Reflection;
 using Microsoft.OpenApi.Models;
-using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Middleware;
-using WoodseatsScouts.Coins.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +11,10 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
 const string allOrigins = "_allOrigins";
-builder.Services.AddCors(options => { options.AddPolicy(name: allOrigins, policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); }); });
-
-
-builder.Services.AddControllers();
 ServicesRegistration.RegisterAll(builder.Services, builder.Configuration, builder.Environment);
+builder.Services.AddCors(options => { options.AddPolicy(name: allOrigins, policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); }); });
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition(AppSettings.ApiAuthenticationTokenKey, new OpenApiSecurityScheme
@@ -56,13 +50,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
-
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors(allOrigins);
 app.MapControllers();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 AppStartupValidator.Validate(app);
-
 app.Run();
