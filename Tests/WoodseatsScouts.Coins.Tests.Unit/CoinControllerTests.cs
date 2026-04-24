@@ -12,6 +12,7 @@ using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
 using Xunit;
 
 namespace WoodseatsScouts.Coins.Tests;
@@ -151,9 +152,9 @@ public class CoinControllerTests
         var result = Should.NotThrow(() => coinsController.GetCoin(coinCode, memberCode));
 
         result.ShouldBeOfType<OkObjectResult>();
-        var coin = (CoinViewModel)((OkObjectResult)result).Value!;
+        var coin = (CoinDto)((OkObjectResult)result).Value!;
         coin.PointValue.ShouldBe(20);
-        coin.BaseNumber.ShouldBe(10);
+        coin.ActivityBaseId.ShouldBe(10);
         coin.Code.ShouldBe("C0001010020");
     }
 }

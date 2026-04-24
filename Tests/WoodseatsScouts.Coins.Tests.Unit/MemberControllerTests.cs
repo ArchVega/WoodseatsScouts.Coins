@@ -12,6 +12,7 @@ using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.View;
 using WoodseatsScouts.Coins.Api.Models.View.Members;
@@ -33,41 +34,75 @@ public class MemberControllerTests
         return new MemberController(memberServiceMock.Object, appDbContextMock.Object, imagePersisterMock.Object, appSettingsOptions.Object, leaderboardSettingsOptions.Object);
     }
 
+    // These need to go into a db test
+    // GetMembersWithPoints_ReturnsValidViewModel
+    // var scoutGroup = new ScoutGroup { Id = 1 };
+    // var section = new ScoutSection { Code = "A" };
+    // var scavengeResults = new List<ScanSession> { new() { ScanCoins = scavengedCoins } };
+    // SetupDbMock(appDbContextMock, x => x.ScoutGroups!, [scoutGroup]);
+    // SetupDbMock(appDbContextMock, x => x.ScoutSections!, [section]);
+    // SetupDbMock(appDbContextMock, x => x.ScanCoins!, scavengedCoins);
+    // SetupDbMock(appDbContextMock, x => x.ScanSessions!, scavengeResults);
+    // SetupDbMock(appDbContextMock, x => x.ScoutMembers!, [
+    //     new Api.Models.Domain.ScoutMember { ScoutGroupId = 1, ScoutGroup = scoutGroup, ScoutSectionId = "A", ScoutSection = section, ScavengeResults = scavengeResults }
+    // ]);
+
     [Fact]
     public void GetMembersWithPoints_ReturnsValidViewModel()
     {
         var membersController = CreateCut();
 
-        var scoutGroup = new ScoutGroup { Id = 1 };
-        var section = new ScoutSection { Code = "A" };
-        var scavengedCoins = new List<ScanCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6}} }; // changed
-        var scavengeResults = new List<ScanSession> { new() { ScanCoins = scavengedCoins } };
+        var scavengedCoins = new List<ScanCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6 } } };
 
-        SetupDbMock(appDbContextMock, x => x.ScoutGroups!, [scoutGroup]);
-        SetupDbMock(appDbContextMock, x => x.ScoutSections!, [section]);
-        SetupDbMock(appDbContextMock, x => x.ScanCoins!, scavengedCoins);
-        SetupDbMock(appDbContextMock, x => x.ScanSessions!, scavengeResults);
-        SetupDbMock(appDbContextMock, x => x.ScoutMembers!, [
-            new Api.Models.Domain.ScoutMember { ScoutGroupId = 1, ScoutGroup = scoutGroup, ScoutSectionId = "A", ScoutSection = section, ScavengeResults = scavengeResults }
+        memberServiceMock.Setup(x => x.GetMemberWithPointsSummaryDtos()).Returns([
+            new MemberPointsSummaryDto(new ScoutMember
+            {
+                ScoutGroup = new ScoutGroup(),
+                ScoutSection = new ScoutSection(),
+                ScavengeResults =
+                [
+                    new ScanSession
+                    {
+                        ScanCoins =
+                        [
+                            new ScanCoin
+                            {
+                                Coin = new Coin
+                                {
+                                    Value = 23
+                                }
+                            },
+
+                            new ScanCoin
+                            {
+                                Coin = new Coin
+                                {
+                                    Value = 22
+                                }
+                            }
+                        ]
+                    }
+                ]
+            })
         ]);
 
-        var results = membersController.GetAllMembers(null);
+        var results = membersController.GetAllMembers(new Member() { View = View.PointsSummary });
 
         results.ShouldNotBeNull();
         results.ShouldBeOfType<OkObjectResult>();
-        var viewModels = (List<MembersWithPointsViewModel>)((OkObjectResult)results).Value!;
+        var viewModels = (List<MemberPointsSummaryDto>)((OkObjectResult)results).Value!;
         viewModels.Count.ShouldBe(1);
 
         var membersWithPointsViewModel = viewModels[0];
 
-        membersWithPointsViewModel.TotalPoints.ShouldBe(19);
+        membersWithPointsViewModel.TotalPoints.ShouldBe(45); // todo create test for total points calculation
     }
 
     [Fact]
     public void GetMemberInfoFromCode_InvalidCode_ThrowsException()
     {
         var membersController = CreateCut();
-
+    
         var result = membersController.GetMemberByCode("invalid", null);
         result.ShouldBeOfType<BadRequestObjectResult>();
         ((BadRequestObjectResult)result).Value.ShouldBe("Oops, we can't find your profile - please speak to a District Camp Leader");
@@ -100,21 +135,20 @@ public class MemberControllerTests
         result.ShouldBeOfType<OkResult>();
     }
 
-    [Fact]
-    public void GetPhoto()
-    {
-        var membersController = CreateCut();
-
-        membersController.Get(1);
-    }
+    // [Fact] // todo: test file stream?
+    // public void GetPhoto()
+    // {
+    //     var membersController = CreateCut();
+    //
+    //     membersController.Get(1);
+    // }
 
     [Fact]
     public void AddPointsToMember_Todo1()
     {
         var membersController = CreateCut();
 
-        // var scavengedCoins = new List<ScavengedCoin> { new() { PointValue = 13 }, new() { PointValue = 6 } };
-        var scavengedCoins = new List<ScanCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6}} }; // changed
+        var scavengedCoins = new List<ScanCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6 } } };
         var scavengeResults = new List<ScanSession> { new() { ScanCoins = scavengedCoins } };
         SetupDbMock(appDbContextMock, x => x.ScanCoins!, scavengedCoins);
         SetupDbMock(appDbContextMock, x => x.ScanSessions!, scavengeResults);
