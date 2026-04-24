@@ -1,7 +1,7 @@
 import {logApi} from "../../components/logging/Logger.ts";
 import getAppSettings from "../../AppSettings.ts";
 
-const baseUri = getAppSettings().VITE_WEB_API_URI + "/api"
+const baseUri: string = getAppSettings().VITE_WEB_API_URI + "/api"
 
 const Uris = {
   testDataCoins: `${baseUri}/system/tests/coins`,
@@ -49,17 +49,17 @@ const Uris = {
             return logApi(`${membersResourcePath}/${memberCode}?view=3`);
           },
           addPointsToMember: function (memberId: number) {
-            return `${membersResourcePath}/${memberId}/Coins`
+            return logApi(`${membersResourcePath}/${memberId}/Coins`)
           },
           updateMemberPhoto: function (memberId: number) {
-            return `${membersResourcePath}/${memberId}/Photo`
+            return logApi(`${membersResourcePath}/${memberId}/Photo`)
           },
           memberPhoto: function (photoImagePath: string) {
-            return `${baseUri}/${photoImagePath}`
+            return logApi(`${scoutsResourcePath}/${photoImagePath}`)
           },
-          memberName: function (id) {
-            return `${baseUri}/Members/${id}/Name?`
-          }
+          memberName: function (id: number) {
+            return logApi(`${membersResourcePath}/${id}/Name?`)
+          },
         }
       },
       groups: () => {

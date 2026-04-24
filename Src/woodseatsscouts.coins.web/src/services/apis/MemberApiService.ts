@@ -19,8 +19,8 @@ export default function MemberApiService() {
       return await axios.get(uri);
     },
 
-    async photo(): Promise<AxiosResponse<any>> {
-      return await axios.get(Uris.scouts().members().membersWithPointSummary());
+    async photo(photoImagePath: string): Promise<AxiosResponse<string>> {
+      return await axios.get(Uris.scouts().members().memberPhoto(photoImagePath));
     }
   }
 }

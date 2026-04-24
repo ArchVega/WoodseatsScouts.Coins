@@ -13,7 +13,7 @@ public class MemberPointsSummaryDto
         Id = scoutMember.Id;
         MemberCode = scoutMember.Code;
         HasImage = scoutMember.HasImage;
-        ComputedImagePath = scoutMember.HasImage ? $"Members/{scoutMember.Id}/Photo?{cacheBuster}" : "Members/Photo/Placeholder";
+        ComputedImagePath = scoutMember.HasImage ? $"{scoutMember.Id}/Photo?{cacheBuster}" : "Photo/Placeholder";
         MemberNumber = scoutMember.Number;
         FirstName = scoutMember.FirstName;
         LastName = scoutMember.LastName;
@@ -22,7 +22,6 @@ public class MemberPointsSummaryDto
         ScoutGroupName = scoutMember.ScoutGroup.Name;
         SectionId = scoutMember.ScoutSectionId;
         SectionName = scoutMember.ScoutSection.Name;
-        // changed
         TotalPoints = scoutMember.ScavengeResults.SelectMany(y => y.ScanCoins.Select(z => z.Coin.Value)).Sum();
         HaulResults = scoutMember.ScavengeResults.Select(x =>
         {

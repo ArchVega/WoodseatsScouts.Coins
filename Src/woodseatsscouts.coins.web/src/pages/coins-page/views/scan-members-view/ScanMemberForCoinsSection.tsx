@@ -43,8 +43,7 @@ export default function ScanMemberForCoinsSection({setMember}) {
         return await MemberApiService().fetchMember(memberQrCode)
       }
 
-      MemberApiService()
-        .photo()
+      fetchData()
         .then(value => {
           const member: MemberDto = value.data;
           member.clientComputedImageUri = Uris.scouts().members().memberPhoto(member.computedImagePath) // todo: is there an axios way to do this automatically?
