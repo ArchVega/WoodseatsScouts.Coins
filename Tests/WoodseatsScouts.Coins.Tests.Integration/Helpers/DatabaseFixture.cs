@@ -18,14 +18,9 @@ public class DatabaseFixture
 
     private readonly IOptions<AppSettings> appSettingsOptions;
     
-    private readonly IOptions<LeaderboardSettings> leaderboardSettingsOptions;
-    public LeaderboardSettings LeaderboardSettings { get; }
-
     public AppSettings AppSettings { get; set; }
 
-    public SystemDateTimeProvider SystemDateTimeProvider { get; set; }
-    
-    public AppDbContext AppDbContext => new(contextOptions, appSettingsOptions, SystemDateTimeProvider, leaderboardSettingsOptions);
+    public AppDbContext AppDbContext => new(contextOptions, appSettingsOptions);
 
     private const string SourceDatabaseConnectionString 
         = "Server=localhost,1433;Database=WoodseatsScouts.Coins.Development;User Id=SA;Password=Pa55w0rd123;TrustServerCertificate=True;Encrypt=False";
@@ -42,9 +37,6 @@ public class DatabaseFixture
 
         AppSettings = new AppSettings();
         appSettingsOptions = Options.Create(AppSettings);
-        
-        LeaderboardSettings = new LeaderboardSettings();
-        leaderboardSettingsOptions = Options.Create(LeaderboardSettings);
     }
 
     private static void RecreateDbViaPowerShell()

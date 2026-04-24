@@ -19,4 +19,5 @@ public class AppSettings
 
     public string ParticipantPlaceholderImagePath { get; set; }
     
+    public int NumberOfLatestScansToDisplay { get; set; }
 }

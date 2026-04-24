@@ -14,11 +14,8 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [Route("api/system/tests")]
 public class SutController(
     IAppDbContext appDbContext,
-    SystemDateTimeProvider systemDateTimeProvider,
-    IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase
+    SystemDateTimeProvider systemDateTimeProvider) : ControllerBase
 {
-    private readonly LeaderboardSettings leaderboardSettings = leaderboardSettingsOptions.Value;
-
     [HttpGet]
     [Route("members")]
     public List<ScoutMember> GetMembers()
@@ -40,15 +37,6 @@ public class SutController(
 
         return Ok("Updated all members HasImage property to true");
     }
-    
-    // [HttpPut]
-    // [Route("Leaderboard/Deadline/{minutesToAdd:int}")]
-    // public IActionResult SetReportDeadline(int minutesToAdd)
-    // {
-    //     leaderboardSettings.ScavengerHuntDeadline = DateTime.UtcNow.AddMinutes(minutesToAdd);
-    //
-    //     return Ok($"Report deadline datetime set to '{leaderboardSettings.ScavengerHuntDeadline}'");
-    // }
     
     [HttpPut]
     [Route("datetime/{minutesToAdd:int?}")]

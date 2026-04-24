@@ -16,7 +16,6 @@ builder.Configuration
 const string allOrigins = "_allOrigins";
 builder.Services.AddCors(options => { options.AddPolicy(name: allOrigins, policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); }); });
 
-builder.Services.AddScoped<IMemberService, MemberService>();
 
 builder.Services.AddControllers();
 ServicesRegistration.RegisterAll(builder.Services, builder.Configuration, builder.Environment);

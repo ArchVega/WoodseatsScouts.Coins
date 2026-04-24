@@ -1,14 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.View;
-using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -19,8 +16,7 @@ public class ScoutMemberController(
     IMemberService memberService,
     IAppDbContext appDbContext,
     IImagePersister imagePersister,
-    IOptions<AppSettings> appSettingsOptions,
-    IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase
+    IOptions<AppSettings> appSettingsOptions) : ControllerBase
 {
     private static readonly object Locker = new();
     

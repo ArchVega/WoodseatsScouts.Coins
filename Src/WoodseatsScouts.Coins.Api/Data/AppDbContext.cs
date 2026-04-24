@@ -1,23 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Options;
-using WoodseatsScouts.Coins.Api.AppLogic;
-using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
-using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Data
 {
     public class AppDbContext(
         DbContextOptions<AppDbContext> options,
-        IOptions<AppSettings> appSettingsOptions,
-        SystemDateTimeProvider systemDateTimeProvider,
-        IOptions<LeaderboardSettings> leaderboardSettings)
+        IOptions<AppSettings> appSettingsOptions)
         : DbContext(options), IAppDbContext
     {
-        private readonly LeaderboardSettings leaderboardSettings = leaderboardSettings.Value;
         public TimeProvider TimeProvider { get; set; } = TimeProvider.System;
 
         public DbSet<ScoutMember>? ScoutMembers { get; set; }
@@ -156,55 +149,6 @@ namespace WoodseatsScouts.Coins.Api.Data
 
             return f;
         }
-
-        // public List<GroupPoints> GetTopThreeGroupsInLastHour()
-        // {
-        //     var now = TimeProvider.GetLocalNow().DateTime;
-        //     var startDateTime = now.AddHours(-1);
-        //     return TopXScoutGroupsSinceY(3, startDateTime, now);
-        // }
-        //
-        // public List<GroupPoints> GetGroupsWithMostPoints()
-        // {
-        //     return TopXScoutGroupsSinceY(10, leaderboardSettings.ScavengerHuntStartTime, leaderboardSettings.ScavengerHuntDeadline);
-        // }
-        //
-        // private List<GroupPoints> TopXScoutGroupsSinceY(int count, DateTime startDateTime, DateTime endDateTime)
-        // {
-        //     var memberIds = ScavengeResults!
-        //         .Include(x => x.Member)
-        //         .Where(x => x.CompletedAt >= startDateTime)
-        //         .Select(x => x.MemberId)
-        //         .ToList();
-        //
-        //     var memberGroupedByScoutGroup = Members!
-        //         .Include(x => x.ScoutGroup)
-        //         .Include(x => x.ScavengeResults)
-        //         .ThenInclude(x => x.ScavengedCoins)
-        //         .Where(x => memberIds.Contains(x.Id))
-        //         .ToList()
-        //         .GroupBy(x => x.ScoutGroupId)
-        //         .ToList();
-        //
-        //     var topXGroupsInLastYHours = (
-        //         from grouping in memberGroupedByScoutGroup
-        //         let sum = grouping.SelectMany(x => x.ScavengeResults).SelectMany(x => x.ScavengedCoins).Sum(x => x.Coin.Value) // changed
-        //         select new GroupPoints
-        //         {
-        //             Id = grouping.First().ScoutGroup.Id,
-        //             Name = grouping.First().ScoutGroup.Name,
-        //             TotalPoints = sum
-        //         }).ToList();
-        //
-        //     var allScoutGroupsWithMembers = ScoutGroups!.Include(x => x.Members).ToList();
-        //     topXGroupsInLastYHours.ForEach(x =>
-        //         x.MemberCount = allScoutGroupsWithMembers.Single(y => y.Id == x.Id).Members.Count);
-        //
-        //     topXGroupsInLastYHours
-        //         = topXGroupsInLastYHours.OrderByDescending(x => x.AveragePoints).Take(count).ToList();
-        //
-        //     return topXGroupsInLastYHours;
-        // }
 
         public ScoutGroup CreateScoutGroup(int id, string name)
         {

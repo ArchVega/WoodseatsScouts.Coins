@@ -10,23 +10,14 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [ApiController]
 [Tags("Scan Sessions")]
 [Route("api/scans/sessions")]
-public class ScanSessionController(IAppDbContext appDbContext, IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase
+public class ScanSessionController(IAppDbContext appDbContext, IOptions<AppSettings> appSettingsOptions) : ControllerBase
 {   
     [HttpGet]
     [Route("latest")]
     public ActionResult LatestScans()
     {
-        var latestScans = appDbContext.GetLatestScans(leaderboardSettingsOptions.Value.NumberOfLatestScansToDisplay);
+        var latestScans = appDbContext.GetLatestScans(appSettingsOptions.Value.NumberOfLatestScansToDisplay);
 
         return Ok(latestScans);
     }
-
-    // todo: move to client side env file
-    // // move
-    // [HttpGet]
-    // [Route("RefreshSecondsForLatestScans")]
-    // public ActionResult RefreshSecondsForLatestScans()
-    // {
-    //     return Ok(leaderboardSettingsOptions.Value.Last6ScavengersPageRefreshSeconds);
-    // }
 }

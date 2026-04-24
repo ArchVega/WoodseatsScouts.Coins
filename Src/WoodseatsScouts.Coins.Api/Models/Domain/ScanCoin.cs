@@ -13,12 +13,6 @@
         
         public Coin Coin { get; set; }
         
-        // public string Code { get; set; }
-        //
-        // public int BaseNumber { get; set; }
-        //
-        // public int PointValue { get; set; }
-
         public override string ToString()
         {
             return $"{nameof(Coin.Code)}: {Coin.Code}, {nameof(Coin.Value)}: {Coin.Value}";

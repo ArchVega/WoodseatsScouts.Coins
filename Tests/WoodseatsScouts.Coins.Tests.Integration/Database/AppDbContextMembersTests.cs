@@ -21,8 +21,6 @@ public class AppDbContextMembersTests
         testDataFactory = new TestDataFactory(appDbContext);
         
         /* Setting arbitrary start and end dates*/
-        databaseFixture.LeaderboardSettings.ScavengerHuntStartTime = DateTime.UtcNow.AddDays(-1);
-        databaseFixture.LeaderboardSettings.ScavengerHuntDeadline = DateTime.UtcNow.AddDays(1);
         databaseFixture.AppSettings.MinutesToLockScavengedCoins = 10;
     }
     

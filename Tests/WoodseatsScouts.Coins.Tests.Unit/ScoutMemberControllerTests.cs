@@ -26,12 +26,11 @@ public class ScoutMemberControllerTests
     private readonly Mock<IMemberService> memberServiceMock = new();
     private readonly Mock<IAppDbContext> appDbContextMock = new();
     private readonly Mock<IImagePersister> imagePersisterMock = new();
-    private readonly Mock<IOptions<LeaderboardSettings>> leaderboardSettingsOptions = new();
     private readonly Mock<IOptions<AppSettings>> appSettingsOptions = new();
 
     private ScoutMemberController CreateCut()
     {
-        return new ScoutMemberController(memberServiceMock.Object, appDbContextMock.Object, imagePersisterMock.Object, appSettingsOptions.Object, leaderboardSettingsOptions.Object);
+        return new ScoutMemberController(memberServiceMock.Object, appDbContextMock.Object, imagePersisterMock.Object, appSettingsOptions.Object);
     }
 
     // These need to go into a db test
