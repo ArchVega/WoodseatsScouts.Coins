@@ -6,9 +6,9 @@ public class ScanSession
     
     public int ScoutMemberId { get; set; }
     
-    public ScoutMember ScoutMember { get; set; }
+    public required ScoutMember ScoutMember { get; set; }
     
     public DateTime CompletedAt { get; set; }
 
-    public List<ScanCoin> ScanCoins { get; set; }
+    public required List<ScanCoin> ScanCoins { get; set; } = [];
 }

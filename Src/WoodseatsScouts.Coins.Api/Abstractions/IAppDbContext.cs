@@ -28,7 +28,7 @@ public interface IAppDbContext
     
     List<MemberPointsSummaryDto> GetLatestScans(int numberOfScans);
     
-    ScoutGroup CreateScoutGroup(int id, string name);
+    ScoutGroup CreateScoutGroup(string name);
     
     ScanSession CreateScavengeResult(ScoutMember scoutMember);
     

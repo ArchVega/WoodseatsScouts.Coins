@@ -49,13 +49,41 @@ public class ScoutMemberControllerTests
     {
         var membersController = CreateCut();
 
-        var scavengedCoins = new List<ScanCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6 } } };
+        var scavengedCoins = new List<ScanCoin> { new()
+        {
+            Coin = new Coin
+            {
+                Value = 13,
+                ActivityBase = null,
+                Code = null
+            },
+            
+            ScanSession = null
+        }, new()
+            {
+                Coin = new Coin
+                {
+                    Value = 6,
+                    ActivityBase = null,
+                    Code = null
+                },
+                ScanSession = null
+            }
+        };
 
         memberServiceMock.Setup(x => x.GetMemberWithPointsSummaryDtos()).Returns([
             new MemberPointsSummaryDto(new ScoutMember
             {
-                ScoutGroup = new ScoutGroup(),
-                ScoutSection = new ScoutSection(),
+                ScoutGroup = new ScoutGroup
+                {
+                    Name = null,
+                    ScoutMembers = null
+                },
+                ScoutSection = new ScoutSection
+                {
+                    Code = null,
+                    Name = null
+                },
                 ScavengeResults =
                 [
                     new ScanSession
@@ -66,18 +94,25 @@ public class ScoutMemberControllerTests
                             {
                                 Coin = new Coin
                                 {
-                                    Value = 23
-                                }
+                                    Value = 23,
+                                    ActivityBase = null,
+                                    Code = null
+                                },
+                                ScanSession = null
                             },
 
                             new ScanCoin
                             {
                                 Coin = new Coin
                                 {
-                                    Value = 22
-                                }
+                                    Value = 22,
+                                    ActivityBase = null,
+                                    Code = null
+                                },
+                                ScanSession = null
                             }
-                        ]
+                        ],
+                        ScoutMember = null
                     }
                 ]
             })
@@ -145,8 +180,32 @@ public class ScoutMemberControllerTests
     {
         var membersController = CreateCut();
 
-        var scavengedCoins = new List<ScanCoin> { new() { Coin = new Coin() { Value = 13 } }, new() { Coin = new Coin() { Value = 6 } } };
-        var scavengeResults = new List<ScanSession> { new() { ScanCoins = scavengedCoins } };
+        var scavengedCoins = new List<ScanCoin> { new()
+        {
+            Coin = new Coin
+            {
+                Value = 13,
+                ActivityBase = null,
+                Code = null
+            },
+            ScanSession = null
+        }, new()
+            {
+                Coin = new Coin
+                {
+                    Value = 6,
+                    ActivityBase = null,
+                    Code = null
+                },
+                ScanSession = null
+            }
+        };
+        var scavengeResults = new List<ScanSession> { new()
+            {
+                ScanCoins = scavengedCoins,
+                ScoutMember = null
+            }
+        };
         SetupDbMock(appDbContextMock, x => x.ScanCoins!, scavengedCoins);
         SetupDbMock(appDbContextMock, x => x.ScanSessions!, scavengeResults);
         SetupDbMock(appDbContextMock, x => x.ScoutMembers!, [

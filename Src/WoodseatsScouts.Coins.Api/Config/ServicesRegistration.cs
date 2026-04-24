@@ -32,6 +32,7 @@ public static class ServicesRegistration
     private static void RegisterScoped(IServiceCollection serviceCollection, IConfiguration configuration, IHostEnvironment environment)
     {
         serviceCollection.AddScoped<IMemberService, MemberService>();
+        serviceCollection.AddScoped<ICoinService, CoinService>();
         
         serviceCollection.AddDbContext<AppDbContext>((_, options) =>
         {

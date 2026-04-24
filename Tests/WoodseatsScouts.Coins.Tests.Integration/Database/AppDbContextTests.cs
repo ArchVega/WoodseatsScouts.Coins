@@ -48,12 +48,20 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
     {
         databaseFixture.RestoreBaseTestData();
         
-        appDbContext.ScoutSections!.Add(new ScoutSection("X", "Duplicate"));
+        appDbContext.ScoutSections!.Add(new ScoutSection
+        {
+            Code = "X",
+            Name =  "Duplicate"
+        });
         appDbContext.SaveChanges();
         
         appDbContext.ChangeTracker.Clear();
         
-        appDbContext.ScoutSections!.Add(new ScoutSection("X", "Duplicate"));
+        appDbContext.ScoutSections!.Add(new ScoutSection
+        {
+            Code = "X",
+            Name = "Duplicate"
+        });
         var exception = Should.Throw<Exception>(() => appDbContext.SaveChanges());
 
         const string expectedErrorMessage = "Violation of PRIMARY KEY constraint 'PK_Sections'. Cannot insert duplicate key in object 'dbo.Sections'";
@@ -65,7 +73,7 @@ public class AppDbContextTests(DatabaseFixture databaseFixture)
     {
         databaseFixture.RestoreBaseTestData();
         
-        var scoutGroup = appDbContext.CreateScoutGroup(int.MaxValue,"ScoutGroup 1");
+        var scoutGroup = appDbContext.CreateScoutGroup("ScoutGroup 1");
         appDbContext.CreateMember("any", "any", scoutGroup.Id, "A", false);
         
         var member = appDbContext.ScoutMembers!.Include(x => x.ScoutSection).First();

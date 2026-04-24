@@ -7,11 +7,11 @@
         
         public int ScanSessionId { get; set; }
         
-        public ScanSession ScanSession { get; set; }
+        public required ScanSession ScanSession { get; set; }
         
         public int CoinId { get; set;  }
         
-        public Coin Coin { get; set; }
+        public required Coin Coin { get; set; }
         
         public override string ToString()
         {

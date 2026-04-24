@@ -4,6 +4,7 @@ using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 using WoodseatsScouts.Coins.Api.Models.Requests.Coins;
+using WoodseatsScouts.Coins.Api.Services;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -11,6 +12,7 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [Route("api/coins")]
 public class CoinController(
     IAppDbContext appDbContext,
+    ICoinService coinService,
     SystemDateTimeProvider systemDateTimeProvider) : ControllerBase
 {
     [HttpPost]
@@ -86,8 +88,8 @@ public class CoinController(
     
     [HttpGet]
     [Route("")]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(appDbContext.Coins.ToList());
+        return Ok(await coinService.GetCoinFullDtos());
     }
 }

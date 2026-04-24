@@ -13,18 +13,26 @@ using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+using WoodseatsScouts.Coins.Api.Services;
 using Xunit;
 
 namespace WoodseatsScouts.Coins.Tests;
 
 public class CoinControllerTests
 {
+    private readonly Mock<IAppDbContext> appDbContextMock = new();
+    private readonly Mock<SystemDateTimeProvider> systemDateTimeProviderMock = new();
+    private readonly Mock<ICoinService> coinServiceMock = new();
+
+    private CoinController CreateCut()
+    {
+        return new CoinController(appDbContextMock.Object, coinServiceMock.Object, systemDateTimeProviderMock.Object);
+    }
+    
     [Fact]
     public void GetCoin_MemberCodeSuppliedInsteadOfCoinCode_ThrowsException()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = CreateCut();
         const string memberCode = "M045B019";
 
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember { Code = memberCode } }));
@@ -37,9 +45,7 @@ public class CoinControllerTests
     [Fact]
     public void GetCoin_InvalidCoinCode_ThrowsException()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = CreateCut();
         const string memberCode = "test-any-member-code";
         const string coinCode = "test-any-coin-code";
 
@@ -53,9 +59,7 @@ public class CoinControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeButNotFound_ThrowsException()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = CreateCut();
         const string memberCode = "test-valid-member-code";
         const string coinCode = "C9999999999";
 
@@ -71,14 +75,17 @@ public class CoinControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeButSuppliedMemberCodeDoesNotMatchAnyMember_ThrowsException()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = CreateCut();
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
 
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember() }));
-        appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin() { Code = coinCode } }));
+        appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new Coin
+            {
+                Code = coinCode,
+                ActivityBase = null
+            }
+        }));
 
         var result = coinsController.AssignCoinToScoutMember(coinCode, memberCode);
 
@@ -89,9 +96,7 @@ public class CoinControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeButAlreadyRecordedByTheCurrentMember_ThrowsException()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = CreateCut();
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
         const int memberId = 1;
@@ -99,7 +104,13 @@ public class CoinControllerTests
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { member }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>
         {
-            new() { Code = coinCode, MemberId = memberId, LockUntil = DateTime.UtcNow.AddHours(1) }
+            new()
+            {
+                Code = coinCode,
+                MemberId = memberId,
+                LockUntil = DateTime.UtcNow.AddHours(1),
+                ActivityBase = null
+            }
         }));
 
         var result = coinsController.AssignCoinToScoutMember(coinCode, memberCode);
@@ -111,9 +122,7 @@ public class CoinControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeButAlreadyScavengedByAnotherMember_ThrowsException()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = CreateCut();
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
         const int memberId = 1;
@@ -125,7 +134,13 @@ public class CoinControllerTests
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { currentMember, otherMember }));
         appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin>
         {
-            new() { Code = coinCode, MemberId = otherMemberId, LockUntil = DateTime.UtcNow.AddHours(1) }
+            new()
+            {
+                Code = coinCode,
+                MemberId = otherMemberId,
+                LockUntil = DateTime.UtcNow.AddHours(1),
+                ActivityBase = null
+            }
         }));
 
         var result = coinsController.AssignCoinToScoutMember(coinCode, memberCode);
@@ -138,16 +153,19 @@ public class CoinControllerTests
     [Fact]
     public void GetCoin_ValidCoinCodeAndNotAlreadyScavengedByAnotherMember_ReturnsCode()
     {
-        var appDbContextMock = new Mock<IAppDbContext>();
-        var systemDateTimeProviderMock = new Mock<SystemDateTimeProvider>();
-        var coinsController = new CoinController(appDbContextMock.Object, systemDateTimeProviderMock.Object);
+        var coinsController = CreateCut();
         const string memberCode = "M001A001";
         const string coinCode = "C0001010020";
         const int memberId = 1;
         var currentMember = new ScoutMember { Code = memberCode, Id = memberId, FirstName = "test-first-name" };
 
         appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { currentMember }));
-        appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new() { Code = coinCode } }));
+        appDbContextMock.Setup(x => x.Coins).ReturnsDbSet((new List<Coin> { new()
+            {
+                Code = coinCode,
+                ActivityBase = null
+            }
+        }));
 
         var result = Should.NotThrow(() => coinsController.AssignCoinToScoutMember(coinCode, memberCode));
 

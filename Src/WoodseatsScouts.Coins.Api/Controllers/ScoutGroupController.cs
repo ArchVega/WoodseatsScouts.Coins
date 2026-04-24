@@ -21,8 +21,8 @@ public class ScoutGroupController(IAppDbContext appDbContext) : ControllerBase
     [Route("")]
     public ActionResult CreateScoutGroup([FromBody] CreateScoutGroupRequest createScoutGroupRequest)
     {
-        var scoutGroup = appDbContext.CreateScoutGroup(createScoutGroupRequest.Id, createScoutGroupRequest.Name);
+        var scoutGroup = appDbContext.CreateScoutGroup(createScoutGroupRequest.Name);
 
-        return Ok($"ScoutGroup {scoutGroup.Name} added");
+        return Ok($"Scout group '{scoutGroup.Name}' created");
     }
 }

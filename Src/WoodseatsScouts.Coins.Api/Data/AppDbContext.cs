@@ -150,21 +150,19 @@ namespace WoodseatsScouts.Coins.Api.Data
             return memberPointsSummaryDtos;
         }
 
-        public ScoutGroup CreateScoutGroup(int id, string name)
+        public ScoutGroup CreateScoutGroup(string name)
         {
             using var transaction = Database.BeginTransaction();
-            Database.ExecuteSqlRaw("SET IDENTITY_INSERT ScoutGroups ON");
 
             var scoutGroup = new ScoutGroup
             {
-                Id = id,
-                Name = name
+                Name = name,
+                ScoutMembers = null
             };
-            ScoutGroups?.Add(scoutGroup);
+            ScoutGroups.Add(scoutGroup);
 
             SaveChanges();
 
-            Database.ExecuteSqlRaw("SET IDENTITY_INSERT ScoutGroups OFF");
             transaction.Commit();
 
             return scoutGroup;
@@ -175,7 +173,9 @@ namespace WoodseatsScouts.Coins.Api.Data
             var scavengeResult = new ScanSession
             {
                 ScoutMemberId = scoutMember.Id,
-                CompletedAt = DateTime.UtcNow
+                CompletedAt = DateTime.UtcNow,
+                ScoutMember = null,
+                ScanCoins = null
             };
 
             ScanSessions!.Add(scavengeResult);
@@ -205,7 +205,9 @@ namespace WoodseatsScouts.Coins.Api.Data
                 ScanCoins!.Add(new ScanCoin
                 {
                     ScanSessionId = scanSession.Id,
-                    CoinId = coin.Id
+                    CoinId = coin.Id,
+                    ScanSession = null,
+                    Coin = null
                 });
             }
         }
@@ -278,7 +280,9 @@ namespace WoodseatsScouts.Coins.Api.Data
                 {
                     ActivityBaseId = baseId,
                     ActivityBaseSequenceNumber = i,
-                    Value = points
+                    Value = points,
+                    ActivityBase = null,
+                    Code = null
                 });
             }
 
