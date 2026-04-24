@@ -86,15 +86,6 @@ export default function MemberDetailsPage() {
             </div>
           </div>
         </div>
-
-        <div className="row mb-3 g-1">
-          <div className={"member-action-button-container"}>
-            <button id="add-points-button">Add fixed amount points</button>
-          </div>
-          <div className={"member-action-button-container"}>
-            <button id="remove-points-button">Remove fixed amount points</button>
-          </div>
-        </div>
       </>
     )
   }

@@ -1,7 +1,6 @@
 import getAppSettings from "../../AppSettings.ts";
 import axios from "axios";
 import {logDebug, logError} from "../../components/logging/Logger.ts";
-import Uris from "./Uris.ts";
 
 const baseUri: string = getAppSettings().VITE_WEB_API_URI + "/api"
 
@@ -10,13 +9,13 @@ export const apiClient = axios.create({
 })
 
 apiClient.interceptors.request.use((config) => {
-  logDebug("Request started");
+  logDebug("apiClient request started", config);
   return config;
 });
 
 apiClient.interceptors.response.use(
   (response) => {
-    logDebug("Response received");
+    logDebug("apiClient response received", response);
 
     const data = response.data;
 
@@ -33,7 +32,8 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    logError("Request failed");
+    logError("apiClient request failed", error);
+
     return Promise.reject(error);
   }
 );

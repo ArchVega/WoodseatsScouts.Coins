@@ -30,7 +30,6 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
       setLastName(memberCompleteDto.lastName);
       setSelectedScoutGroupId(memberCompleteDto.scoutGroupId)
       setSelectedSectionId(memberCompleteDto.sectionId)
-      // todo: stopped here
     }
 
     AppStateApiService().getScoutGroups().then((response) => response.data).then((data) => setScoutGroups(data))

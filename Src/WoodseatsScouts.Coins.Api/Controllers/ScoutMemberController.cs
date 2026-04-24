@@ -95,27 +95,6 @@ public class ScoutMemberController(
         }
     }
 
-    // [HttpGet]
-    // [Route("{code}/WithPoints")]
-    // public MemberPointsSummaryDto GetMemberWithPoints(string code)
-    // {
-    //     var member = appDbContext.ScoutMembers!
-    //         .Include(x => x.ScoutSection)
-    //         .Include(x => x.ScoutGroup)
-    //         .Include(x => x.ScavengeResults)
-    //         .ThenInclude(x => x.ScanCoins)
-    //         .Single(x => x.Code == code);
-    //
-    //     var viewModel = new MemberPointsSummaryDto(member);
-    //
-    //     if (member.ScavengeResults.Any())
-    //     {
-    //         viewModel.LatestCompletedAtTime = member.ScavengeResults.MaxBy(x => x.CompletedAt).CompletedAt;
-    //     }
-    //
-    //     return viewModel;
-    // }
-
     [HttpPut]
     [Route("{id:int}/coins")]
     public ActionResult AddPointsToMember(int id, [FromBody] PointsForMemberViewModel viewModel)

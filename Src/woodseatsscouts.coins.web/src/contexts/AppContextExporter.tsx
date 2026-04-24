@@ -30,7 +30,7 @@ type PageActionMenuAreaContextType = {
     pageActionMenuAreaAction: string
     setPageActionMenuAreaAction: React.Dispatch<React.SetStateAction<string>>;
     activeScanningMember: MemberDto;
-    setActiveScanningMember: React.Dispatch<React.SetStateAction<any>>; // todo: rename to member
+    setActiveScanningMember: React.Dispatch<React.SetStateAction<any>>;
 }
 
 type AppSettingsContextType = {
