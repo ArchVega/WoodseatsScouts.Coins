@@ -28,20 +28,11 @@ export default function MembersListPage() {
     }
     fetchMembers().then(response => {
       response.data.forEach(memberPointsSummaryDto => {
-        memberPointsSummaryDto.clientComputedImageUri = Uris.memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
+        memberPointsSummaryDto.clientComputedImageUri = Uris.scouts().members().memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
       })
       setMembers(response.data)
     });
   }, [])
-
-  function sectionClassName(sectionName) {
-    return `label-section-${sectionName.toLowerCase()}`
-  }
-
-  function showUserModal(user1) {
-    setSelectedUser(user1)
-    setUserModal(true)
-  }
 
   function showEditUserModal(user1) {
     setSelectedUser(user1)

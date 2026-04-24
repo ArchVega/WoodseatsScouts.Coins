@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
@@ -14,6 +15,7 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [Route("api/system/tests")]
 public class SutController(
     IAppDbContext appDbContext,
+    IScoutsAppEnvironment scoutsAppEnvironment, 
     SystemDateTimeProvider systemDateTimeProvider) : ControllerBase
 {
     [HttpGet]
@@ -83,5 +85,12 @@ public class SutController(
         appDbContext.SaveChanges();
         
         return Ok();
+    }
+    
+    [HttpGet]
+    [Route("app-test-mode")]
+    public ActionResult IsAppTestMode()
+    {
+        return Ok(scoutsAppEnvironment.ScoutsAppMode == ScoutsAppMode.AcceptanceTest);
     }
 }

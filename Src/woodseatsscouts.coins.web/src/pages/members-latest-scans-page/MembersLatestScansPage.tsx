@@ -17,11 +17,11 @@ export default function MembersLatestScansPage() {
       setMembers([])
 
       axios
-        .get(Uris.memberLatestScans())
+        .get(Uris.scans().sessionsLatest())
         .then(async (response: AxiosResponse<MemberPointsSummaryDto[]>) => {
           const members = response.data
           response.data.forEach(memberPointsSummaryDto => {
-            memberPointsSummaryDto.clientComputedImageUri = Uris.memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
+            memberPointsSummaryDto.clientComputedImageUri = Uris.scouts().members().memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
           })
 
           setMembers(members)

@@ -68,7 +68,7 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
       body: JSON.stringify(payload)
     };
 
-    fetch(Uris.memberName(memberCompleteDto.id), requestOptions).then((r) => {
+    fetch(Uris.scouts().members().memberName(memberCompleteDto.id), requestOptions).then((r) => {
       const updatedSelectedMember = ({...memberCompleteDto})
       updatedSelectedMember.firstName = firstName
       updatedSelectedMember.lastName = lastName

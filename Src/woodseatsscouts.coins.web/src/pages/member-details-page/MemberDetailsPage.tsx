@@ -29,7 +29,7 @@ export default function MemberDetailsPage() {
       MemberApiService()
         .fetchMemberComplete(memberCode)
         .then(response => {
-          response.data.clientComputedImageUri = Uris.memberPhoto(response.data.computedImagePath) // todo: is there an axios way to do this automatically?
+          response.data.clientComputedImageUri = Uris.scouts().members().memberPhoto(response.data.computedImagePath) // todo: is there an axios way to do this automatically?
           return response.data
         })
         .then((memberCompleteDto: MemberCompleteDto) => {

@@ -42,7 +42,7 @@ export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowE
       body: JSON.stringify(payload)
     };
 
-    fetch(Uris.updateMemberPhoto(memberCompleteDto.id), requestOptions).then(() => {
+    fetch(Uris.scouts().members().updateMemberPhoto(memberCompleteDto.id), requestOptions).then(() => {
       const updatedSelectedMember = ({...memberCompleteDto})
       updatedSelectedMember.hasImage = true;
       setMemberCompleteDto(updatedSelectedMember)

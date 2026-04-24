@@ -19,9 +19,11 @@ type AppTestModeContextType = {
     setAppTestMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export type AppModeContextTypeEnum = 'Development' | 'AcceptanceTest' | 'Production';
+
 type AppModeContextType = {
-    appMode: string;
-    setAppMode: React.Dispatch<React.SetStateAction<string>>;
+    appMode: AppModeContextTypeEnum
+    isAppTestMode: boolean;
 }
 
 type PageActionMenuAreaContextType = {

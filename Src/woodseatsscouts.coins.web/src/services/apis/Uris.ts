@@ -1,58 +1,93 @@
 import {logApi} from "../../components/logging/Logger.ts";
+import getAppSettings from "../../AppSettings.ts";
 
-// const baseUri = import.meta.env.VITE_WEB_API_URI + "/api"
-const baseUri = "https://release-scouts-webapi.azurewebsites.net/api"
+const baseUri = getAppSettings().VITE_WEB_API_URI + "/api"
 
 const Uris = {
-  members: `${baseUri}/members`,
-  coins: `${baseUri}/coins`,
+  testDataCoins: `${baseUri}/system/tests/coins`,
 
-  appState: `${baseUri}/AppState`,
-  appVersion: `${baseUri}/AppState/AppVersion`,
-  leaderboard: `${baseUri}/Leaderboard/Report`,
-  testDataCoins: `${baseUri}/Sut/Coins`,
+  application: () => {
+    const resourcePath = `${baseUri}/application`
 
-  memberByCode: function (memberCode: string) {
-    return logApi(`${this.members}/${memberCode}`)
-  },
-  membersWithPointSummary: function() {
-    return logApi(`${this.members}?view=PointsSummary`);
-  },
-  fetchMemberComplete: function(memberCode: string) {
-    return logApi(`${this.members}/${memberCode}?view=3`);
-  },
-  memberLatestScans: function() {
-   return logApi(`${this.members}/LatestScans`)
-  },
-  pointValueFromCode: function (coinCode: string, memberCode: string) {
-    return `${this.coins}/${coinCode}/Scan/${memberCode}`
-  },
-  addPointsToMember: function (memberId: number) {
-    return `${this.members}/${memberId}/Coins`
-  },
-  updateMemberPhoto: function(memberId: number) {
-    return `${this.members}/${memberId}/Photo`
+    return {
+      appVersion: () => logApi(`${resourcePath}/app-version`),
+      mode: () => logApi(`${resourcePath}/mode`)
+    }
   },
 
-  scoutGroups: function() {
-    return `${this.appState}/ScoutGroups`
+  activities: () => {
+    const resourcePath = `${baseUri}/application`
+
+    return {
+      bases: () => logApi(`${baseUri}/activities/bases`),
+    }
   },
-  sections: function() {
-    return `${this.appState}/Sections`
+
+  coins: () => {
+    const resourcePath = `${baseUri}/coins`
+
+    return {
+      resourcePath: resourcePath,
+      scans: (coinCode: string, memberCode: string) => logApi(`${resourcePath}/${coinCode}/scans/${memberCode}`),
+    }
   },
 
+  scouts: () => {
+    const scoutsResourcePath = `${baseUri}/scouts`
 
+    return {
+      members: () => {
+        const membersResourcePath = `${scoutsResourcePath}/members`
+        return {
+          memberByCode: function (memberCode: string) {
+            return logApi(`${membersResourcePath}/${memberCode}`)
+          },
+          membersWithPointSummary: function () {
+            return logApi(`${membersResourcePath}?view=PointsSummary`);
+          },
+          fetchMemberComplete: function (memberCode: string) {
+            return logApi(`${membersResourcePath}/${memberCode}?view=3`);
+          },
+          addPointsToMember: function (memberId: number) {
+            return `${membersResourcePath}/${memberId}/Coins`
+          },
+          updateMemberPhoto: function (memberId: number) {
+            return `${membersResourcePath}/${memberId}/Photo`
+          },
+          memberPhoto: function (photoImagePath: string) {
+            return `${baseUri}/${photoImagePath}`
+          },
+          memberName: function (id) {
+            return `${baseUri}/Members/${id}/Name?`
+          }
+        }
+      },
+      groups: () => {
+        const groupsResourcePath = `${scoutsResourcePath}/groups`
 
+        return {
+          resourcePath: groupsResourcePath,
+        }
+      },
 
-  memberPhoto: function (photoImagePath: string) {
-    return `${baseUri}/${photoImagePath}`
+      sections: () => {
+        const sectionsResourcePath = `${scoutsResourcePath}/sections`
+
+        return {
+          resourcePath: sectionsResourcePath,
+        }
+      }
+    }
   },
-  // memberWithPoints: function (memberQrCode) {
-  //   return `${baseUri}/Members/${memberQrCode}/WithPoints`
-  // },
-  memberName: function (id) {
-    return `${baseUri}/Members/${id}/Name?`
-  }
+
+  scans: () => {
+    const resourcePath = `${baseUri}/scans`
+    return {
+      sessionsLatest: function () {
+        return logApi(`${resourcePath}/sessions/latest`)
+      },
+    }
+  },
 }
 
 export default Uris

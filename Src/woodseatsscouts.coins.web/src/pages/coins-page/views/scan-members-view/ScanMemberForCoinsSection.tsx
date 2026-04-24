@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import wave from "../../../../images/wave.png";
 import "./ScanMemberForCoinsSection.scss"
 import MemberApiService from "../../../../services/apis/MemberApiService.ts";
-import {PageActionMenuAreaContext, UseAppCameraContext} from "../../../../contexts/AppContextExporter.tsx";
+import {PageActionMenuAreaContext} from "../../../../contexts/AppContextExporter.tsx";
 import AudioFx from "../../../../components/fx/AudioFx.ts";
 import Spinner from "../../../../components/widgets/Spinner.tsx";
 import QRCodeInputDevices from "../../../../components/io/qr-input-devices/QRCodeInputDevices.tsx";
@@ -10,14 +10,14 @@ import QRScanCodeType from "../../../../components/io/qr-input-devices/QRScanCod
 import {logDebug, logError, logObject} from "../../../../components/logging/Logger.ts";
 import {toastError} from "../../../../components/toaster/toaster.ts";
 import type {AxiosResponse} from "axios";
-import type {Member, MemberDto} from "../../../../types/ServerTypes.ts";
+import type {MemberDto} from "../../../../types/ServerTypes.ts";
 import Uris from "../../../../services/apis/Uris.ts";
 
 export default function ScanMemberForCoinsSection({setMember}) {
-  const {setActiveScanningMember} = useContext(PageActionMenuAreaContext)
   const audioFx = AudioFx(); // todo: move into Context
-  const [loading, setLoading] = useState(false)
-  const [memberQrCode, setMemberQrCode] = useState("")
+  const {setActiveScanningMember} = useContext(PageActionMenuAreaContext)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [memberQrCode, setMemberQrCode] = useState<string>("")
 
   let timeoutId = null
 
@@ -26,7 +26,7 @@ export default function ScanMemberForCoinsSection({setMember}) {
     if (element) {
       element.onblur = () => {
         if (timeoutId) {
-          console.log('clearing timeout', timeoutId)
+          logDebug('clearing timeout', timeoutId)
           clearTimeout(timeoutId)
         }
         timeoutId = setTimeout(() => focusScanner(), 1000 * 10)
@@ -43,12 +43,14 @@ export default function ScanMemberForCoinsSection({setMember}) {
         return await MemberApiService().fetchMember(memberQrCode)
       }
 
-      fetchData()
-        .then(async member => {
-          member.data.clientComputedImageUri = Uris.memberPhoto(member.data.computedImagePath) // todo: is there an axios way to do this automatically?
-          logObject("memberDto", member.data)
-          setMember(member.data);
-          setActiveScanningMember(member.data)
+      MemberApiService()
+        .photo()
+        .then(value => {
+          const member: MemberDto = value.data;
+          member.clientComputedImageUri = Uris.scouts().members().memberPhoto(member.computedImagePath) // todo: is there an axios way to do this automatically?
+          logObject("memberDto", member)
+          setMember(member);
+          setActiveScanningMember(member)
         })
         .catch(async axiosReason => {
           logError("Setting member", axiosReason)

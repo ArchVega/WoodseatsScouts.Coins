@@ -5,7 +5,7 @@ import type {CoinDto, MemberDto} from "../../types/ServerTypes.ts";
 export default function CoinApiService() {
   return {
     async fetchCoin(coinCode: string, memberCode: string): Promise<AxiosResponse<CoinDto>> {
-      const uri = Uris.pointValueFromCode(coinCode, memberCode)
+      const uri = Uris.coins().scans(coinCode, memberCode)
 
       return await axios.get(uri);
     },
@@ -16,7 +16,7 @@ export default function CoinApiService() {
       }
 
       return await axios
-        .put(Uris.addPointsToMember(member.id), payload).catch(reason => {
+        .put(Uris.scouts().members().addPointsToMember(member.id), payload).catch(reason => {
           console.error(reason)
         })
     }
