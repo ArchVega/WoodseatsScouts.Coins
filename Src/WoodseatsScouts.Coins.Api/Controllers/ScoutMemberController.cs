@@ -19,7 +19,7 @@ public class ScoutMemberController(
     IImagePersister imagePersister,
     IOptions<AppSettings> appSettingsOptions) : ControllerBase
 {
-    private static readonly Lock Locker = new();
+    private static readonly object Locker = new();
     
     [HttpGet]
     [Route("{code}")]

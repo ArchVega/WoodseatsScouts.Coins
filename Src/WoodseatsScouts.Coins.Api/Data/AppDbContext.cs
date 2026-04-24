@@ -13,19 +13,19 @@ namespace WoodseatsScouts.Coins.Api.Data
     {
         public TimeProvider TimeProvider { get; set; } = TimeProvider.System;
 
-        public DbSet<ScoutMember>? ScoutMembers { get; set; }
+        public DbSet<ScoutMember> ScoutMembers { get; set; }
 
-        public DbSet<ScoutGroup>? ScoutGroups { get; set; }
+        public DbSet<ScoutGroup> ScoutGroups { get; set; }
 
-        public DbSet<ScoutSection>? ScoutSections { get; set; }
+        public DbSet<ScoutSection> ScoutSections { get; set; }
 
-        public DbSet<Coin>? Coins { get; set; }
+        public DbSet<Coin> Coins { get; set; }
 
-        public DbSet<ActivityBase>? ActivityBases { get; set; }
+        public DbSet<ActivityBase> ActivityBases { get; set; }
 
-        public DbSet<ScanCoin>? ScanCoins { get; set; }
+        public DbSet<ScanCoin> ScanCoins { get; set; }
 
-        public DbSet<ScanSession>? ScanSessions { get; set; }
+        public DbSet<ScanSession> ScanSessions { get; set; }
 
         public DbSet<ErrorLog> ErrorLogs { get; set; }
 

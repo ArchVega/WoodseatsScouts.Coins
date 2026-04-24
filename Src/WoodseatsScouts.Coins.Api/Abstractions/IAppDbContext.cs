@@ -6,17 +6,17 @@ namespace WoodseatsScouts.Coins.Api.Data;
 
 public interface IAppDbContext
 {
-    public DbSet<ScanCoin>? ScanCoins { get; set; }
+    public DbSet<ScanCoin> ScanCoins { get; set; }
 
-    public DbSet<ScoutMember>? ScoutMembers { get; set; }
+    public DbSet<ScoutMember> ScoutMembers { get; set; }
     
-    public DbSet<ScanSession>? ScanSessions { get; set; }
+    public DbSet<ScanSession> ScanSessions { get; set; }
     
-    public DbSet<ScoutGroup>? ScoutGroups { get; set; }
+    public DbSet<ScoutGroup> ScoutGroups { get; set; }
     
-    public DbSet<ScoutSection>? ScoutSections { get; set; }
+    public DbSet<ScoutSection> ScoutSections { get; set; }
     
-    public DbSet<Coin>? Coins { get; set; }
+    public DbSet<Coin> Coins { get; set; }
     
     public DbSet<ErrorLog> ErrorLogs { get; set; }
 
@@ -28,10 +28,6 @@ public interface IAppDbContext
     
     List<MemberPointsSummaryDto> GetLatestScans(int numberOfScans);
     
-    // List<GroupPoints> GetTopThreeGroupsInLastHour();
-    //
-    // List<GroupPoints> GetGroupsWithMostPoints();
-
     ScoutGroup CreateScoutGroup(int id, string name);
     
     ScanSession CreateScavengeResult(ScoutMember scoutMember);

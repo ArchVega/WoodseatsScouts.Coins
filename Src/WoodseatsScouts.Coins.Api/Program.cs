@@ -1,5 +1,6 @@
 // dotcover disable
 
+using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Middleware;

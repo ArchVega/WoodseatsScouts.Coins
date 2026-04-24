@@ -90,39 +90,39 @@ public class DatabaseFixture
         runspace.Close();
     }
 
-    private void ConsumeStreamOutput(object? sender, DataAddedEventArgs e)
+    private static void ConsumeStreamOutput(object? sender, DataAddedEventArgs e)
     {
-        if (sender is PSDataCollection<InformationRecord> i)
+        switch (sender)
         {
-            var collection = (PSDataCollection<InformationRecord>)sender;
-            var record = collection[e.Index];
+            case PSDataCollection<InformationRecord> i:
+            {
+                var record = i[e.Index];
 
-            var message = record.MessageData?.ToString();
-            Console.WriteLine("Information: " + message);
-        }
-        
-        if (sender is PSDataCollection<VerboseRecord> v)
-        {
-            var collection = (PSDataCollection<VerboseRecord>)sender;
-            var record = collection[e.Index];
+                var message = record.MessageData?.ToString();
+                Console.WriteLine("Information: " + message);
+                break;
+            }
+            case PSDataCollection<VerboseRecord> v:
+            {
+                var record = v[e.Index];
 
-            var message = record.Message?.ToString();
-            Console.WriteLine(message);
-            Console.WriteLine("Verbose: " + message);
+                var message = record.Message?.ToString();
+                Console.WriteLine(message);
+                Console.WriteLine("Verbose: " + message);
+                break;
+            }
         }
     }
     
-    private void ConsumeErrorStreamOutput(object? sender, DataAddedEventArgs e)
+    private static void ConsumeErrorStreamOutput(object? sender, DataAddedEventArgs e)
     {
-        if (sender is PSDataCollection<ErrorRecord> o)
-        {
-            var errs = o
-                .Select(x => x.Exception.Message)
-                .Aggregate((x, y) => $"{x}{Environment.NewLine}{y}");
-            
-            throw new Exception(errs);    
-        }
+        if (sender is not PSDataCollection<ErrorRecord> o) throw new Exception(sender?.ToString());
         
-        throw new Exception(sender.ToString());
+        var errs = o
+            .Select(x => x.Exception.Message)
+            .Aggregate((x, y) => $"{x}{Environment.NewLine}{y}");
+            
+        throw new Exception(errs);
+
     }
 }
