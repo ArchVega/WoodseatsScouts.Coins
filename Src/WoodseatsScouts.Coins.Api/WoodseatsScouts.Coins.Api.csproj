@@ -38,7 +38,8 @@
       <Folder Include="Migrations\" />
     </ItemGroup>
 
-    <PropertyGroup>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    </PropertyGroup>
+<!--    todo-->
+<!--    <PropertyGroup>-->
+<!--        <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
+<!--    </PropertyGroup>-->
 </Project>

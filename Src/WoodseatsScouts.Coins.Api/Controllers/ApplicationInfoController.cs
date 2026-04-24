@@ -8,7 +8,7 @@ using WoodseatsScouts.Coins.Api.Config;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Tags("Application Info")]
+[Tags("Application")]
 [Route("api/application")]
 public class ApplicationInfoController(IScoutsAppEnvironment scoutsAppEnvironment, IOptions<AppSettings> appSettingsOptions) : ControllerBase
 {

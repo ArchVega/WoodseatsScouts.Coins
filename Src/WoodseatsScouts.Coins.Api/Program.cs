@@ -50,44 +50,20 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
+    // todo
+    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    // c.IncludeXmlComments(xmlPath);
 });
 
 var app = builder.Build();
 
-// Todo: consider uncommenting in staging / release
-// if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "AcceptanceTest")
-// {
 app.UseSwagger();
 app.UseSwaggerUI();
-// }
-
-// Todo: consider uncommenting in staging / release
-// app.UseHttpsRedirection();
 app.UseCors(allOrigins);
 app.MapControllers();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 AppStartupValidator.Validate(app);
-
-// var cultureInfo = new CultureInfo("en-GB");
-//
-// // Sets the culture for the current thread
-// CultureInfo.CurrentCulture = cultureInfo;
-// CultureInfo.CurrentUICulture = cultureInfo;
-//
-// // Sets the default culture for all new threads in the app
-// CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-// CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
-//
-// var supportedCultures = new[] { "en-GB" };
-// var localizationOptions = new RequestLocalizationOptions()
-//     .SetDefaultCulture(supportedCultures[0])
-//     .AddSupportedCultures(supportedCultures)
-//     .AddSupportedUICultures(supportedCultures);
-//
-// app.UseRequestLocalization(localizationOptions);
 
 app.Run();

@@ -5,14 +5,14 @@ using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Tags("Scout Sections")]
-[Route("api/scouts/sections")]
-public class ScoutSectionController( IAppDbContext appDbContext) : ControllerBase
+[Tags("Activity Bases")]
+[Route("api/activities/bases")]
+public class ActivityBaseController( IAppDbContext appDbContext) : ControllerBase
 {   
     [HttpGet]
     [Route("")]
-    public ActionResult ScoutSections()
+    public ActionResult GetActivityBases()
     {
-        return Ok(appDbContext.ScoutSections!.Select(x => new ScoutSectionDto(x)));
+        return Ok(appDbContext.ActivityBases.Select(x => new ActivityBasesDto(x)));
     }
 }

@@ -24,3 +24,10 @@ public class ScoutSectionDto(ScoutSection scoutSection)
     
     public string Name { get; set; } = scoutSection.Name;
 }
+
+public class ActivityBasesDto(ActivityBase activityBase)
+{
+    public int Id { get; set; } = activityBase.Id;
+    
+    public string Name { get; set; } = activityBase.Name;
+}

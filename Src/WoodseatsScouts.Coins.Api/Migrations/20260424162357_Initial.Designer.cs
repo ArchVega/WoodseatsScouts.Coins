@@ -12,7 +12,7 @@ using WoodseatsScouts.Coins.Api.Data;
 namespace WoodseatsScouts.Coins.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260422182401_Initial")]
+    [Migration("20260424162357_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -141,6 +141,76 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         {
                             Id = 20,
                             Name = "Zip wire"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Name = "46th St Pauls"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Name = "146th Old Norton"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Name = "173rd Woodhouse"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Name = "186th Manor"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Name = "219th Stradbroke"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Name = "229th Greenhill"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Name = "246th Beauchief"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Name = "270th Intake"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Name = "273rd Handsworth"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Name = "280th Norton"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Name = "297th Bradway"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Name = "49th Beighton"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Name = "69th Mosborough"
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Name = "74th Oak Street"
                         },
                         new
                         {

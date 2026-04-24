@@ -201,6 +201,20 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     { 18, "Sailing" },
                     { 19, "Tomahawk throwing" },
                     { 20, "Zip wire" },
+                    { 21, "46th St Pauls" },
+                    { 22, "146th Old Norton" },
+                    { 23, "173rd Woodhouse" },
+                    { 24, "186th Manor" },
+                    { 25, "219th Stradbroke" },
+                    { 26, "229th Greenhill" },
+                    { 27, "246th Beauchief" },
+                    { 28, "270th Intake" },
+                    { 29, "273rd Handsworth" },
+                    { 31, "280th Norton" },
+                    { 32, "297th Bradway" },
+                    { 33, "49th Beighton" },
+                    { 34, "69th Mosborough" },
+                    { 35, "74th Oak Street" },
                     { 99, "Misc" }
                 });
 
