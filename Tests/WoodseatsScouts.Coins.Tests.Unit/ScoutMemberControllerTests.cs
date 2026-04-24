@@ -12,12 +12,10 @@ using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 using WoodseatsScouts.Coins.Api.Models.Queries;
-using WoodseatsScouts.Coins.Api.Models.View;
-using WoodseatsScouts.Coins.Api.Models.View.Members;
 using Xunit;
-using Member = WoodseatsScouts.Coins.Api.Models.Queries.Member;
 
 namespace WoodseatsScouts.Coins.Tests;
 
@@ -47,7 +45,7 @@ public class ScoutMemberControllerTests
     // ]);
 
     [Fact]
-    public void GetMembersWithPoints_ReturnsValidViewModel()
+    public void GetMembersWithPoints_ReturnsValidRequestModel()
     {
         var membersController = CreateCut();
 
@@ -89,12 +87,12 @@ public class ScoutMemberControllerTests
 
         results.ShouldNotBeNull();
         results.ShouldBeOfType<OkObjectResult>();
-        var viewModels = (List<MemberPointsSummaryDto>)((OkObjectResult)results).Value!;
-        viewModels.Count.ShouldBe(1);
+        var memberPointsSummaryDtos = (List<MemberPointsSummaryDto>)((OkObjectResult)results).Value!;
+        memberPointsSummaryDtos.Count.ShouldBe(1);
 
-        var membersWithPointsViewModel = viewModels[0];
+        var memberPointsSummaryDto = memberPointsSummaryDtos[0];
 
-        membersWithPointsViewModel.TotalPoints.ShouldBe(45); // todo create test for total points calculation
+        memberPointsSummaryDto.TotalPoints.ShouldBe(45); // todo create test for total points calculation
     }
 
     [Fact]
@@ -126,7 +124,7 @@ public class ScoutMemberControllerTests
             new Api.Models.Domain.ScoutMember { Id = 9 }
         ]);
 
-        var saveMemberPhotoViewModel = new SaveMemberPhotoViewModel { Photo = "test-image-string" };
+        var saveMemberPhotoViewModel = new SaveMemberPhotoRequestModel { Photo = "test-image-string" };
         var result = Should.NotThrow(() => membersController.SaveMemberPhoto(9, saveMemberPhotoViewModel));
 
         appDbContextMock.Verify(x => x.SaveChanges(), Times.Once);
@@ -159,7 +157,7 @@ public class ScoutMemberControllerTests
             .Setup(x => x.RecordMemberAgainstUnscavengedCoins(It.IsAny<Api.Models.Domain.ScoutMember>(), It.IsAny<List<string>>()))
             .Returns(new List<Coin>());
 
-        var pointsForMemberViewModel = new PointsForMemberViewModel { CoinCodes = ["C0001001010", "C0001001020"] };
+        var pointsForMemberViewModel = new PointsForMemberRequestModel { CoinCodes = ["C0001001010", "C0001001020"] };
         var result = Should.NotThrow(() => membersController.AddPointsToMember(9, pointsForMemberViewModel));
 
         result.ShouldBeOfType<CreatedAtActionResult>();

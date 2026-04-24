@@ -2,10 +2,9 @@
 
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
-namespace WoodseatsScouts.Coins.Api.Models.View;
+namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 
-// Rename to ScavengerHaulResponseViewModel
-public class AddPointsToMemberViewModel
+public class AddPointsToMemberDto
 {
     public bool HasAnomalyOccurred { get; set; }
 
@@ -13,7 +12,7 @@ public class AddPointsToMemberViewModel
     
     public int AnomalousCoinsTotalValue { get; set; }
 
-    public AddPointsToMemberViewModel(IReadOnlyCollection<Coin> alreadyScavengedCoins)
+    public AddPointsToMemberDto(IReadOnlyCollection<Coin> alreadyScavengedCoins)
     {
         HasAnomalyOccurred = alreadyScavengedCoins.Count != 0;
 

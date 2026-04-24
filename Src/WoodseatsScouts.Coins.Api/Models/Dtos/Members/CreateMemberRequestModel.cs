@@ -1,6 +1,6 @@
-﻿namespace WoodseatsScouts.Coins.Api.Models.View;
+﻿namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 
-public class CreateMemberViewModel
+public class CreateMemberRequestModel
 {
     public string FirstName{ get; set; } 
     

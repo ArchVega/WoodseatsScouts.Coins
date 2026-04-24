@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
-using WoodseatsScouts.Coins.Api.Models.View;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 

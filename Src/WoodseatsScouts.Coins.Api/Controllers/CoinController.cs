@@ -3,7 +3,6 @@ using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
-using WoodseatsScouts.Coins.Api.Models.View;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 

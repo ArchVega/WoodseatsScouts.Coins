@@ -128,7 +128,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .Take(numberOfScans)
                 .ToList();
 
-            var f = last6MembersIdsWithCompletedAtTimes.Select(scavengeResult =>
+            var memberPointsSummaryDtos = last6MembersIdsWithCompletedAtTimes.Select(scavengeResult =>
             {
                 var member = ScoutMembers!
                     .Include(x => x.ScoutSection)
@@ -139,15 +139,15 @@ namespace WoodseatsScouts.Coins.Api.Data
                     .ThenInclude(x => x.ActivityBase)
                     .Single(x => x.Id == scavengeResult.ScoutMemberId);
 
-                var viewModel = new MemberPointsSummaryDto(member)
+                var memberPointsSummaryDto = new MemberPointsSummaryDto(member)
                 {
                     SelectedHaulResultId = scavengeResult.Id
                 };
 
-                return viewModel;
+                return memberPointsSummaryDto;
             }).ToList();
 
-            return f;
+            return memberPointsSummaryDtos;
         }
 
         public ScoutGroup CreateScoutGroup(int id, string name)

@@ -4,8 +4,8 @@ using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
 using WoodseatsScouts.Coins.Api.Models.Queries;
-using WoodseatsScouts.Coins.Api.Models.View;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -61,16 +61,16 @@ public class ScoutMemberController(
     
     [HttpPost]
     [Route("")]
-    public object CreateMember([FromBody] CreateMemberViewModel createMemberViewModel)
+    public object CreateMember([FromBody] CreateMemberRequestModel createMemberRequestModel)
     {
         lock (Locker)
         {
             return Ok(appDbContext.CreateMember(
-                createMemberViewModel.FirstName,
-                createMemberViewModel.LastName,
-                createMemberViewModel.ScoutGroupId,
-                createMemberViewModel.Section, // Todo: Client sends "section" but this is really "sectionId"
-                createMemberViewModel.IsDayVisitor));
+                createMemberRequestModel.FirstName,
+                createMemberRequestModel.LastName,
+                createMemberRequestModel.ScoutGroupId,
+                createMemberRequestModel.Section, // Todo: Client sends "section" but this is really "sectionId"
+                createMemberRequestModel.IsDayVisitor));
         }
     }
 
@@ -97,20 +97,20 @@ public class ScoutMemberController(
 
     [HttpPut]
     [Route("{id:int}/coins")]
-    public ActionResult AddPointsToMember(int id, [FromBody] PointsForMemberViewModel viewModel)
+    public ActionResult AddPointsToMember(int id, [FromBody] PointsForMemberRequestModel requestModel)
     {
         // Todo: wrap in a transaction
         var member = appDbContext.ScoutMembers!.Single(x => x.Id == id);
 
         var tallyHistoryItem = appDbContext.CreateScavengeResult(member);
 
-        appDbContext.CreateScavengedCoins(tallyHistoryItem, viewModel.CoinCodes);
+        appDbContext.CreateScavengedCoins(tallyHistoryItem, requestModel.CoinCodes);
 
-        var alreadyScavengedCoins = appDbContext.RecordMemberAgainstUnscavengedCoins(member, viewModel.CoinCodes);
+        var alreadyScavengedCoins = appDbContext.RecordMemberAgainstUnscavengedCoins(member, requestModel.CoinCodes);
 
-        var responseViewModel = new AddPointsToMemberViewModel(alreadyScavengedCoins);
+        var addPointsToMemberDto = new AddPointsToMemberDto(alreadyScavengedCoins);
 
-        return CreatedAtAction(nameof(AddPointsToMember), null, responseViewModel);
+        return CreatedAtAction(nameof(AddPointsToMember), null, addPointsToMemberDto);
     }
 
     [HttpGet]
@@ -130,9 +130,9 @@ public class ScoutMemberController(
 
     [HttpPut]
     [Route("{id:int}/photo")]
-    public ActionResult SaveMemberPhoto(int id, [FromBody] SaveMemberPhotoViewModel saveMemberPhotoViewModel)
+    public ActionResult SaveMemberPhoto(int id, [FromBody] SaveMemberPhotoRequestModel saveMemberPhotoRequestModel)
     {
-        imagePersister.Persist(id.ToString(), saveMemberPhotoViewModel.Photo);
+        imagePersister.Persist(id.ToString(), saveMemberPhotoRequestModel.Photo);
         appDbContext.ScoutMembers!.Single(x => x.Id == id).HasImage = true;
         appDbContext.SaveChanges();
 
@@ -141,11 +141,11 @@ public class ScoutMemberController(
     
     [HttpPost]
     [Route("{id:int}/name")]
-    public ActionResult Name(int id, [FromBody] UpdateMemberNameViewModel updateMemberNameViewModel)
+    public ActionResult Name(int id, [FromBody] UpdateMemberNameRequestModel updateMemberNameRequestModel)
     {
         var member = appDbContext.ScoutMembers!.Single(x => x.Id == id);
-        member.FirstName = updateMemberNameViewModel.FirstName;
-        member.LastName = updateMemberNameViewModel.LastName;
+        member.FirstName = updateMemberNameRequestModel.FirstName;
+        member.LastName = updateMemberNameRequestModel.LastName;
         appDbContext.SaveChanges();
 
         return Ok();
@@ -153,9 +153,9 @@ public class ScoutMemberController(
     
     [HttpPut]
     [Route("{memberId:int}")]
-    public object UpdateMemberName(int memberId, [FromBody] UpdateMemberViewModel updateMemberViewModel)
+    public object UpdateMemberName(int memberId, [FromBody] UpdateMemberRequestModel updateMemberRequestModel)
     {
-        var member = appDbContext.UpdateMemberName(memberId, updateMemberViewModel.FirstName, updateMemberViewModel.LastName);
+        var member = appDbContext.UpdateMemberName(memberId, updateMemberRequestModel.FirstName, updateMemberRequestModel.LastName);
         
         return new
         {

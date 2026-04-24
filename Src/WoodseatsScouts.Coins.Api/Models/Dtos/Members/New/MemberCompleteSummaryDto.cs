@@ -1,6 +1,5 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins.New;
-using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 

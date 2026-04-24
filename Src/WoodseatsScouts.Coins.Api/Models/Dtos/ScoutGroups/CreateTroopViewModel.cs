@@ -1,6 +1,6 @@
-﻿namespace WoodseatsScouts.Coins.Api.Models.View;
+﻿namespace WoodseatsScouts.Coins.Api.Models.Dtos.ScoutGroups;
 
-public class CreateScoutGroupViewModel
+public class CreateScoutGroupRequestModel
 {
     public int Id { get; set; }
     

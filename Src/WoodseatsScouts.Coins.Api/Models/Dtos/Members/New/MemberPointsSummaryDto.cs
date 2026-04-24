@@ -1,9 +1,7 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
-using WoodseatsScouts.Coins.Api.Models.View.Members;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
 
-// Src/WoodseatsScouts.Coins.Api/Models/Dtos/Members/MembersWithPointsViewModel.cs
 public class MemberPointsSummaryDto
 {
     public MemberPointsSummaryDto(ScoutMember scoutMember)
