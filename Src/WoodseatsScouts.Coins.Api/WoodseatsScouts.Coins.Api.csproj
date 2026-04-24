@@ -18,7 +18,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.8.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="5.3.0" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
         <PackageReference Include="Microsoft.Management.Infrastructure" Version="3.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
@@ -40,6 +40,11 @@
       <Folder Include="Models\Requests\Scouts\" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);NU1608</NoWarn>
+        <NoWarn>$(NoWarn);NU1902</NoWarn>
+    </PropertyGroup>
+    
 <!--    todo-->
 <!--    <PropertyGroup>-->
 <!--        <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
