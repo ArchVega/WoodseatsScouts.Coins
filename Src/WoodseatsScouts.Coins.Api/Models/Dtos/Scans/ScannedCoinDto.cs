@@ -15,19 +15,15 @@ public class ScannedCoinDto
         CoinId = scannedCoin.CoinId;
         Points = scannedCoin.Coin!.Value;
 
-        if (scannedCoin.PointsOverride.HasValue)
-        {
-            PointsOverride = scannedCoin.PointsOverride.Value;
-        }
+        PointsOverride = scannedCoin.PointsOverride;
+        CalculatedEffectivePoints = scannedCoin.CalculatedEffectivePoints!.Value; // Must have Coins nav prop loaded.
+        HasPointsOverride = scannedCoin.HasPointsOverride;
         
         if (scannedCoin.Coin.ActivityBase == null)
         {
             throw new InvalidOperationException("Coin navigation property on ScannedCoin must have navigation property ActivityBase loaded");
         }
 
-        CalculatedEffectivePoints = scannedCoin.PointsOverride ?? Points;
-
-        HasPointsOverride = PointsOverride.HasValue;
         CoinActivityBase = scannedCoin.Coin.ActivityBase.Name;
     }
 

@@ -33,7 +33,7 @@ public class ScoutMemberCompleteSummaryDto
             {
                 ScanSessionId = scanSession.Id,
                 HauledAtIso8601 = scanSession.CompletedAt.ToUniversalTime().ToString("o"),
-                TotalPoints = scanSession.ScanCoins.Sum(x => x.Coin!.Value),
+                TotalPoints = (int)scanSession.ScanCoins.Sum(x => x.CalculatedEffectivePoints)!,
                 ActivityBaseHaulResultDtos = activityBaseResults
             };
         }).ToList();
@@ -52,7 +52,7 @@ public class ScoutMemberCompleteSummaryDto
         ScoutGroupName = scoutMember.ScoutGroup.Name;
         ScoutSectionCode = scoutMember.ScoutSectionCode;
         ScoutSectionName = scoutMember.ScoutSection.Name;
-        TotalPoints = scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.Coin!.Value)).Sum();
+        TotalPoints = (int)scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.CalculatedEffectivePoints)).Sum()!;
         HaulResults = haulResults;
 
         ScoutMemberCompleteSummaryStatsDto = new ScoutMemberCompleteSummaryStatsDto();
