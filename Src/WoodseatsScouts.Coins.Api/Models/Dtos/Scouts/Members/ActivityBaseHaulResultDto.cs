@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scans;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
@@ -16,5 +17,5 @@ public class ActivityBaseHaulResultDto
     
     public int CoinsScanned { get; set; }
     
-    public required List<CoinDto> Coins { get; set; }
+    public required List<ScannedCoinDto> ScannedCoinDtos { get; set; }
 }

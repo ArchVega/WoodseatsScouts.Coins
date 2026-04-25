@@ -23,8 +23,8 @@ namespace WoodseatsScouts.Coins.Api.Data
         public DbSet<Coin> Coins { get; set; }
 
         public DbSet<ActivityBase> ActivityBases { get; set; }
-
-        public DbSet<ScanCoin> ScanCoins { get; set; }
+        
+        public DbSet<ScannedCoin> ScannedCoins { get; set; }
 
         public DbSet<ScanSession> ScanSessions { get; set; }
 
@@ -222,7 +222,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
                 var coin = Coins!.Single(x => x.Code == coinCode);
 
-                ScanCoins!.Add(new ScanCoin
+                ScannedCoins!.Add(new ScannedCoin
                 {
                     ScanSessionId = scanSession.Id,
                     CoinId = coin.Id

@@ -153,7 +153,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScanCoins",
+                name: "ScannedCoins",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -163,15 +163,15 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScanCoins", x => x.Id);
+                    table.PrimaryKey("PK_ScannedCoins", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ScanCoins_Coins_CoinId",
+                        name: "FK_ScannedCoins_Coins_CoinId",
                         column: x => x.CoinId,
                         principalTable: "Coins",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ScanCoins_ScanSessions_ScanSessionId",
+                        name: "FK_ScannedCoins_ScanSessions_ScanSessionId",
                         column: x => x.ScanSessionId,
                         principalTable: "ScanSessions",
                         principalColumn: "Id",
@@ -237,13 +237,13 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScanCoins_CoinId",
-                table: "ScanCoins",
+                name: "IX_ScannedCoins_CoinId",
+                table: "ScannedCoins",
                 column: "CoinId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScanCoins_ScanSessionId",
-                table: "ScanCoins",
+                name: "IX_ScannedCoins_ScanSessionId",
+                table: "ScannedCoins",
                 column: "ScanSessionId");
 
             migrationBuilder.CreateIndex(
@@ -281,7 +281,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 name: "ErrorLogs");
 
             migrationBuilder.DropTable(
-                name: "ScanCoins");
+                name: "ScannedCoins");
 
             migrationBuilder.DropTable(
                 name: "Coins");

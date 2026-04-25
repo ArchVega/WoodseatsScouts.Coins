@@ -1,5 +1,6 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scans;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
@@ -7,9 +8,14 @@ public class ScoutMemberCompleteSummaryDto
 {
     public ScoutMemberCompleteSummaryDto(ScoutMember scoutMember)
     {
-        var haulResults = scoutMember.ScanSessions.Select(scavengeResult =>
+        if (scoutMember.ScanSessions == null)
         {
-            var groupedByActivityBase = scavengeResult.ScanCoins.GroupBy(x => x.Coin!.ActivityBaseId).ToList();
+            throw new InvalidOperationException("Scout member must load navigation property ScanSession");
+        }
+        
+        var haulResults = scoutMember.ScanSessions.Select(scanSession =>
+        {
+            var groupedByActivityBase = scanSession.ScanCoins.GroupBy(x => x.Coin!.ActivityBaseId).ToList();
 
             var activityBaseResults = groupedByActivityBase.Select(x =>
             {
@@ -19,15 +25,15 @@ public class ScoutMemberCompleteSummaryDto
                     ActivityBaseName = x.ElementAt(0).Coin!.ActivityBase!.Name,
                     TotalPoints = x.Sum(y => y.Coin!.Value),
                     CoinsScanned = x.Count(),
-                    Coins = x.Select(y => new CoinDto(y.Coin!.Value, y.Coin!.ActivityBase!.Id, y.Coin.Code)).ToList()
+                    ScannedCoinDtos = x.Select(y => new ScannedCoinDto(y)).ToList()
                 };
             }).ToList();
 
             return new HaulResultDto
             {
-                ScavengerResultId = scavengeResult.Id,
-                HauledAtIso8601 = scavengeResult.CompletedAt.ToUniversalTime().ToString("o"),
-                TotalPoints = scavengeResult.ScanCoins.Sum(x => x.Coin!.Value),
+                ScanSessionId = scanSession.Id,
+                HauledAtIso8601 = scanSession.CompletedAt.ToUniversalTime().ToString("o"),
+                TotalPoints = scanSession.ScanCoins.Sum(x => x.Coin!.Value),
                 ActivityBaseHaulResultDtos = activityBaseResults
             };
         }).ToList();

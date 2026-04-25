@@ -49,7 +49,7 @@ public class ScoutMemberControllerTests
     {
         var membersController = CreateCut();
 
-        var scavengedCoins = new List<ScanCoin>
+        var scavengedCoins = new List<ScannedCoin>
         {
             new()
             {
@@ -74,13 +74,13 @@ public class ScoutMemberControllerTests
                     {
                         ScanCoins =
                         [
-                            new ScanCoin
+                            new ScannedCoin
                             {
                                 Coin = TestDataFactory.CreateCoin(23),
                                 ScanSession = null
                             },
 
-                            new ScanCoin
+                            new ScannedCoin
                             {
                                 Coin = TestDataFactory.CreateCoin(22),
                                 ScanSession = null
@@ -154,7 +154,7 @@ public class ScoutMemberControllerTests
     {
         var membersController = CreateCut();
 
-        var scavengedCoins = new List<ScanCoin>
+        var scavengedCoins = new List<ScannedCoin>
         {
             new()
             {
@@ -175,7 +175,7 @@ public class ScoutMemberControllerTests
                 ScoutMember = null
             }
         };
-        SetupDbMock(appDbContextMock, x => x.ScanCoins!, scavengedCoins);
+        SetupDbMock(appDbContextMock, x => x.ScannedCoins!, scavengedCoins);
         SetupDbMock(appDbContextMock, x => x.ScanSessions!, scavengeResults);
         SetupDbMock(appDbContextMock, x => x.ScoutMembers!, [
             new Api.Models.Domain.ScoutMember { Id = 9 }

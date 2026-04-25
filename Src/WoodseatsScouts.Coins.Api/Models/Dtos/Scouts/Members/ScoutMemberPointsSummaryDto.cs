@@ -25,7 +25,7 @@ public class ScoutMemberPointsSummaryDto
         {
             return new HaulResultDto
             {
-                ScavengerResultId = x.Id,
+                ScanSessionId = x.Id,
                 HauledAtIso8601 = x.CompletedAt.ToUniversalTime().ToString("o"),
                 TotalPoints = x.ScanCoins.Sum(x => x.Coin!.Value)
             };
@@ -82,7 +82,7 @@ public class ScoutMemberPointsSummaryDto
         {
             if (SelectedHaulResultId.HasValue)
             {
-                return HaulResults.Single(x => x.ScavengerResultId == SelectedHaulResultId);
+                return HaulResults.Single(x => x.ScanSessionId == SelectedHaulResultId);
             }
 
             return null;

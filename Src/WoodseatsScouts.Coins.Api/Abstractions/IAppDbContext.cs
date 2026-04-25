@@ -6,7 +6,7 @@ namespace WoodseatsScouts.Coins.Api.Abstractions;
 
 public interface IAppDbContext
 {
-    public DbSet<ScanCoin> ScanCoins { get; set; }
+    public DbSet<ScannedCoin> ScannedCoins { get; set; }
 
     public DbSet<ScoutMember> ScoutMembers { get; set; }
     

@@ -5,11 +5,12 @@ import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import type {ActivityBaseHaulResultDto, HaulResultDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
+import type {ActivityBaseHaulResultDto, HaulResultDto, ScannedCoinDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
 import EditMemberDetailsModal from "../../components/modals/EditMemberDetailsModal.tsx";
+import EditScannedCoinPointsModal from "../../components/modals/EditScannedCoinPointsModal.tsx";
 
 export default function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -17,9 +18,12 @@ export default function MemberDetailsPage() {
   const [loading, setLoading] = useState(false)
   const [showEditMemberPhotoModal, setShowEditMemberPhotoModal] = useState<boolean>(false);
   const [showEditMemberDetailsModal, setShowEditMemberDetailsModal] = useState<boolean>(false);
+  const [showEditScannedCoinPointsModal, setShowEditScannedCoinPointsModal] = useState<boolean>(false);
   const [memberCompleteDto, setMemberCompleteDto] = useState<ScoutMemberCompleteDto | null>(null);
   const [activeHaulResultDto, setActiveHaulResultDto] = useState<HaulResultDto | null>(null);
   const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
+
+  const [selectedScannedCoinDto, setSelectedScannedCoinDto] = useState<ScannedCoinDto | undefined>(undefined);
 
   useEffect(() => {
     if (memberId) {
@@ -34,7 +38,7 @@ export default function MemberDetailsPage() {
           logObject("memberCompleteDto", memberCompleteDto)
           setMemberCompleteDto(memberCompleteDto)
           if (memberCompleteDto.haulResults.length >= 0) {
-            setSelectedScanSessionId(memberCompleteDto.haulResults[0].scavengerResultId)
+            setSelectedScanSessionId(memberCompleteDto.haulResults[0].scanSessionId)
           }
         })
         .finally(() => setLoading(false));
@@ -43,7 +47,7 @@ export default function MemberDetailsPage() {
 
   useEffect(() => {
     if (selectedScanSessionId !== null) {
-      const selectedHaulResultDto = memberCompleteDto.haulResults.find(x => x.scavengerResultId == selectedScanSessionId);
+      const selectedHaulResultDto = memberCompleteDto.haulResults.find(x => x.scanSessionId == selectedScanSessionId);
       setActiveHaulResultDto(selectedHaulResultDto);
     }
   }, [selectedScanSessionId, memberCompleteDto]);
@@ -96,6 +100,22 @@ export default function MemberDetailsPage() {
     }).format(new Date(isoDateString));
   }
 
+  function deleteScanSession(haulResultDto: HaulResultDto) {
+    // todo: quick hack using timeout to allow selected row to visually update before confirm box loads.
+    setTimeout(() => {
+      const c = confirm(`Are you sure you want to delete this session for ${memberCompleteDto.firstName}'s session? This is irreversible!`)
+    }, 100)
+  }
+
+  function editScannedCoin(scannedCoinDto: ScannedCoinDto) {
+    setSelectedScannedCoinDto(scannedCoinDto);
+    setShowEditScannedCoinPointsModal(true)
+  }
+
+  function deleteScannedCoin(scannedCoinDto: ScannedCoinDto) {
+    const c = confirm(`Are you sure you want to delete this coin from ${memberCompleteDto.firstName}'s session? This is irreversible!`)
+  }
+
   function RenderMemberScanSessions() {
     return (
       <div className="member-details-table-container card">
@@ -114,14 +134,14 @@ export default function MemberDetailsPage() {
           </thead>
           <tbody>
           {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, index) => (
-            <tr key={index} role="button" onClick={() => setSelectedScanSessionId(haulResultDto.scavengerResultId)}
+            <tr key={index} role="button" onClick={() => setSelectedScanSessionId(haulResultDto.scanSessionId)}
                 style={{
-                  backgroundColor: selectedScanSessionId === haulResultDto.scavengerResultId ? "#d3e5ff" : "transparent"
+                  backgroundColor: selectedScanSessionId === haulResultDto.scanSessionId ? "#d3e5ff" : "transparent"
                 }}>
               <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
               <td>{haulResultDto.totalPoints}</td>
               <td>
-                <span>🗑️</span>
+                <span role="button" onClick={e => deleteScanSession(haulResultDto)}>🗑️</span>
               </td>
             </tr>
           ))}
@@ -161,22 +181,22 @@ export default function MemberDetailsPage() {
           </thead>
           <tbody>
           {activeHaulResultDto && activeHaulResultDto.activityBaseHaulResultDtos.map((activityBaseHaulResultDto: ActivityBaseHaulResultDto, haulIndex) =>
-              activityBaseHaulResultDto.coins && activityBaseHaulResultDto.coins.map((coin, coinIndex) => (
-                <tr key={`${haulIndex}-${coinIndex}`}>
-                  {coinIndex === 0 && (
-                    <td rowSpan={activityBaseHaulResultDto.coins.length}>
+              activityBaseHaulResultDto.scannedCoinDtos && activityBaseHaulResultDto.scannedCoinDtos.map((scannedCoinDto, scannedCoinDtoIndex) => (
+                <tr key={`${haulIndex}-${scannedCoinDtoIndex}`}>
+                  {scannedCoinDtoIndex === 0 && (
+                    <td rowSpan={activityBaseHaulResultDto.scannedCoinDtos.length}>
                       <div className="pe-2" style={{display: "flex", justifyContent: "space-between"}}>
                         <span>{activityBaseHaulResultDto.activityBaseName}</span>
-                        <span>(x {activityBaseHaulResultDto.coins.length})</span>
+                        <span>(x {activityBaseHaulResultDto.scannedCoinDtos.length})</span>
                       </div>
                     </td>
                   )}
-                  <td>{coin.pointValue}</td>
+                  <td>{scannedCoinDto.points}</td>
                   <td>
-                    <span>✏️</span>
+                    <span role="button" onClick={e => editScannedCoin(scannedCoinDto)}>✏️</span>
                   </td>
                   <td>
-                    <span>🗑️</span>
+                    <span role="button" onClick={e => deleteScannedCoin(scannedCoinDto)}>🗑️</span>
                   </td>
                 </tr>
               ))
@@ -276,6 +296,12 @@ export default function MemberDetailsPage() {
           setShowModal={setShowEditMemberDetailsModal}
           memberCompleteDto={memberCompleteDto}
           setMemberCompleteDto={setMemberCompleteDto}/>
+        <EditScannedCoinPointsModal
+          showModal={showEditScannedCoinPointsModal}
+          setShowModal={setShowEditScannedCoinPointsModal}
+          scannedCoinDto={selectedScannedCoinDto}
+          setScannedCoinDto={ setSelectedScannedCoinDto}
+        />
       </div>
     )
   }

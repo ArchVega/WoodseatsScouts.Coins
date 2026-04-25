@@ -10,5 +10,5 @@ public class ScanSession
     
     public DateTime CompletedAt { get; set; }
 
-    public List<ScanCoin> ScanCoins { get; set; } = [];
+    public List<ScannedCoin> ScanCoins { get; set; } = [];
 }

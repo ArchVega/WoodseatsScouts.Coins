@@ -56,14 +56,21 @@ export type ActivityBaseHaulResultDto = {
   activityBaseName: string
   totalPoints: number
   coinsScanned: number
-  coins: CoinDto[]
+  scannedCoinDtos: ScannedCoinDto[]
 }
 
 export type HaulResultDto = {
-  scavengerResultId: number
+  scanSessionId: number
   hauledAtIso8601: string
   totalPoints: number
   activityBaseHaulResultDtos: ActivityBaseHaulResultDto[]
+}
+
+export type ScannedCoinDto = {
+  scannedCoinId: number
+  coinId: number
+  points: number
+  coinActivityBase: string
 }
 
 export type MemberCompleteSummaryStatsActivityBaseInfoDto = {
@@ -72,10 +79,10 @@ export type MemberCompleteSummaryStatsActivityBaseInfoDto = {
 }
 
 export type MemberCompleteSummaryStatsDto = {
- mostVisitedActivityBase: MemberCompleteSummaryStatsActivityBaseInfoDto
- leastVisitedActivityBase: MemberCompleteSummaryStatsActivityBaseInfoDto
- mostScans: number
- totalTokensScanned: number
+  mostVisitedActivityBase: MemberCompleteSummaryStatsActivityBaseInfoDto
+  leastVisitedActivityBase: MemberCompleteSummaryStatsActivityBaseInfoDto
+  mostScans: number
+  totalTokensScanned: number
 }
 
 export type ScoutGroupDto = {

@@ -56,7 +56,7 @@ public class SutController(IAppDbContext appDbContext, IScoutsAppEnvironment sco
     public ActionResult ResetData()
     {
         appDbContext.ScanSessions.ExecuteDelete();
-        appDbContext.ScanCoins.ExecuteDelete();
+        appDbContext.ScannedCoins.ExecuteDelete();
 
         foreach (var coin in appDbContext.Coins)
         {
