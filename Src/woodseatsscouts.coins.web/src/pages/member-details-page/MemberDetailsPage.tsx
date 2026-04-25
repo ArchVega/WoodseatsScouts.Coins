@@ -13,7 +13,7 @@ import EditMemberDetailsModal from "../../components/modals/EditMemberDetailsMod
 
 export default function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
-  const {memberCode} = useParams();
+  const {memberId} = useParams();
   const [loading, setLoading] = useState(false)
   const [showEditMemberPhotoModal, setShowEditMemberPhotoModal] = useState<boolean>(false);
   const [showEditMemberDetailsModal, setShowEditMemberDetailsModal] = useState<boolean>(false);
@@ -22,10 +22,11 @@ export default function MemberDetailsPage() {
   const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (memberCode) {
+    if (memberId) {
       setLoading(true)
+      const memberIdNumber = Number(memberId);
       MemberApiService()
-        .fetchMemberComplete(memberCode)
+        .getMemberComplete(memberIdNumber)
         .then(response => {
           return response.data
         })
@@ -38,7 +39,7 @@ export default function MemberDetailsPage() {
         })
         .finally(() => setLoading(false));
     }
-  }, [memberCode])
+  }, [memberId])
 
   useEffect(() => {
     if (selectedScanSessionId !== null) {

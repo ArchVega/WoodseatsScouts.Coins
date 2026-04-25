@@ -6,23 +6,23 @@ import type {UpdateScoutMemberRequestPayload} from "../../types/ClientTypes.ts";
 
 export default function MemberApiService() {
   return {
-    async fetchMember(memberCode: string): Promise<AxiosResponse<ScoutMemberDto>> {
+    async getMember(memberCode: string): Promise<AxiosResponse<ScoutMemberDto>> {
       return await apiClient.get(Uris.scouts().members().memberByCode(memberCode));
     },
 
-    async fetchMemberComplete(memberCode: string): Promise<AxiosResponse<ScoutMemberCompleteDto>> {
-      return await apiClient.get(Uris.scouts().members().fetchMemberComplete(memberCode));
+    async getMemberComplete(scoutMemberId: number): Promise<AxiosResponse<ScoutMemberCompleteDto>> {
+      return await apiClient.get(Uris.scouts().members().getMemberComplete(scoutMemberId));
     },
 
-    async fetchMembers(): Promise<AxiosResponse<ScoutMemberPointsSummaryDto[]>> {
+    async getMembers(): Promise<AxiosResponse<ScoutMemberPointsSummaryDto[]>> {
       return await apiClient.get(Uris.scouts().members().membersWithPointSummary());
     },
 
-    async photo(photoImagePath: string): Promise<AxiosResponse<string>> {
+    async photo(photoImagePath: string): Promise<AxiosResponse<string>> { // todo: rename to getPhoto, check usage
       return await apiClient.get(Uris.scouts().members().memberPhoto(photoImagePath));
     },
 
-    async updateScoutMember(scoutMemberId: number, payload: UpdateScoutMemberRequestPayload): Promise<ScoutMemberDto> {
+    async updateScoutMember(scoutMemberId: number, payload: UpdateScoutMemberRequestPayload): Promise<ScoutMemberCompleteDto> {
       return await apiClient.put(Uris.scouts().members().memberById(scoutMemberId), payload).then(x => x.data)
     }
   }

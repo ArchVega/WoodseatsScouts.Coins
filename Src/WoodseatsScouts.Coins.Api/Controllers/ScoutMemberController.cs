@@ -21,7 +21,7 @@ public class ScoutMemberController(
     IOptions<AppSettings> appSettingsOptions) : ControllerBase
 {
     private static readonly Lock Locker = new();
-    
+
     /// <summary>
     /// Gets all scout members.
     /// </summary>
@@ -138,6 +138,16 @@ public class ScoutMemberController(
     }
 
     /// <summary>
+    /// Get a scout member's details by their member code.
+    /// </summary>
+    [HttpGet]
+    [Route("{scoutMemberId}/complete")]
+    public IActionResult GetScoutMemberById(int scoutMemberId)
+    {
+        return Ok(scoutMemberService.MemberCompleteSummaryDto(scoutMemberId));
+    }
+
+    /// <summary>
     /// Update a scout member's details.
     /// </summary>
     [HttpPut]
@@ -149,23 +159,19 @@ public class ScoutMemberController(
         var maxMemberNumberFromTargetGroup = appDbContext.ScoutMembers
             .Where(x => x.ScoutGroupId == request.ScoutGroupId && x.ScoutSectionCode == request.ScoutSectionCode)
             .ToList();
-            
-        var newMemberNumber = maxMemberNumberFromTargetGroup.Count == 0 ?  1 : maxMemberNumberFromTargetGroup.Max(x => x.Number) + 1;
-        
+
+        var newMemberNumber = maxMemberNumberFromTargetGroup.Count == 0 ? 1 : maxMemberNumberFromTargetGroup.Max(x => x.Number) + 1;
+
         scoutMember.FirstName = request.FirstName;
         scoutMember.LastName = request.LastName;
         scoutMember.ScoutGroupId = request.ScoutGroupId;
         scoutMember.ScoutSectionCode = request.ScoutSectionCode;
         scoutMember.Number = newMemberNumber;
         appDbContext.SaveChanges();
-        
-        var updatedScoutMember = appDbContext
-            .ScoutMembers
-            .Include(x => x.ScoutGroup)
-            .Include(x => x.ScoutSection)
-            .Single(x => x.Id == scoutMemberId);
 
-        return Ok(new ScoutMemberDto(updatedScoutMember));
+        var memberCompleteSummaryDto = scoutMemberService.MemberCompleteSummaryDto(scoutMember.Id);
+
+        return Ok(memberCompleteSummaryDto);
     }
 
     /// <summary>
@@ -185,7 +191,7 @@ public class ScoutMemberController(
             member.Clue3State
         });
     }
-    
+
     /// <summary>
     /// Gets the default placeholder image for scout members who have no photo. 
     /// </summary>

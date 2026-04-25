@@ -69,17 +69,8 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
 
     MemberApiService()
       .updateScoutMember(memberCompleteDto.id, payload)
-      .then((result) => {
-        const updatedSelectedMember = ({...memberCompleteDto})
-        updatedSelectedMember.firstName = firstName
-        updatedSelectedMember.lastName = lastName
-        updatedSelectedMember.fullName = `${firstName} ${lastName}`
-        updatedSelectedMember.scoutGroupId = selectedScoutGroupId
-        updatedSelectedMember.scoutSectionCode = selectedScoutSectionCode
-        updatedSelectedMember.scoutMemberCode = result.scoutMemberCode // todo: there should be a 'load' helper function
-
-        navigate(`/members/${updatedSelectedMember.scoutMemberCode}`)
-        setMemberCompleteDto(updatedSelectedMember)
+      .then((updatedScoutMemberCompleteDto) => {
+        setMemberCompleteDto(updatedScoutMemberCompleteDto)
         setShowModal(false);
       });
   }

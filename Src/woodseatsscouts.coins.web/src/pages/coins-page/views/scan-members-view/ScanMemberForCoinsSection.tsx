@@ -40,7 +40,7 @@ export default function ScanMemberForCoinsSection({setMember}) {
 
       async function fetchData(): Promise<AxiosResponse<ScoutMemberDto>> {
         audioFx.playMemberScannedAudio()
-        return await MemberApiService().fetchMember(memberQrCode)
+        return await MemberApiService().getMember(memberQrCode)
       }
 
       fetchData()

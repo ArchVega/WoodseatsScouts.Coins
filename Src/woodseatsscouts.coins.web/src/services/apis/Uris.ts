@@ -43,14 +43,14 @@ const Uris = {
           membersWithPointSummary: function () {
             return logApi(`${membersResourcePath}`);
           },
-          fetchMemberComplete: function (memberCode: string) {
-            return logApi(`${membersResourcePath}/${memberCode}?view=3`);
+          getMemberComplete: function (scoutMemberId: number) {
+            return logApi(`${membersResourcePath}/${scoutMemberId}/complete`);
           },
           addPointsToMember: function (memberId: number) {
-            return logApi(`${membersResourcePath}/${memberId}/Coins`)
+            return logApi(`${membersResourcePath}/${memberId}/coins`)
           },
           updateMemberPhoto: function (memberId: number) {
-            return logApi(`${membersResourcePath}/${memberId}/Photo`)
+            return logApi(`${membersResourcePath}/${memberId}/photo`)
           },
           memberPhoto: function (photoImagePath: string) {
             return logApi(`${scoutsResourcePath}/${photoImagePath}`)

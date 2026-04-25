@@ -10,7 +10,7 @@ const AppRoutes = [
         element: <CoinsPage/>
     },
     {
-        path: '/members/:memberCode',
+        path: '/members/:memberId',
         element: <MemberDetailsPage/>,
         hasParams: true
     },

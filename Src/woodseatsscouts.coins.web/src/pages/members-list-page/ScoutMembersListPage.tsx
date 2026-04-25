@@ -22,7 +22,7 @@ export default function ScoutMembersListPage() {
 
   useEffect(() => {
     const fetchMembers = async (): Promise<AxiosResponse<ScoutMemberPointsSummaryDto[]>> => {
-      return await MemberApiService().fetchMembers();
+      return await MemberApiService().getMembers();
     }
     fetchMembers().then(response => {
       setMembers(response.data)
@@ -89,7 +89,7 @@ export default function ScoutMembersListPage() {
           </div>
           <div className="row pb-2 g-1">
             <div className="col-6 members-list-item-section">
-              <Button onClick={() => navigate(`/members/${scoutMember.scoutMemberCode}`)}>EDIT</Button>
+              <Button onClick={() => navigate(`/members/${scoutMember.id}`)}>EDIT</Button>
             </div>
             <div className=" col-6 members-list-item-section">
               <Button disabled={!useAppCamera}
