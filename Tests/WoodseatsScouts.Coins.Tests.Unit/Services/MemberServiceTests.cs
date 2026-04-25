@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.Queries;

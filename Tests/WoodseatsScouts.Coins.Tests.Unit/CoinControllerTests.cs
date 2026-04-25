@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;

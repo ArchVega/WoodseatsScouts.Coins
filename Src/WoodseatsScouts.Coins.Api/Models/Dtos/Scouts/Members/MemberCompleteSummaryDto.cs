@@ -1,8 +1,7 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
-namespace WoodseatsScouts.Coins.Api.Models.Dtos.Members;
+namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 public class MemberCompleteSummaryDto
 {

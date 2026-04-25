@@ -1,4 +1,4 @@
-using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 namespace WoodseatsScouts.Coins.Api.Abstractions;
 

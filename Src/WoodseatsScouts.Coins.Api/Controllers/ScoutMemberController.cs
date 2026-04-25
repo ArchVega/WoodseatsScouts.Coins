@@ -4,7 +4,7 @@ using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Members;
 

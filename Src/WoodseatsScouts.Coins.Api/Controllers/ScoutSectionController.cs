@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 

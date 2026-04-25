@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Models.Domain;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 namespace WoodseatsScouts.Coins.Api.Data
 {

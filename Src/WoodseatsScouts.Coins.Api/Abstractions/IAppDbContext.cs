@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Models.Domain;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
-namespace WoodseatsScouts.Coins.Api.Data;
+namespace WoodseatsScouts.Coins.Api.Abstractions;
 
 public interface IAppDbContext
 {

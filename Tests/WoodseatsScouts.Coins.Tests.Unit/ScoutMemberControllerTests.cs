@@ -12,7 +12,7 @@ using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Controllers;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Members;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Members;
 using Xunit;
