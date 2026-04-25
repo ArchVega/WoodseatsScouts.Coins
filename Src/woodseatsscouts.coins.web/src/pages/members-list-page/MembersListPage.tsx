@@ -56,7 +56,7 @@ export default function MembersListPage() {
   }
 
   function RenderMember(member: MemberPointsSummaryDto) {
-    const sectionBranding = getSectionBranding(member.sectionId)
+    const sectionBranding = getSectionBranding(member.sectionCode)
 
     return (
       <div key={member.memberCode} className="card members-list-item-card flex-shrink-0">
@@ -90,7 +90,7 @@ export default function MembersListPage() {
           </div>
           <div className="row pb-2 g-1">
             <div className="col-6 members-list-item-section">
-              <Button onClick={() => navigate(`/member/${member.memberCode}`)}>EDIT</Button>
+              <Button onClick={() => navigate(`/members/${member.memberCode}`)}>EDIT</Button>
             </div>
             <div className=" col-6 members-list-item-section">
               <Button disabled={!useAppCamera}

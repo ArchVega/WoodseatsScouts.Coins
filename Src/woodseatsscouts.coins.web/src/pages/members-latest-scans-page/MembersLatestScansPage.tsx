@@ -37,7 +37,7 @@ export default function MembersLatestScansPage() {
   }, []);
 
   function RenderMember(member: MemberPointsSummaryDto) {
-    const sectionBranding = getSectionBranding(member.sectionId)
+    const sectionBranding = getSectionBranding(member.sectionCode)
 
     return (
       <div className="card latest-scans-item-card flex-shrink-0" >

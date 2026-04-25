@@ -40,7 +40,7 @@ const Uris = {
             return logApi(`${membersResourcePath}/${memberCode}`)
           },
           membersWithPointSummary: function () {
-            return logApi(`${membersResourcePath}?view=PointsSummary`);
+            return logApi(`${membersResourcePath}`);
           },
           fetchMemberComplete: function (memberCode: string) {
             return logApi(`${membersResourcePath}/${memberCode}?view=3`);

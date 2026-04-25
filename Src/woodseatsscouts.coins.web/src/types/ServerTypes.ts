@@ -6,7 +6,7 @@ export type MemberBase = {
   lastName: string
   fullName: string
   scoutGroupId: number
-  sectionId: string
+  sectionCode: string
   computedImagePath: string
   clientComputedImageUri: string
   memberCode: string

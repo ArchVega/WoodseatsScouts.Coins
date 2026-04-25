@@ -5,8 +5,7 @@ import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import Uris from "../../services/apis/Uris.ts";
-import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
@@ -18,7 +17,6 @@ export default function MemberDetailsPage() {
   const [loading, setLoading] = useState(false)
   const [showEditMemberPhotoModal, setShowEditMemberPhotoModal] = useState<boolean>(false);
   const [showEditMemberDetailsModal, setShowEditMemberDetailsModal] = useState<boolean>(false);
-
   const [memberCompleteDto, setMemberCompleteDto] = useState<MemberCompleteDto | null>(null);
   const [activeHaulResultDto, setActiveHaulResultDto] = useState<HaulResultDto | null>(null);
   const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
@@ -29,7 +27,6 @@ export default function MemberDetailsPage() {
       MemberApiService()
         .fetchMemberComplete(memberCode)
         .then(response => {
-          // response.data.clientComputedImageUri = Uris.scouts().members().memberPhoto(response.data.computedImagePath) // todo: is there an axios way to do this automatically?
           return response.data
         })
         .then((memberCompleteDto: MemberCompleteDto) => {
@@ -51,7 +48,7 @@ export default function MemberDetailsPage() {
   }, [selectedScanSessionId, memberCompleteDto]);
 
   function RenderMemberDetails() {
-    const sectionBranding = getSectionBranding(memberCompleteDto.sectionId)
+    const sectionBranding = getSectionBranding(memberCompleteDto.sectionCode)
 
     return (
       <>
