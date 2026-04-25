@@ -1,4 +1,5 @@
 // dotcover disable
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -13,10 +14,7 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [ApiController]
 [Tags("System Testing")]
 [Route("api/system/tests")]
-public class SutController(
-    IAppDbContext appDbContext,
-    IScoutsAppEnvironment scoutsAppEnvironment, 
-    SystemDateTimeProvider systemDateTimeProvider) : ControllerBase
+public class SutController(IAppDbContext appDbContext, IScoutsAppEnvironment scoutsAppEnvironment) : ControllerBase
 {
     [HttpGet]
     [Route("members")]
@@ -40,22 +38,6 @@ public class SutController(
         return Ok("Updated all members HasImage property to true");
     }
     
-    [HttpPut]
-    [Route("datetime/{minutesToAdd:int?}")]
-    public IActionResult SetSystemDateTime(int? minutesToAdd)
-    {
-        if (minutesToAdd.HasValue)
-        {
-            systemDateTimeProvider.SetDateTimeToSetTime(DateTime.UtcNow.AddMinutes(minutesToAdd.Value));
-        }
-        else
-        {
-            systemDateTimeProvider.SetDateTimeToSystemClock();
-        }
-
-        return Ok($"System datetime set to '{systemDateTimeProvider.Now}'");
-    }
-    
     [HttpGet]
     [Route("coins")]
     public ActionResult GetAll()
@@ -68,14 +50,14 @@ public class SutController(
             IsAlreadyScavenged = x.MemberId != null
         }));
     }
-    
+
     [HttpGet]
     [Route("data/reset")]
     public ActionResult ResetData()
     {
         appDbContext.ScanSessions.ExecuteDelete();
         appDbContext.ScanCoins.ExecuteDelete();
-        
+
         foreach (var coin in appDbContext.Coins)
         {
             coin.MemberId = null;
@@ -83,10 +65,10 @@ public class SutController(
         }
 
         appDbContext.SaveChanges();
-        
+
         return Ok();
     }
-    
+
     [HttpGet]
     [Route("app-test-mode")]
     public ActionResult IsAppTestMode()

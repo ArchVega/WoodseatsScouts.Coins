@@ -22,12 +22,11 @@ namespace WoodseatsScouts.Coins.Tests;
 public class CoinControllerTests
 {
     private readonly Mock<IAppDbContext> appDbContextMock = new();
-    private readonly Mock<SystemDateTimeProvider> systemDateTimeProviderMock = new();
     private readonly Mock<ICoinService> coinServiceMock = new();
 
     private CoinController CreateCut()
     {
-        return new CoinController(appDbContextMock.Object, coinServiceMock.Object, systemDateTimeProviderMock.Object);
+        return new CoinController(appDbContextMock.Object, coinServiceMock.Object);
     }
     
     [Fact]

@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WoodseatsScouts.Coins.Api.Abstractions;
-using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
-using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 using WoodseatsScouts.Coins.Api.Models.Requests.Coins;
 using WoodseatsScouts.Coins.Api.Services;
@@ -11,10 +9,7 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
 [Route("api/coins")]
-public class CoinController(
-    IAppDbContext appDbContext,
-    ICoinService coinService,
-    SystemDateTimeProvider systemDateTimeProvider) : ControllerBase
+public class CoinController(IAppDbContext appDbContext, ICoinService coinService) : ControllerBase
 {
     [HttpPost]
     [Route("")]
@@ -43,7 +38,7 @@ public class CoinController(
 
         return Ok(coins);
     }
-    
+
     [HttpPut]
     [Route("{coinCode}/assign/{scoutMemberCode}")]
     public IActionResult AssignCoinToScoutMember(string coinCode, string scoutMemberCode)
@@ -64,16 +59,16 @@ public class CoinController(
             return NotFound($"A member with the code '{coinCode}' was not found in the database.");
         }
 
-        if (member.Id == dbCoin.MemberId && systemDateTimeProvider.Now < dbCoin.LockUntil)
+        if (member.Id == dbCoin.MemberId && DateTime.UtcNow < dbCoin.LockUntil)
         {
             return base.Conflict($"The coin has already been scavenged by {member.FirstName}");
         }
 
         // ReSharper disable once InvertIf
-        if (dbCoin.MemberId.HasValue && systemDateTimeProvider.Now < dbCoin.LockUntil)
+        if (dbCoin.MemberId.HasValue && DateTime.UtcNow < dbCoin.LockUntil)
         {
             var memberWhoScavengedCoin = appDbContext.ScoutMembers!.Single(x => x.Id == dbCoin.MemberId);
-            
+
             var message = $"This points token has already been used by {memberWhoScavengedCoin.FullName}. Please hand it to a District Camp Leader";
             return base.Conflict(message);
         }
@@ -86,7 +81,7 @@ public class CoinController(
 
         return Ok(new CoinDto(result.PointValue, result.ActivityBaseId, coinCode));
     }
-    
+
     [HttpGet]
     [Route("")]
     public async Task<IActionResult> GetAll()
