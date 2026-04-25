@@ -13,6 +13,7 @@ import EditMemberDetailsModal from "../../components/modals/EditMemberDetailsMod
 import EditScannedCoinPointsModal from "../../components/modals/EditScannedCoinPointsModal.tsx";
 import ScannedCoinApiService from "../../services/apis/ScannedCoinApiService.ts";
 import ScanSessionApiService from "../../services/apis/ScanSessionApiService.ts";
+import {usePasscode} from "../../components/security/usePasscode.ts";
 
 export default function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -25,6 +26,7 @@ export default function MemberDetailsPage() {
   const [activeHaulResultDto, setActiveHaulResultDto] = useState<HaulResultDto | null>(null);
   const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
   const [selectedScannedCoinDto, setSelectedScannedCoinDto] = useState<ScannedCoinDto | undefined>(undefined);
+  const {checkPasscode} = usePasscode();
 
   useEffect(() => {
     if (memberId) {
@@ -53,6 +55,18 @@ export default function MemberDetailsPage() {
     }
   }, [selectedScanSessionId, memberCompleteDto]);
 
+  function tryEditScoutMemberPhoto() {
+    if (checkPasscode()) {
+      useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')
+    }
+  }
+
+  function tryEditScoutMemberDetails() {
+    if (checkPasscode()) {
+      setShowEditMemberDetailsModal(true)
+    }
+  }
+
   function formatDateTime(isoDateString: string) {
     return new Intl.DateTimeFormat("en-GB", {
       weekday: "long",
@@ -63,29 +77,35 @@ export default function MemberDetailsPage() {
   }
 
   function deleteScanSession(haulResultDto: HaulResultDto) {
-    // todo: quick hack using timeout to allow selected row to visually update before confirm box loads.
-    setTimeout(() => {
-      const c = confirm(`Are you sure you want to delete this session for ${memberCompleteDto.firstName}'s session? This is irreversible!`)
-      if (c) {
-        ScanSessionApiService().deleteScanSession(haulResultDto.scanSessionId).then(value => {
-          // Todo: implement dynamic solution later
-          alert('Reload page to see updated points value')
-        })
-      }
-    }, 100)
+    if (checkPasscode()) {
+      // todo: quick hack using timeout to allow selected row to visually update before confirm box loads.
+      setTimeout(() => {
+        const c = confirm(`Are you sure you want to delete this session for ${memberCompleteDto.firstName}'s session? This is irreversible!`)
+        if (c) {
+          ScanSessionApiService().deleteScanSession(haulResultDto.scanSessionId).then(value => {
+            // Todo: implement dynamic solution later
+            alert('Reload page to see updated points value')
+          })
+        }
+      }, 100)
+    }
   }
 
   function updateScannedCoinPoints(scannedCoinDto: ScannedCoinDto) {
-    setSelectedScannedCoinDto(scannedCoinDto);
-    setShowEditScannedCoinPointsModal(true)
+    if (checkPasscode()) {
+      setSelectedScannedCoinDto(scannedCoinDto);
+      setShowEditScannedCoinPointsModal(true)
+    }
   }
 
   function deleteScannedCoin(scannedCoinDto: ScannedCoinDto) {
-    const c = confirm(`Are you sure you want to delete this coin that has ${scannedCoinDto.calculatedEffectivePoints} points from ${memberCompleteDto.firstName}'s session? This is irreversible!`)
-    if (c) {
-      ScannedCoinApiService().deleteScannedCoin(scannedCoinDto.scannedCoinId).then(value =>
-        // Todo: implement dynamic solution later
-        alert('Reload page to see updated points value'))
+    if (checkPasscode()) {
+      const c = confirm(`Are you sure you want to delete this coin that has ${scannedCoinDto.calculatedEffectivePoints} points from ${memberCompleteDto.firstName}'s session? This is irreversible!`)
+      if (c) {
+        ScannedCoinApiService().deleteScannedCoin(scannedCoinDto.scannedCoinId).then(value =>
+          // Todo: implement dynamic solution later
+          alert('Reload page to see updated points value'))
+      }
     }
   }
 
@@ -97,12 +117,12 @@ export default function MemberDetailsPage() {
         <div className="card member-details-member-card flex-shrink-0 sticky-top mb-3">
           <div className="card-body">
             <Image className="mb-2"
-                   onClick={() => useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')}
+                   onClick={() => tryEditScoutMemberPhoto()}
                    title={"User id: " + memberCompleteDto.id}
                    src={memberCompleteDto.clientComputedImageUri}/>
             <div className="row mb-2">
               <div role="button" className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}
-                   onClick={() => setShowEditMemberDetailsModal(true)}>
+                   onClick={() => tryEditScoutMemberDetails()}>
                 <strong className="tile d-flex flex-column justify-content-center h-100">{memberCompleteDto.firstName + " " + memberCompleteDto.lastName}</strong>
               </div>
             </div>
@@ -117,7 +137,7 @@ export default function MemberDetailsPage() {
             <div className="row mb-2">
               <div className="members-list-item-section" title={`Section: ${memberCompleteDto.scoutSectionName}`}>
                 <div role="button" className="tile" style={{backgroundColor: sectionBranding.backgroundColour, color: sectionBranding.foregroundColour}}
-                     onClick={() => setShowEditMemberDetailsModal(true)}>
+                     onClick={() => tryEditScoutMemberDetails()}>
                   {memberCompleteDto.scoutGroupName}
                 </div>
               </div>
@@ -225,11 +245,6 @@ export default function MemberDetailsPage() {
     )
   }
 
-  {/*<td>{activityBaseHaulResultDto.totalPoints}</td>*/
-  }
-  {/*<td>{activityBaseHaulResultDto.coinsScanned}</td>*/
-  }
-
   function RenderMemberActivitySummary() {
     function RenderActivityCard(title: string, node: ReactNode) {
       return (
@@ -293,12 +308,7 @@ export default function MemberDetailsPage() {
             {RenderMemberScanSessions()}
           </div>
           <div className={"col-4"}>
-            {/*{!selectedSession && (*/}
-            {/*  <>Select a session</>*/}
-            {/*)}*/}
-            {
-              RenderSelectedScanSessions()
-            }
+            {RenderSelectedScanSessions()}
           </div>
           <div className={"col-2"}>
             {RenderMemberActivitySummary()}
