@@ -20,14 +20,14 @@ public class MemberPointsSummaryDto
         ScoutGroupName = scoutMember.ScoutGroup.Name;
         SectionId = scoutMember.ScoutSectionId;
         SectionName = scoutMember.ScoutSection.Name;
-        TotalPoints = scoutMember.ScavengeResults.SelectMany(y => y.ScanCoins.Select(z => z.Coin.Value)).Sum();
-        HaulResults = scoutMember.ScavengeResults.Select(x =>
+        TotalPoints = scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.Coin!.Value)).Sum();
+        HaulResults = scoutMember.ScanSessions.Select(x =>
         {
             return new HaulResultDto
             {
                 ScavengerResultId = x.Id,
-                HauledAtIso8601 = x.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
-                TotalPoints = x.ScanCoins.Sum(x => x.Coin.Value) // changed
+                HauledAtIso8601 = x.CompletedAt.ToUniversalTime().ToString("o"),
+                TotalPoints = x.ScanCoins.Sum(x => x.Coin!.Value)
             };
         }).ToList();
     }

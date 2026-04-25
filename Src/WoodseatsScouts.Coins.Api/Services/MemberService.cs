@@ -32,7 +32,7 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
     public List<MemberPointsSummaryDto> GetMemberWithPointsSummaryDtos()
     {
         return appDbContext.ScoutMembers!
-            .Include(x => x.ScavengeResults)
+            .Include(x => x.ScanSessions)
             .ThenInclude(x => x.ScanCoins)
             .ThenInclude(x => x.Coin)
             .Include(x => x.ScoutGroup)
@@ -47,10 +47,10 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
     public MemberCompleteSummaryDto MemberCompleteSummaryDto(int memberId)
     {
         return appDbContext.ScoutMembers!
-            .Include(x => x.ScavengeResults)
+            .Include(x => x.ScanSessions)
             .ThenInclude(x => x.ScanCoins)
             .ThenInclude(x => x.Coin)
-            .ThenInclude(x => x.ActivityBase)
+            .ThenInclude(x => x!.ActivityBase)
             .Include(x => x.ScoutGroup)
             .Include(x => x.ScoutSection)
             .Where(x => x.Id == memberId)

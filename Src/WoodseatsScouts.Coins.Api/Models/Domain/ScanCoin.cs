@@ -7,15 +7,15 @@
         
         public int ScanSessionId { get; set; }
         
-        public required ScanSession ScanSession { get; set; }
+        public ScanSession? ScanSession { get; set; }
         
         public int CoinId { get; set;  }
         
-        public required Coin Coin { get; set; }
+        public Coin? Coin { get; set; }
         
         public override string ToString()
         {
-            return $"{nameof(Coin.Code)}: {Coin.Code}, {nameof(Coin.Value)}: {Coin.Value}";
+            return $"{nameof(Coin.Code)}: {Coin!.Code}, {nameof(Coin.Value)}: {Coin.Value}";
         }
     }
 }

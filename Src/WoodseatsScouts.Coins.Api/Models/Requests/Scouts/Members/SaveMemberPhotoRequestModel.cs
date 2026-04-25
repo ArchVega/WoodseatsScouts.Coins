@@ -2,5 +2,5 @@
 
 public class SaveMemberPhotoRequestModel
 {
-    public string Photo { get; set; }
+    public required string Photo { get; set; }
 }

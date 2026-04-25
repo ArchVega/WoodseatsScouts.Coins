@@ -8,27 +8,27 @@ public class MemberCompleteSummaryDto
 {
     public MemberCompleteSummaryDto(ScoutMember scoutMember)
     {
-        var haulResults = scoutMember.ScavengeResults.Select(scavengeResult =>
+        var haulResults = scoutMember.ScanSessions.Select(scavengeResult =>
         {
-            var groupedByActivityBase = scavengeResult.ScanCoins.GroupBy(x => x.Coin.ActivityBaseId).ToList();
+            var groupedByActivityBase = scavengeResult.ScanCoins.GroupBy(x => x.Coin!.ActivityBaseId).ToList();
 
             var activityBaseResults = groupedByActivityBase.Select(x =>
             {
                 return new ActivityBaseHaulResultDto
                 {
                     ActivityBaseId = x.Key,
-                    ActivityBaseName = x.ElementAt(0).Coin.ActivityBase.Name,
-                    TotalPoints = x.Sum(y => y.Coin.Value),
+                    ActivityBaseName = x.ElementAt(0).Coin!.ActivityBase!.Name,
+                    TotalPoints = x.Sum(y => y.Coin!.Value),
                     CoinsScanned = x.Count(),
-                    Coins = x.Select(y => new CoinDto(y.Coin.Value, y.Coin.ActivityBase.Id, y.Coin.Code)).ToList()
+                    Coins = x.Select(y => new CoinDto(y.Coin!.Value, y.Coin!.ActivityBase!.Id, y.Coin.Code)).ToList()
                 };
             }).ToList();
 
             return new HaulResultDto
             {
                 ScavengerResultId = scavengeResult.Id,
-                HauledAtIso8601 = scavengeResult.CompletedAt.ToUniversalTime().ToString("o"), // ISO 8601
-                TotalPoints = scavengeResult.ScanCoins.Sum(x => x.Coin.Value), // changed
+                HauledAtIso8601 = scavengeResult.CompletedAt.ToUniversalTime().ToString("o"),
+                TotalPoints = scavengeResult.ScanCoins.Sum(x => x.Coin!.Value),
                 ActivityBaseHaulResultDtos = activityBaseResults
             };
         }).ToList();
@@ -47,8 +47,7 @@ public class MemberCompleteSummaryDto
         ScoutGroupName = scoutMember.ScoutGroup.Name;
         SectionCode = scoutMember.ScoutSectionId;
         SectionName = scoutMember.ScoutSection.Name;
-        // changed
-        TotalPoints = scoutMember.ScavengeResults.SelectMany(y => y.ScanCoins.Select(z => z.Coin.Value)).Sum();
+        TotalPoints = scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.Coin!.Value)).Sum();
         HaulResults = haulResults;
 
         MemberCompleteSummaryStatsDto = new MemberCompleteSummaryStatsDto();
@@ -72,11 +71,11 @@ public class MemberCompleteSummaryDto
             TimesVisited = minCount,
         };
 
-        MemberCompleteSummaryStatsDto.MostScans = scoutMember.ScavengeResults
+        MemberCompleteSummaryStatsDto.MostScans = scoutMember.ScanSessions
             .Select(x => x.ScanCoins.Count)
             .DefaultIfEmpty(0)
             .Max() ;
-        MemberCompleteSummaryStatsDto.TotalTokensScanned = scoutMember.ScavengeResults
+        MemberCompleteSummaryStatsDto.TotalTokensScanned = scoutMember.ScanSessions
             .Select(x => x.ScanCoins.Count)
             .DefaultIfEmpty(0)
             .Min() ;

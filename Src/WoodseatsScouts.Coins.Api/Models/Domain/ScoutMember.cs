@@ -51,7 +51,7 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
         
         public bool HasImage { get; set; }
         
-        public List<ScanSession> ScavengeResults { get; set; } = null!;
+        public List<ScanSession> ScanSessions { get; set; } = [];
 
         public string FullName => $"{FirstName} {LastName}";
 

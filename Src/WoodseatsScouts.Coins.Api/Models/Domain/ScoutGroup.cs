@@ -9,5 +9,5 @@ public class ScoutGroup
     [MaxLength(100)]
     public required string Name { get; set; }
 
-    public required List<ScoutMember> ScoutMembers { get; set; } = [];
+    public List<ScoutMember> ScoutMembers { get; set; } = [];
 }

@@ -49,24 +49,16 @@ public class ScoutMemberControllerTests
     {
         var membersController = CreateCut();
 
-        var scavengedCoins = new List<ScanCoin> { new()
+        var scavengedCoins = new List<ScanCoin>
         {
-            Coin = new Coin
+            new()
             {
-                Value = 13,
-                ActivityBase = null,
-                Code = null
+                Coin = TestDataFactory.CreateCoin(13),
+                ScanSession = null
             },
-            
-            ScanSession = null
-        }, new()
+            new()
             {
-                Coin = new Coin
-                {
-                    Value = 6,
-                    ActivityBase = null,
-                    Code = null
-                },
+                Coin = TestDataFactory.CreateCoin(6),
                 ScanSession = null
             }
         };
@@ -74,17 +66,9 @@ public class ScoutMemberControllerTests
         memberServiceMock.Setup(x => x.GetMemberWithPointsSummaryDtos()).Returns([
             new MemberPointsSummaryDto(new ScoutMember
             {
-                ScoutGroup = new ScoutGroup
-                {
-                    Name = null,
-                    ScoutMembers = null
-                },
-                ScoutSection = new ScoutSection
-                {
-                    Code = null,
-                    Name = null
-                },
-                ScavengeResults =
+                ScoutGroup = TestDataFactory.CreateScoutGroup(""),
+                ScoutSection = TestDataFactory.CreateScoutSection(""),
+                ScanSessions =
                 [
                     new ScanSession
                     {
@@ -92,23 +76,13 @@ public class ScoutMemberControllerTests
                         [
                             new ScanCoin
                             {
-                                Coin = new Coin
-                                {
-                                    Value = 23,
-                                    ActivityBase = null,
-                                    Code = null
-                                },
+                                Coin = TestDataFactory.CreateCoin(23),
                                 ScanSession = null
                             },
 
                             new ScanCoin
                             {
-                                Coin = new Coin
-                                {
-                                    Value = 22,
-                                    ActivityBase = null,
-                                    Code = null
-                                },
+                                Coin = TestDataFactory.CreateCoin(22),
                                 ScanSession = null
                             }
                         ],
@@ -134,7 +108,7 @@ public class ScoutMemberControllerTests
     public void GetMemberInfoFromCode_InvalidCode_ThrowsException()
     {
         var membersController = CreateCut();
-    
+
         var result = membersController.GetMemberByCode("invalid", null);
         result.ShouldBeOfType<BadRequestObjectResult>();
         ((BadRequestObjectResult)result).Value.ShouldBe("Oops, we can't find your profile - please speak to a District Camp Leader");
@@ -180,27 +154,22 @@ public class ScoutMemberControllerTests
     {
         var membersController = CreateCut();
 
-        var scavengedCoins = new List<ScanCoin> { new()
+        var scavengedCoins = new List<ScanCoin>
         {
-            Coin = new Coin
+            new()
             {
-                Value = 13,
-                ActivityBase = null,
-                Code = null
+                Coin = TestDataFactory.CreateCoin(13),
+                ScanSession = null
             },
-            ScanSession = null
-        }, new()
+            new()
             {
-                Coin = new Coin
-                {
-                    Value = 6,
-                    ActivityBase = null,
-                    Code = null
-                },
+                Coin = TestDataFactory.CreateCoin(6),
                 ScanSession = null
             }
         };
-        var scavengeResults = new List<ScanSession> { new()
+        var scavengeResults = new List<ScanSession>
+        {
+            new()
             {
                 ScanCoins = scavengedCoins,
                 ScoutMember = null

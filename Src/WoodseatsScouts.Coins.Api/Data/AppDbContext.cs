@@ -102,10 +102,10 @@ namespace WoodseatsScouts.Coins.Api.Data
         public List<ScoutMember> GetLastThreeUsersToScanPoints()
         {
             return ScoutMembers!
-                .Include(x => x.ScavengeResults)
+                .Include(x => x.ScanSessions)
                 .ThenInclude(x => x.ScanCoins)
                 .Include(x => x.ScoutSection)
-                .Where(x => x.ScavengeResults.Count > 0)
+                .Where(x => x.ScanSessions.Count > 0)
                 .Select(member => new
                 {
                     Member = member,
@@ -133,10 +133,10 @@ namespace WoodseatsScouts.Coins.Api.Data
                 var member = ScoutMembers!
                     .Include(x => x.ScoutSection)
                     .Include(x => x.ScoutGroup)
-                    .Include(x => x.ScavengeResults)
+                    .Include(x => x.ScanSessions)
                     .ThenInclude(x => x.ScanCoins)
                     .ThenInclude(x => x.Coin)
-                    .ThenInclude(x => x.ActivityBase)
+                    .ThenInclude(x => x!.ActivityBase)
                     .Single(x => x.Id == scavengeResult.ScoutMemberId);
 
                 var memberPointsSummaryDto = new MemberPointsSummaryDto(member)
@@ -156,8 +156,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
             var scoutGroup = new ScoutGroup
             {
-                Name = name,
-                ScoutMembers = null
+                Name = name
             };
             ScoutGroups.Add(scoutGroup);
 
@@ -173,9 +172,7 @@ namespace WoodseatsScouts.Coins.Api.Data
             var scavengeResult = new ScanSession
             {
                 ScoutMemberId = scoutMember.Id,
-                CompletedAt = DateTime.UtcNow,
-                ScoutMember = null,
-                ScanCoins = null
+                CompletedAt = DateTime.UtcNow
             };
 
             ScanSessions!.Add(scavengeResult);
@@ -205,9 +202,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                 ScanCoins!.Add(new ScanCoin
                 {
                     ScanSessionId = scanSession.Id,
-                    CoinId = coin.Id,
-                    ScanSession = null,
-                    Coin = null
+                    CoinId = coin.Id
                 });
             }
         }
@@ -281,8 +276,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                     ActivityBaseId = baseId,
                     ActivityBaseSequenceNumber = i,
                     Value = points,
-                    ActivityBase = null,
-                    Code = null
+                    ActivityBase = null
                 });
             }
 

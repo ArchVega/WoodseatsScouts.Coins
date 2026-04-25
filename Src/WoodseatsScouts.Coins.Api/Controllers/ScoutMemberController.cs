@@ -142,11 +142,11 @@ public class ScoutMemberController(
     
     [HttpPost]
     [Route("{id:int}/name")]
-    public ActionResult Name(int id, [FromBody] UpdateMemberNameRequestModel updateMemberNameRequestModel)
+    public ActionResult Name(int id, [FromBody] UpdateMemberRequest updateMemberRequest)
     {
         var member = appDbContext.ScoutMembers!.Single(x => x.Id == id);
-        member.FirstName = updateMemberNameRequestModel.FirstName;
-        member.LastName = updateMemberNameRequestModel.LastName;
+        member.FirstName = updateMemberRequest.FirstName;
+        member.LastName = updateMemberRequest.LastName;
         appDbContext.SaveChanges();
 
         return Ok();
@@ -154,9 +154,9 @@ public class ScoutMemberController(
     
     [HttpPut]
     [Route("{memberId:int}")]
-    public object UpdateMemberName(int memberId, [FromBody] UpdateMemberRequestModel updateMemberRequestModel)
+    public object UpdateMemberName(int memberId, [FromBody] UpdateMemberRequest updateMemberRequest)
     {
-        var member = appDbContext.UpdateMemberName(memberId, updateMemberRequestModel.FirstName, updateMemberRequestModel.LastName);
+        var member = appDbContext.UpdateMemberName(memberId, updateMemberRequest.FirstName, updateMemberRequest.LastName);
         
         return new
         {

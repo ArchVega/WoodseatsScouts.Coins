@@ -2,5 +2,5 @@
 
 public class PointsForMemberRequestModel
 {
-    public List<string> CoinCodes { get; set; }
+    public List<string> CoinCodes { get; set; } = [];
 }
