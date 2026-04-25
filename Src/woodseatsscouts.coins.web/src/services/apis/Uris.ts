@@ -1,8 +1,6 @@
 import {logApi} from "../../components/logging/Logger.ts";
 
 const Uris = {
-  testDataCoins: `system/tests/coins`,
-
   application: () => {
     const resourcePath = `application`
 
@@ -85,6 +83,15 @@ const Uris = {
       },
     }
   },
+
+  system: () => {
+    const resourcePath = `system`
+    return {
+      testDataCoins: function() {
+        return logApi(`${resourcePath}/tests/coins`)
+      }
+    }
+  }
 }
 
 export default Uris

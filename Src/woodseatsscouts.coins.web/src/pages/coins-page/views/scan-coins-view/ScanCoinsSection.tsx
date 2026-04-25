@@ -28,7 +28,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
       logDebug(`Fetching coin data for code ${coinQrCode}`)
 
       async function fetchData(): Promise<AxiosResponse<CoinDto>> {
-        return await CoinApiService().fetchCoin(coinQrCode, member.code)
+        return await CoinApiService().fetchCoin(coinQrCode, member.scoutMemberCode)
       }
 
       function isDuplicateCoin(coin) {

@@ -1,6 +1,5 @@
 export type ScoutMemberBase = {
   id: number;
-  code: string
   number: number
   firstName: string
   lastName: string

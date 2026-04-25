@@ -19,3 +19,10 @@ export type UpdateScoutMemberRequestPayload = {
   scoutGroupId: number,
   scoutSectionCode: string,
 }
+
+export type UnscavengedCoin = {
+  code: string
+  value: number
+  fullName: string,
+  isAlreadyScavenged: boolean
+}
