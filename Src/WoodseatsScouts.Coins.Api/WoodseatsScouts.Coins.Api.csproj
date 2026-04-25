@@ -44,10 +44,10 @@
         <NoWarn>$(NoWarn);NU1608</NoWarn>
         <NoWarn>$(NoWarn);NU1901</NoWarn>
         <NoWarn>$(NoWarn);NU1902</NoWarn>
+        <NoWarn>$(NoWarn);1591</NoWarn> <!--Missing XML comment for publicly visible type or member-->
     </PropertyGroup>
-    
-<!--    todo-->
-<!--    <PropertyGroup>-->
-<!--        <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
-<!--    </PropertyGroup>-->
+
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
 </Project>

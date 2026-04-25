@@ -92,7 +92,7 @@ public class ScoutMemberControllerTests
             })
         ]);
 
-        var results = membersController.GetAllMembers(new Member() { View = View.PointsSummary });
+        var results = membersController.GetAllScoutMembers(new Member() { View = View.PointsSummary });
 
         results.ShouldNotBeNull();
         results.ShouldBeOfType<OkObjectResult>();
@@ -109,7 +109,7 @@ public class ScoutMemberControllerTests
     {
         var membersController = CreateCut();
 
-        var result = membersController.GetMemberByCode("invalid", null);
+        var result = membersController.GetScoutMemberByCode("invalid", null);
         result.ShouldBeOfType<BadRequestObjectResult>();
         ((BadRequestObjectResult)result).Value.ShouldBe("Oops, we can't find your profile - please speak to a District Camp Leader");
     }
@@ -119,7 +119,7 @@ public class ScoutMemberControllerTests
     {
         var membersController = CreateCut();
 
-        var result = membersController.GetMemberByCode("M001A003", new Member { View = View.Basic });
+        var result = membersController.GetScoutMemberByCode("M001A003", new Member { View = View.Basic });
         result.ShouldBeOfType<OkObjectResult>();
         memberServiceMock.Verify(x => x.GetMemberId(3, 1, "A"), Times.Once);
     }
@@ -134,7 +134,7 @@ public class ScoutMemberControllerTests
         ]);
 
         var saveMemberPhotoViewModel = new SaveMemberPhotoRequestModel { Photo = "test-image-string" };
-        var result = Should.NotThrow(() => membersController.SaveMemberPhoto(9, saveMemberPhotoViewModel));
+        var result = Should.NotThrow(() => membersController.SaveScoutMemberPhoto(9, saveMemberPhotoViewModel));
 
         appDbContextMock.Verify(x => x.SaveChanges(), Times.Once);
         imagePersisterMock.Verify(x => x.Persist("9", "test-image-string"));
@@ -185,8 +185,8 @@ public class ScoutMemberControllerTests
             .Setup(x => x.RecordMemberAgainstUnscavengedCoins(It.IsAny<Api.Models.Domain.ScoutMember>(), It.IsAny<List<string>>()))
             .Returns(new List<Coin>());
 
-        var pointsForMemberViewModel = new PointsForMemberRequestModel { CoinCodes = ["C0001001010", "C0001001020"] };
-        var result = Should.NotThrow(() => membersController.AddPointsToMember(9, pointsForMemberViewModel));
+        var pointsForMemberViewModel = new AssignCoinsToScoutMembersRequest { CoinCodes = ["C0001001010", "C0001001020"] };
+        var result = Should.NotThrow(() => membersController.AssignCoinsToScoutMember(9, pointsForMemberViewModel));
 
         result.ShouldBeOfType<CreatedAtActionResult>();
     }

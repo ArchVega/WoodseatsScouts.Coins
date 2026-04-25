@@ -1,5 +1,6 @@
 // dotcover disable
 
+using System.Reflection;
 using Microsoft.OpenApi.Models;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Middleware;
@@ -43,10 +44,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    // todo
-    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    // c.IncludeXmlComments(xmlPath);
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 
 var app = builder.Build();

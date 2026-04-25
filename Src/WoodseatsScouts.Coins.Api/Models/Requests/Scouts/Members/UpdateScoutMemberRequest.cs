@@ -1,6 +1,6 @@
 namespace WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Members;
 
-public class UpdateMemberRequest
+public class UpdateScoutMemberRequest
 {
     public required string FirstName { get; set; }
     
