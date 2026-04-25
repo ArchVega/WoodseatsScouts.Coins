@@ -236,7 +236,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)")
-                        .HasComputedColumnSql("'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))");
+                        .HasComputedColumnSql("    'C'\n    + RIGHT('0000' + CAST([ActivityBaseSequenceNumber] AS VARCHAR(4)), 4)\n    + RIGHT('000' + CAST([ActivityBaseId] AS VARCHAR(3)), 3)\n    + RIGHT('000' + CAST([Value] AS VARCHAR(3)), 3)");
 
                     b.Property<DateTime?>("LockUntil")
                         .HasColumnType("datetime2");
@@ -250,6 +250,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityBaseId");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.HasIndex("MemberId");
 
@@ -372,8 +375,8 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.Property<string>("Code")
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("nvarchar(max)")
-                        .HasComputedColumnSql("'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionCode] + (FORMAT(Number, '000'))");
+                        .HasColumnType("nvarchar(450)")
+                        .HasComputedColumnSql("    'M'\n    + RIGHT('000' + CAST([ScoutGroupId] AS VARCHAR(3)), 3)\n    + ScoutSectionCode\n    + RIGHT('000' + CAST([Number] AS VARCHAR(3)), 3)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -402,6 +405,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .HasColumnType("char(1)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
 
                     b.HasIndex("ScoutGroupId");
 

@@ -63,8 +63,8 @@ public class CodeTranslatorTests
         var memberCodeTranslationResult = CodeTranslator.TranslateMemberCode(code);
         
         memberCodeTranslationResult.TokenIdentifier.ShouldBe(tokenIdentifier);
-        memberCodeTranslationResult.SectionCode.ShouldBe(section);
-        memberCodeTranslationResult.ScoutGroupNumber.ShouldBe(scoutGroup);
+        memberCodeTranslationResult.ScoutSectionCode.ShouldBe(section);
+        memberCodeTranslationResult.ScoutGroupId.ShouldBe(scoutGroup);
         memberCodeTranslationResult.ScoutMemberNumber.ShouldBe(memberNumber);
     }
 }

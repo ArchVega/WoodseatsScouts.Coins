@@ -6,12 +6,21 @@ namespace WoodseatsScouts.Coins.Api.Services;
 
 public class ScoutMemberService(IAppDbContext appDbContext) : IScoutMemberService
 {
-    public int GetScoutMemberId(int scoutMemberNumber, int scoutGroupNumber, string? scoutSectionId)
+    public int GetScoutMemberId(int scoutMemberNumber, int scoutGroupId, string? scoutSectionId)
     {
+        var count = appDbContext.ScoutMembers!
+            .Include(x => x.ScoutGroup)
+            .Include(x => x.ScoutSection)
+            .Count(x => x.Number == scoutMemberNumber && x.ScoutGroupId == scoutGroupId && x.ScoutSectionCode == scoutSectionId);
+        if (count > 1)
+        {
+            throw new Exception("Error");
+        }
+        
         return appDbContext.ScoutMembers!
             .Include(x => x.ScoutGroup)
             .Include(x => x.ScoutSection)
-            .Single(x => x.Number == scoutMemberNumber && x.ScoutGroupId == scoutGroupNumber && x.ScoutSectionCode == scoutSectionId)
+            .Single(x => x.Number == scoutMemberNumber && x.ScoutGroupId == scoutGroupId && x.ScoutSectionCode == scoutSectionId)
             .Id;
     }
 

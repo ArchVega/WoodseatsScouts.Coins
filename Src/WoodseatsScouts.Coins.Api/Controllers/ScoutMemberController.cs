@@ -118,7 +118,7 @@ public class ScoutMemberController(
             return BadRequest(e.Message);
         }
 
-        var memberId = scoutMemberService.GetScoutMemberId(translationResult.ScoutMemberNumber, translationResult.ScoutGroupNumber, translationResult.SectionCode);
+        var memberId = scoutMemberService.GetScoutMemberId(translationResult.ScoutMemberNumber, translationResult.ScoutGroupId, translationResult.ScoutSectionCode);
 
         switch (memberQuery.View)
         {
@@ -159,13 +159,13 @@ public class ScoutMemberController(
         scoutMember.Number = newMemberNumber;
         appDbContext.SaveChanges();
         
-        scoutMember = appDbContext
+        var updatedScoutMember = appDbContext
             .ScoutMembers
             .Include(x => x.ScoutGroup)
             .Include(x => x.ScoutSection)
             .Single(x => x.Id == scoutMemberId);
 
-        return Ok(new ScoutMemberDto(scoutMember));
+        return Ok(new ScoutMemberDto(updatedScoutMember));
     }
 
     /// <summary>

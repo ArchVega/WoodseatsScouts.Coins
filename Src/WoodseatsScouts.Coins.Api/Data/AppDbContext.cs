@@ -32,12 +32,30 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            const string coinCodeFormat = "'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))";
-            const string memberCodeFormat = "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionCode] + (FORMAT(Number, '000'))";
+            // const string coinCodeFormat = "'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))";
+            // const string memberCodeFormat = "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionCode] + (FORMAT(Number, '000'))";
+
+            const string coinCodeFormat = """
+                                              'C'
+                                              + RIGHT('0000' + CAST([ActivityBaseSequenceNumber] AS VARCHAR(4)), 4)
+                                              + RIGHT('000' + CAST([ActivityBaseId] AS VARCHAR(3)), 3)
+                                              + RIGHT('000' + CAST([Value] AS VARCHAR(3)), 3)
+                                          """;
+            const string memberCodeFormat = """
+                                                'M'
+                                                + RIGHT('000' + CAST([ScoutGroupId] AS VARCHAR(3)), 3)
+                                                + ScoutSectionCode
+                                                + RIGHT('000' + CAST([Number] AS VARCHAR(3)), 3)
+                                            """;
 
             /* As of the v2024, Coins data is generated externally and the Id value is predetermined and inserted. */
             modelBuilder.Entity<Coin>()
-                .Property(x => x.Code).HasComputedColumnSql(coinCodeFormat);
+                .Property(x => x.Code)
+                .HasComputedColumnSql(coinCodeFormat);
+
+            modelBuilder.Entity<Coin>()
+                .HasIndex(x => x.Code)
+                .IsUnique();
 
             modelBuilder.Entity<Coin>().HasOne(x => x.ActivityBase).WithMany().HasForeignKey(x => x.ActivityBaseId);
 
@@ -45,6 +63,10 @@ namespace WoodseatsScouts.Coins.Api.Data
             modelBuilder.Entity<ScoutMember>()
                 .Property(p => p.Code)
                 .HasComputedColumnSql(memberCodeFormat);
+
+            modelBuilder.Entity<ScoutMember>()
+                .HasIndex(x => x.Code)
+                .IsUnique();
 
             modelBuilder.Entity<ScoutSection>()
                 .HasIndex(u => u.Code)

@@ -74,7 +74,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false, computedColumnSql: "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionCode] + (FORMAT(Number, '000'))"),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: false, computedColumnSql: "    'M'\n    + RIGHT('000' + CAST([ScoutGroupId] AS VARCHAR(3)), 3)\n    + ScoutSectionCode\n    + RIGHT('000' + CAST([Number] AS VARCHAR(3)), 3)"),
                     Number = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -112,7 +112,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     ActivityBaseSequenceNumber = table.Column<int>(type: "int", nullable: false),
                     ActivityBaseId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<int>(type: "int", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false, computedColumnSql: "'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))"),
+                    Code = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false, computedColumnSql: "    'C'\n    + RIGHT('0000' + CAST([ActivityBaseSequenceNumber] AS VARCHAR(4)), 4)\n    + RIGHT('000' + CAST([ActivityBaseId] AS VARCHAR(3)), 3)\n    + RIGHT('000' + CAST([Value] AS VARCHAR(3)), 3)"),
                     MemberId = table.Column<int>(type: "int", nullable: true),
                     LockUntil = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -226,6 +226,12 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 column: "ActivityBaseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Coins_Code",
+                table: "Coins",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Coins_MemberId",
                 table: "Coins",
                 column: "MemberId");
@@ -244,6 +250,12 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 name: "IX_ScanSessions_ScoutMemberId",
                 table: "ScanSessions",
                 column: "ScoutMemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScoutMembers_Code",
+                table: "ScoutMembers",
+                column: "Code",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScoutMembers_ScoutGroupId",
