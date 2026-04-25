@@ -67,7 +67,10 @@ export default function MemberDetailsPage() {
     setTimeout(() => {
       const c = confirm(`Are you sure you want to delete this session for ${memberCompleteDto.firstName}'s session? This is irreversible!`)
       if (c) {
-        ScanSessionApiService().deleteScanSession(haulResultDto.scanSessionId)
+        ScanSessionApiService().deleteScanSession(haulResultDto.scanSessionId).then(value => {
+          // Todo: implement dynamic solution later
+          alert('Reload page to see updated points value')
+        })
       }
     }, 100)
   }
@@ -80,7 +83,9 @@ export default function MemberDetailsPage() {
   function deleteScannedCoin(scannedCoinDto: ScannedCoinDto) {
     const c = confirm(`Are you sure you want to delete this coin that has ${scannedCoinDto.calculatedEffectivePoints} points from ${memberCompleteDto.firstName}'s session? This is irreversible!`)
     if (c) {
-      ScannedCoinApiService().deleteScannedCoin(scannedCoinDto.scannedCoinId)
+      ScannedCoinApiService().deleteScannedCoin(scannedCoinDto.scannedCoinId).then(value =>
+        // Todo: implement dynamic solution later
+        alert('Reload page to see updated points value'))
     }
   }
 
@@ -199,7 +204,8 @@ export default function MemberDetailsPage() {
                     </td>
                   )}
                   {scannedCoinDto.hasPointsOverride && (
-                    <td><strong title={`This coin's points has been adjusted. The original Points value is ${scannedCoinDto.points}.`} className="text-danger">{scannedCoinDto.calculatedEffectivePoints}*</strong> </td>
+                    <td><strong title={`This coin's points has been adjusted. The original Points value is ${scannedCoinDto.points}.`}
+                                className="text-danger">{scannedCoinDto.calculatedEffectivePoints}*</strong></td>
                   )}
                   {!scannedCoinDto.hasPointsOverride && (
                     <td>{scannedCoinDto.calculatedEffectivePoints}</td>
@@ -312,7 +318,7 @@ export default function MemberDetailsPage() {
           showModal={showEditScannedCoinPointsModal}
           setShowModal={setShowEditScannedCoinPointsModal}
           scannedCoinDto={selectedScannedCoinDto}
-          setScannedCoinDto={ setSelectedScannedCoinDto}
+          setScannedCoinDto={setSelectedScannedCoinDto}
         />
       </div>
     )

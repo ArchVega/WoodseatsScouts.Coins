@@ -20,14 +20,14 @@ public class ScoutMemberPointsSummaryDto
         ScoutGroupName = scoutMember.ScoutGroup.Name;
         ScoutSectionCode = scoutMember.ScoutSectionCode;
         ScoutSectionName = scoutMember.ScoutSection.Name;
-        TotalPoints = scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.Coin!.Value)).Sum();
+        TotalPoints = scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.CalculatedEffectivePoints!.Value)).Sum(); // todo: some props calculates with casts; change to !
         HaulResults = scoutMember.ScanSessions.Select(x =>
         {
             return new HaulResultDto
             {
                 ScanSessionId = x.Id,
                 HauledAtIso8601 = x.CompletedAt.ToUniversalTime().ToString("o"),
-                TotalPoints = x.ScanCoins.Sum(x => x.Coin!.Value)
+                TotalPoints = x.ScanCoins.Sum(z => z.CalculatedEffectivePoints!.Value)
             };
         }).ToList();
     }

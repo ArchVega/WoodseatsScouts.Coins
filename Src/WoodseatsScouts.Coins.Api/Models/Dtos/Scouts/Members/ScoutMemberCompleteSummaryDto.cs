@@ -23,7 +23,7 @@ public class ScoutMemberCompleteSummaryDto
                 {
                     ActivityBaseId = x.Key,
                     ActivityBaseName = x.ElementAt(0).Coin!.ActivityBase!.Name,
-                    TotalPoints = x.Sum(y => y.Coin!.Value),
+                    TotalPoints = x.Sum(y => y.CalculatedEffectivePoints!.Value),
                     CoinsScanned = x.Count(),
                     ScannedCoinDtos = x.Select(y => new ScannedCoinDto(y)).ToList()
                 };

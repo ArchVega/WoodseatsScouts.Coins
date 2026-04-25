@@ -18,13 +18,9 @@ export default function MembersLatestScansPage() {
       setMembers([])
 
       apiClient
-        .get(Uris.scans().sessionsLatest())
+        .get(Uris.scans().sessions().sessionsLatest())
         .then(async (response: AxiosResponse<ScoutMemberPointsSummaryDto[]>) => {
           const members = response.data
-          response.data.forEach(memberPointsSummaryDto => {
-            // memberPointsSummaryDto.clientComputedImageUri = Uris.scouts().members().memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
-          })
-
           setMembers(members)
         })
     }

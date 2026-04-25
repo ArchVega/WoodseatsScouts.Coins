@@ -3,9 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Config;
-using WoodseatsScouts.Coins.Api.Data;
-using WoodseatsScouts.Coins.Api.Models.Domain;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Scans;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -21,5 +18,16 @@ public class ScanSessionController(IAppDbContext appDbContext, IOptions<AppSetti
         var latestScans = appDbContext.GetLatestScans(appSettingsOptions.Value.NumberOfLatestScansToDisplay);
 
         return Ok(latestScans);
+    }
+    
+    [HttpDelete]
+    [Route("{scanSessionId:int}")]
+    public async Task<ActionResult> DeleteScanSession(int scanSessionId)
+    {
+        var rows = await appDbContext.ScanSessions
+            .Where(m => m.Id == scanSessionId)
+            .ExecuteDeleteAsync();
+        
+        return rows == 0 ? NotFound() : NoContent();
     }
 }
