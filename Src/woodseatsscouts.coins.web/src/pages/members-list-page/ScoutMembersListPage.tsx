@@ -132,7 +132,7 @@ export default function ScoutMembersListPage() {
             className="filter-members"
             data-testid="textbox-search-members"
             autoFocus={true}
-            placeholder="Search to filter members, groups or section"
+            placeholder="Search by member, groups or section name"
             onChange={x => setFilterText(x.target.value)}
           />
         </div>

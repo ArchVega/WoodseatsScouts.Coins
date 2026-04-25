@@ -30,10 +30,10 @@ export default function ScannedCoin({coin, removeCoin, isLast}) {
 
   return <>
      <span className={getClassName()} ref={scrollRef}>
-        <div className="coin-value font-extra-bold">{coin.pointValue}</div>
-        <span className="remove-score">
-            <i onClick={() => removeCoin(coin)} className="remove"><div style={{fontSize: '2em'}}>x</div></i>
-        </span>
+       <div className="remove-points" onClick={() => removeCoin(coin)}>
+            x
+        </div>
+        <div className="coin-value">{coin.pointValue}</div>
     </span>
   </>
 }
