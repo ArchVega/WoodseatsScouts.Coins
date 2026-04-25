@@ -11,6 +11,19 @@ namespace WoodseatsScouts.Coins.Api.Controllers;
 [Route("api/coins")]
 public class CoinController(IAppDbContext appDbContext, ICoinService coinService) : ControllerBase
 {
+    /// <summary>
+    /// Get all coins.
+    /// </summary>
+    [HttpGet]
+    [Route("")]
+    public async Task<IActionResult> GetAll()
+    {
+        return Ok(await coinService.GetCoinFullDtos());
+    }
+    
+    /// <summary>
+    /// Create new coins.
+    /// </summary>
     [HttpPost]
     [Route("")]
     public ActionResult CreateCoins([FromBody] CreateCoinsRequest createCoinsRequest)
@@ -39,6 +52,9 @@ public class CoinController(IAppDbContext appDbContext, ICoinService coinService
         return Ok(coins);
     }
 
+    /// <summary>
+    /// Assigns a coin to a scout member. 
+    /// </summary>
     [HttpPut]
     [Route("{coinCode}/assign/{scoutMemberCode}")]
     public IActionResult AssignCoinToScoutMember(string coinCode, string scoutMemberCode)
@@ -80,12 +96,5 @@ public class CoinController(IAppDbContext appDbContext, ICoinService coinService
         appDbContext.SaveChanges();
 
         return Ok(new CoinDto(result.PointValue, result.ActivityBaseId, coinCode));
-    }
-
-    [HttpGet]
-    [Route("")]
-    public async Task<IActionResult> GetAll()
-    {
-        return Ok(await coinService.GetCoinFullDtos());
     }
 }

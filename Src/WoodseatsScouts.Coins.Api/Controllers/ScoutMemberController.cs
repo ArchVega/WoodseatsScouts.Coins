@@ -19,39 +19,15 @@ public class ScoutMemberController(
     IOptions<AppSettings> appSettingsOptions) : ControllerBase
 {
     private static readonly Lock Locker = new();
-
-    /// <summary>
-    /// Gets the default placeholder image for scout members who have no photo. 
-    /// </summary>
-    [HttpGet]
-    [Route("photo/placeholder")]
-    public IActionResult GetScoutMemberPlaceholderPhoto()
-    {
-        return File(imagePersister.PlaceholderImageStream(), "image/png", enableRangeProcessing: true);
-    }
-
+    
     /// <summary>
     /// Gets all scout members.
     /// </summary>
     [HttpGet]
     [Route("")]
-    public ActionResult GetAllScoutMembers([FromQuery] Member? memberQuery)
+    public ActionResult GetAllScoutMembers()
     {
-        memberQuery ??= new Member
-        {
-            View = View.Basic
-        };
-
-        switch (memberQuery.View)
-        {
-            case View.PointsSummary:
-                return Ok(memberService.GetMemberWithPointsSummaryDtos());
-            case View.Login:
-            case View.Basic:
-            case View.Complete:
-            default:
-                throw new ArgumentOutOfRangeException(nameof(memberQuery));
-        }
+        return Ok(memberService.GetMemberWithPointsSummaryDtos());
     }
 
     /// <summary>
@@ -158,7 +134,7 @@ public class ScoutMemberController(
                 throw new ArgumentOutOfRangeException(nameof(memberQuery));
         }
     }
-    
+
     /// <summary>
     /// Update a scout member's details.
     /// </summary>
@@ -190,5 +166,15 @@ public class ScoutMemberController(
             member.Clue2State,
             member.Clue3State
         });
+    }
+    
+    /// <summary>
+    /// Gets the default placeholder image for scout members who have no photo. 
+    /// </summary>
+    [HttpGet]
+    [Route("photo/placeholder")]
+    public IActionResult GetScoutMemberPlaceholderPhoto()
+    {
+        return File(imagePersister.PlaceholderImageStream(), "image/png", enableRangeProcessing: true);
     }
 }

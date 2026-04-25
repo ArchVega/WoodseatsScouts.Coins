@@ -92,7 +92,7 @@ public class ScoutMemberControllerTests
             })
         ]);
 
-        var results = membersController.GetAllScoutMembers(new Member() { View = View.PointsSummary });
+        var results = membersController.GetAllScoutMembers();
 
         results.ShouldNotBeNull();
         results.ShouldBeOfType<OkObjectResult>();
