@@ -12,6 +12,8 @@
         public int CoinId { get; set;  }
         
         public Coin? Coin { get; set; }
+
+        public int? PointsOverride { get; set; }
         
         public override string ToString()
         {

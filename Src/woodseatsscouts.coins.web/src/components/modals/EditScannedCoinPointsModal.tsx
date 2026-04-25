@@ -5,6 +5,7 @@ import {BaseModal} from "./BaseModal.tsx";
 import {Button, Switch} from "../widgets/HtmlControlWrappers.tsx";
 import AppLocalStorage from "../storage/AppLocalStorage.ts";
 import type {ScannedCoinDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
+import ScannedCoinApiService from "../../services/apis/ScannedCoinApiService.ts";
 
 interface EditScannedCoinPointsModalProps {
   showModal: boolean;
@@ -18,14 +19,19 @@ export default function EditScannedCoinPointsModal({showModal, setShowModal, sca
 
   useEffect(() => {
     if (scannedCoinDto) {
-      setNewPointsValue(scannedCoinDto.points)
+      setNewPointsValue(scannedCoinDto.calculatedEffectivePoints)
     }
   }, [scannedCoinDto])
 
   function changeCoinValue() {
-    alert('make update')
-    setScannedCoinDto(null)
-    setShowModal(false)
+    ScannedCoinApiService().updateScannedCoinPoints(scannedCoinDto.scannedCoinId, newPointsValue).then(r => {
+      const updatedScannedCoinDto = {...scannedCoinDto}
+      updatedScannedCoinDto.calculatedEffectivePoints = newPointsValue
+      setScannedCoinDto(updatedScannedCoinDto)
+      setShowModal(false)
+      // Todo: implement dynamic solution later
+      alert('Reload page to see updated points value')
+    });
   }
 
   return (

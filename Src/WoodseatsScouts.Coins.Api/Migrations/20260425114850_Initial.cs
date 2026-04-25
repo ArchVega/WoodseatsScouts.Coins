@@ -159,7 +159,8 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ScanSessionId = table.Column<int>(type: "int", nullable: false),
-                    CoinId = table.Column<int>(type: "int", nullable: false)
+                    CoinId = table.Column<int>(type: "int", nullable: false),
+                    PointsOverride = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

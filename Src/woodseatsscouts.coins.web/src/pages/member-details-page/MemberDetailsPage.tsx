@@ -11,6 +11,8 @@ import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.t
 import {logObject} from "../../components/logging/Logger.ts";
 import EditMemberDetailsModal from "../../components/modals/EditMemberDetailsModal.tsx";
 import EditScannedCoinPointsModal from "../../components/modals/EditScannedCoinPointsModal.tsx";
+import ScannedCoinApiService from "../../services/apis/ScannedCoinApiService.ts";
+import ScanSessionApiService from "../../services/apis/ScanSessionApiService.ts";
 
 export default function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -22,7 +24,6 @@ export default function MemberDetailsPage() {
   const [memberCompleteDto, setMemberCompleteDto] = useState<ScoutMemberCompleteDto | null>(null);
   const [activeHaulResultDto, setActiveHaulResultDto] = useState<HaulResultDto | null>(null);
   const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
-
   const [selectedScannedCoinDto, setSelectedScannedCoinDto] = useState<ScannedCoinDto | undefined>(undefined);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function MemberDetailsPage() {
         .then((memberCompleteDto: ScoutMemberCompleteDto) => {
           logObject("memberCompleteDto", memberCompleteDto)
           setMemberCompleteDto(memberCompleteDto)
-          if (memberCompleteDto.haulResults.length >= 0) {
+          if (memberCompleteDto.haulResults.length > 0) {
             setSelectedScanSessionId(memberCompleteDto.haulResults[0].scanSessionId)
           }
         })
@@ -51,6 +52,37 @@ export default function MemberDetailsPage() {
       setActiveHaulResultDto(selectedHaulResultDto);
     }
   }, [selectedScanSessionId, memberCompleteDto]);
+
+  function formatDateTime(isoDateString: string) {
+    return new Intl.DateTimeFormat("en-GB", {
+      weekday: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(new Date(isoDateString));
+  }
+
+  function deleteScanSession(haulResultDto: HaulResultDto) {
+    // todo: quick hack using timeout to allow selected row to visually update before confirm box loads.
+    setTimeout(() => {
+      const c = confirm(`Are you sure you want to delete this session for ${memberCompleteDto.firstName}'s session? This is irreversible!`)
+      if (c) {
+        ScanSessionApiService().deleteScanSession(haulResultDto.scanSessionId)
+      }
+    }, 100)
+  }
+
+  function updateScannedCoinPoints(scannedCoinDto: ScannedCoinDto) {
+    setSelectedScannedCoinDto(scannedCoinDto);
+    setShowEditScannedCoinPointsModal(true)
+  }
+
+  function deleteScannedCoin(scannedCoinDto: ScannedCoinDto) {
+    const c = confirm(`Are you sure you want to delete this coin that has ${scannedCoinDto.calculatedEffectivePoints} points from ${memberCompleteDto.firstName}'s session? This is irreversible!`)
+    if (c) {
+      ScannedCoinApiService().deleteScannedCoin(scannedCoinDto.scannedCoinId)
+    }
+  }
 
   function RenderMemberDetails() {
     const sectionBranding = getSectionBranding(memberCompleteDto.scoutSectionCode)
@@ -89,31 +121,6 @@ export default function MemberDetailsPage() {
         </div>
       </>
     )
-  }
-
-  function formatDateTime(isoDateString: string) {
-    return new Intl.DateTimeFormat("en-GB", {
-      weekday: "long",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(new Date(isoDateString));
-  }
-
-  function deleteScanSession(haulResultDto: HaulResultDto) {
-    // todo: quick hack using timeout to allow selected row to visually update before confirm box loads.
-    setTimeout(() => {
-      const c = confirm(`Are you sure you want to delete this session for ${memberCompleteDto.firstName}'s session? This is irreversible!`)
-    }, 100)
-  }
-
-  function editScannedCoin(scannedCoinDto: ScannedCoinDto) {
-    setSelectedScannedCoinDto(scannedCoinDto);
-    setShowEditScannedCoinPointsModal(true)
-  }
-
-  function deleteScannedCoin(scannedCoinDto: ScannedCoinDto) {
-    const c = confirm(`Are you sure you want to delete this coin from ${memberCompleteDto.firstName}'s session? This is irreversible!`)
   }
 
   function RenderMemberScanSessions() {
@@ -191,9 +198,14 @@ export default function MemberDetailsPage() {
                       </div>
                     </td>
                   )}
-                  <td>{scannedCoinDto.points}</td>
+                  {scannedCoinDto.hasPointsOverride && (
+                    <td><strong title={`This coin's points has been adjusted. The original Points value is ${scannedCoinDto.points}.`} className="text-danger">{scannedCoinDto.calculatedEffectivePoints}*</strong> </td>
+                  )}
+                  {!scannedCoinDto.hasPointsOverride && (
+                    <td>{scannedCoinDto.calculatedEffectivePoints}</td>
+                  )}
                   <td>
-                    <span role="button" onClick={e => editScannedCoin(scannedCoinDto)}>✏️</span>
+                    <span role="button" onClick={e => updateScannedCoinPoints(scannedCoinDto)}>✏️</span>
                   </td>
                   <td>
                     <span role="button" onClick={e => deleteScannedCoin(scannedCoinDto)}>🗑️</span>

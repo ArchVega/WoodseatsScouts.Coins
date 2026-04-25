@@ -12,7 +12,7 @@ using WoodseatsScouts.Coins.Api.Data;
 namespace WoodseatsScouts.Coins.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260425102211_Initial")]
+    [Migration("20260425114850_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -323,6 +323,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CoinId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PointsOverride")
                         .HasColumnType("int");
 
                     b.Property<int>("ScanSessionId")

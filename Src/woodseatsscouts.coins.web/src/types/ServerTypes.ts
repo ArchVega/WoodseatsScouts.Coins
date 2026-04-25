@@ -59,6 +59,7 @@ export type ActivityBaseHaulResultDto = {
   scannedCoinDtos: ScannedCoinDto[]
 }
 
+// todo: rename ScanSessionDto
 export type HaulResultDto = {
   scanSessionId: number
   hauledAtIso8601: string
@@ -70,6 +71,9 @@ export type ScannedCoinDto = {
   scannedCoinId: number
   coinId: number
   points: number
+  pointsOverride?: number
+  hasPointsOverride: boolean
+  calculatedEffectivePoints: number
   coinActivityBase: string
 }
 

@@ -322,6 +322,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.Property<int>("CoinId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PointsOverride")
+                        .HasColumnType("int");
+
                     b.Property<int>("ScanSessionId")
                         .HasColumnType("int");
 

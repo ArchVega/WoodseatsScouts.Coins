@@ -78,16 +78,32 @@ const Uris = {
   scans: () => {
     const resourcePath = `scans`
     return {
-      sessionsLatest: function () {
-        return logApi(`${resourcePath}/sessions/latest`)
+      sessions: () => {
+        const sessionResourcePath = `${resourcePath}/sessions`
+        return {
+          resourceEntityPath: (scanSessionId: number) => {
+            return logApi(`${sessionResourcePath}/${scanSessionId}`)
+          },
+          sessionsLatest: function () {
+            return logApi(`${sessionResourcePath}/latest`)
+          },
+        }
       },
+      coins: () => {
+        const coinResourcePath = `${resourcePath}/coins`
+        return {
+          resourceEntityPath: (scannedCoinId: number) => {
+            return logApi(`${coinResourcePath}/${scannedCoinId}`)
+          }
+        }
+      }
     }
   },
 
   system: () => {
     const resourcePath = `system`
     return {
-      testDataCoins: function() {
+      testDataCoins: function () {
         return logApi(`${resourcePath}/tests/coins`)
       }
     }
