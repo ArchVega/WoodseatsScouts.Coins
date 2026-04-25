@@ -73,7 +73,7 @@ export default function ScoutMembersListPage() {
             </div>
           </div>
           <div className="row pb-2 g-1">
-            <div className="col-7 members-list-item-section">
+            <div className="col-7 members-list-item-section" title={`Id: ${scoutMember.id}`}>
               <div className="tile">{scoutMember.scoutMemberCode}</div>
             </div>
             <div className="col-5 members-list-item-section">

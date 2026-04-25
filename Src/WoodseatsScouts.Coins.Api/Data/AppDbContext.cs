@@ -33,7 +33,7 @@ namespace WoodseatsScouts.Coins.Api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             const string coinCodeFormat = "'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))";
-            const string memberCodeFormat = "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionId] + (FORMAT(Number, '000'))";
+            const string memberCodeFormat = "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionCode] + (FORMAT(Number, '000'))";
 
             /* As of the v2024, Coins data is generated externally and the Id value is predetermined and inserted. */
             modelBuilder.Entity<Coin>()
@@ -89,7 +89,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public int GenerateNextMemberCode(int scoutGroupId, string section)
         {
-            var matchingMembers = ScoutMembers!.Where(x => x.ScoutGroupId == scoutGroupId && x.ScoutSectionId == section).ToList();
+            var matchingMembers = ScoutMembers!.Where(x => x.ScoutGroupId == scoutGroupId && x.ScoutSectionCode == section).ToList();
 
             var nextMemberNumber = 1;
             if (matchingMembers.Count > 0)
@@ -243,7 +243,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                 FirstName = firstName,
                 LastName = lastName,
                 ScoutGroupId = scoutGroupId,
-                ScoutSectionId = scoutSectionId,
+                ScoutSectionCode = scoutSectionId,
                 IsDayVisitor = isDayVisitor,
                 Number = GenerateNextMemberCode(scoutGroupId, scoutSectionId)
             };

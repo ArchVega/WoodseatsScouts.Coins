@@ -81,6 +81,6 @@ public class TestDataFactory(IAppDbContext appDbContext)
             LastName = "Member" + number,
             Number = number,
             ScoutGroup = scoutGroup,
-            ScoutSectionId = section.ToString()
+            ScoutSectionCode = section.ToString()
         };
 }

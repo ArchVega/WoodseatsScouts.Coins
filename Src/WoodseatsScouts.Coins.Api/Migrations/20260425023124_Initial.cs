@@ -19,7 +19,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,7 +49,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,12 +74,12 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false, computedColumnSql: "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionId] + (FORMAT(Number, '000'))"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false, computedColumnSql: "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionCode] + (FORMAT(Number, '000'))"),
                     Number = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ScoutGroupId = table.Column<int>(type: "int", nullable: false),
-                    ScoutSectionId = table.Column<string>(type: "char(1)", maxLength: 1, nullable: false),
+                    ScoutSectionCode = table.Column<string>(type: "char(1)", maxLength: 1, nullable: false),
                     Clue1State = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Clue2State = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Clue3State = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -96,8 +96,8 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ScoutMembers_ScoutSections_ScoutSectionId",
-                        column: x => x.ScoutSectionId,
+                        name: "FK_ScoutMembers_ScoutSections_ScoutSectionCode",
+                        column: x => x.ScoutSectionCode,
                         principalTable: "ScoutSections",
                         principalColumn: "Code",
                         onDelete: ReferentialAction.Cascade);
@@ -251,9 +251,9 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 column: "ScoutGroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScoutMembers_ScoutSectionId",
+                name: "IX_ScoutMembers_ScoutSectionCode",
                 table: "ScoutMembers",
-                column: "ScoutSectionId");
+                column: "ScoutSectionCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScoutSections_Code",

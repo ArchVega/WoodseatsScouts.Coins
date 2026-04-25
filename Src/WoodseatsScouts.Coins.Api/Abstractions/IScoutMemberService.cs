@@ -2,11 +2,11 @@ using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 namespace WoodseatsScouts.Coins.Api.Abstractions;
 
-public interface IMemberService
+public interface IScoutMemberService
 {
     int GetScoutMemberId(int scoutMemberNumber, int scoutGroupNumber, string? scoutSectionId);
     
-    ScoutScoutMemberDto GetMemberDto(int scoutMemberId);
+    ScoutMemberDto GetMemberDto(int scoutMemberId);
     
     ScoutMemberCompleteSummaryDto MemberCompleteSummaryDto(int scoutMemberId);
     

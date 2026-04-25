@@ -44,7 +44,7 @@ public class ScoutMemberCompleteSummaryDto
         FullName = scoutMember.FullName;
         ScoutGroupId = scoutMember.ScoutGroup.Id;
         ScoutGroupName = scoutMember.ScoutGroup.Name;
-        ScoutSectionCode = scoutMember.ScoutSectionId;
+        ScoutSectionCode = scoutMember.ScoutSectionCode;
         ScoutSectionName = scoutMember.ScoutSection.Name;
         TotalPoints = scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.Coin!.Value)).Sum();
         HaulResults = haulResults;

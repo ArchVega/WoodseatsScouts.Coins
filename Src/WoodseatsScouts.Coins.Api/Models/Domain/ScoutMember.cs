@@ -29,12 +29,12 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
         [MaxLength(100)]
         public string? LastName { get; set; }
         
-        public int ScoutGroupId { get; init; }
+        public int ScoutGroupId { get; set; }
         
         public ScoutGroup ScoutGroup { get; init; } = null!;
         
         [MaxLength(1)]
-        public string ScoutSectionId { get; init; } = null!;
+        public string ScoutSectionCode { get; set; } = null!;
         
         public ScoutSection ScoutSection { get; set; } = null!;
         

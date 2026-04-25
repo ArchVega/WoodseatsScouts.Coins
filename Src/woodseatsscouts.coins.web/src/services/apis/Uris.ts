@@ -39,6 +39,9 @@ const Uris = {
           memberByCode: function (memberCode: string) {
             return logApi(`${membersResourcePath}/${memberCode}`)
           },
+          memberById: function (id: number) {
+            return logApi(`${membersResourcePath}/${id}`)
+          },
           membersWithPointSummary: function () {
             return logApi(`${membersResourcePath}`);
           },
@@ -53,9 +56,6 @@ const Uris = {
           },
           memberPhoto: function (photoImagePath: string) {
             return logApi(`${scoutsResourcePath}/${photoImagePath}`)
-          },
-          memberName: function (id: number) {
-            return logApi(`${membersResourcePath}/${id}/Name?`)
           },
         }
       },

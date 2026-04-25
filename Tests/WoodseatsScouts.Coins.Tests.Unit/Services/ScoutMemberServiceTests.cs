@@ -15,13 +15,13 @@ using Xunit;
 
 namespace WoodseatsScouts.Coins.Tests.Services;
 
-public class MemberServiceTests
+public class ScoutMemberServiceTests
 {
     private readonly Mock<IAppDbContext> appDbContextMock = new();
     
-    private MemberService CreateCut()
+    private ScoutMemberService CreateCut()
     {
-        return new MemberService(appDbContextMock.Object);
+        return new ScoutMemberService(appDbContextMock.Object);
     }
     
     // Obsolete

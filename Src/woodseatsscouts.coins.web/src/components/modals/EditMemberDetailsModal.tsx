@@ -5,6 +5,9 @@ import Uris from "../../services/apis/Uris.ts";
 import {Button} from "../widgets/HtmlControlWrappers.tsx";
 import type {ActivityGroupDto, ScoutMemberCompleteDto, ScoutGroupDto, ScoutSectionDto} from "../../types/ServerTypes.ts";
 import AppStateApiService from "../../services/apis/AppStateApiService.tsx";
+import MemberApiService from "../../services/apis/MemberApiService.ts";
+import type {UpdateScoutMemberRequestPayload} from "../../types/ClientTypes.ts";
+import {useNavigate} from "react-router-dom";
 
 interface EditMemberDetailsModalProps {
   showModal: boolean;
@@ -23,6 +26,8 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
 
   const [selectedScoutGroupId, setSelectedScoutGroupId] = useState<number | undefined>(undefined);
   const [selectedScoutSectionCode, setSelectedScoutSectionCode] = useState<string | undefined>(undefined);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (memberCompleteDto) {
@@ -52,29 +57,31 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
     }
   }, [firstName, lastName]);
 
-  function updateMemberName(e) {
+  function updateScoutMemberName(e) {
     e.preventDefault();
 
-    const payload = {
+    const payload: UpdateScoutMemberRequestPayload = {
       firstName: firstName,
       lastName: lastName,
+      scoutGroupId: selectedScoutGroupId,
+      scoutSectionCode: selectedScoutSectionCode,
     }
 
-    const requestOptions = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload)
-    };
+    MemberApiService()
+      .updateScoutMember(memberCompleteDto.id, payload)
+      .then((result) => {
+        const updatedSelectedMember = ({...memberCompleteDto})
+        updatedSelectedMember.firstName = firstName
+        updatedSelectedMember.lastName = lastName
+        updatedSelectedMember.fullName = `${firstName} ${lastName}`
+        updatedSelectedMember.scoutGroupId = selectedScoutGroupId
+        updatedSelectedMember.scoutSectionCode = selectedScoutSectionCode
+        updatedSelectedMember.scoutMemberCode = result.scoutMemberCode // todo: there should be a 'load' helper function
 
-    fetch(Uris.scouts().members().memberName(memberCompleteDto.id), requestOptions).then((r) => {
-      const updatedSelectedMember = ({...memberCompleteDto})
-      updatedSelectedMember.firstName = firstName
-      updatedSelectedMember.lastName = lastName
-      updatedSelectedMember.fullName = `${firstName} ${lastName}`
-
-      setMemberCompleteDto(updatedSelectedMember)
-      setShowModal(false);
-    });
+        navigate(`/members/${updatedSelectedMember.scoutMemberCode}`)
+        setMemberCompleteDto(updatedSelectedMember)
+        setShowModal(false);
+      });
   }
 
   return (
@@ -109,7 +116,9 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
         </div>
         <div className={"row mb-3"}>
           <div className={"col"}>
-            <select className={"form-select"} value={selectedScoutGroupId}>
+            <select className={"form-select"}
+                    value={selectedScoutGroupId}
+                    onChange={(e) => setSelectedScoutGroupId(Number(e.target.value))}>
               {scoutGroups && scoutGroups.map((scoutGroup) => (
                 <option key={scoutGroup.id} value={scoutGroup.id}>{scoutGroup.name}</option>
               ))}
@@ -118,7 +127,9 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
         </div>
         <div className={"row mb-3"}>
           <div className={"col"}>
-            <select className={"form-select"} value={selectedScoutSectionCode}>
+            <select className={"form-select"}
+                    value={selectedScoutSectionCode}
+                    onChange={(e) => setSelectedScoutSectionCode(e.target.value)}>
               {scoutSections && scoutSections.map((scoutSection) => (
                 <option key={scoutSection.code} value={scoutSection.code}>{scoutSection.name}</option>
               ))}
@@ -127,7 +138,7 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
         </div>
         <div className={"row"}>
           <div className={"col-12"}>
-            <Button type={"submit"} onClick={(e) => updateMemberName(e)} className={"btn-success float-end w-25"} disabled={validationMessage.length > 0}>Ok</Button>
+            <Button type={"submit"} onClick={(e) => updateScoutMemberName(e)} className={"btn-success float-end w-25"} disabled={validationMessage.length > 0}>Ok</Button>
           </div>
         </div>
       </form>

@@ -21,7 +21,7 @@ namespace WoodseatsScouts.Coins.Tests;
 
 public class ScoutMemberControllerTests
 {
-    private readonly Mock<IMemberService> memberServiceMock = new();
+    private readonly Mock<IScoutMemberService> memberServiceMock = new();
     private readonly Mock<IAppDbContext> appDbContextMock = new();
     private readonly Mock<IImagePersister> imagePersisterMock = new();
     private readonly Mock<IOptions<AppSettings>> appSettingsOptions = new();

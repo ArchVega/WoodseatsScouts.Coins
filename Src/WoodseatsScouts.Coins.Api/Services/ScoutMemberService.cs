@@ -1,26 +1,25 @@
 using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Abstractions;
-using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 namespace WoodseatsScouts.Coins.Api.Services;
 
-public class MemberService(IAppDbContext appDbContext) : IMemberService
+public class ScoutMemberService(IAppDbContext appDbContext) : IScoutMemberService
 {
     public int GetScoutMemberId(int scoutMemberNumber, int scoutGroupNumber, string? scoutSectionId)
     {
         return appDbContext.ScoutMembers!
             .Include(x => x.ScoutGroup)
             .Include(x => x.ScoutSection)
-            .Single(x => x.Number == scoutMemberNumber && x.ScoutGroupId == scoutGroupNumber && x.ScoutSectionId == scoutSectionId)
+            .Single(x => x.Number == scoutMemberNumber && x.ScoutGroupId == scoutGroupNumber && x.ScoutSectionCode == scoutSectionId)
             .Id;
     }
 
-    public ScoutScoutMemberDto GetMemberDto(int scoutMemberId)
+    public ScoutMemberDto GetMemberDto(int scoutMemberId)
     {
         var member = appDbContext.ScoutMembers!.Single(x => x.Id == scoutMemberId);
 
-        return new ScoutScoutMemberDto(member);
+        return new ScoutMemberDto(member);
     }
 
     public ScoutMemberPointsSummaryDto ScoutMemberPointsSummaryDto(int scoutMemberId)

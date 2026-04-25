@@ -32,7 +32,8 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -340,7 +341,8 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -371,7 +373,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("nvarchar(max)")
-                        .HasComputedColumnSql("'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionId] + (FORMAT(Number, '000'))");
+                        .HasComputedColumnSql("'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionCode] + (FORMAT(Number, '000'))");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -394,7 +396,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                     b.Property<int>("ScoutGroupId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ScoutSectionId")
+                    b.Property<string>("ScoutSectionCode")
                         .IsRequired()
                         .HasMaxLength(1)
                         .HasColumnType("char(1)");
@@ -403,7 +405,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
                     b.HasIndex("ScoutGroupId");
 
-                    b.HasIndex("ScoutSectionId");
+                    b.HasIndex("ScoutSectionCode");
 
                     b.ToTable("ScoutMembers");
                 });
@@ -464,7 +466,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScanSession", b =>
                 {
                     b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScoutMember", "ScoutMember")
-                        .WithMany("ScavengeResults")
+                        .WithMany("ScanSessions")
                         .HasForeignKey("ScoutMemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -482,7 +484,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
                     b.HasOne("WoodseatsScouts.Coins.Api.Models.Domain.ScoutSection", "ScoutSection")
                         .WithMany()
-                        .HasForeignKey("ScoutSectionId")
+                        .HasForeignKey("ScoutSectionCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -503,7 +505,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
 
             modelBuilder.Entity("WoodseatsScouts.Coins.Api.Models.Domain.ScoutMember", b =>
                 {
-                    b.Navigation("ScavengeResults");
+                    b.Navigation("ScanSessions");
                 });
 #pragma warning restore 612, 618
         }
