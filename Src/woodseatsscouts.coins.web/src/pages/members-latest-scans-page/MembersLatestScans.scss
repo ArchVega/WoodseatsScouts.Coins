@@ -3,9 +3,21 @@
 @use "./../../styles/abstract/_site-colours" as colours;
 
 #latest-scans-page {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  height: 920px;
+
   .card {
     background-color: map.get(colours.$colours, grey-light);
-    height: 300px
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+
+    .card-body {
+      width: 240px;
+    }
   }
 
   * {
@@ -13,6 +25,7 @@
     font-style: italic;
     text-align: center;
   }
+
   img {
     border-radius: 50% !important;
     object-fit: contain;
