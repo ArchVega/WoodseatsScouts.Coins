@@ -1,6 +1,6 @@
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
-public class MemberCompleteSummaryStatsActivityBaseInfoDto
+public class ScoutMemberCompleteSummaryStatsActivityBaseInfoDto
 {
     public List<string> Names { get; set; } = [];
 

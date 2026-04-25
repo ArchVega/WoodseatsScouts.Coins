@@ -26,7 +26,7 @@ public interface IAppDbContext
     
     List<ScoutMember> GetLastThreeUsersToScanPoints();
     
-    List<MemberPointsSummaryDto> GetLatestScans(int numberOfScans);
+    List<ScoutMemberPointsSummaryDto> GetLatestScans(int numberOfScans);
     
     ScoutGroup CreateScoutGroup(string name);
     
@@ -38,7 +38,7 @@ public interface IAppDbContext
     
     DbSet<ActivityBase> ActivityBases { get; set; }
 
-    ScoutMember? CreateMember(string firstName, string lastName, int scoutGroupId, string section, bool isDayVisitor);
+    ScoutMember? CreateMember(string firstName, string lastName, int scoutGroupId, string scoutSectionId, bool isDayVisitor);
     
     ScoutMember UpdateMemberName(int memberId, string firstName, string lastName);
     

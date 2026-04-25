@@ -7,29 +7,29 @@ namespace WoodseatsScouts.Coins.Api.Services;
 
 public class MemberService(IAppDbContext appDbContext) : IMemberService
 {
-    public int GetMemberId(int memberNumber, int scoutGroupNumber, string? sectionId)
+    public int GetScoutMemberId(int scoutMemberNumber, int scoutGroupNumber, string? scoutSectionId)
     {
         return appDbContext.ScoutMembers!
             .Include(x => x.ScoutGroup)
             .Include(x => x.ScoutSection)
-            .Single(x => x.Number == memberNumber && x.ScoutGroupId == scoutGroupNumber && x.ScoutSectionId == sectionId)
+            .Single(x => x.Number == scoutMemberNumber && x.ScoutGroupId == scoutGroupNumber && x.ScoutSectionId == scoutSectionId)
             .Id;
     }
 
-    public ScoutMemberDto GetMemberDto(int memberId)
+    public ScoutScoutMemberDto GetMemberDto(int scoutMemberId)
     {
-        var member = appDbContext.ScoutMembers!.Single(x => x.Id == memberId);
+        var member = appDbContext.ScoutMembers!.Single(x => x.Id == scoutMemberId);
 
-        return new ScoutMemberDto(member);
+        return new ScoutScoutMemberDto(member);
     }
 
-    public MemberPointsSummaryDto MemberPointsSummaryDto(int memberId)
+    public ScoutMemberPointsSummaryDto ScoutMemberPointsSummaryDto(int scoutMemberId)
     {
         throw new NotImplementedException();
         // return new MemberPointsSummaryDto();
     }
 
-    public List<MemberPointsSummaryDto> GetMemberWithPointsSummaryDtos()
+    public List<ScoutMemberPointsSummaryDto> ScoutGetMemberWithPointsSummaryDtos()
     {
         return appDbContext.ScoutMembers!
             .Include(x => x.ScanSessions)
@@ -38,13 +38,13 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
             .Include(x => x.ScoutGroup)
             .Include(x => x.ScoutSection)
             .ToList()
-            .Select(x => new MemberPointsSummaryDto(x))
+            .Select(x => new ScoutMemberPointsSummaryDto(x))
             .OrderBy(x => x.FirstName)
             .ThenBy(x => x.LastName)
             .ToList();
     }
 
-    public MemberCompleteSummaryDto MemberCompleteSummaryDto(int memberId)
+    public ScoutMemberCompleteSummaryDto MemberCompleteSummaryDto(int scoutMemberId)
     {
         return appDbContext.ScoutMembers!
             .Include(x => x.ScanSessions)
@@ -53,9 +53,9 @@ public class MemberService(IAppDbContext appDbContext) : IMemberService
             .ThenInclude(x => x!.ActivityBase)
             .Include(x => x.ScoutGroup)
             .Include(x => x.ScoutSection)
-            .Where(x => x.Id == memberId)
+            .Where(x => x.Id == scoutMemberId)
             .ToList()
-            .Select(x => new MemberCompleteSummaryDto(x))
+            .Select(x => new ScoutMemberCompleteSummaryDto(x))
             .First();
     }
 }

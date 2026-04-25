@@ -94,7 +94,7 @@ export default function NavMenu() {
             <Image className="member-image h-100 w-auto me-3" src={activeScanningMember.clientComputedImageUri}></Image>
             <div id="member-details" className="flex-fill">
               <div><span>Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
-              <div>{activeScanningMember.sectionName}, {activeScanningMember.scoutGroupName}</div>
+              <div>{activeScanningMember.scoutSectionName}, {activeScanningMember.scoutGroupName}</div>
             </div>
           </div>
         )

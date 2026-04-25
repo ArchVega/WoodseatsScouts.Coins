@@ -1,22 +1,22 @@
-export type MemberBase = {
+export type ScoutMemberBase = {
   id: number;
   code: string
   number: number
   firstName: string
   lastName: string
   fullName: string
+  scoutMemberCode: string
+  scoutMemberNumber: number
   scoutGroupId: number
-  sectionCode: string
+  scoutSectionCode: string
   computedImagePath: string
   clientComputedImageUri: string
-  memberCode: string
   hasImage: boolean
-  memberNumber: number
 }
 
-export type MemberDto = MemberBase & {
+export type ScoutMemberDto = ScoutMemberBase & {
   scoutGroupName: string
-  sectionName: string
+  scoutSectionName: string
   clue1State: string
   clue2State: string
   clue3State: string
@@ -24,9 +24,9 @@ export type MemberDto = MemberBase & {
   hasImage: boolean
 }
 
-export type MemberPointsSummaryDto = MemberBase & {
+export type ScoutMemberPointsSummaryDto = ScoutMemberBase & {
   scoutGroupName: string
-  sectionName: string
+  scoutSectionName: string
   totalPoints: number
   latestCompletedAtTime: string
   selectedHaulResultId: number | null
@@ -35,15 +35,15 @@ export type MemberPointsSummaryDto = MemberBase & {
   latestHaulResult: HaulResultDto | null
 }
 
-export type MemberCompleteDto = MemberBase & {
+export type ScoutMemberCompleteDto = ScoutMemberBase & {
   scoutGroupName: string
-  sectionName: string
+  scoutSectionName: string
   totalPoints: number
   latestCompletedAtTime: string
   computedImagePath: string
   clientComputedImageUri: string
   haulResults: HaulResultDto[]
-  memberCompleteSummaryStatsDto: MemberCompleteSummaryStatsDto
+  scoutMemberCompleteSummaryStatsDto: MemberCompleteSummaryStatsDto
 }
 
 export type CoinDto = {
@@ -84,54 +84,12 @@ export type ScoutGroupDto = {
   name: string
 }
 
-export type ActivityGroupDto = {
-  id: number
+export type ScoutSectionDto = {
+  code: number
   name: string
 }
 
-
-
-
-
-
-
-
-
-
-// old ---------------------------------------------------------------------------v
-export type Member = {
-  firstName: string
-  lastName: string
-  hasImage: boolean
-  memberScoutGroupNumber: number
-  memberSection: string
-  memberId: number
-  memberCode: string
-  memberNumber: number
-  memberSectionName: string
-  memberScoutGroupName: string
-}
-
-export type HaulResult = {
-  scavengerResultId: number
-  hauledAtIso8601: string
-  totalPoints: number
-}
-
-export type MembersWithPoints = {
+export type ActivityGroupDto = {
   id: number
-  firstName: string
-  lastName: string
-  fullName: string
-  hasImage: boolean
-  memberCode: string
-  memberNumber: number
-  scoutGroupName: string
-  sectionId: string
-  sectionName: string
-  totalPoints: number
-  haulResult: HaulResult[]
-  latestHaulResult?: HaulResult | undefined
-  selectedHaulResultId: number | undefined
-  selectedHaulResult?: HaulResult | undefined
+  name: string
 }

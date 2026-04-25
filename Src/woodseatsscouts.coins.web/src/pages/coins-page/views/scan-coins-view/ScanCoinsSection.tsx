@@ -9,11 +9,11 @@ import {logDebug, logError, logObject, logReactSet} from "../../../../components
 import {toastError} from "../../../../components/toaster/toaster.ts";
 import './ScanCoinsSection.scss'
 import type {AxiosResponse} from "axios";
-import type {CoinDto, Member, MemberDto} from "../../../../types/ServerTypes.ts";
+import type {CoinDto, ScoutMemberDto} from "../../../../types/ServerTypes.ts";
 import type {HaulResult} from "../../../../types/ClientTypes.ts";
 
 interface ScanCoinsSectionProps {
-  member: MemberDto;
+  member: ScoutMemberDto;
   setHaulResult: React.Dispatch<React.SetStateAction<HaulResult>>
 }
 

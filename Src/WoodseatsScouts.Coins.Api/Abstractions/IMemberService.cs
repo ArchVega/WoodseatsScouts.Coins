@@ -4,13 +4,13 @@ namespace WoodseatsScouts.Coins.Api.Abstractions;
 
 public interface IMemberService
 {
-    int GetMemberId(int memberNumber, int scoutGroupNumber, string? sectionId);
+    int GetScoutMemberId(int scoutMemberNumber, int scoutGroupNumber, string? scoutSectionId);
     
-    ScoutMemberDto GetMemberDto(int member);
+    ScoutScoutMemberDto GetMemberDto(int scoutMemberId);
     
-    MemberCompleteSummaryDto MemberCompleteSummaryDto(int memberId);
+    ScoutMemberCompleteSummaryDto MemberCompleteSummaryDto(int scoutMemberId);
     
-    MemberPointsSummaryDto MemberPointsSummaryDto(int memberId);
+    ScoutMemberPointsSummaryDto ScoutMemberPointsSummaryDto(int scoutMemberId);
     
-    List<MemberPointsSummaryDto> GetMemberWithPointsSummaryDtos();
+    List<ScoutMemberPointsSummaryDto> ScoutGetMemberWithPointsSummaryDtos();
 }

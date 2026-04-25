@@ -121,7 +121,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .ToList();
         }
 
-        public List<MemberPointsSummaryDto> GetLatestScans(int numberOfScans)
+        public List<ScoutMemberPointsSummaryDto> GetLatestScans(int numberOfScans)
         {
             var last6MembersIdsWithCompletedAtTimes = ScanSessions!
                 .Include(x => x.ScoutMember)
@@ -140,7 +140,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                     .ThenInclude(x => x!.ActivityBase)
                     .Single(x => x.Id == scavengeResult.ScoutMemberId);
 
-                var memberPointsSummaryDto = new MemberPointsSummaryDto(member)
+                var memberPointsSummaryDto = new ScoutMemberPointsSummaryDto(member)
                 {
                     SelectedHaulResultId = scavengeResult.Id
                 };
@@ -236,16 +236,16 @@ namespace WoodseatsScouts.Coins.Api.Data
             return alreadyScavengedCoins;
         }
 
-        public ScoutMember CreateMember(string firstName, string lastName, int scoutGroupId, string sectionId, bool isDayVisitor)
+        public ScoutMember CreateMember(string firstName, string lastName, int scoutGroupId, string scoutSectionId, bool isDayVisitor)
         {
             var member = new ScoutMember
             {
                 FirstName = firstName,
                 LastName = lastName,
                 ScoutGroupId = scoutGroupId,
-                ScoutSectionId = sectionId,
+                ScoutSectionId = scoutSectionId,
                 IsDayVisitor = isDayVisitor,
-                Number = GenerateNextMemberCode(scoutGroupId, sectionId)
+                Number = GenerateNextMemberCode(scoutGroupId, scoutSectionId)
             };
 
             ScoutMembers?.Add(member);

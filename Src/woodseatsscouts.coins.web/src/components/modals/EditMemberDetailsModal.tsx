@@ -3,14 +3,14 @@ import React, {useEffect, useState} from "react";
 import {BaseModal} from "./BaseModal.tsx";
 import Uris from "../../services/apis/Uris.ts";
 import {Button} from "../widgets/HtmlControlWrappers.tsx";
-import type {ActivityGroupDto, MemberCompleteDto, ScoutGroupDto} from "../../types/ServerTypes.ts";
+import type {ActivityGroupDto, ScoutMemberCompleteDto, ScoutGroupDto, ScoutSectionDto} from "../../types/ServerTypes.ts";
 import AppStateApiService from "../../services/apis/AppStateApiService.tsx";
 
 interface EditMemberDetailsModalProps {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
-  memberCompleteDto: MemberCompleteDto;
-  setMemberCompleteDto: React.Dispatch<React.SetStateAction<MemberCompleteDto>>
+  memberCompleteDto: ScoutMemberCompleteDto;
+  setMemberCompleteDto: React.Dispatch<React.SetStateAction<ScoutMemberCompleteDto>>
 }
 
 export default function EditMemberDetailsModal({showModal, setShowModal, memberCompleteDto, setMemberCompleteDto}: EditMemberDetailsModalProps) {
@@ -19,21 +19,21 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
   const [validationMessage, setValidationMessage] = useState("");
 
   const [scoutGroups, setScoutGroups] = useState<ScoutGroupDto[]>([]);
-  const [sections, setSections] = useState<ActivityGroupDto[]>([]);
+  const [scoutSections, setScoutSections] = useState<ScoutSectionDto[]>([]);
 
   const [selectedScoutGroupId, setSelectedScoutGroupId] = useState<number | undefined>(undefined);
-  const [selectedSectionId, setSelectedSectionId] = useState<string | undefined>(undefined);
+  const [selectedScoutSectionCode, setSelectedScoutSectionCode] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (memberCompleteDto) {
       setFirstName(memberCompleteDto.firstName);
       setLastName(memberCompleteDto.lastName);
       setSelectedScoutGroupId(memberCompleteDto.scoutGroupId)
-      setSelectedSectionId(memberCompleteDto.sectionCode)
+      setSelectedScoutSectionCode(memberCompleteDto.scoutSectionCode)
     }
 
     AppStateApiService().getScoutGroups().then((response) => response.data).then((data) => setScoutGroups(data))
-    AppStateApiService().getSections().then((response) => response.data).then((data) => setSections(data))
+    AppStateApiService().getSections().then((response) => response.data).then((data) => setScoutSections(data))
 
   }, [memberCompleteDto]);
 
@@ -118,9 +118,9 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
         </div>
         <div className={"row mb-3"}>
           <div className={"col"}>
-            <select className={"form-select"} value={selectedSectionId}>
-              {sections && sections.map((activityBase) => (
-                <option key={activityBase.id} value={activityBase.id}>{activityBase.name}</option>
+            <select className={"form-select"} value={selectedScoutSectionCode}>
+              {scoutSections && scoutSections.map((scoutSection) => (
+                <option key={scoutSection.code} value={scoutSection.code}>{scoutSection.name}</option>
               ))}
             </select>
           </div>

@@ -4,13 +4,13 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import {BaseModal} from "./BaseModal.tsx";
 import Uris from "../../services/apis/Uris.ts";
 import {Button} from "../widgets/HtmlControlWrappers.tsx";
-import type {MemberCompleteDto} from "../../types/ServerTypes.ts";
+import type {ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
 
 interface EditMemberPhotoModalProps {
   showEditMemberPhotoModal: boolean;
   setShowEditMemberPhotoModal: React.Dispatch<React.SetStateAction<boolean>>
-  memberCompleteDto: MemberCompleteDto;
-  setMemberCompleteDto: React.Dispatch<React.SetStateAction<MemberCompleteDto>>
+  memberCompleteDto: ScoutMemberCompleteDto;
+  setMemberCompleteDto: React.Dispatch<React.SetStateAction<ScoutMemberCompleteDto>>
 }
 
 export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowEditMemberPhotoModal, memberCompleteDto, setMemberCompleteDto}: EditMemberPhotoModalProps) {

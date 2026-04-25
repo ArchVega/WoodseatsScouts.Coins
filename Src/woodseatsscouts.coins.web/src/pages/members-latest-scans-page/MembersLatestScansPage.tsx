@@ -3,7 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import Uris from "../../services/apis/Uris.ts";
 import {type AxiosResponse} from "axios";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import type {MemberPointsSummaryDto, MembersWithPoints} from "../../types/ServerTypes.ts";
+import type {ScoutMemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import { format } from 'timeago.js';
 import {AppSettingsContext} from "../../contexts/AppContextExporter.tsx";
@@ -11,7 +11,7 @@ import {apiClient} from "../../services/apis/apiClient.ts";
 
 export default function MembersLatestScansPage() {
   const {appSettings} = useContext(AppSettingsContext)
-  const [members, setMembers] = useState<MemberPointsSummaryDto[]>([])
+  const [members, setMembers] = useState<ScoutMemberPointsSummaryDto[]>([])
 
   useEffect(() => {
     function loadData() {
@@ -19,7 +19,7 @@ export default function MembersLatestScansPage() {
 
       apiClient
         .get(Uris.scans().sessionsLatest())
-        .then(async (response: AxiosResponse<MemberPointsSummaryDto[]>) => {
+        .then(async (response: AxiosResponse<ScoutMemberPointsSummaryDto[]>) => {
           const members = response.data
           response.data.forEach(memberPointsSummaryDto => {
             // memberPointsSummaryDto.clientComputedImageUri = Uris.scouts().members().memberPhoto(memberPointsSummaryDto.computedImagePath) // todo: is there an axios way to do this automatically?
@@ -36,8 +36,8 @@ export default function MembersLatestScansPage() {
     }, appSettings.VITE_RECENT_SCANS_REFRESH_INTERVAL_SECONDS * 1000)
   }, []);
 
-  function RenderMember(member: MemberPointsSummaryDto) {
-    const sectionBranding = getSectionBranding(member.sectionCode)
+  function RenderMember(member: ScoutMemberPointsSummaryDto) {
+    const sectionBranding = getSectionBranding(member.scoutSectionCode)
 
     return (
       <div className="card latest-scans-item-card flex-shrink-0" >

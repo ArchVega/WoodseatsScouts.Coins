@@ -5,7 +5,7 @@ import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteDto} from "../../types/ServerTypes.ts";
+import type {ActivityBaseHaulResultDto, HaulResultDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
@@ -17,7 +17,7 @@ export default function MemberDetailsPage() {
   const [loading, setLoading] = useState(false)
   const [showEditMemberPhotoModal, setShowEditMemberPhotoModal] = useState<boolean>(false);
   const [showEditMemberDetailsModal, setShowEditMemberDetailsModal] = useState<boolean>(false);
-  const [memberCompleteDto, setMemberCompleteDto] = useState<MemberCompleteDto | null>(null);
+  const [memberCompleteDto, setMemberCompleteDto] = useState<ScoutMemberCompleteDto | null>(null);
   const [activeHaulResultDto, setActiveHaulResultDto] = useState<HaulResultDto | null>(null);
   const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
 
@@ -29,7 +29,7 @@ export default function MemberDetailsPage() {
         .then(response => {
           return response.data
         })
-        .then((memberCompleteDto: MemberCompleteDto) => {
+        .then((memberCompleteDto: ScoutMemberCompleteDto) => {
           logObject("memberCompleteDto", memberCompleteDto)
           setMemberCompleteDto(memberCompleteDto)
           if (memberCompleteDto.haulResults.length >= 0) {
@@ -48,14 +48,13 @@ export default function MemberDetailsPage() {
   }, [selectedScanSessionId, memberCompleteDto]);
 
   function RenderMemberDetails() {
-    const sectionBranding = getSectionBranding(memberCompleteDto.sectionCode)
+    const sectionBranding = getSectionBranding(memberCompleteDto.scoutSectionCode)
 
     return (
       <>
         <div className="card member-details-member-card flex-shrink-0 sticky-top mb-3">
           <div className="card-body">
-            <Image
-                   className="mb-2"
+            <Image className="mb-2"
                    onClick={() => useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')}
                    title={"User id: " + memberCompleteDto.id}
                    src={memberCompleteDto.clientComputedImageUri}/>
@@ -67,17 +66,17 @@ export default function MemberDetailsPage() {
             </div>
             <div className="row  mb-2 g-1">
               <div className="col-6 members-list-item-section">
-                <div className="tile" style={{fontSize: "12px"}}>{memberCompleteDto.memberCode}</div>
+                <div className="tile" style={{fontSize: "12px"}}>{memberCompleteDto.scoutMemberCode}</div>
               </div>
               <div className="col-6 members-list-item-section">
                 <div className="tile" style={{fontSize: "12px"}}>{memberCompleteDto.totalPoints}</div>
               </div>
             </div>
             <div className="row mb-2">
-              <div className="members-list-item-section">
+              <div className="members-list-item-section" title={`Section: ${memberCompleteDto.scoutSectionName}`}>
                 <div role="button" className="tile" style={{backgroundColor: sectionBranding.backgroundColour, color: sectionBranding.foregroundColour}}
-                onClick={() => setShowEditMemberDetailsModal(true)}>
-                  {memberCompleteDto.sectionName}
+                     onClick={() => setShowEditMemberDetailsModal(true)}>
+                  {memberCompleteDto.scoutGroupName}
                 </div>
               </div>
             </div>
@@ -164,12 +163,12 @@ export default function MemberDetailsPage() {
               activityBaseHaulResultDto.coins && activityBaseHaulResultDto.coins.map((coin, coinIndex) => (
                 <tr key={`${haulIndex}-${coinIndex}`}>
                   {coinIndex === 0 && (
-                      <td rowSpan={activityBaseHaulResultDto.coins.length}>
-                        <div className="pe-2" style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span>{activityBaseHaulResultDto.activityBaseName}</span>
-                          <span>(x {activityBaseHaulResultDto.coins.length})</span>
-                        </div>
-                      </td>
+                    <td rowSpan={activityBaseHaulResultDto.coins.length}>
+                      <div className="pe-2" style={{display: "flex", justifyContent: "space-between"}}>
+                        <span>{activityBaseHaulResultDto.activityBaseName}</span>
+                        <span>(x {activityBaseHaulResultDto.coins.length})</span>
+                      </div>
+                    </td>
                   )}
                   <td>{coin.pointValue}</td>
                   <td>
@@ -187,8 +186,10 @@ export default function MemberDetailsPage() {
     )
   }
 
-  {/*<td>{activityBaseHaulResultDto.totalPoints}</td>*/}
-  {/*<td>{activityBaseHaulResultDto.coinsScanned}</td>*/}
+  {/*<td>{activityBaseHaulResultDto.totalPoints}</td>*/
+  }
+  {/*<td>{activityBaseHaulResultDto.coinsScanned}</td>*/
+  }
 
   function RenderMemberActivitySummary() {
     function RenderActivityCard(title: string, node: ReactNode) {
@@ -208,31 +209,31 @@ export default function MemberDetailsPage() {
       <div id="recent-member-activity-summary-cards" className="row g-1 sticky-top">
         {RenderActivityCard("Most Visited Base", (
           <>
-            {memberCompleteDto.memberCompleteSummaryStatsDto
-              && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase
-              && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.names.map((x, i) => (
+            {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.names.map((x, i) => (
                 <div key={i}>
                   <strong className="fs-3">{x}</strong>
                 </div>
               ))}
-            <div><em>{memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</em></div>
+            <div><em>{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</em></div>
           </>
         ))}
         {RenderActivityCard("Least Visited Base", <>
-          {memberCompleteDto.memberCompleteSummaryStatsDto
-            && memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase
-            && memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase.names.map((x, i) => (
+          {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.names.map((x, i) => (
               <div key={i}>
                 <strong className="fs-3">{x}</strong>
               </div>
             ))}
-          <div><em>{memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase.timesVisited} visits</em></div>
+          <div><em>{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.timesVisited} visits</em></div>
         </>)}
         {RenderActivityCard("Most Scans", <>
-          <div><strong className="fs-3">{memberCompleteDto.memberCompleteSummaryStatsDto.mostScans} Tokens</strong></div>
+          <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostScans} Tokens</strong></div>
         </>)}
         {RenderActivityCard("Total tokens scanned", <>
-          <div><strong className="fs-3">{memberCompleteDto.memberCompleteSummaryStatsDto.totalTokensScanned}</strong></div>
+          <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.totalTokensScanned}</strong></div>
         </>)}
       </div>
     )

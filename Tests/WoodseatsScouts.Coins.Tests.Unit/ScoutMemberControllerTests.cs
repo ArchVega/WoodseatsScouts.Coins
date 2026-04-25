@@ -63,8 +63,8 @@ public class ScoutMemberControllerTests
             }
         };
 
-        memberServiceMock.Setup(x => x.GetMemberWithPointsSummaryDtos()).Returns([
-            new MemberPointsSummaryDto(new ScoutMember
+        memberServiceMock.Setup(x => x.ScoutGetMemberWithPointsSummaryDtos()).Returns([
+            new ScoutMemberPointsSummaryDto(new ScoutMember
             {
                 ScoutGroup = TestDataFactory.CreateScoutGroup(""),
                 ScoutSection = TestDataFactory.CreateScoutSection(""),
@@ -96,7 +96,7 @@ public class ScoutMemberControllerTests
 
         results.ShouldNotBeNull();
         results.ShouldBeOfType<OkObjectResult>();
-        var memberPointsSummaryDtos = (List<MemberPointsSummaryDto>)((OkObjectResult)results).Value!;
+        var memberPointsSummaryDtos = (List<ScoutMemberPointsSummaryDto>)((OkObjectResult)results).Value!;
         memberPointsSummaryDtos.Count.ShouldBe(1);
 
         var memberPointsSummaryDto = memberPointsSummaryDtos[0];
@@ -121,7 +121,7 @@ public class ScoutMemberControllerTests
 
         var result = membersController.GetScoutMemberByCode("M001A003", new Member { View = View.Basic });
         result.ShouldBeOfType<OkObjectResult>();
-        memberServiceMock.Verify(x => x.GetMemberId(3, 1, "A"), Times.Once);
+        memberServiceMock.Verify(x => x.GetScoutMemberId(3, 1, "A"), Times.Once);
     }
 
     [Fact]

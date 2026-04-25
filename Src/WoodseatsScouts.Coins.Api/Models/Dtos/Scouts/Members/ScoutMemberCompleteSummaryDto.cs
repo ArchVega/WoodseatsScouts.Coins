@@ -3,9 +3,9 @@ using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
-public class MemberCompleteSummaryDto
+public class ScoutMemberCompleteSummaryDto
 {
-    public MemberCompleteSummaryDto(ScoutMember scoutMember)
+    public ScoutMemberCompleteSummaryDto(ScoutMember scoutMember)
     {
         var haulResults = scoutMember.ScanSessions.Select(scavengeResult =>
         {
@@ -35,21 +35,21 @@ public class MemberCompleteSummaryDto
         var cacheBuster = DateTime.UtcNow.Ticks;
 
         Id = scoutMember.Id;
-        MemberCode = scoutMember.Code;
+        ScoutMemberCode = scoutMember.Code;
         HasImage = scoutMember.HasImage;
         ComputedImagePath = scoutMember.HasImage ? $"scouts/members/{scoutMember.Id}/photo?{cacheBuster}" : "scouts/members/photo/placeholder";
-        MemberNumber = scoutMember.Number;
+        ScoutMemberNumber = scoutMember.Number;
         FirstName = scoutMember.FirstName;
         LastName = scoutMember.LastName;
         FullName = scoutMember.FullName;
         ScoutGroupId = scoutMember.ScoutGroup.Id;
         ScoutGroupName = scoutMember.ScoutGroup.Name;
-        SectionCode = scoutMember.ScoutSectionId;
-        SectionName = scoutMember.ScoutSection.Name;
+        ScoutSectionCode = scoutMember.ScoutSectionId;
+        ScoutSectionName = scoutMember.ScoutSection.Name;
         TotalPoints = scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.Coin!.Value)).Sum();
         HaulResults = haulResults;
 
-        MemberCompleteSummaryStatsDto = new MemberCompleteSummaryStatsDto();
+        ScoutMemberCompleteSummaryStatsDto = new ScoutMemberCompleteSummaryStatsDto();
 
         var grouping = haulResults
             .SelectMany(x => x.ActivityBaseHaulResultDtos)
@@ -59,22 +59,22 @@ public class MemberCompleteSummaryDto
         var maxCount = grouping.Any() ? grouping.Max(x => x.Count()) : 0;
         var minCount = grouping.Any() ? grouping.Min(x => x.Count()) : 0;
 
-        MemberCompleteSummaryStatsDto.MostVisitedActivityBase = new MemberCompleteSummaryStatsActivityBaseInfoDto
+        ScoutMemberCompleteSummaryStatsDto.MostVisitedActivityBase = new ScoutMemberCompleteSummaryStatsActivityBaseInfoDto
         {
             Names = grouping.Where(x => x.Count() == maxCount).Select(x => x.Key).ToList(),
             TimesVisited = maxCount,
         };
-        MemberCompleteSummaryStatsDto.LeastVisitedActivityBase = new MemberCompleteSummaryStatsActivityBaseInfoDto
+        ScoutMemberCompleteSummaryStatsDto.LeastVisitedActivityBase = new ScoutMemberCompleteSummaryStatsActivityBaseInfoDto
         {
             Names = grouping.Where(x => x.Count() == minCount).Select(x => x.Key).ToList(),
             TimesVisited = minCount,
         };
 
-        MemberCompleteSummaryStatsDto.MostScans = scoutMember.ScanSessions
+        ScoutMemberCompleteSummaryStatsDto.MostScans = scoutMember.ScanSessions
             .Select(x => x.ScanCoins.Count)
             .DefaultIfEmpty(0)
             .Max() ;
-        MemberCompleteSummaryStatsDto.TotalTokensScanned = scoutMember.ScanSessions
+        ScoutMemberCompleteSummaryStatsDto.TotalTokensScanned = scoutMember.ScanSessions
             .Select(x => x.ScanCoins.Count)
             .DefaultIfEmpty(0)
             .Min() ;
@@ -84,13 +84,13 @@ public class MemberCompleteSummaryDto
 
     public string FullName { get; set; }
 
-    public string MemberCode { get; set; }
+    public string ScoutMemberCode { get; set; }
 
     public bool HasImage { get; set; }
 
     public string ComputedImagePath { get; set; }
 
-    public int MemberNumber { get; set; }
+    public int ScoutMemberNumber { get; set; }
 
     public string FirstName { get; set; }
 
@@ -100,9 +100,9 @@ public class MemberCompleteSummaryDto
 
     public string ScoutGroupName { get; set; }
 
-    public string SectionCode { get; set; }
+    public string ScoutSectionCode { get; set; }
 
-    public string SectionName { get; set; }
+    public string ScoutSectionName { get; set; }
 
     public int TotalPoints { get; set; }
 
@@ -110,5 +110,5 @@ public class MemberCompleteSummaryDto
 
     public List<HaulResultDto> HaulResults { get; set; }
 
-    public MemberCompleteSummaryStatsDto MemberCompleteSummaryStatsDto { get; set; }
+    public ScoutMemberCompleteSummaryStatsDto ScoutMemberCompleteSummaryStatsDto { get; set; }
 }

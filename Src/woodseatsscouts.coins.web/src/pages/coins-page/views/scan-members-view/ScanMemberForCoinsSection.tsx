@@ -10,7 +10,7 @@ import QRScanCodeType from "../../../../components/io/qr-input-devices/QRScanCod
 import {logDebug, logError, logObject} from "../../../../components/logging/Logger.ts";
 import {toastError} from "../../../../components/toaster/toaster.ts";
 import type {AxiosResponse} from "axios";
-import type {MemberDto} from "../../../../types/ServerTypes.ts";
+import type {ScoutMemberDto} from "../../../../types/ServerTypes.ts";
 import Uris from "../../../../services/apis/Uris.ts";
 
 export default function ScanMemberForCoinsSection({setMember}) {
@@ -38,14 +38,14 @@ export default function ScanMemberForCoinsSection({setMember}) {
     if (memberQrCode != null && memberQrCode.trim().length > 0) {
       setLoading(true)
 
-      async function fetchData(): Promise<AxiosResponse<MemberDto>> {
+      async function fetchData(): Promise<AxiosResponse<ScoutMemberDto>> {
         audioFx.playMemberScannedAudio()
         return await MemberApiService().fetchMember(memberQrCode)
       }
 
       fetchData()
         .then(value => {
-          const member: MemberDto = value.data;
+          const member: ScoutMemberDto = value.data;
           logObject("memberDto", member)
           setMember(member);
           setActiveScanningMember(member)

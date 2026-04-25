@@ -2,14 +2,14 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
-public class MemberPointsSummaryDto
+public class ScoutMemberPointsSummaryDto
 {
-    public MemberPointsSummaryDto(ScoutMember scoutMember)
+    public ScoutMemberPointsSummaryDto(ScoutMember scoutMember)
     {
         var cacheBuster = DateTime.UtcNow.Ticks;
         
         Id = scoutMember.Id;
-        MemberCode = scoutMember.Code;
+        ScoutMemberCode = scoutMember.Code;
         HasImage = scoutMember.HasImage;
         ComputedImagePath = scoutMember.HasImage ? $"scouts/members/{scoutMember.Id}/photo?{cacheBuster}" : "scouts/members/photo/placeholder";
         MemberNumber = scoutMember.Number;
@@ -18,8 +18,8 @@ public class MemberPointsSummaryDto
         FullName = scoutMember.FullName;
         ScoutGroupId = scoutMember.ScoutGroup.Id;
         ScoutGroupName = scoutMember.ScoutGroup.Name;
-        SectionId = scoutMember.ScoutSectionId;
-        SectionName = scoutMember.ScoutSection.Name;
+        ScoutSectionCode = scoutMember.ScoutSectionId;
+        ScoutSectionName = scoutMember.ScoutSection.Name;
         TotalPoints = scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.Coin!.Value)).Sum();
         HaulResults = scoutMember.ScanSessions.Select(x =>
         {
@@ -36,7 +36,7 @@ public class MemberPointsSummaryDto
 
     public string FullName { get; set; }
 
-    public string MemberCode { get; set; }
+    public string ScoutMemberCode { get; set; }
 
     public bool HasImage { get; set; }
     
@@ -51,8 +51,9 @@ public class MemberPointsSummaryDto
     public int ScoutGroupId { get; init; }
     public string ScoutGroupName { get; set; }
 
-    public string SectionId { get; set; } // Todo Section is now "SectionId". Rename
-    public string SectionName { get; set; }
+    public string ScoutSectionCode { get; set; }
+    
+    public string ScoutSectionName { get; set; }
 
     public int TotalPoints { get; set; }
 

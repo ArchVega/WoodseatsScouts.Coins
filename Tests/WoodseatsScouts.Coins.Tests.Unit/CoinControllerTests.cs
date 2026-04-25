@@ -33,11 +33,11 @@ public class CoinControllerTests
     public void GetCoin_MemberCodeSuppliedInsteadOfCoinCode_ThrowsException()
     {
         var coinsController = CreateCut();
-        const string memberCode = "M045B019";
+        const string scoutMemberCode = "M045B019";
 
-        appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember { Code = memberCode } }));
+        appDbContextMock.Setup(x => x.ScoutMembers).ReturnsDbSet((new List<ScoutMember> { new ScoutMember { Code = scoutMemberCode } }));
 
-        var exception = Should.Throw<CodeTranslationException>(() => coinsController.AssignCoinToScoutMember(memberCode, It.IsAny<string>()));
+        var exception = Should.Throw<CodeTranslationException>(() => coinsController.AssignCoinToScoutMember(scoutMemberCode, It.IsAny<string>()));
 
         exception.Message.ShouldBe("The code 'M045B019' is a Member code");
     }

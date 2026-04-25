@@ -1,6 +1,6 @@
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 
-public class CoinFullDto()
+public class CoinFullDto
 {
     public required int Id { get; set; }
     
@@ -12,7 +12,7 @@ public class CoinFullDto()
 
     public required string Code { get; set; }
 
-    public required int? MemberId { get; set; }
+    public required int? ScoutMemberId { get; set; }
     
     public required DateTime? LockUntil { get; set; }
 }

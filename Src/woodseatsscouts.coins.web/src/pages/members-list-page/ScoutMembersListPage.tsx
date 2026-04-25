@@ -1,20 +1,19 @@
-import './MembersListPage.scss'
+import './ScoutMembersListPage.scss'
 import React, {useContext, useEffect, useState} from "react";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
-import Uris from "../../services/apis/Uris.ts";
 import {useNavigate} from "react-router-dom";
 import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import type {AxiosResponse} from "axios";
-import type {MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import type {ScoutMemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 
-export default function MembersListPage() {
+export default function ScoutMembersListPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
   const navigate = useNavigate();
 
-  const [members, setMembers] = useState<MemberPointsSummaryDto[]>([]);
+  const [members, setMembers] = useState<ScoutMemberPointsSummaryDto[]>([]);
   const [userModal, setUserModal] = useState<boolean>(false);
   const [editUserModal, setEditUserModal] = useState<boolean>(false);
   const [editMemberNameModal, setEditMemberNameModal] = useState<boolean>(false);
@@ -22,7 +21,7 @@ export default function MembersListPage() {
   const [filterText, setFilterText] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMembers = async (): Promise<AxiosResponse<MemberPointsSummaryDto[]>> => {
+    const fetchMembers = async (): Promise<AxiosResponse<ScoutMemberPointsSummaryDto[]>> => {
       return await MemberApiService().fetchMembers();
     }
     fetchMembers().then(response => {
@@ -41,7 +40,7 @@ export default function MembersListPage() {
     return false
   }
 
-  function filterMember(member) {
+  function filterMember(member: ScoutMemberPointsSummaryDto) {
     if (filterText === null || filterText.trim().length === 0) {
       return true;
     }
@@ -49,52 +48,52 @@ export default function MembersListPage() {
     const firstNameMatch = member.firstName.toLowerCase().includes(filterText.toLowerCase());
     const lastNameMatch = (member.lastName !== null && member.lastName.toLowerCase().includes(filterText.toLowerCase()));
     const scoutGroupNameMatch = member.scoutGroupName.toString().toLowerCase().includes(filterText.toLowerCase());
-    const sectionMatch = member.sectionName.toString().toLowerCase().includes(filterText.toLowerCase())
-    const memberCodeMatch = member.memberCode.toLowerCase().includes(filterText.toLowerCase());
+    const sectionMatch = member.scoutSectionName.toString().toLowerCase().includes(filterText.toLowerCase())
+    const memberCodeMatch = member.scoutMemberCode.toLowerCase().includes(filterText.toLowerCase());
 
     return firstNameMatch || lastNameMatch || scoutGroupNameMatch || sectionMatch || memberCodeMatch
   }
 
-  function RenderMember(member: MemberPointsSummaryDto) {
-    const sectionBranding = getSectionBranding(member.sectionCode)
+  function RenderMember(scoutMember: ScoutMemberPointsSummaryDto) {
+    const sectionBranding = getSectionBranding(scoutMember.scoutSectionCode)
 
     return (
-      <div key={member.memberCode} className="card members-list-item-card flex-shrink-0">
+      <div key={scoutMember.scoutMemberCode} className="card members-list-item-card flex-shrink-0">
         <div className="card-body">
           <div className="row pb-2">
             <div className="col">
-              <img key={Date.now()}
-                   title={"User id: " + member.id}
-                   src={member.clientComputedImageUri} alt=""/>
+              <img key={scoutMember.scoutMemberCode}
+                   title={"User id: " + scoutMember.id}
+                   src={scoutMember.clientComputedImageUri} alt=""/>
             </div>
           </div>
           <div className="row pb-2 member-name-row">
             <div className={"col d-flex justify-content-center align-items-center members-list-item-section"}>
-              <strong className={"tile d-flex flex-column justify-content-center h-100"}>{member.firstName + " " + member.lastName}</strong>
+              <strong className={"tile d-flex flex-column justify-content-center h-100"}>{scoutMember.firstName + " " + scoutMember.lastName}</strong>
             </div>
           </div>
           <div className="row pb-2 g-1">
             <div className="col-7 members-list-item-section">
-              <div className="tile">{member.memberCode}</div>
+              <div className="tile">{scoutMember.scoutMemberCode}</div>
             </div>
             <div className="col-5 members-list-item-section">
-              <div className="tile">{member.totalPoints}</div>
+              <div className="tile">{scoutMember.totalPoints}</div>
             </div>
           </div>
           <div className="row pb-2">
-            <div className="members-list-item-section">
+            <div className="members-list-item-section" title={`Section: ${scoutMember.scoutSectionName}`}>
               <div className="tile" style={{color: sectionBranding.foregroundColour, backgroundColor: sectionBranding.backgroundColour, fontWeight: "bold"}}>
-                {member.scoutGroupName}
+                {scoutMember.scoutGroupName}
               </div>
             </div>
           </div>
           <div className="row pb-2 g-1">
             <div className="col-6 members-list-item-section">
-              <Button onClick={() => navigate(`/members/${member.memberCode}`)}>EDIT</Button>
+              <Button onClick={() => navigate(`/members/${scoutMember.scoutMemberCode}`)}>EDIT</Button>
             </div>
             <div className=" col-6 members-list-item-section">
               <Button disabled={!useAppCamera}
-                      onClick={() => useAppCamera ? showEditUserModal(member) : alert('Device does not have a camera or it is unavailable.')}>PHOTO</Button>
+                      onClick={() => useAppCamera ? showEditUserModal(scoutMember) : alert('Device does not have a camera or it is unavailable.')}>PHOTO</Button>
             </div>
           </div>
         </div>

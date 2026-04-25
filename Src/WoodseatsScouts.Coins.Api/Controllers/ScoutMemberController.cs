@@ -27,7 +27,7 @@ public class ScoutMemberController(
     [Route("")]
     public ActionResult GetAllScoutMembers()
     {
-        return Ok(memberService.GetMemberWithPointsSummaryDtos());
+        return Ok(memberService.ScoutGetMemberWithPointsSummaryDtos());
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ public class ScoutMemberController(
                 createMemberRequest.FirstName,
                 createMemberRequest.LastName,
                 createMemberRequest.ScoutGroupId,
-                createMemberRequest.SectionCode, // Todo: Client sends "section" but this is really "sectionId"
+                createMemberRequest.SectionCode,
                 createMemberRequest.IsDayVisitor));
         }
     }
@@ -116,7 +116,7 @@ public class ScoutMemberController(
             return BadRequest(e.Message);
         }
 
-        var memberId = memberService.GetMemberId(translationResult.ScoutMemberNumber, translationResult.ScoutGroupNumber, translationResult.SectionCode);
+        var memberId = memberService.GetScoutMemberId(translationResult.ScoutMemberNumber, translationResult.ScoutGroupNumber, translationResult.SectionCode);
 
         switch (memberQuery.View)
         {
@@ -127,7 +127,7 @@ public class ScoutMemberController(
             case View.Basic:
                 return Ok(memberService.GetMemberDto(memberId));
             case View.PointsSummary:
-                return Ok(memberService.MemberPointsSummaryDto(memberId));
+                return Ok(memberService.ScoutMemberPointsSummaryDto(memberId));
             case View.Complete:
                 return Ok(memberService.MemberCompleteSummaryDto(memberId));
             default:

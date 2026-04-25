@@ -17,7 +17,7 @@ public class CoinService(IAppDbContext appDbContext) : ICoinService
                 ActivityBaseId = x.ActivityBaseId,
                 Value = x.Value,
                 Code = x.Code,
-                MemberId = x.MemberId,
+                ScoutMemberId = x.MemberId,
                 LockUntil = x.LockUntil
             })
             .ToList();
