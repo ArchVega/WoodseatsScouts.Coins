@@ -2,7 +2,7 @@ import './ScoutMembersListPage.scss'
 import React, {useContext, useEffect, useState} from "react";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import {useNavigate} from "react-router-dom";
-import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
+import {PageActionMenuAreaContext, UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
@@ -19,6 +19,11 @@ export default function ScoutMembersListPage() {
   const [editMemberNameModal, setEditMemberNameModal] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [filterText, setFilterText] = useState<string | null>(null);
+  const {setPageActionMenuAreaAction} = useContext(PageActionMenuAreaContext)
+
+  useEffect(() => {
+    setPageActionMenuAreaAction(null)
+  }, []);
 
   useEffect(() => {
     const fetchMembers = async (): Promise<AxiosResponse<ScoutMemberPointsSummaryDto[]>> => {

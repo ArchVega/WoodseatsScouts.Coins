@@ -6,12 +6,17 @@ import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
 import type {ScoutMemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import { format } from 'timeago.js';
-import {AppSettingsContext} from "../../contexts/AppContextExporter.tsx";
+import {AppSettingsContext, PageActionMenuAreaContext} from "../../contexts/AppContextExporter.tsx";
 import {apiClient} from "../../services/apis/apiClient.ts";
 
 export default function MembersLatestScansPage() {
   const {appSettings} = useContext(AppSettingsContext)
   const [members, setMembers] = useState<ScoutMemberPointsSummaryDto[]>([])
+  const {setPageActionMenuAreaAction} = useContext(PageActionMenuAreaContext)
+
+  useEffect(() => {
+    setPageActionMenuAreaAction(null)
+  }, []);
 
   useEffect(() => {
     function loadData() {
@@ -36,7 +41,7 @@ export default function MembersLatestScansPage() {
     const sectionBranding = getSectionBranding(member.scoutSectionCode)
 
     return (
-      <div className="card latest-scans-item-card" >
+      <div className="card" >
         <div className="card-body">
           <div className="row">
             <div className="col">

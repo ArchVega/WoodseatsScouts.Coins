@@ -1,7 +1,7 @@
 import './MemberDetailsPage.scss'
 import {useParams} from "react-router-dom";
 import React, {type ReactNode, useContext, useEffect, useState} from "react";
-import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
+import {PageActionMenuAreaContext, UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
@@ -27,6 +27,11 @@ export default function MemberDetailsPage() {
   const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
   const [selectedScannedCoinDto, setSelectedScannedCoinDto] = useState<ScannedCoinDto | undefined>(undefined);
   const {checkPasscode} = usePasscode();
+  const {setPageActionMenuAreaAction} = useContext(PageActionMenuAreaContext)
+
+  useEffect(() => {
+    setPageActionMenuAreaAction(null)
+  }, []);
 
   useEffect(() => {
     if (memberId) {
