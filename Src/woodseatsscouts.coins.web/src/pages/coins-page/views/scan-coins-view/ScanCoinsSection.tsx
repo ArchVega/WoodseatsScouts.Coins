@@ -94,7 +94,9 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
           additionalData: additionalData
         })
       }).finally(() => {
-        setIsCreateScanSessionRequestInProgress(false);
+        setTimeout(() => {
+          setIsCreateScanSessionRequestInProgress(false);
+        }, 1000)
       })
   }
 
