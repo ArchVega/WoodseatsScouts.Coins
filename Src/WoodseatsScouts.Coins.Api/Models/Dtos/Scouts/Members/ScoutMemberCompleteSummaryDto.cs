@@ -83,7 +83,7 @@ public class ScoutMemberCompleteSummaryDto
         ScoutMemberCompleteSummaryStatsDto.TotalTokensScanned = scoutMember.ScanSessions
             .Select(x => x.ScanCoins.Count)
             .DefaultIfEmpty(0)
-            .Min() ;
+            .Sum() ;
     }
 
     public int Id { get; set; }

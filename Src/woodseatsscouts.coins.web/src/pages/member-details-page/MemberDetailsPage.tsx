@@ -270,7 +270,7 @@ export default function MemberDetailsPage() {
                   <strong className="fs-3">{x}</strong>
                 </div>
               ))}
-            <div><em>{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</em></div>
+            <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</strong></div>
           </>
         ))}
         {RenderActivityCard("Least Visited Base", <>
@@ -281,7 +281,7 @@ export default function MemberDetailsPage() {
                 <strong className="fs-3">{x}</strong>
               </div>
             ))}
-          <div><em>{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.timesVisited} visits</em></div>
+          <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.timesVisited} visits</strong></div>
         </>)}
         {RenderActivityCard("Most Scans", <>
           <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostScans} Tokens</strong></div>
