@@ -85,7 +85,7 @@ export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowE
         <>
           <div className="row mb-3 mt-2">
             <div className="col text-center fs-3">
-              Take a photo of <strong>{memberCompleteDto.firstName}</strong>
+              Take a photo of <strong>{memberCompleteDto.firstName} {memberCompleteDto.lastName}</strong>
             </div>
           </div>
           <div className="row mb-2">

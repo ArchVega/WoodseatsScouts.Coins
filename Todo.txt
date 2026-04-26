@@ -56,3 +56,5 @@ now that there's coin's effective points - update scan session's total to use ef
 styling for details page when 0 stuff
 
 use k6 in the future for load testing
+
+the desaturate idea (2026 release pdf) is cool
