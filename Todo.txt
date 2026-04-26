@@ -54,3 +54,5 @@ make a generic Confirmation modal to replace default confirm
 now that there's coin's effective points - update scan session's total to use effective points.
 
 styling for details page when 0 stuff
+
+use k6 in the future for load testing
