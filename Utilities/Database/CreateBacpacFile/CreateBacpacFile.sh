@@ -4,6 +4,6 @@ sqlpackage \
     /SourceDatabaseName:"WoodseatsScouts.Coins.Development" \
     /SourceUser:"sa" \
     /SourcePassword:"Pa55w0rd123" \
-    /TargetFile:"WoodseatsScouts.Coins.Development.bacpac" \
+    /TargetFile:"/home/developer/dev/bkps/WoodseatsScouts.Coins.Development-alpha.bacpac" \
     /SourceEncryptConnection:False \
     /SourceTrustServerCertificate:True
