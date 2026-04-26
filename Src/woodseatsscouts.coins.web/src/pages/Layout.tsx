@@ -1,4 +1,4 @@
-import SiteDevBar from "../components/_dev/siteDevBar.tsx";
+import SiteDevBar from "../components/_dev/SiteDevBar.tsx";
 import NavMenu from "../site/NavMenu.tsx";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';

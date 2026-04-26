@@ -1,49 +1,61 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Options;
-using WoodseatsScouts.Coins.Api.AppLogic;
-using WoodseatsScouts.Coins.Api.AppLogic.Translators;
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Models.Domain;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Members.New;
-using WoodseatsScouts.Coins.Api.Models.View.Members;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 namespace WoodseatsScouts.Coins.Api.Data
 {
     public class AppDbContext(
         DbContextOptions<AppDbContext> options,
-        IOptions<AppSettings> appSettingsOptions,
-        SystemDateTimeProvider systemDateTimeProvider,
-        IOptions<LeaderboardSettings> leaderboardSettings)
+        IOptions<AppSettings> appSettingsOptions)
         : DbContext(options), IAppDbContext
     {
-        private readonly LeaderboardSettings leaderboardSettings = leaderboardSettings.Value;
         public TimeProvider TimeProvider { get; set; } = TimeProvider.System;
 
-        public DbSet<ScoutMember>? ScoutMembers { get; set; }
+        public DbSet<ScoutMember> ScoutMembers { get; set; }
 
-        public DbSet<ScoutGroup>? ScoutGroups { get; set; }
+        public DbSet<ScoutGroup> ScoutGroups { get; set; }
 
-        public DbSet<ScoutSection>? ScoutSections { get; set; }
+        public DbSet<ScoutSection> ScoutSections { get; set; }
 
-        public DbSet<Coin>? Coins { get; set; }
+        public DbSet<Coin> Coins { get; set; }
 
-        public DbSet<ActivityBase>? ActivityBases { get; set; }
+        public DbSet<ActivityBase> ActivityBases { get; set; }
+        
+        public DbSet<ScannedCoin> ScannedCoins { get; set; }
 
-        public DbSet<ScanCoin>? ScanCoins { get; set; }
+        public DbSet<ScanSession> ScanSessions { get; set; }
 
-        public DbSet<ScanSession>? ScanSessions { get; set; }
-
-        public DbSet<ErrorLog>? ErrorLogs { get; set; }
+        public DbSet<ErrorLog> ErrorLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            const string coinCodeFormat = "'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))";
-            const string memberCodeFormat = "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionId] + (FORMAT(Number, '000'))";
+            // const string coinCodeFormat = "'C' + (FORMAT([ActivityBaseSequenceNumber], '0000'))  + (FORMAT([ActivityBaseId], '000')) + (FORMAT([Value], '000'))";
+            // const string memberCodeFormat = "'M' + (FORMAT(ScoutGroupId, '000'))  + [ScoutSectionCode] + (FORMAT(Number, '000'))";
+
+            const string coinCodeFormat = """
+                                              'C'
+                                              + RIGHT('0000' + CAST([ActivityBaseSequenceNumber] AS VARCHAR(4)), 4)
+                                              + RIGHT('000' + CAST([ActivityBaseId] AS VARCHAR(3)), 3)
+                                              + RIGHT('000' + CAST([Value] AS VARCHAR(3)), 3)
+                                          """;
+            const string memberCodeFormat = """
+                                                'M'
+                                                + RIGHT('000' + CAST([ScoutGroupId] AS VARCHAR(3)), 3)
+                                                + ScoutSectionCode
+                                                + RIGHT('000' + CAST([Number] AS VARCHAR(3)), 3)
+                                            """;
 
             /* As of the v2024, Coins data is generated externally and the Id value is predetermined and inserted. */
             modelBuilder.Entity<Coin>()
-                .Property(x => x.Code).HasComputedColumnSql(coinCodeFormat);
+                .Property(x => x.Code)
+                .HasComputedColumnSql(coinCodeFormat);
+
+            modelBuilder.Entity<Coin>()
+                .HasIndex(x => x.Code)
+                .IsUnique();
 
             modelBuilder.Entity<Coin>().HasOne(x => x.ActivityBase).WithMany().HasForeignKey(x => x.ActivityBaseId);
 
@@ -51,6 +63,10 @@ namespace WoodseatsScouts.Coins.Api.Data
             modelBuilder.Entity<ScoutMember>()
                 .Property(p => p.Code)
                 .HasComputedColumnSql(memberCodeFormat);
+
+            modelBuilder.Entity<ScoutMember>()
+                .HasIndex(x => x.Code)
+                .IsUnique();
 
             modelBuilder.Entity<ScoutSection>()
                 .HasIndex(u => u.Code)
@@ -95,7 +111,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public int GenerateNextMemberCode(int scoutGroupId, string section)
         {
-            var matchingMembers = ScoutMembers!.Where(x => x.ScoutGroupId == scoutGroupId && x.ScoutSectionId == section).ToList();
+            var matchingMembers = ScoutMembers!.Where(x => x.ScoutGroupId == scoutGroupId && x.ScoutSectionCode == section).ToList();
 
             var nextMemberNumber = 1;
             if (matchingMembers.Count > 0)
@@ -109,10 +125,10 @@ namespace WoodseatsScouts.Coins.Api.Data
         public List<ScoutMember> GetLastThreeUsersToScanPoints()
         {
             return ScoutMembers!
-                .Include(x => x.ScavengeResults)
+                .Include(x => x.ScanSessions)
                 .ThenInclude(x => x.ScanCoins)
                 .Include(x => x.ScoutSection)
-                .Where(x => x.ScavengeResults.Count > 0)
+                .Where(x => x.ScanSessions.Count > 0)
                 .Select(member => new
                 {
                     Member = member,
@@ -127,7 +143,7 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .ToList();
         }
 
-        public List<MemberPointsSummaryDto> GetLatestScans(int numberOfScans)
+        public List<ScoutMemberPointsSummaryDto> GetLatestScans(int numberOfScans)
         {
             var last6MembersIdsWithCompletedAtTimes = ScanSessions!
                 .Include(x => x.ScoutMember)
@@ -135,92 +151,40 @@ namespace WoodseatsScouts.Coins.Api.Data
                 .Take(numberOfScans)
                 .ToList();
 
-            var f = last6MembersIdsWithCompletedAtTimes.Select(scavengeResult =>
+            var memberPointsSummaryDtos = last6MembersIdsWithCompletedAtTimes.Select(scavengeResult =>
             {
                 var member = ScoutMembers!
                     .Include(x => x.ScoutSection)
                     .Include(x => x.ScoutGroup)
-                    .Include(x => x.ScavengeResults)
+                    .Include(x => x.ScanSessions)
                     .ThenInclude(x => x.ScanCoins)
                     .ThenInclude(x => x.Coin)
-                    .ThenInclude(x => x.ActivityBase)
+                    .ThenInclude(x => x!.ActivityBase)
                     .Single(x => x.Id == scavengeResult.ScoutMemberId);
 
-                var viewModel = new MemberPointsSummaryDto(member)
+                var memberPointsSummaryDto = new ScoutMemberPointsSummaryDto(member)
                 {
                     SelectedHaulResultId = scavengeResult.Id
                 };
 
-                return viewModel;
+                return memberPointsSummaryDto;
             }).ToList();
 
-            return f;
+            return memberPointsSummaryDtos;
         }
 
-        // public List<GroupPoints> GetTopThreeGroupsInLastHour()
-        // {
-        //     var now = TimeProvider.GetLocalNow().DateTime;
-        //     var startDateTime = now.AddHours(-1);
-        //     return TopXScoutGroupsSinceY(3, startDateTime, now);
-        // }
-        //
-        // public List<GroupPoints> GetGroupsWithMostPoints()
-        // {
-        //     return TopXScoutGroupsSinceY(10, leaderboardSettings.ScavengerHuntStartTime, leaderboardSettings.ScavengerHuntDeadline);
-        // }
-        //
-        // private List<GroupPoints> TopXScoutGroupsSinceY(int count, DateTime startDateTime, DateTime endDateTime)
-        // {
-        //     var memberIds = ScavengeResults!
-        //         .Include(x => x.Member)
-        //         .Where(x => x.CompletedAt >= startDateTime)
-        //         .Select(x => x.MemberId)
-        //         .ToList();
-        //
-        //     var memberGroupedByScoutGroup = Members!
-        //         .Include(x => x.ScoutGroup)
-        //         .Include(x => x.ScavengeResults)
-        //         .ThenInclude(x => x.ScavengedCoins)
-        //         .Where(x => memberIds.Contains(x.Id))
-        //         .ToList()
-        //         .GroupBy(x => x.ScoutGroupId)
-        //         .ToList();
-        //
-        //     var topXGroupsInLastYHours = (
-        //         from grouping in memberGroupedByScoutGroup
-        //         let sum = grouping.SelectMany(x => x.ScavengeResults).SelectMany(x => x.ScavengedCoins).Sum(x => x.Coin.Value) // changed
-        //         select new GroupPoints
-        //         {
-        //             Id = grouping.First().ScoutGroup.Id,
-        //             Name = grouping.First().ScoutGroup.Name,
-        //             TotalPoints = sum
-        //         }).ToList();
-        //
-        //     var allScoutGroupsWithMembers = ScoutGroups!.Include(x => x.Members).ToList();
-        //     topXGroupsInLastYHours.ForEach(x =>
-        //         x.MemberCount = allScoutGroupsWithMembers.Single(y => y.Id == x.Id).Members.Count);
-        //
-        //     topXGroupsInLastYHours
-        //         = topXGroupsInLastYHours.OrderByDescending(x => x.AveragePoints).Take(count).ToList();
-        //
-        //     return topXGroupsInLastYHours;
-        // }
-
-        public ScoutGroup CreateScoutGroup(int id, string name)
+        public ScoutGroup CreateScoutGroup(string name)
         {
             using var transaction = Database.BeginTransaction();
-            Database.ExecuteSqlRaw("SET IDENTITY_INSERT ScoutGroups ON");
 
             var scoutGroup = new ScoutGroup
             {
-                Id = id,
                 Name = name
             };
-            ScoutGroups?.Add(scoutGroup);
+            ScoutGroups.Add(scoutGroup);
 
             SaveChanges();
 
-            Database.ExecuteSqlRaw("SET IDENTITY_INSERT ScoutGroups OFF");
             transaction.Commit();
 
             return scoutGroup;
@@ -258,7 +222,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
                 var coin = Coins!.Single(x => x.Code == coinCode);
 
-                ScanCoins!.Add(new ScanCoin
+                ScannedCoins!.Add(new ScannedCoin
                 {
                     ScanSessionId = scanSession.Id,
                     CoinId = coin.Id
@@ -294,16 +258,16 @@ namespace WoodseatsScouts.Coins.Api.Data
             return alreadyScavengedCoins;
         }
 
-        public ScoutMember CreateMember(string firstName, string lastName, int scoutGroupId, string sectionId, bool isDayVisitor)
+        public ScoutMember CreateMember(string firstName, string lastName, int scoutGroupId, string scoutSectionId, bool isDayVisitor)
         {
             var member = new ScoutMember
             {
                 FirstName = firstName,
                 LastName = lastName,
                 ScoutGroupId = scoutGroupId,
-                ScoutSectionId = sectionId,
+                ScoutSectionCode = scoutSectionId,
                 IsDayVisitor = isDayVisitor,
-                Number = GenerateNextMemberCode(scoutGroupId, sectionId)
+                Number = GenerateNextMemberCode(scoutGroupId, scoutSectionId)
             };
 
             ScoutMembers?.Add(member);
@@ -334,7 +298,8 @@ namespace WoodseatsScouts.Coins.Api.Data
                 {
                     ActivityBaseId = baseId,
                     ActivityBaseSequenceNumber = i,
-                    Value = points
+                    Value = points,
+                    ActivityBase = null
                 });
             }
 

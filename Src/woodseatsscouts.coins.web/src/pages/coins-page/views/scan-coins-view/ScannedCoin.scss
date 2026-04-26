@@ -47,7 +47,14 @@
 }
 
 .coin-value {
-  margin-top: 10px;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1.3em;
+  line-height: 0.3em;
+}
+
+.coin-value::before {
+  content: '+';
 }
 
 .coin-last-added {
@@ -63,19 +70,23 @@
   }
 }
 
-.coin span.remove-score {
+.coin .remove-points {
   cursor: pointer;
   -webkit-font-smoothing: antialiased;
+  font-size: 0.6em;
+  position: relative;
+  top: -20px;
+  right: -40px;
 }
 
-.coin .remove {
-  position: absolute;
-  top: -20px;
-  right: 30px;
-  color: white;
-  font-style: normal;
-  font-size: 10px !important;
-}
+//.coin .remove {
+//  position: absolute;
+//  top: -20px;
+//  right: 30px;
+//  color: white;
+//  font-style: normal;
+//  font-size: 10px !important;
+//}
 
 .total-points-so-far {
   & .col.text-end {

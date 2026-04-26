@@ -1,3 +1,4 @@
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Data;
 
 namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;

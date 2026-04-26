@@ -1,7 +1,9 @@
 // dotcover disable
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.Config;
 using WoodseatsScouts.Coins.Api.Data;
@@ -10,23 +12,19 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class SutController(
-    IAppDbContext appDbContext,
-    SystemDateTimeProvider systemDateTimeProvider,
-    IOptions<LeaderboardSettings> leaderboardSettingsOptions) : ControllerBase
+[Tags("System Testing")]
+[Route("api/system/tests")]
+public class SutController(IAppDbContext appDbContext, IScoutsAppEnvironment scoutsAppEnvironment) : ControllerBase
 {
-    private readonly LeaderboardSettings leaderboardSettings = leaderboardSettingsOptions.Value;
-
     [HttpGet]
-    [Route("Members")]
+    [Route("members")]
     public List<ScoutMember> GetMembers()
     {
         return appDbContext.ScoutMembers!.ToList();
     }
 
     [HttpPut]
-    [Route("Members/HasImage/True")]
+    [Route("members/has-image/true")]
     public IActionResult SetAllMemberHasImagePropertyToTrue()
     {
         var members = appDbContext.ScoutMembers!.ToList();
@@ -40,33 +38,8 @@ public class SutController(
         return Ok("Updated all members HasImage property to true");
     }
     
-    [HttpPut]
-    [Route("Leaderboard/Deadline/{minutesToAdd:int}")]
-    public IActionResult SetReportDeadline(int minutesToAdd)
-    {
-        leaderboardSettings.ScavengerHuntDeadline = DateTime.UtcNow.AddMinutes(minutesToAdd);
-
-        return Ok($"Report deadline datetime set to '{leaderboardSettings.ScavengerHuntDeadline}'");
-    }
-    
-    [HttpPut]
-    [Route("SystemDateTime/{minutesToAdd:int?}")]
-    public IActionResult SetSystemDateTime(int? minutesToAdd)
-    {
-        if (minutesToAdd.HasValue)
-        {
-            systemDateTimeProvider.SetDateTimeToSetTime(DateTime.UtcNow.AddMinutes(minutesToAdd.Value));
-        }
-        else
-        {
-            systemDateTimeProvider.SetDateTimeToSystemClock();
-        }
-
-        return Ok($"System datetime set to '{systemDateTimeProvider.Now}'");
-    }
-    
     [HttpGet]
-    [Route("Coins")]
+    [Route("coins")]
     public ActionResult GetAll()
     {
         return Ok(appDbContext.Coins!.Include(x => x.Member).Select(x => new
@@ -77,14 +50,14 @@ public class SutController(
             IsAlreadyScavenged = x.MemberId != null
         }));
     }
-    
+
     [HttpGet]
-    [Route("ResetData")]
+    [Route("data/reset")]
     public ActionResult ResetData()
     {
         appDbContext.ScanSessions.ExecuteDelete();
-        appDbContext.ScanCoins.ExecuteDelete();
-        
+        appDbContext.ScannedCoins.ExecuteDelete();
+
         foreach (var coin in appDbContext.Coins)
         {
             coin.MemberId = null;
@@ -92,7 +65,14 @@ public class SutController(
         }
 
         appDbContext.SaveChanges();
-        
+
         return Ok();
+    }
+
+    [HttpGet]
+    [Route("app-test-mode")]
+    public ActionResult IsAppTestMode()
+    {
+        return Ok(scoutsAppEnvironment.ScoutsAppMode == ScoutsAppMode.AcceptanceTest);
     }
 }

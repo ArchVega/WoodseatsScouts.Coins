@@ -1,6 +1,8 @@
 export type AppSettings = {
   VITE_WEB_API_URI: string
-  VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT: number
+  VITE_SCAN_COINS_REDIRECT_DELAY_SECONDS: number
+  VITE_RECENT_SCANS_REFRESH_INTERVAL_SECONDS: number
+  VITE_ADMIN_PASSCODE: string
 }
 
 export default function getAppSettings(): AppSettings {
@@ -12,10 +14,16 @@ export default function getAppSettings(): AppSettings {
     return import.meta.env[key];
   }
 
-  return {
-    // VITE_WEB_API_URI: tryGet("VITE_WEB_API_URI"),
-    // VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT: tryGet("VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT")
-    VITE_WEB_API_URI: "https://release-scouts-webapi.azurewebsites.net/api",
-    VITE_SCAVENGER_HAUL_COMPLETED_REFRESH_TIMEOUT: 5000
+  const appSettings = {
+    VITE_WEB_API_URI: tryGet("VITE_WEB_API_URI"),
+    VITE_SCAN_COINS_REDIRECT_DELAY_SECONDS: tryGet("VITE_SCAN_COINS_REDIRECT_DELAY_SECONDS"),
+    VITE_RECENT_SCANS_REFRESH_INTERVAL_SECONDS: tryGet("VITE_RECENT_SCANS_REFRESH_INTERVAL_SECONDS"),
+    VITE_ADMIN_PASSCODE: tryGet("VITE_ADMIN_PASSCODE")
   }
+
+  if (import.meta.env.DEV) {
+    console.log("AppSettings loaded", appSettings);
+  }
+
+  return appSettings;
 }

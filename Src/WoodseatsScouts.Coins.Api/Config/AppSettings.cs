@@ -1,22 +1,23 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace WoodseatsScouts.Coins.Api.Config;
 
 // dotcover disable
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class AppSettings
 {
-    public static string ApiAuthenticationTokenKey = "X-Coins-Authentication-Token";
+    public const string ApiAuthenticationTokenKey = "X-Coins-Authentication-Token";
+
+    public required string AppVersion { get; set; }
     
-    public string AppVersion { get; set; }
-    public string ContentRootDirectory { get; set; }
+    public required string ContentRootDirectory { get; init; }
 
     public int MinutesToLockScavengedCoins { get; set; }
     
-    // todo: ?
-    public string AuthenticationToken { get; set; }
-    
     public int LoginPauseDurationSeconds { get; set; }
 
-    public string ParticipantPlaceholderImagePath { get; set; }
+    public required string ParticipantPlaceholderImagePath { get; set; }
     
+    public int NumberOfLatestScansToDisplay { get; set; }
 }

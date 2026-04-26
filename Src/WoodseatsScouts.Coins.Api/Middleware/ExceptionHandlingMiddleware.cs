@@ -2,22 +2,15 @@ using System.Net;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.AppLogic.Translators;
+using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Middleware;
 
 // dotcover disable
-public class ExceptionHandlingMiddleware
+public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
 {
-    private readonly RequestDelegate next;
-    private readonly ILogger<ExceptionHandlingMiddleware> logger;
-
-    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
-    {
-        this.next = next;
-        this.logger = logger;
-    }
-    
-    public async Task InvokeAsync(HttpContext httpContext)
+    public async Task InvokeAsync(HttpContext httpContext, AppDbContext appDbContext)
     {
         try
         {
@@ -25,11 +18,11 @@ public class ExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(httpContext, ex);
+            await HandleExceptionAsync(httpContext, ex, appDbContext);
         }
     }
 
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception, AppDbContext appDbContext)
     {
         context.Response.ContentType = "application/json";
         var response = context.Response;
@@ -41,14 +34,13 @@ public class ExceptionHandlingMiddleware
             case InvalidOperationException invalidOperationException:
                 if (invalidOperationException.Message.Contains("Sequence contains no elements"))
                 {
+                    // todo: throw specific exception type
                     response.StatusCode = (int)HttpStatusCode.NotFound;
-                    // errorResponse = "Could not find the requested resource";
                     errorResponse = "Oops, we can't find your profile - please speak to a District Camp Leader";
                 }
                 else
                 {
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    // errorResponse = $"Error of type {invalidOperationException.GetType().Name} not handled";
                     errorResponse = "Oops, an unusual error occurred - please speak to a District Camp Leader";
                 }
                 break;
@@ -67,7 +59,25 @@ public class ExceptionHandlingMiddleware
         }
         
         logger.LogError(exception.Message);
-        var result = JsonSerializer.Serialize(errorResponse);
-        await context.Response.WriteAsync(result);
+        try
+        {
+            appDbContext.ErrorLogs.Add(new ErrorLog
+            {
+                Message = exception.Message,
+                StackTrace = exception.StackTrace,
+                Path = context.Request.Path,
+                Method = context.Request.Method,
+                LoggedAt = DateTime.UtcNow
+            });
+            await appDbContext.SaveChangesAsync();
+        }
+        catch (Exception dbEx)
+        {
+            logger.LogError(dbEx.Message);
+        }
+        
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
     }
 }

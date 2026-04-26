@@ -5,98 +5,66 @@ import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import Uris from "../../services/apis/Uris.ts";
-import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import type {ActivityBaseHaulResultDto, HaulResultDto, ScannedCoinDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
 import EditMemberDetailsModal from "../../components/modals/EditMemberDetailsModal.tsx";
+import EditScannedCoinPointsModal from "../../components/modals/EditScannedCoinPointsModal.tsx";
+import ScannedCoinApiService from "../../services/apis/ScannedCoinApiService.ts";
+import ScanSessionApiService from "../../services/apis/ScanSessionApiService.ts";
+import {usePasscode} from "../../components/security/usePasscode.ts";
 
 export default function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
-  const {memberCode} = useParams();
+  const {memberId} = useParams();
   const [loading, setLoading] = useState(false)
   const [showEditMemberPhotoModal, setShowEditMemberPhotoModal] = useState<boolean>(false);
   const [showEditMemberDetailsModal, setShowEditMemberDetailsModal] = useState<boolean>(false);
-
-  const [memberCompleteDto, setMemberCompleteDto] = useState<MemberCompleteDto | null>(null);
+  const [showEditScannedCoinPointsModal, setShowEditScannedCoinPointsModal] = useState<boolean>(false);
+  const [memberCompleteDto, setMemberCompleteDto] = useState<ScoutMemberCompleteDto | null>(null);
   const [activeHaulResultDto, setActiveHaulResultDto] = useState<HaulResultDto | null>(null);
   const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
+  const [selectedScannedCoinDto, setSelectedScannedCoinDto] = useState<ScannedCoinDto | undefined>(undefined);
+  const {checkPasscode} = usePasscode();
 
   useEffect(() => {
-    if (memberCode) {
+    if (memberId) {
       setLoading(true)
+      const memberIdNumber = Number(memberId);
       MemberApiService()
-        .fetchMemberComplete(memberCode)
+        .getMemberComplete(memberIdNumber)
         .then(response => {
-          response.data.clientComputedImageUri = Uris.memberPhoto(response.data.computedImagePath) // todo: is there an axios way to do this automatically?
           return response.data
         })
-        .then((memberCompleteDto: MemberCompleteDto) => {
+        .then((memberCompleteDto: ScoutMemberCompleteDto) => {
           logObject("memberCompleteDto", memberCompleteDto)
           setMemberCompleteDto(memberCompleteDto)
-          if (memberCompleteDto.haulResults.length >= 0) {
-            setSelectedScanSessionId(memberCompleteDto.haulResults[0].scavengerResultId)
+          if (memberCompleteDto.haulResults.length > 0) {
+            setSelectedScanSessionId(memberCompleteDto.haulResults[0].scanSessionId)
           }
         })
         .finally(() => setLoading(false));
     }
-  }, [memberCode])
+  }, [memberId])
 
   useEffect(() => {
     if (selectedScanSessionId !== null) {
-      const selectedHaulResultDto = memberCompleteDto.haulResults.find(x => x.scavengerResultId == selectedScanSessionId);
+      const selectedHaulResultDto = memberCompleteDto.haulResults.find(x => x.scanSessionId == selectedScanSessionId);
       setActiveHaulResultDto(selectedHaulResultDto);
     }
   }, [selectedScanSessionId, memberCompleteDto]);
 
-  function RenderMemberDetails() {
-    const sectionBranding = getSectionBranding(memberCompleteDto.sectionId)
+  function tryEditScoutMemberPhoto() {
+    if (checkPasscode()) {
+      useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')
+    }
+  }
 
-    return (
-      <>
-        <div className="card member-details-member-card flex-shrink-0 sticky-top mb-3">
-          <div className="card-body">
-            <Image
-                   className="mb-2"
-                   onClick={() => useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')}
-                   title={"User id: " + memberCompleteDto.id}
-                   src={memberCompleteDto.clientComputedImageUri}/>
-            <div className="row mb-2">
-              <div role="button" className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}
-                   onClick={() => setShowEditMemberDetailsModal(true)}>
-                <strong className="tile d-flex flex-column justify-content-center h-100">{memberCompleteDto.firstName + " " + memberCompleteDto.lastName}</strong>
-              </div>
-            </div>
-            <div className="row  mb-2 g-1">
-              <div className="col-6 members-list-item-section">
-                <div className="tile" style={{fontSize: "12px"}}>{memberCompleteDto.memberCode}</div>
-              </div>
-              <div className="col-6 members-list-item-section">
-                <div className="tile" style={{fontSize: "12px"}}>{memberCompleteDto.totalPoints}</div>
-              </div>
-            </div>
-            <div className="row mb-2">
-              <div className="members-list-item-section">
-                <div role="button" className="tile" style={{backgroundColor: sectionBranding.backgroundColour, color: sectionBranding.foregroundColour}}
-                onClick={() => setShowEditMemberDetailsModal(true)}>
-                  {memberCompleteDto.sectionName}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row mb-3 g-1">
-          <div className={"member-action-button-container"}>
-            <button id="add-points-button">Add fixed amount points</button>
-          </div>
-          <div className={"member-action-button-container"}>
-            <button id="remove-points-button">Remove fixed amount points</button>
-          </div>
-        </div>
-      </>
-    )
+  function tryEditScoutMemberDetails() {
+    if (checkPasscode()) {
+      setShowEditMemberDetailsModal(true)
+    }
   }
 
   function formatDateTime(isoDateString: string) {
@@ -106,6 +74,78 @@ export default function MemberDetailsPage() {
       minute: "2-digit",
       hour12: false,
     }).format(new Date(isoDateString));
+  }
+
+  function deleteScanSession(haulResultDto: HaulResultDto) {
+    if (checkPasscode()) {
+      // todo: quick hack using timeout to allow selected row to visually update before confirm box loads.
+      setTimeout(() => {
+        const c = confirm(`Are you sure you want to delete this session for ${memberCompleteDto.firstName}'s session? This is irreversible!`)
+        if (c) {
+          ScanSessionApiService().deleteScanSession(haulResultDto.scanSessionId).then(value => {
+            // Todo: implement dynamic solution later
+            alert('Reload page to see updated points value')
+          })
+        }
+      }, 100)
+    }
+  }
+
+  function updateScannedCoinPoints(scannedCoinDto: ScannedCoinDto) {
+    if (checkPasscode()) {
+      setSelectedScannedCoinDto(scannedCoinDto);
+      setShowEditScannedCoinPointsModal(true)
+    }
+  }
+
+  function deleteScannedCoin(scannedCoinDto: ScannedCoinDto) {
+    if (checkPasscode()) {
+      const c = confirm(`Are you sure you want to delete this coin that has ${scannedCoinDto.calculatedEffectivePoints} points from ${memberCompleteDto.firstName}'s session? This is irreversible!`)
+      if (c) {
+        ScannedCoinApiService().deleteScannedCoin(scannedCoinDto.scannedCoinId).then(value =>
+          // Todo: implement dynamic solution later
+          alert('Reload page to see updated points value'))
+      }
+    }
+  }
+
+  function RenderMemberDetails() {
+    const sectionBranding = getSectionBranding(memberCompleteDto.scoutSectionCode)
+
+    return (
+      <>
+        <div className="card member-details-member-card flex-shrink-0 sticky-top mb-3">
+          <div className="card-body">
+            <Image className="mb-2"
+                   onClick={() => tryEditScoutMemberPhoto()}
+                   title={"User id: " + memberCompleteDto.id}
+                   src={memberCompleteDto.clientComputedImageUri}/>
+            <div className="row mb-2">
+              <div role="button" className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}
+                   onClick={() => tryEditScoutMemberDetails()}>
+                <strong className="tile d-flex flex-column justify-content-center h-100">{memberCompleteDto.firstName + " " + memberCompleteDto.lastName}</strong>
+              </div>
+            </div>
+            <div className="row  mb-2 g-1">
+              <div className="col-6 members-list-item-section">
+                <div className="tile" style={{fontSize: "12px"}}>{memberCompleteDto.scoutMemberCode}</div>
+              </div>
+              <div className="col-6 members-list-item-section">
+                <div className="tile" style={{fontSize: "12px"}}>{memberCompleteDto.totalPoints}</div>
+              </div>
+            </div>
+            <div className="row mb-2">
+              <div className="members-list-item-section" title={`Section: ${memberCompleteDto.scoutSectionName}`}>
+                <div role="button" className="tile" style={{backgroundColor: sectionBranding.backgroundColour, color: sectionBranding.foregroundColour}}
+                     onClick={() => tryEditScoutMemberDetails()}>
+                  {memberCompleteDto.scoutGroupName}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    )
   }
 
   function RenderMemberScanSessions() {
@@ -126,14 +166,14 @@ export default function MemberDetailsPage() {
           </thead>
           <tbody>
           {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, index) => (
-            <tr key={index} role="button" onClick={() => setSelectedScanSessionId(haulResultDto.scavengerResultId)}
+            <tr key={index} role="button" onClick={() => setSelectedScanSessionId(haulResultDto.scanSessionId)}
                 style={{
-                  backgroundColor: selectedScanSessionId === haulResultDto.scavengerResultId ? "#d3e5ff" : "transparent"
+                  backgroundColor: selectedScanSessionId === haulResultDto.scanSessionId ? "#d3e5ff" : "transparent"
                 }}>
               <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
               <td>{haulResultDto.totalPoints}</td>
               <td>
-                <span>🗑️</span>
+                <span role="button" onClick={e => deleteScanSession(haulResultDto)}>🗑️</span>
               </td>
             </tr>
           ))}
@@ -173,22 +213,28 @@ export default function MemberDetailsPage() {
           </thead>
           <tbody>
           {activeHaulResultDto && activeHaulResultDto.activityBaseHaulResultDtos.map((activityBaseHaulResultDto: ActivityBaseHaulResultDto, haulIndex) =>
-              activityBaseHaulResultDto.coins && activityBaseHaulResultDto.coins.map((coin, coinIndex) => (
-                <tr key={`${haulIndex}-${coinIndex}`}>
-                  {coinIndex === 0 && (
-                      <td rowSpan={activityBaseHaulResultDto.coins.length}>
-                        <div className="pe-2" style={{ display: "flex", justifyContent: "space-between" }}>
-                          <span>{activityBaseHaulResultDto.activityBaseName}</span>
-                          <span>(x {activityBaseHaulResultDto.coins.length})</span>
-                        </div>
-                      </td>
+              activityBaseHaulResultDto.scannedCoinDtos && activityBaseHaulResultDto.scannedCoinDtos.map((scannedCoinDto, scannedCoinDtoIndex) => (
+                <tr key={`${haulIndex}-${scannedCoinDtoIndex}`}>
+                  {scannedCoinDtoIndex === 0 && (
+                    <td rowSpan={activityBaseHaulResultDto.scannedCoinDtos.length}>
+                      <div className="pe-2" style={{display: "flex", justifyContent: "space-between"}}>
+                        <span>{activityBaseHaulResultDto.activityBaseName}</span>
+                        <span>(x {activityBaseHaulResultDto.scannedCoinDtos.length})</span>
+                      </div>
+                    </td>
                   )}
-                  <td>{coin.pointValue}</td>
+                  {scannedCoinDto.hasPointsOverride && (
+                    <td><strong title={`This coin's points has been adjusted. The original Points value is ${scannedCoinDto.points}.`}
+                                className="text-danger">{scannedCoinDto.calculatedEffectivePoints}*</strong></td>
+                  )}
+                  {!scannedCoinDto.hasPointsOverride && (
+                    <td>{scannedCoinDto.calculatedEffectivePoints}</td>
+                  )}
                   <td>
-                    <span>✏️</span>
+                    <span role="button" onClick={e => updateScannedCoinPoints(scannedCoinDto)}>✏️</span>
                   </td>
                   <td>
-                    <span>🗑️</span>
+                    <span role="button" onClick={e => deleteScannedCoin(scannedCoinDto)}>🗑️</span>
                   </td>
                 </tr>
               ))
@@ -198,9 +244,6 @@ export default function MemberDetailsPage() {
       </div>
     )
   }
-
-  {/*<td>{activityBaseHaulResultDto.totalPoints}</td>*/}
-  {/*<td>{activityBaseHaulResultDto.coinsScanned}</td>*/}
 
   function RenderMemberActivitySummary() {
     function RenderActivityCard(title: string, node: ReactNode) {
@@ -220,31 +263,31 @@ export default function MemberDetailsPage() {
       <div id="recent-member-activity-summary-cards" className="row g-1 sticky-top">
         {RenderActivityCard("Most Visited Base", (
           <>
-            {memberCompleteDto.memberCompleteSummaryStatsDto
-              && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase
-              && memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.names.map((x, i) => (
+            {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.names.map((x, i) => (
                 <div key={i}>
                   <strong className="fs-3">{x}</strong>
                 </div>
               ))}
-            <div><em>{memberCompleteDto.memberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</em></div>
+            <div><em>{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</em></div>
           </>
         ))}
         {RenderActivityCard("Least Visited Base", <>
-          {memberCompleteDto.memberCompleteSummaryStatsDto
-            && memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase
-            && memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase.names.map((x, i) => (
+          {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.names.map((x, i) => (
               <div key={i}>
                 <strong className="fs-3">{x}</strong>
               </div>
             ))}
-          <div><em>{memberCompleteDto.memberCompleteSummaryStatsDto.leastVisitedActivityBase.timesVisited} visits</em></div>
+          <div><em>{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.timesVisited} visits</em></div>
         </>)}
         {RenderActivityCard("Most Scans", <>
-          <div><strong className="fs-3">{memberCompleteDto.memberCompleteSummaryStatsDto.mostScans} Tokens</strong></div>
+          <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostScans} Tokens</strong></div>
         </>)}
         {RenderActivityCard("Total tokens scanned", <>
-          <div><strong className="fs-3">{memberCompleteDto.memberCompleteSummaryStatsDto.totalTokensScanned}</strong></div>
+          <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.totalTokensScanned}</strong></div>
         </>)}
       </div>
     )
@@ -265,12 +308,7 @@ export default function MemberDetailsPage() {
             {RenderMemberScanSessions()}
           </div>
           <div className={"col-4"}>
-            {/*{!selectedSession && (*/}
-            {/*  <>Select a session</>*/}
-            {/*)}*/}
-            {
-              RenderSelectedScanSessions()
-            }
+            {RenderSelectedScanSessions()}
           </div>
           <div className={"col-2"}>
             {RenderMemberActivitySummary()}
@@ -286,6 +324,12 @@ export default function MemberDetailsPage() {
           setShowModal={setShowEditMemberDetailsModal}
           memberCompleteDto={memberCompleteDto}
           setMemberCompleteDto={setMemberCompleteDto}/>
+        <EditScannedCoinPointsModal
+          showModal={showEditScannedCoinPointsModal}
+          setShowModal={setShowEditScannedCoinPointsModal}
+          scannedCoinDto={selectedScannedCoinDto}
+          setScannedCoinDto={setSelectedScannedCoinDto}
+        />
       </div>
     )
   }

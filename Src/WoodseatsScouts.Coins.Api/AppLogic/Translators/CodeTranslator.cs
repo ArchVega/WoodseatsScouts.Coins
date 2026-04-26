@@ -38,9 +38,9 @@
                 return new MemberCodeTranslationResult
                 {
                     TokenIdentifier = code[..1],
-                    Section = code.Substring(4, 1),
-                    ScoutGroupNumber = Convert.ToInt32(code.Substring(1, 3)),
-                    MemberNumber = Convert.ToInt32(code[5..])
+                    ScoutSectionCode = code.Substring(4, 1),
+                    ScoutGroupId = Convert.ToInt32(code.Substring(1, 3)),
+                    ScoutMemberNumber = Convert.ToInt32(code[5..])
                 };
 
             }

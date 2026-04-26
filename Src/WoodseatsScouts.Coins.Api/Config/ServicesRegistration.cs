@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.AppLogic;
 using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Services;
 
 namespace WoodseatsScouts.Coins.Api.Config;
 
@@ -19,9 +20,7 @@ public static class ServicesRegistration
     private static void RegisterOptions(IServiceCollection serviceCollection, IConfiguration configuration)
     {
         serviceCollection.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
-        serviceCollection.Configure<LeaderboardSettings>(configuration.GetSection(nameof(LeaderboardSettings)));
         serviceCollection.AddSingleton<AppSettings>();
-        serviceCollection.AddSingleton<LeaderboardSettings>();
     }
 
     private static void RegisterTransients(IServiceCollection serviceCollection)
@@ -32,6 +31,9 @@ public static class ServicesRegistration
 
     private static void RegisterScoped(IServiceCollection serviceCollection, IConfiguration configuration, IHostEnvironment environment)
     {
+        serviceCollection.AddScoped<IScoutMemberService, ScoutMemberService>();
+        serviceCollection.AddScoped<ICoinService, CoinService>();
+        
         serviceCollection.AddDbContext<AppDbContext>((_, options) =>
         {
             var connectionString = configuration.GetConnectionString(AppConsts.DatabaseName);
@@ -48,6 +50,5 @@ public static class ServicesRegistration
     private static void RegisterSingletons(IServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<IScoutsAppEnvironment, ScoutsAppEnvironmentMode>();
-        serviceCollection.AddSingleton<SystemDateTimeProvider>();
     }
 }

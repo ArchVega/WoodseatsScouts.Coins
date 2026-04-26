@@ -36,6 +36,18 @@
 
     <ItemGroup>
       <Folder Include="Migrations\" />
+      <Folder Include="Models\Dtos\Scouts\" />
+      <Folder Include="Models\Requests\Scouts\" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);NU1608</NoWarn>
+        <NoWarn>$(NoWarn);NU1901</NoWarn>
+        <NoWarn>$(NoWarn);NU1902</NoWarn>
+        <NoWarn>$(NoWarn);1591</NoWarn> <!--Missing XML comment for publicly visible type or member-->
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
 </Project>

@@ -18,14 +18,9 @@ public class DatabaseFixture
 
     private readonly IOptions<AppSettings> appSettingsOptions;
     
-    private readonly IOptions<LeaderboardSettings> leaderboardSettingsOptions;
-    public LeaderboardSettings LeaderboardSettings { get; }
-
     public AppSettings AppSettings { get; set; }
 
-    public SystemDateTimeProvider SystemDateTimeProvider { get; set; }
-    
-    public AppDbContext AppDbContext => new(contextOptions, appSettingsOptions, SystemDateTimeProvider, leaderboardSettingsOptions);
+    public AppDbContext AppDbContext => new(contextOptions, appSettingsOptions);
 
     private const string SourceDatabaseConnectionString 
         = "Server=localhost,1433;Database=WoodseatsScouts.Coins.Development;User Id=SA;Password=Pa55w0rd123;TrustServerCertificate=True;Encrypt=False";
@@ -40,11 +35,16 @@ public class DatabaseFixture
         // contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(SourceDatabaseConnectionString).Options;
         contextOptions = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(TestDatabaseConnectionString).Options;
 
-        AppSettings = new AppSettings();
+        AppSettings = new AppSettings
+        {
+            AppVersion = "test",
+            ContentRootDirectory = "test",
+            MinutesToLockScavengedCoins = 10,
+            LoginPauseDurationSeconds = 10,
+            ParticipantPlaceholderImagePath = "test",
+            NumberOfLatestScansToDisplay = 10
+        };
         appSettingsOptions = Options.Create(AppSettings);
-        
-        LeaderboardSettings = new LeaderboardSettings();
-        leaderboardSettingsOptions = Options.Create(LeaderboardSettings);
     }
 
     private static void RecreateDbViaPowerShell()
@@ -98,39 +98,39 @@ public class DatabaseFixture
         runspace.Close();
     }
 
-    private void ConsumeStreamOutput(object? sender, DataAddedEventArgs e)
+    private static void ConsumeStreamOutput(object? sender, DataAddedEventArgs e)
     {
-        if (sender is PSDataCollection<InformationRecord> i)
+        switch (sender)
         {
-            var collection = (PSDataCollection<InformationRecord>)sender;
-            var record = collection[e.Index];
+            case PSDataCollection<InformationRecord> i:
+            {
+                var record = i[e.Index];
 
-            var message = record.MessageData?.ToString();
-            Console.WriteLine("Information: " + message);
-        }
-        
-        if (sender is PSDataCollection<VerboseRecord> v)
-        {
-            var collection = (PSDataCollection<VerboseRecord>)sender;
-            var record = collection[e.Index];
+                var message = record.MessageData?.ToString();
+                Console.WriteLine("Information: " + message);
+                break;
+            }
+            case PSDataCollection<VerboseRecord> v:
+            {
+                var record = v[e.Index];
 
-            var message = record.Message?.ToString();
-            Console.WriteLine(message);
-            Console.WriteLine("Verbose: " + message);
+                var message = record.Message?.ToString();
+                Console.WriteLine(message);
+                Console.WriteLine("Verbose: " + message);
+                break;
+            }
         }
     }
     
-    private void ConsumeErrorStreamOutput(object? sender, DataAddedEventArgs e)
+    private static void ConsumeErrorStreamOutput(object? sender, DataAddedEventArgs e)
     {
-        if (sender is PSDataCollection<ErrorRecord> o)
-        {
-            var errs = o
-                .Select(x => x.Exception.Message)
-                .Aggregate((x, y) => $"{x}{Environment.NewLine}{y}");
-            
-            throw new Exception(errs);    
-        }
+        if (sender is not PSDataCollection<ErrorRecord> o) throw new Exception(sender?.ToString());
         
-        throw new Exception(sender.ToString());
+        var errs = o
+            .Select(x => x.Exception.Message)
+            .Aggregate((x, y) => $"{x}{Environment.NewLine}{y}");
+            
+        throw new Exception(errs);
+
     }
 }

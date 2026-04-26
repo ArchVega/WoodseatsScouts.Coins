@@ -1,17 +1,19 @@
 ﻿import "./EditMemberPhotoModal.scss"
-import Webcam from "react-webcam";
-import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {BaseModal} from "./BaseModal.tsx";
 import Uris from "../../services/apis/Uris.ts";
 import {Button} from "../widgets/HtmlControlWrappers.tsx";
-import type {ActivityGroupDto, Member, MemberCompleteDto, MemberDto, ScoutGroupDto} from "../../types/ServerTypes.ts";
+import type {ActivityGroupDto, ScoutMemberCompleteDto, ScoutGroupDto, ScoutSectionDto} from "../../types/ServerTypes.ts";
 import AppStateApiService from "../../services/apis/AppStateApiService.tsx";
+import MemberApiService from "../../services/apis/MemberApiService.ts";
+import type {UpdateScoutMemberRequestPayload} from "../../types/ClientTypes.ts";
+import {useNavigate} from "react-router-dom";
 
 interface EditMemberDetailsModalProps {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
-  memberCompleteDto: MemberCompleteDto;
-  setMemberCompleteDto: React.Dispatch<React.SetStateAction<MemberCompleteDto>>
+  memberCompleteDto: ScoutMemberCompleteDto;
+  setMemberCompleteDto: React.Dispatch<React.SetStateAction<ScoutMemberCompleteDto>>
 }
 
 export default function EditMemberDetailsModal({showModal, setShowModal, memberCompleteDto, setMemberCompleteDto}: EditMemberDetailsModalProps) {
@@ -20,22 +22,23 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
   const [validationMessage, setValidationMessage] = useState("");
 
   const [scoutGroups, setScoutGroups] = useState<ScoutGroupDto[]>([]);
-  const [sections, setSections] = useState<ActivityGroupDto[]>([]);
+  const [scoutSections, setScoutSections] = useState<ScoutSectionDto[]>([]);
 
   const [selectedScoutGroupId, setSelectedScoutGroupId] = useState<number | undefined>(undefined);
-  const [selectedSectionId, setSelectedSectionId] = useState<string | undefined>(undefined);
+  const [selectedScoutSectionCode, setSelectedScoutSectionCode] = useState<string | undefined>(undefined);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (memberCompleteDto) {
       setFirstName(memberCompleteDto.firstName);
       setLastName(memberCompleteDto.lastName);
       setSelectedScoutGroupId(memberCompleteDto.scoutGroupId)
-      setSelectedSectionId(memberCompleteDto.sectionId)
-      // todo: stopped here
+      setSelectedScoutSectionCode(memberCompleteDto.scoutSectionCode)
     }
 
     AppStateApiService().getScoutGroups().then((response) => response.data).then((data) => setScoutGroups(data))
-    AppStateApiService().getSections().then((response) => response.data).then((data) => setSections(data))
+    AppStateApiService().getSections().then((response) => response.data).then((data) => setScoutSections(data))
 
   }, [memberCompleteDto]);
 
@@ -54,29 +57,22 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
     }
   }, [firstName, lastName]);
 
-  function updateMemberName(e) {
+  function updateScoutMemberName(e) {
     e.preventDefault();
 
-    const payload = {
+    const payload: UpdateScoutMemberRequestPayload = {
       firstName: firstName,
       lastName: lastName,
+      scoutGroupId: selectedScoutGroupId,
+      scoutSectionCode: selectedScoutSectionCode,
     }
 
-    const requestOptions = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload)
-    };
-
-    fetch(Uris.memberName(memberCompleteDto.id), requestOptions).then((r) => {
-      const updatedSelectedMember = ({...memberCompleteDto})
-      updatedSelectedMember.firstName = firstName
-      updatedSelectedMember.lastName = lastName
-      updatedSelectedMember.fullName = `${firstName} ${lastName}`
-
-      setMemberCompleteDto(updatedSelectedMember)
-      setShowModal(false);
-    });
+    MemberApiService()
+      .updateScoutMember(memberCompleteDto.id, payload)
+      .then((updatedScoutMemberCompleteDto) => {
+        setMemberCompleteDto(updatedScoutMemberCompleteDto)
+        setShowModal(false);
+      });
   }
 
   return (
@@ -111,7 +107,9 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
         </div>
         <div className={"row mb-3"}>
           <div className={"col"}>
-            <select className={"form-select"} value={selectedScoutGroupId}>
+            <select className={"form-select"}
+                    value={selectedScoutGroupId}
+                    onChange={(e) => setSelectedScoutGroupId(Number(e.target.value))}>
               {scoutGroups && scoutGroups.map((scoutGroup) => (
                 <option key={scoutGroup.id} value={scoutGroup.id}>{scoutGroup.name}</option>
               ))}
@@ -120,16 +118,18 @@ export default function EditMemberDetailsModal({showModal, setShowModal, memberC
         </div>
         <div className={"row mb-3"}>
           <div className={"col"}>
-            <select className={"form-select"} value={selectedSectionId}>
-              {sections && sections.map((activityBase) => (
-                <option key={activityBase.id} value={activityBase.id}>{activityBase.name}</option>
+            <select className={"form-select"}
+                    value={selectedScoutSectionCode}
+                    onChange={(e) => setSelectedScoutSectionCode(e.target.value)}>
+              {scoutSections && scoutSections.map((scoutSection) => (
+                <option key={scoutSection.code} value={scoutSection.code}>{scoutSection.name}</option>
               ))}
             </select>
           </div>
         </div>
         <div className={"row"}>
           <div className={"col-12"}>
-            <Button type={"submit"} onClick={(e) => updateMemberName(e)} className={"btn-success float-end w-25"} disabled={validationMessage.length > 0}>Ok</Button>
+            <Button type={"submit"} onClick={(e) => updateScoutMemberName(e)} className={"btn-success float-end w-25"} disabled={validationMessage.length > 0}>Ok</Button>
           </div>
         </div>
       </form>

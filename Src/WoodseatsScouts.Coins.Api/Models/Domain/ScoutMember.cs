@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WoodseatsScouts.Coins.Api.Models.Domain
 {
@@ -7,6 +9,7 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
     /// Member photos are stored on disk in the ClientApp/public/member-images directory and the files must be a jpg file whose name
     /// matches the Number field
     /// </summary>
+    [SuppressMessage("ReSharper", "PropertyCanBeMadeInitOnly.Global")]
     public class ScoutMember
     {
         public int Id { get; set; }
@@ -16,33 +19,39 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
         /// members are added to the application after it is live.  
         /// </summary>
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public string Code { get; set; }
+        public string Code { get; set; } = null!;
         
         public int Number { get; set; }
         
-        public string FirstName { get; set; }
+        [MaxLength(100)]
+        public string FirstName { get; set; } = null!;
 
+        [MaxLength(100)]
         public string? LastName { get; set; }
         
-        public int ScoutGroupId { get; init; }
+        public int ScoutGroupId { get; set; }
         
-        public ScoutGroup ScoutGroup { get; init; }
+        public ScoutGroup ScoutGroup { get; init; } = null!;
         
-        public string ScoutSectionId { get; init; }
+        [MaxLength(1)]
+        public string ScoutSectionCode { get; set; } = null!;
         
-        public ScoutSection ScoutSection { get; set; }
+        public ScoutSection ScoutSection { get; set; } = null!;
         
+        [MaxLength(100)]
         public string? Clue1State { get; init; }
 
+        [MaxLength(100)]
         public string? Clue2State { get; init; }
 
+        [MaxLength(100)]
         public string? Clue3State { get; init; }
         
         public bool IsDayVisitor { get; set; }
         
         public bool HasImage { get; set; }
         
-        public List<ScanSession> ScavengeResults { get; set; }
+        public List<ScanSession> ScanSessions { get; set; } = [];
 
         public string FullName => $"{FirstName} {LastName}";
 

@@ -1,7 +1,7 @@
 import {createContext} from "react";
 import * as React from "react";
 import type {AppSettings} from "../AppSettings.ts";
-import type {MemberDto} from "../types/ServerTypes.ts";
+import type {ScoutMemberDto} from "../types/ServerTypes.ts";
 
 const cameraAvailable = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 
@@ -19,16 +19,18 @@ type AppTestModeContextType = {
     setAppTestMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export type AppModeContextTypeEnum = 'Development' | 'AcceptanceTest' | 'Production';
+
 type AppModeContextType = {
-    appMode: string;
-    setAppMode: React.Dispatch<React.SetStateAction<string>>;
+    appMode: AppModeContextTypeEnum
+    isAppTestMode: boolean;
 }
 
 type PageActionMenuAreaContextType = {
     pageActionMenuAreaAction: string
     setPageActionMenuAreaAction: React.Dispatch<React.SetStateAction<string>>;
-    activeScanningMember: MemberDto;
-    setActiveScanningMember: React.Dispatch<React.SetStateAction<any>>; // todo: rename to member
+    activeScanningMember: ScoutMemberDto;
+    setActiveScanningMember: React.Dispatch<React.SetStateAction<any>>;
 }
 
 type AppSettingsContextType = {

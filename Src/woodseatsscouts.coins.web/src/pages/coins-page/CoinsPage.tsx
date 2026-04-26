@@ -5,31 +5,31 @@ import ScanMemberForCoinsSection from "./views/scan-members-view/ScanMemberForCo
 import ScanCoinsSection from "./views/scan-coins-view/ScanCoinsSection.tsx";
 import HaulResultsSection from "./views/haul-summary-view/HaulSummarySection.tsx";
 import AudioFx from "../../components/fx/AudioFx.ts";
-import type {MemberDto} from "../../types/ServerTypes.ts";
+import type {ScoutMemberDto} from "../../types/ServerTypes.ts";
 
 export default function CoinsPage() {
   const {setPageActionMenuAreaAction} = useContext(PageActionMenuAreaContext)
-  const [sectionName, setSectionName] = useState(CoinsPageViewName.ScanMember)
+  const [scoutSectionName, setScoutSectionName] = useState(CoinsPageViewName.ScanMember)
   const [section, setSection] = useState(null);
-  const [member, setMember] = useState<MemberDto | null>(null)
+  const [member, setMember] = useState<ScoutMemberDto | null>(null)
   const [haulResult, setHaulResult] = useState(null)
 
   useEffect(() => {
     if (member !== null) {
-      setSectionName(CoinsPageViewName.ScanCoins)
+      setScoutSectionName(CoinsPageViewName.ScanCoins)
     }
   }, [member]);
 
   useEffect(() => {
     if (haulResult != null) {
-      setSectionName(CoinsPageViewName.HaulSummary)
+      setScoutSectionName(CoinsPageViewName.HaulSummary)
       AudioFx().playHaulCompleteAudio();
     }
   }, [haulResult]);
 
   useEffect(() => {
     function getSection() {
-      switch (sectionName) {
+      switch (scoutSectionName) {
         case CoinsPageViewName.ScanMember: {
           setPageActionMenuAreaAction(CoinsPageViewName.ScanMember)
           return (<ScanMemberForCoinsSection setMember={setMember}/>)
@@ -43,13 +43,13 @@ export default function CoinsPage() {
           return (<HaulResultsSection member={member} haulResult={haulResult}/>)
         }
         default: {
-          throw `Handler not defined ${sectionName}`
+          throw `Handler not defined ${scoutSectionName}`
         }
       }
     }
 
     setSection(getSection());
-  }, [sectionName]);
+  }, [scoutSectionName]);
 
   return (
     <div className="row">

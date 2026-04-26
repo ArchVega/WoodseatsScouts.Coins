@@ -1,22 +1,22 @@
-import axios from "axios";
 import Uris from "./Uris.ts";
+import {apiClient} from "./apiClient.ts";
 
 export default function AppStateApiService() {
   return {
-    getAppSate: (responseFunc) => {
-      async function fetch() {
-        const response = await axios.get(Uris.appState);
+    getAppSate: (responseFunc: (response: any) => void) => {
+      async function fetchAppState() {
+        const response = await apiClient.get(Uris.application().mode());
         return response.data
       }
 
-      fetch().then(response => {
+      fetchAppState().then(response => {
         responseFunc(response)
       });
     },
 
     getAppVersion: (responseFunc) => {
       async function fetch() {
-        const response = await axios.get(Uris.appVersion);
+        const response = await apiClient.get(Uris.application().appVersion());
         return response.data
       }
 
@@ -26,12 +26,12 @@ export default function AppStateApiService() {
     },
 
     getScoutGroups: async () => {
-      return await axios.get(Uris.scoutGroups());
+      return await apiClient.get(Uris.scouts().groups().resourcePath);
 
     },
 
     getSections: async () => {
-      return await axios.get(Uris.sections());
+      return await apiClient.get(Uris.scouts().sections().resourcePath);
     },
   }
 }

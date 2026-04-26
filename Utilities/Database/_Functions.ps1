@@ -177,14 +177,14 @@ function CreateAdditionalDbObjects {
         FROM ScoutMembers
         join ScanSessions
         on ScanSessions.ScoutMemberId = ScoutMembers.Id
-        join ScanCoins
-        on ScanCoins.ScanSessionId = ScanSessions.Id
+        join ScannedCoins
+        on ScannedCoins.ScanSessionId = ScanSessions.Id
         join ScoutGroups
         on ScoutGroups.Id = ScoutMembers.ScoutGroupId
         join ScoutSections
-        on ScoutSections.Code = ScoutMembers.ScoutSectionId
+        on ScoutSections.Code = ScoutMembers.ScoutSectionCode
         join Coins
-        on Coins.Id = ScanCoins.CoinId
+        on Coins.Id = ScannedCoins.CoinId
         join ActivityBases
         on ActivityBases.Id = Coins.ActivityBaseId
         "

@@ -1,9 +1,7 @@
 import ScoutsLogo from '../images/fleur-de-lis-marque-white.png'
 import './NavMenu.scss';
-import React, {useContext, useEffect, useState} from 'react';
-import {NavLink, Link, useLocation, useNavigate} from 'react-router-dom';
-import './NavMenu.scss';
-import Uris from "../services/apis/Uris.ts";
+import React, {useContext, useState} from 'react';
+import {NavLink, useNavigate} from 'react-router-dom';
 import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../contexts/AppContextExporter.tsx";
 import CoinsPageViewName from "../pages/coins-page/CoinsPageViewName.ts";
 import {Button, Image} from "../components/widgets/HtmlControlWrappers.tsx";
@@ -53,7 +51,7 @@ export default function NavMenu() {
         return (
           <div>
             <span data-testid="nav-coins-page" onClick={() => navigate("/")} className={"scouts-nav-link m-3"}>
-              <div className={"fs-3 px-3 py-1 scouts-borders-white"}>
+              <div role="button" className={"fs-3 px-3 py-1 scouts-borders-white"}>
                 Return to Main Screen
               </div>
             </span>
@@ -96,7 +94,7 @@ export default function NavMenu() {
             <Image className="member-image h-100 w-auto me-3" src={activeScanningMember.clientComputedImageUri}></Image>
             <div id="member-details" className="flex-fill">
               <div><span>Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
-              <div>{activeScanningMember.sectionName}, {activeScanningMember.scoutGroupName}</div>
+              <div>{activeScanningMember.scoutSectionName}, {activeScanningMember.scoutGroupName}</div>
             </div>
           </div>
         )

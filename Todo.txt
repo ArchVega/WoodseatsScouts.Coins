@@ -46,3 +46,11 @@ the filter members page should work with the scanner, but is it the ipad ie the 
 Would have gone with ScanPoints but singular would be ScanPoint and that's no good. ScanCoin.
 
 home page is calling https://release-scouts-webapi.azurewebsites.net/api/members?view=PointsSummary
+
+changing member's group or section means new code!
+
+make a generic Confirmation modal to replace default confirm
+
+now that there's coin's effective points - update scan session's total to use effective points.
+
+styling for details page when 0 stuff

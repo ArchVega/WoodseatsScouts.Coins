@@ -1,5 +1,8 @@
 ﻿@use "sass:map";
+@use "sass:color";
 @use '../styles/abstract/site-colours' as colours;
+
+$hoverPercentage: 35%;
 
 .scouts-navbar {
   min-height: 100px;
@@ -61,6 +64,9 @@
       margin-top: 3px;
       margin-right: 10px;
       cursor: pointer;
+      &:hover {
+        color: color.adjust(map.get(colours.$colours, purple), $lightness: $hoverPercentage);
+      }
     }
   }
 
@@ -68,7 +74,12 @@
     color: white;
     text-decoration: none;
 
-    &:hover {
+    &:hover, div:hover {
+      color: color.adjust(map.get(colours.$colours, purple), $lightness: $hoverPercentage);
+    }
+
+    div:hover {
+      border-color: color.adjust(map.get(colours.$colours, purple), $lightness: $hoverPercentage);
     }
 
     * {

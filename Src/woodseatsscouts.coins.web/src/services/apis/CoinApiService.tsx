@@ -1,24 +1,20 @@
-import axios, {type AxiosResponse} from "axios";
+import {type AxiosResponse} from "axios";
 import Uris from "./Uris.ts";
-import type {CoinDto, MemberDto} from "../../types/ServerTypes.ts";
+import type {CoinDto, ScoutMemberDto} from "../../types/ServerTypes.ts";
+import {apiClient} from "./apiClient.ts";
 
 export default function CoinApiService() {
   return {
     async fetchCoin(coinCode: string, memberCode: string): Promise<AxiosResponse<CoinDto>> {
-      const uri = Uris.pointValueFromCode(coinCode, memberCode)
-
-      return await axios.get(uri);
+      return await apiClient.put(Uris.coins().assign(coinCode, memberCode));
     },
 
-    async addPointsToMember(member: MemberDto, coins: CoinDto[]) {
+    async addPointsToMember(member: ScoutMemberDto, coins: CoinDto[]) {
       const payload = {
         coinCodes: coins.map(x => x.code)
       }
 
-      return await axios
-        .put(Uris.addPointsToMember(member.id), payload).catch(reason => {
-          console.error(reason)
-        })
+      return await apiClient.put(Uris.scouts().members().addPointsToMember(member.id), payload)
     }
   }
 }

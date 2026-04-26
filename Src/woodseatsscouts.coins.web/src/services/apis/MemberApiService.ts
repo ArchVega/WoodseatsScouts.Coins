@@ -1,28 +1,29 @@
-import axios, {type AxiosResponse} from "axios";
+import {type AxiosResponse} from "axios";
 import Uris from "./Uris.ts";
-import type {MemberCompleteDto, MemberDto, MemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import type {ScoutMemberCompleteDto, ScoutMemberDto, ScoutMemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import {apiClient} from "./apiClient.ts";
+import type {UpdateScoutMemberRequestPayload} from "../../types/ClientTypes.ts";
 
-function MemberApiService() {
+export default function MemberApiService() {
   return {
-    async fetchMember(memberCode: string): Promise<AxiosResponse<MemberDto>> {
-      return await axios.get(Uris.memberByCode(memberCode));
+    async getMember(memberCode: string): Promise<AxiosResponse<ScoutMemberDto>> {
+      return await apiClient.get(Uris.scouts().members().memberByCode(memberCode));
     },
 
-    async fetchMemberWithPoints(memberCode: string) {
-      const uri = Uris.memberWithPoints(memberCode);
-      return await axios.get(uri);
+    async getMemberComplete(scoutMemberId: number): Promise<AxiosResponse<ScoutMemberCompleteDto>> {
+      return await apiClient.get(Uris.scouts().members().getMemberComplete(scoutMemberId));
     },
 
-    async fetchMemberComplete(memberCode: string): Promise<AxiosResponse<MemberCompleteDto>> {
-      const uri = Uris.fetchMemberComplete(memberCode);
-      return await axios.get(uri);
+    async getMembers(): Promise<AxiosResponse<ScoutMemberPointsSummaryDto[]>> {
+      return await apiClient.get(Uris.scouts().members().membersWithPointSummary());
     },
 
-    async fetchMembers(): Promise<AxiosResponse<MemberPointsSummaryDto[]>> {
-      const uri = Uris.membersWithPointSummary()
-      return await axios.get(uri);
+    async photo(photoImagePath: string): Promise<AxiosResponse<string>> { // todo: rename to getPhoto, check usage
+      return await apiClient.get(Uris.scouts().members().memberPhoto(photoImagePath));
+    },
+
+    async updateScoutMember(scoutMemberId: number, payload: UpdateScoutMemberRequestPayload): Promise<ScoutMemberCompleteDto> {
+      return await apiClient.put(Uris.scouts().members().memberById(scoutMemberId), payload).then(x => x.data)
     }
   }
 }
-
-export default MemberApiService

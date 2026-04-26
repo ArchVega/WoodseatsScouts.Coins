@@ -1,4 +1,5 @@
-﻿using WoodseatsScouts.Coins.Api.Data;
+﻿using WoodseatsScouts.Coins.Api.Abstractions;
+using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Tests.Integration.Helpers;
@@ -80,6 +81,6 @@ public class TestDataFactory(IAppDbContext appDbContext)
             LastName = "Member" + number,
             Number = number,
             ScoutGroup = scoutGroup,
-            ScoutSectionId = section.ToString()
+            ScoutSectionCode = section.ToString()
         };
 }

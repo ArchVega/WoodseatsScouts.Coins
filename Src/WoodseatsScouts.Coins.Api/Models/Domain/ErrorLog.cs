@@ -1,23 +1,21 @@
-﻿namespace WoodseatsScouts.Coins.Api.Models.Domain;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace WoodseatsScouts.Coins.Api.Models.Domain;
 
 // dotcover disable
+[SuppressMessage("ReSharper", "EntityFramework.ModelValidation.UnlimitedStringLength")]
+[SuppressMessage("ReSharper", "PropertyCanBeMadeInitOnly.Global")]
 public class ErrorLog
 {
     public int Id { get; set; }
     
     public DateTime LoggedAt { get; set; }
     
-    public string Message { get; set; }
+    public required string Message { get; set; }
     
     public string? StackTrace { get; set; }
-
-    public static ErrorLog Log(Exception e)
-    {
-        return new ErrorLog()
-        {
-            LoggedAt = DateTime.UtcNow,
-            Message = e.Message,
-            StackTrace = e.StackTrace
-        };
-    }
+    
+    public required string Path { get; set; }
+    
+    public required string Method { get; set; }
 }

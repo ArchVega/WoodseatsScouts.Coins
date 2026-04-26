@@ -1,58 +1,112 @@
 import {logApi} from "../../components/logging/Logger.ts";
 
-// const baseUri = import.meta.env.VITE_WEB_API_URI + "/api"
-const baseUri = "https://release-scouts-webapi.azurewebsites.net/api"
-
 const Uris = {
-  members: `${baseUri}/members`,
-  coins: `${baseUri}/coins`,
+  application: () => {
+    const resourcePath = `application`
 
-  appState: `${baseUri}/AppState`,
-  appVersion: `${baseUri}/AppState/AppVersion`,
-  leaderboard: `${baseUri}/Leaderboard/Report`,
-  refreshSecondsForLatestScans: `${baseUri}/Members/RefreshSecondsForLatestScans`, // todo
-  testDataCoins: `${baseUri}/Sut/Coins`,
-
-  memberByCode: function (memberCode: string) {
-    return logApi(`${this.members}/${memberCode}`)
-  },
-  membersWithPointSummary: function() {
-    return logApi(`${this.members}?view=PointsSummary`);
-  },
-  fetchMemberComplete: function(memberCode: string) {
-    return logApi(`${this.members}/${memberCode}?view=3`);
-  },
-  memberLatestScans: function() {
-   return logApi(`${this.members}/LatestScans`)
-  },
-  pointValueFromCode: function (coinCode: string, memberCode: string) {
-    return `${this.coins}/${coinCode}/Scan/${memberCode}`
-  },
-  addPointsToMember: function (memberId: number) {
-    return `${this.members}/${memberId}/Coins`
-  },
-  updateMemberPhoto: function(memberId: number) {
-    return `${this.members}/${memberId}/Photo`
+    return {
+      appVersion: () => logApi(`${resourcePath}/app-version`),
+      mode: () => logApi(`${resourcePath}/mode`)
+    }
   },
 
-  scoutGroups: function() {
-    return `${this.appState}/ScoutGroups`
-  },
-  sections: function() {
-    return `${this.appState}/Sections`
+  activities: () => {
+    const resourcePath = `application`
+
+    return {
+      bases: () => logApi(`activities/bases`),
+    }
   },
 
+  coins: () => {
+    const resourcePath = `coins`
 
-
-
-  memberPhoto: function (photoImagePath: string) {
-    return `${baseUri}/${photoImagePath}`
+    return {
+      resourcePath: resourcePath,
+      assign: (coinCode: string, memberCode: string) => logApi(`${resourcePath}/${coinCode}/assign/${memberCode}`),
+    }
   },
-  memberWithPoints: function (memberQrCode) {
-    return `${baseUri}/Members/${memberQrCode}/WithPoints`
+
+  scouts: () => {
+    const scoutsResourcePath = `scouts`
+
+    return {
+      members: () => {
+        const membersResourcePath = `${scoutsResourcePath}/members`
+        return {
+          memberByCode: function (memberCode: string) {
+            return logApi(`${membersResourcePath}/${memberCode}`)
+          },
+          memberById: function (id: number) {
+            return logApi(`${membersResourcePath}/${id}`)
+          },
+          membersWithPointSummary: function () {
+            return logApi(`${membersResourcePath}`);
+          },
+          getMemberComplete: function (scoutMemberId: number) {
+            return logApi(`${membersResourcePath}/${scoutMemberId}/complete`);
+          },
+          addPointsToMember: function (memberId: number) {
+            return logApi(`${membersResourcePath}/${memberId}/coins`)
+          },
+          updateMemberPhoto: function (memberId: number) {
+            return logApi(`${membersResourcePath}/${memberId}/photo`)
+          },
+          memberPhoto: function (photoImagePath: string) {
+            return logApi(`${scoutsResourcePath}/${photoImagePath}`)
+          },
+        }
+      },
+      groups: () => {
+        const groupsResourcePath = `${scoutsResourcePath}/groups`
+
+        return {
+          resourcePath: groupsResourcePath,
+        }
+      },
+
+      sections: () => {
+        const sectionsResourcePath = `${scoutsResourcePath}/sections`
+
+        return {
+          resourcePath: sectionsResourcePath,
+        }
+      }
+    }
   },
-  memberName: function (id) {
-    return `${baseUri}/Members/${id}/Name?`
+
+  scans: () => {
+    const resourcePath = `scans`
+    return {
+      sessions: () => {
+        const sessionResourcePath = `${resourcePath}/sessions`
+        return {
+          resourceEntityPath: (scanSessionId: number) => {
+            return logApi(`${sessionResourcePath}/${scanSessionId}`)
+          },
+          sessionsLatest: function () {
+            return logApi(`${sessionResourcePath}/latest`)
+          },
+        }
+      },
+      coins: () => {
+        const coinResourcePath = `${resourcePath}/coins`
+        return {
+          resourceEntityPath: (scannedCoinId: number) => {
+            return logApi(`${coinResourcePath}/${scannedCoinId}`)
+          }
+        }
+      }
+    }
+  },
+
+  system: () => {
+    const resourcePath = `system`
+    return {
+      testDataCoins: function () {
+        return logApi(`${resourcePath}/tests/coins`)
+      }
+    }
   }
 }
 

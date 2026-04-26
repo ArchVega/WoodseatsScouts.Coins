@@ -1,7 +1,8 @@
 import MemberDetailsPage from "../pages/member-details-page/MemberDetailsPage.tsx";
 import CoinsPage from "../pages/coins-page/CoinsPage.tsx";
-import MembersListPage from "../pages/members-list-page/MembersListPage.tsx";
+import ScoutMembersListPage from "../pages/members-list-page/ScoutMembersListPage.tsx";
 import MembersLatestScansPage from "../pages/members-latest-scans-page/MembersLatestScansPage.tsx";
+import AdminPage from "../pages/admin-page/AdminPage.tsx";
 
 const AppRoutes = [
     {
@@ -9,17 +10,21 @@ const AppRoutes = [
         element: <CoinsPage/>
     },
     {
-        path: '/member/:memberCode',
+        path: '/members/:memberId',
         element: <MemberDetailsPage/>,
         hasParams: true
     },
     {
         path: '/members',
-        element: <MembersListPage/>
+        element: <ScoutMembersListPage/>
     },
     {
         path: '/members/latest-scans',
         element: <MembersLatestScansPage/>
+    },
+    {
+        path: '/admin',
+        element: <AdminPage/>
     }
 ];
 

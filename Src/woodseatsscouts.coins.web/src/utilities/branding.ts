@@ -1,7 +1,7 @@
 import type {SectionBranding} from "../types/ClientTypes.ts";
 
-export function getSectionBranding(sectionId: string): SectionBranding {
-  switch (sectionId.toLowerCase()) {
+export function getSectionBranding(scoutSectionId: string): SectionBranding {
+  switch (scoutSectionId.toLowerCase()) {
     case 'a': // adults
       return {foregroundColour: "black", backgroundColour: "#ffe627",}
     case 'b': // beavers
@@ -17,6 +17,6 @@ export function getSectionBranding(sectionId: string): SectionBranding {
     case 'q': // squirrels
       return {foregroundColour: "white", backgroundColour: "#ed3f23",}
     default:
-      throw `No handler defined for section id '${sectionId}'`
+      throw `No handler defined for section id '${scoutSectionId}'`
   }
 }

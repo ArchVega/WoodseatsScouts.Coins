@@ -93,7 +93,12 @@ public class ImagePersisterTests
 
         var appSettings = new AppSettings
         {
-            ContentRootDirectory = appSettingsContentRootDirectory // Note
+            ContentRootDirectory = appSettingsContentRootDirectory,
+            AppVersion = "test",
+            MinutesToLockScavengedCoins = 10,
+            LoginPauseDurationSeconds = 10,
+            ParticipantPlaceholderImagePath = "test",
+            NumberOfLatestScansToDisplay = 10
         };
 
         var appSettingsOptions = Options.Create(appSettings);
