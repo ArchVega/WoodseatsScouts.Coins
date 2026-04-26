@@ -48,6 +48,10 @@ export default function NavMenu() {
       }
 
       const RenderReturnToMainScreenButton = () => {
+        if (window.location.pathname === '/') {
+          return null
+        }
+
         return (
           <div>
             <span data-testid="nav-coins-page" onClick={() => navigate("/")} className={"scouts-nav-link m-3"}>
