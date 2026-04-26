@@ -156,39 +156,61 @@ export default function MemberDetailsPage() {
             <h4>{memberCompleteDto.firstName}'s Scan Sessions</h4>
           </div>
         </div>
-        <table className="table table-bordered">
-          <thead className="table-dark">
-          <tr>
-            <th>Time</th>
-            <th>Total Points</th>
-            <th>Delete</th>
-          </tr>
-          </thead>
-          <tbody>
-          {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, index) => (
-            <tr key={index} role="button" onClick={() => setSelectedScanSessionId(haulResultDto.scanSessionId)}
-                style={{
-                  backgroundColor: selectedScanSessionId === haulResultDto.scanSessionId ? "#d3e5ff" : "transparent"
-                }}>
-              <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
-              <td>{haulResultDto.totalPoints}</td>
-              <td>
-                <span role="button" onClick={e => deleteScanSession(haulResultDto)}>🗑️</span>
-              </td>
+        {memberCompleteDto && memberCompleteDto.haulResults.length !== 0 && (
+          <table className="table table-bordered">
+            <thead className="table-dark">
+            <tr>
+              <th>Time</th>
+              <th>Total Points</th>
+              <th>Delete</th>
             </tr>
-          ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, index) => (
+              <tr key={index} role="button" onClick={() => setSelectedScanSessionId(haulResultDto.scanSessionId)}
+                  style={{
+                    backgroundColor: selectedScanSessionId === haulResultDto.scanSessionId ? "#d3e5ff" : "transparent"
+                  }}>
+                <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
+                <td>{haulResultDto.totalPoints}</td>
+                <td>
+                  <span role="button" onClick={e => deleteScanSession(haulResultDto)}>🗑️</span>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        )}
+        {memberCompleteDto && memberCompleteDto.haulResults.length === 0 && (
+          <>
+            <hr />
+            <div className="row mt-3">
+              <div className="col-12">
+                {memberCompleteDto.firstName} hasn't scanned any coins yet.
+              </div>
+            </div>
+          </>
+        )}
       </div>
     )
   }
 
   function RenderSelectedScanSessions() {
+    if (memberCompleteDto && memberCompleteDto.haulResults.length === 0) {
+      return (
+        <div className="card member-details-table-container">
+          <div className="card-body text-center">
+            Details will be shown here when {memberCompleteDto.firstName} has scanned coins.
+          </div>
+        </div>
+      )
+    }
+
     if (!activeHaulResultDto) {
       return (
-        <div className="card">
+        <div className="card member-details-table-container">
           <div className="card-body text-center">
-            Select a Session
+            Select a Session.
           </div>
         </div>
       )

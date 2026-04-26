@@ -67,13 +67,14 @@ export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowE
       show={showEditMemberPhotoModal}
       onClose={() => {
         setShowEditMemberPhotoModal(false)
-      }}>
+      }}
+      isPhotoModal={true}>
 
       {!startCamera && (
         <div className="row">
           <div className="col text-center">
-            <div className="mb-5 mt-5">Click the button to allow the device's webcam to take photos.</div>
-            <button className="btn btn-success mb-5" onClick={() => setStartCamera(true)}>
+            <div className="fs-4 mb-5 mt-5">Click the button to allow the device's webcam to take photos.</div>
+            <button className="fs-3 btn btn-success mb-5" onClick={() => setStartCamera(true)}>
               Start Camera
             </button>
           </div>
@@ -104,7 +105,7 @@ export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowE
               </div>
             </div>
           </div>
-          <Button className="btn btn-success" onClick={capture}>Capture photo</Button>
+          <Button className="fs-1 btn btn-success w-100" style={{height: "100px"}} onClick={capture}>Take Photo</Button>
         </>
       )}
     </BaseModal>
