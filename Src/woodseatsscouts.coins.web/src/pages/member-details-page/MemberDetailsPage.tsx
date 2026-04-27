@@ -284,21 +284,37 @@ export default function MemberDetailsPage() {
 
     return (
       <div id="recent-member-activity-summary-cards" className="row g-1 sticky-top">
-        {RenderActivityCard("Most Visited Base", (
+        {RenderActivityCard("Most Visited Bases", (
           <>
             {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
-              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBases
-              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBases.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBasesByParticipant
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBasesByParticipant.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
                 <div key={i}>
                   <strong className="fs-5">{x.name} ({x.timesVisited})</strong>
                 </div>
               ))}
+            {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBasesByParticipant
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBasesByParticipant.length === 0
+              && (
+                <strong>No bases visited yet!</strong>
+              )
+            }
           </>
         ))}
-        {RenderActivityCard("Least Visited Base", <>
+        {RenderActivityCard("Least Visited Bases", <>
           {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
-            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBases
-            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBases.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBasesByParticipant
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBasesByParticipant.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
+              <div key={i}>
+                <strong className="fs-5">{x.name} ({x.timesVisited})</strong>
+              </div>
+            ))}
+        </>)}
+        {RenderActivityCard("Least Visited Bases By Others", <>
+          {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBasesByOtherParticipants
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBasesByOtherParticipants.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
               <div key={i}>
                 <strong className="fs-5">{x.name} ({x.timesVisited})</strong>
               </div>

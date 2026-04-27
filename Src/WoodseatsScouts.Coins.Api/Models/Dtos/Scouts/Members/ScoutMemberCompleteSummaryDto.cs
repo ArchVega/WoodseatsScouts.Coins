@@ -1,5 +1,4 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Scans;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
@@ -12,7 +11,7 @@ public class ScoutMemberCompleteSummaryDto
         {
             throw new InvalidOperationException("Scout member must load navigation property ScanSession");
         }
-        
+
         var haulResultDtos = scoutMember.ScanSessions.Select(scanSession =>
         {
             var groupedByActivityBase = scanSession.ScanCoins.GroupBy(x => x.Coin!.ActivityBaseId).ToList();
@@ -60,11 +59,32 @@ public class ScoutMemberCompleteSummaryDto
         ScoutMemberCompleteSummaryStatsDto.MostScans = scoutMember.ScanSessions
             .Select(x => x.ScanCoins.Count)
             .DefaultIfEmpty(0)
-            .Max() ;
+            .Max();
         ScoutMemberCompleteSummaryStatsDto.TotalTokensScanned = scoutMember.ScanSessions
             .Select(x => x.ScanCoins.Count)
             .DefaultIfEmpty(0)
-            .Sum() ;
+            .Sum();
+
+        var mostVisited = haulResultDtos
+            .SelectMany(x => x.ActivityBaseHaulResultDtos)
+            .GroupBy(activityBase => activityBase.ActivityBaseName)
+            .Select(g => new
+            {
+                ActivityBaseName = g.Key,
+                Count = g.Count()
+            })
+            .OrderByDescending(x => x.Count)
+            .Take(3)
+            .ToList();
+
+        ScoutMemberCompleteSummaryStatsDto.MostVisitedActivityBasesByParticipant
+            = mostVisited.Select(x => new ScoutMemberCompleteSummaryStatsActivityBaseInfoDto
+            {
+                Name = x.ActivityBaseName,
+                TimesVisited = x.Count,
+            }).ToList();
+        
+       // least by participant and by others done in the controller.
     }
 
     public int Id { get; set; }

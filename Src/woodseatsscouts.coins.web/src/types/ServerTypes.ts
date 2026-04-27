@@ -83,8 +83,9 @@ export type MemberCompleteSummaryStatsActivityBaseInfoDto = {
 }
 
 export type MemberCompleteSummaryStatsDto = {
-  mostVisitedActivityBases: MemberCompleteSummaryStatsActivityBaseInfoDto[]
-  leastVisitedActivityBases: MemberCompleteSummaryStatsActivityBaseInfoDto[]
+  mostVisitedActivityBasesByParticipant: MemberCompleteSummaryStatsActivityBaseInfoDto[]
+  leastVisitedActivityBasesByParticipant: MemberCompleteSummaryStatsActivityBaseInfoDto[]
+  leastVisitedActivityBasesByOtherParticipants: MemberCompleteSummaryStatsActivityBaseInfoDto[]
   mostScans: number
   totalTokensScanned: number
 }

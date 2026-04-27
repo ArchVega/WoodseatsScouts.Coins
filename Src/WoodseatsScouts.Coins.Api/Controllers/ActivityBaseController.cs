@@ -16,4 +16,17 @@ public class ActivityBaseController( IAppDbContext appDbContext) : ControllerBas
     {
         return Ok(appDbContext.ActivityBases.Select(x => new ActivityBasesDto(x)));
     }
+    
+    [HttpGet]
+    [Route("{activityBaseId:int}")]
+    public ActionResult GetCoinCodesByActivityBase(int activityBaseId, bool showOnlyAvailable)
+    {
+        var coins = appDbContext.Coins.Where(x => x.ActivityBaseId == activityBaseId);
+        if (showOnlyAvailable)
+        {
+            coins = coins.Where(x => !x.MemberId.HasValue);
+        }
+        
+        return Ok(coins.Select(x => x.Code));
+    }
 }
