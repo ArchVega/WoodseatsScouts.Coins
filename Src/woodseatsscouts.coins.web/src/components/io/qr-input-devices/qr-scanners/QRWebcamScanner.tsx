@@ -11,6 +11,7 @@ export default function QRWebcamScanner({videoSizeEm, type, ...props}: QRWebcamS
   const [currentQRCode, setCurrentQRCode] = useState("");
   const [previousQRCode, setPreviousQRCode] = useState("");
   const [timeoutHandle, setTimeoutHandle] = useState(0);
+  const [startCamera, setStartCamera] = useState(false);
 
   useEffect(() => {
     if (currentQRCode === "") {
@@ -36,14 +37,26 @@ export default function QRWebcamScanner({videoSizeEm, type, ...props}: QRWebcamS
 
   return (
     <div className="qr-code-scanner-container" style={{width: props.webcamWidth, height: props.webcamHeight, margin: "0 auto"}}>
-      <Scanner
-        onScan={handleScan}
-        onError={(error: any) => console.log(error?.message)}
-        constraints={{
-          facingMode: "environment",
-          aspectRatio: 1,
-        }}
-      />
+      {!startCamera && (
+        <div className="row">
+          <div className="col text-center">
+            <div className="mb-2 mt-1">Click the button to allow the device's webcam to take photos.</div>
+            <button className="fs-3 btn btn-success mb-5" onClick={() => setStartCamera(true)}>
+              Start Camera
+            </button>
+          </div>
+        </div>
+      )}
+      {startCamera && (
+        <Scanner
+          onScan={handleScan}
+          onError={(error: any) => console.log(error?.message)}
+          constraints={{
+            facingMode: "environment",
+            aspectRatio: 1,
+          }}
+        />
+      )}
     </div>
   );
 }
