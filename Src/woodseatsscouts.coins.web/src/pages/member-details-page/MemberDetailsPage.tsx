@@ -61,15 +61,11 @@ export default function MemberDetailsPage() {
   }, [selectedScanSessionId, memberCompleteDto]);
 
   function tryEditScoutMemberPhoto() {
-    if (checkPasscode()) {
-      useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')
-    }
+    useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')
   }
 
   function tryEditScoutMemberDetails() {
-    if (checkPasscode()) {
-      setShowEditMemberDetailsModal(true)
-    }
+    setShowEditMemberDetailsModal(true)
   }
 
   function formatDateTime(isoDateString: string) {
@@ -188,7 +184,7 @@ export default function MemberDetailsPage() {
         )}
         {memberCompleteDto && memberCompleteDto.haulResults.length === 0 && (
           <>
-            <hr />
+            <hr/>
             <div className="row mt-3">
               <div className="col-12">
                 {memberCompleteDto.firstName} hasn't scanned any coins yet.
