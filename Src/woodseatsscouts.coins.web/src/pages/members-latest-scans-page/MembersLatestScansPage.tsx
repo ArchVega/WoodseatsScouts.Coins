@@ -42,10 +42,10 @@ export default function MembersLatestScansPage() {
 
     return (
       <div className="card">
-        <div className="card-body">
+        <div className="card-body mt-5">
           <div className="row">
             <div className="col">
-              <Image style={{height: "150px", width: "150px"}} key={member.id} src={member.clientComputedImageUri}/>
+              <img style={{height: "150px", width: "150px"}} key={member.id} src={member.clientComputedImageUri}/>
             </div>
           </div>
           <div className="first-name mt-2 m-0">

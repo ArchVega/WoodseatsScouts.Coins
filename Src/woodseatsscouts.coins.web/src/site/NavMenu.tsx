@@ -97,7 +97,7 @@ export default function NavMenu() {
       case CoinsPageViewName.ScanCoins:
         return (
           <div className="d-flex h-100 p-2">
-            <Image className="member-image h-100 w-auto me-3" src={activeScanningMember.clientComputedImageUri}></Image>
+            <img className="member-image h-100 me-3" src={activeScanningMember.clientComputedImageUri}></img>
             <div id="member-details" className="flex-fill">
               <div><span>Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
               <div>{activeScanningMember.scoutSectionName}, {activeScanningMember.scoutGroupName}</div>
