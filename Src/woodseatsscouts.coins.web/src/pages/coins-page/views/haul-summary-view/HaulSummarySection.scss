@@ -2,7 +2,18 @@
 @use '../../../../styles/abstract/site-colours' as colours;
 
 #summary-haul-page {
-  
+  #congrats-text {
+    font-size: 3.4em;
+  }
+
+  #added-points-text {
+    font-size: 2em;
+  }
+
+  #head-back-out-text {
+    font-size: 1.5em;
+  }
+
   #haul-summary-tally-total-box {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -10,13 +21,13 @@
     -webkit-border-radius: 20px !important;
     -moz-border-radius: 20px !important;
     border-radius: 20px !important;
-    height: 170px;
-    width: 530px;
+    height: 240px;
+    width: 500px;
     margin: 10px;
     display: inline-block;
     padding: 6px 25px;
     font-weight: bold;
-    font-size: 1.8em;
+    font-size: 2em;
     box-shadow: 0 0 0 5px #088486,  inset 0 0 0 1px #fff;
 
     * {
@@ -30,7 +41,7 @@
 
   .btn-next-member {
     border: none;
-    font-size: 2em;
+    font-size: 2.3em;
     padding: 4px 22px;
     background-color: map.get(colours.$colours, yellow);
   }
