@@ -10,7 +10,7 @@
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(5, 1fr);
   grid-auto-rows: 220px;
-  height: 925px;
+  height: 915px;
   overflow-y: auto !important;
   gap: 4px;
   align-content: start;
@@ -36,7 +36,7 @@
   }
 
   div:last-child {
-    margin-top:60px;
+    margin-top:45px;
     font-weight: 800;
     font-size: 8em;
   }
@@ -44,4 +44,18 @@
 
 #finish-scanning-button {
   height: 14em;
+  animation: button-breathe 3s ease-in-out infinite;
+}
+
+@keyframes button-breathe {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(5, 99, 23, 0.9);
+  }
+  45% {
+    box-shadow: 0 0 0 10px rgba(8, 182, 41, 0.8);
+  }
+}
+
+#now-scan-your-points-tokens {
+  line-height: 1.0em;
 }

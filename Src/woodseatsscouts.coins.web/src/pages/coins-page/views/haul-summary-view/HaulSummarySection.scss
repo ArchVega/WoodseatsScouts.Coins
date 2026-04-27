@@ -1,32 +1,37 @@
 @use "sass:map";
 @use '../../../../styles/abstract/site-colours' as colours;
 
-#haul-summary-tally-total-box {
+#summary-haul-page {
+  
+  #haul-summary-tally-total-box {
     box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -webkit-border-radius: 20px !important;
-  -moz-border-radius: 20px !important;
-  border-radius: 20px !important;
-  height: 170px;
-  margin: 10px;
-  display: inline-block;
-  padding: 6px 25px;
-  font-weight: bold;
-  box-shadow: 0 0 0 5px #088486,  inset 0 0 0 1px #fff;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -webkit-border-radius: 20px !important;
+    -moz-border-radius: 20px !important;
+    border-radius: 20px !important;
+    height: 170px;
+    width: 530px;
+    margin: 10px;
+    display: inline-block;
+    padding: 6px 25px;
+    font-weight: bold;
+    font-size: 1.8em;
+    box-shadow: 0 0 0 5px #088486,  inset 0 0 0 1px #fff;
 
-  * {
-    color: white !important;
+    * {
+      color: white !important;
+    }
+
+    em {
+      font-size: 1.3em;
+    }
   }
 
-  em {
-    font-size: 1.3em;
+  .btn-next-member {
+    border: none;
+    font-size: 2em;
+    padding: 4px 22px;
+    background-color: map.get(colours.$colours, yellow);
   }
-}
-
-.btn-next-member {
-  border: none;
-  font-size: 2em;
-  padding: 4px 22px;
-  background-color: map.get(colours.$colours, yellow);
 }

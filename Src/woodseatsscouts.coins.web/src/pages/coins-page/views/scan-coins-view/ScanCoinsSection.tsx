@@ -135,7 +135,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
       <>
         <div className="row mb-1">
           <div className="col">
-            <div className="mt-3 mb-2 text-black fw-semibold text-center" style={{fontSize: "5em"}}>Now scan your points tokens...</div>
+            <div id="now-scan-your-points-tokens" className="mt-5 mb-5 text-black fw-semibold text-center" style={{fontSize: "5em"}}>Now scan your points tokens...</div>
           </div>
         </div>
         <div className="row mb-3">

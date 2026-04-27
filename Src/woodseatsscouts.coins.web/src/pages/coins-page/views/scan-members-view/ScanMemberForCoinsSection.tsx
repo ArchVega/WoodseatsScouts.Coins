@@ -77,10 +77,14 @@ export default function ScanMemberForCoinsSection({setMember}) {
         <div className="mt-5">
           <span className="page-hello-text">Hello</span>
           <img id="scan-member-section-wave-image" src={wave} alt=""/>
-          <div className="mb-5" style={{fontSize: "2.5em"}}>
-            <strong>
-              Scan your wristband with the scanner to start saving points…
-            </strong>
+          <div className="row">
+            <div className="col-8 offset-2">
+              <div id="scan-member-section-instructions-text" className="mb-5" style={{fontSize: "2.5em"}}>
+                <strong>
+                  Scan your wristband with the scanner to start saving points…
+                </strong>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -93,7 +97,7 @@ export default function ScanMemberForCoinsSection({setMember}) {
                   qrCode={memberQrCode}
                   setQrCode={setMemberQrCode}
                   qrScanCodeType={QRScanCodeType.Member}
-                  textboxWidth={"100%"}
+                  textboxWidth={"80%"}
                   textboxHeight={"70px"}
                   webcamWidth={"240px"}
                   webcamHeight={"240px"}

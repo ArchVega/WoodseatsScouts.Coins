@@ -28,7 +28,7 @@ export default function HaulResultsSection({member, haulResult}) {
   }, appSettings.VITE_SCAN_COINS_REDIRECT_DELAY_SECONDS * 1000)
 
   return (
-    <>
+    <div id="summary-haul-page">
       <div className="row mt-5">
         <div className="col text-center">
           <h1>{congratsPhrase}<span className="font-black">{member.firstName}</span><span
@@ -80,6 +80,6 @@ export default function HaulResultsSection({member, haulResult}) {
           </button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
