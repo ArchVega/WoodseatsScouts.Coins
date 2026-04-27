@@ -17,8 +17,8 @@ public class CoinCodeGenerator
 
         for (var basesIndex = 1; basesIndex <= NumberOfBasesToCreate; basesIndex++)
         {
-            codes.AddRange(FixedCoinValues.Select(fixedCoinValue => new Coin(id++) { Base = basesIndex, Value = fixedCoinValue }));
-            codes.AddRange(RandomCoinValues.Select(randomCoinValue => new Coin(id++) { Base = basesIndex, Value = randomCoinValue }));
+            codes.AddRange(FixedCoinValues.Select(fixedCoinValue => new Coin(id++) { ActivityBaseId = basesIndex, Value = fixedCoinValue }));
+            codes.AddRange(RandomCoinValues.Select(randomCoinValue => new Coin(id++) { ActivityBaseId = basesIndex, Value = randomCoinValue }));
         }
 
         return codes;

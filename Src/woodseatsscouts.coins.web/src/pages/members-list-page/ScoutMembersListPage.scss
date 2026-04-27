@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "sass:color";
 @use "./../../styles/abstract/_site-mixins" as mixins;
 @use "./../../styles/abstract/_site-colours" as colours;
 
@@ -54,6 +55,15 @@
 
   input.filter-members {
     @include mixins.rounded-borders
+  }
+
+  .webcam-modal-button {
+    border: 2px solid map.get(colours.$colours, purple);
+    background-color: color.adjust(map.get(colours.$colours, purple), $lightness: 50%);
+    font-size: 23px;
+    padding: 0;
+    margin: 0;
+    @include mixins.rounded-borders;
   }
 }
 

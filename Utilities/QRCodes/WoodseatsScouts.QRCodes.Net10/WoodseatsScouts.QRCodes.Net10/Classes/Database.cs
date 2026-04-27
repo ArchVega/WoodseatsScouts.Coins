@@ -21,17 +21,17 @@ public class Database : IDisposable
 
     }
 
-    public List<Member> GetMembers()
+    public List<ScoutMember> GetMembers()
     {
-        const string sql = "SELECT * FROM Members";
+        const string sql = "SELECT * FROM ScoutMembers";
 
         using var command = new SqlCommand(sql, connection);
         using var reader = command.ExecuteReader();
-        var members = new List<Member>();
+        var members = new List<ScoutMember>();
         
         while (reader.Read())
         {
-            var member = new Member
+            var member = new ScoutMember
             {
                 Code = reader.GetString(1),
                 FullName = $"{reader.GetString(3)}{reader.GetString(4)}"
@@ -57,8 +57,8 @@ public class Database : IDisposable
         {
             var coin = new Coin(Convert.ToInt32(reader[0]))
             {
-                BaseValueId = Convert.ToInt32(reader[1]),
-                Base = Convert.ToInt32(reader[2]),
+                ActivityBaseSequenceNumber = Convert.ToInt32(reader[1]),
+                ActivityBaseId = Convert.ToInt32(reader[2]),
                 Value = Convert.ToInt32(reader[3]),
                 Code = reader[4].ToString()
             };

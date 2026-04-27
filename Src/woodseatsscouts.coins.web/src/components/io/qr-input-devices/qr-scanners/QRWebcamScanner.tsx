@@ -44,21 +44,6 @@ export default function QRWebcamScanner({videoSizeEm, type, ...props}: QRWebcamS
           aspectRatio: 1,
         }}
       />
-      {/*<QrReader*/}
-      {/*  constraints={{facingMode: "environment"}}*/}
-      {/*  containerStyle={{height: (videoSizeEm + 1) + "em"}}*/}
-      {/*  videoStyle={{height: videoSizeEm + "em"}}*/}
-      {/*  videoContainerStyle={{paddingTop: videoSizeEm + "em"}}*/}
-      {/*  onResult={(result, error) => {*/}
-      {/*    if (!!result) {*/}
-      {/*      setCurrentQRCode(result?.text)*/}
-      {/*    }*/}
-
-      {/*    if (!!error) {*/}
-      {/*    }*/}
-      {/*  }}*/}
-      {/*  style={{width: '100%'}}*/}
-      {/*/>*/}
     </div>
   );
 }

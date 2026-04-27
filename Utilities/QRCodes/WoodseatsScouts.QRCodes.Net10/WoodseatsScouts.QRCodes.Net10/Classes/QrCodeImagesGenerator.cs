@@ -11,7 +11,7 @@ public class QrCodeImagesGenerator(FileSystemInfo memberQrCodesDirectoryInfo, Fi
 
     private const QRCodeGenerator.ECCLevel EccLevel = QRCodeGenerator.ECCLevel.Q;
 
-    public void GenerateMemberQrCodes(List<Member> members)
+    public void GenerateMemberQrCodes(List<ScoutMember> members)
     {
         foreach (var member in members)
         {
