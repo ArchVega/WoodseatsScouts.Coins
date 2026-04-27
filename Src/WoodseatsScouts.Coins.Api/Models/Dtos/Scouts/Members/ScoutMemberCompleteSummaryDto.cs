@@ -13,7 +13,7 @@ public class ScoutMemberCompleteSummaryDto
             throw new InvalidOperationException("Scout member must load navigation property ScanSession");
         }
         
-        var haulResults = scoutMember.ScanSessions.Select(scanSession =>
+        var haulResultDtos = scoutMember.ScanSessions.Select(scanSession =>
         {
             var groupedByActivityBase = scanSession.ScanCoins.GroupBy(x => x.Coin!.ActivityBaseId).ToList();
 
@@ -53,28 +53,9 @@ public class ScoutMemberCompleteSummaryDto
         ScoutSectionCode = scoutMember.ScoutSectionCode;
         ScoutSectionName = scoutMember.ScoutSection.Name;
         TotalPoints = (int)scoutMember.ScanSessions.SelectMany(y => y.ScanCoins.Select(z => z.CalculatedEffectivePoints)).Sum()!;
-        HaulResults = haulResults;
+        HaulResults = haulResultDtos;
 
         ScoutMemberCompleteSummaryStatsDto = new ScoutMemberCompleteSummaryStatsDto();
-
-        var grouping = haulResults
-            .SelectMany(x => x.ActivityBaseHaulResultDtos)
-            .GroupBy(x => x.ActivityBaseName)
-            .ToList();
-
-        var maxCount = grouping.Any() ? grouping.Max(x => x.Count()) : 0;
-        var minCount = grouping.Any() ? grouping.Min(x => x.Count()) : 0;
-
-        ScoutMemberCompleteSummaryStatsDto.MostVisitedActivityBase = new ScoutMemberCompleteSummaryStatsActivityBaseInfoDto
-        {
-            Names = grouping.Where(x => x.Count() == maxCount).Select(x => x.Key).ToList(),
-            TimesVisited = maxCount,
-        };
-        ScoutMemberCompleteSummaryStatsDto.LeastVisitedActivityBase = new ScoutMemberCompleteSummaryStatsActivityBaseInfoDto
-        {
-            Names = grouping.Where(x => x.Count() == minCount).Select(x => x.Key).ToList(),
-            TimesVisited = minCount,
-        };
 
         ScoutMemberCompleteSummaryStatsDto.MostScans = scoutMember.ScanSessions
             .Select(x => x.ScanCoins.Count)

@@ -2,9 +2,9 @@ namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 public class ScoutMemberCompleteSummaryStatsDto
 {
-    public ScoutMemberCompleteSummaryStatsActivityBaseInfoDto MostVisitedActivityBase { get; set; } = null!;
+    public List<ScoutMemberCompleteSummaryStatsActivityBaseInfoDto> MostVisitedActivityBases { get; set; } = [];
 
-    public ScoutMemberCompleteSummaryStatsActivityBaseInfoDto LeastVisitedActivityBase { get; set; } = null!;
+    public List<ScoutMemberCompleteSummaryStatsActivityBaseInfoDto> LeastVisitedActivityBases { get; set; } = [];
 
     public int MostScans { get; set; }
 

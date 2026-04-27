@@ -5,7 +5,7 @@ import {PageActionMenuAreaContext, UseAppCameraContext} from "../../contexts/App
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import type {ActivityBaseHaulResultDto, HaulResultDto, ScannedCoinDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
+import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteSummaryStatsActivityBaseInfoDto, ScannedCoinDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
@@ -287,24 +287,22 @@ export default function MemberDetailsPage() {
         {RenderActivityCard("Most Visited Base", (
           <>
             {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
-              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase
-              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.names.map((x, i) => (
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBases
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBases.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
                 <div key={i}>
-                  <strong className="fs-3">{x}</strong>
+                  <strong className="fs-5">{x.name} ({x.timesVisited})</strong>
                 </div>
               ))}
-            <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</strong></div>
           </>
         ))}
         {RenderActivityCard("Least Visited Base", <>
           {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
-            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase
-            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.names.map((x, i) => (
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBases
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBases.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
               <div key={i}>
-                <strong className="fs-3">{x}</strong>
+                <strong className="fs-5">{x.name} ({x.timesVisited})</strong>
               </div>
             ))}
-          <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.timesVisited} visits</strong></div>
         </>)}
         {RenderActivityCard("Most Scans", <>
           <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostScans} Tokens</strong></div>
