@@ -29,13 +29,14 @@ export default function AppSettingsModal({appSettingsModal, setAppSettingsModal}
           {appCameraAvailable
             ? (
               <form>
-                <label>Use camera instead of usb scanner</label>
-                <Switch id={""} checked={useAppCamera} onChange={() => setUseAppCamera(!useAppCamera)}></Switch>
+                <label className="fs-4">Use camera instead of usb scanner</label>
+                <Switch style={{height: "40px", width: "80px"}} id={""} checked={useAppCamera} onChange={() => setUseAppCamera(!useAppCamera)}></Switch>
               </form>
             )
             : null}
         </div>
       </div>
+      <hr />
       <div className="row">
         <div className="col text-end">
           <small><em>Version:&nbsp;</em></small>

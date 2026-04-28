@@ -22,6 +22,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
   const [coinQrCode, setCoinQrCode] = useState<string>("");
   const [coinDtos, setCoinDtos] = useState<CoinDto[]>([]);
   const [coinTotal, setCoinTotal] = useState<number>(0);
+  const [isCreateScanSessionRequestInProgress, setIsCreateScanSessionRequestInProgress] = useState<boolean>(false);
 
   useEffect(() => {
     if (coinQrCode != null && coinQrCode.trim().length > 0) {
@@ -66,25 +67,37 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
     setCoinDtos((current) => current.filter((c) => c !== coin));
   }
 
-  async function onFinished() {
+  async function onClickSavePointsButton() {
     if (coinDtos.length === 0) {
       toast("Add at least one coin for this member", {position: 'top-center'})
       return
     }
 
-    await CoinApiService().addPointsToMember(member, coinDtos).then(async (response: any) => {
-      const additionalData = await response.data
+    if (isCreateScanSessionRequestInProgress) {
+      return
+    }
 
-      let finalTotal = coinTotal;
-      if (additionalData.hasAnomalyOccurred) {
-        finalTotal = finalTotal - additionalData.anomalousCoinsTotalValue
-      }
+    setIsCreateScanSessionRequestInProgress(true);
 
-      setHaulResult({
-        coinTotal: finalTotal,
-        additionalData: additionalData
+    await CoinApiService()
+      .addPointsToMember(member, coinDtos)
+      .then(async (response: any) => {
+        const additionalData = await response.data
+
+        let finalTotal = coinTotal;
+        if (additionalData.hasAnomalyOccurred) {
+          finalTotal = finalTotal - additionalData.anomalousCoinsTotalValue
+        }
+
+        setHaulResult({
+          coinTotal: finalTotal,
+          additionalData: additionalData
+        })
+      }).finally(() => {
+        setTimeout(() => {
+          setIsCreateScanSessionRequestInProgress(false);
+        }, 1000)
       })
-    })
   }
 
   function focusScanner() {
@@ -122,7 +135,7 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
       <>
         <div className="row mb-1">
           <div className="col">
-            <div className="mt-3 mb-2 text-black fw-semibold text-center" style={{fontSize: "5em"}}>Now scan your points tokens...</div>
+            <div id="now-scan-your-points-tokens" className="mt-5 mb-5 text-black fw-semibold text-center" style={{fontSize: "5em"}}>Now scan your points tokens...</div>
           </div>
         </div>
         <div className="row mb-3">
@@ -149,7 +162,11 @@ export default function ScanCoinsSection({member, setHaulResult}: ScanCoinsSecti
         <div className="row" style={{position: "relative"}}>
           <div className="col float-end text-end ">
             <div className="d-grid">
-              <button id="finish-scanning-button" data-testid="button-finish-scanning" onClick={onFinished} className="btn btn-success btn-lg">
+              <button id="finish-scanning-button"
+                      data-testid="button-finish-scanning"
+                      onClick={onClickSavePointsButton}
+                      disabled={isCreateScanSessionRequestInProgress}
+                      className="btn btn-success btn-lg">
                 <div>
                   <div style={{fontSize: "4em"}}>🎉</div>
                   <em className="text-white" style={{fontSize: "4em"}}>SAVE POINTS</em>

@@ -19,7 +19,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,7 +49,7 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,13 +76,13 @@ namespace WoodseatsScouts.Coins.Api.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(450)", nullable: false, computedColumnSql: "    'M'\n    + RIGHT('000' + CAST([ScoutGroupId] AS VARCHAR(3)), 3)\n    + ScoutSectionCode\n    + RIGHT('000' + CAST([Number] AS VARCHAR(3)), 3)"),
                     Number = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ScoutGroupId = table.Column<int>(type: "int", nullable: false),
                     ScoutSectionCode = table.Column<string>(type: "char(1)", maxLength: 1, nullable: false),
-                    Clue1State = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Clue2State = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Clue3State = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Clue1State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Clue2State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Clue3State = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDayVisitor = table.Column<bool>(type: "bit", nullable: false),
                     HasImage = table.Column<bool>(type: "bit", nullable: false)
                 },

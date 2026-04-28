@@ -18,7 +18,7 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
         Seed = 1024;
     }
 
-    public void Generate(List<Member> members, List<Coin> coins)
+    public void Generate(List<ScoutMember> members, List<Coin> coins)
     {
         var uniqueRandoms = new UniqueRandoms(random);
 
@@ -33,7 +33,7 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
             var fileInfo = databaseDirectoryInfo.GetFiles($"*{member.FullName}*", SearchOption.AllDirectories).Single();
             var memberQrCodeImageFileInfo = new MemberFileInfo
             {
-                Member = member,
+                ScoutMember = member,
                 FileInfo = fileInfo,
                 Bitmap = Image.Load<Rgba32>(fileInfo.FullName)
             };
@@ -96,8 +96,8 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
             // Row 1
             ctx.DrawImage(memberQrCodeImageFileInfo.Bitmap, new Point(row1X, 0), 1f);
             DrawText(ctx, "MEMBER QR CODE", row1X, 0, font);
-            DrawText(ctx, $"Code: {memberQrCodeImageFileInfo.Member.Code}", row1X, 22, font);
-            DrawText(ctx, $"Member: {memberQrCodeImageFileInfo.Member.FullName}", row1X, 44, font);
+            DrawText(ctx, $"Code: {memberQrCodeImageFileInfo.ScoutMember.Code}", row1X, 22, font);
+            DrawText(ctx, $"Member: {memberQrCodeImageFileInfo.ScoutMember.FullName}", row1X, 44, font);
             row1X += memberQrCodeImageFileInfo.Bitmap.Width;
 
             foreach (var coinImage in coinQrCodeImageFileInfos.Take(2))
@@ -123,7 +123,7 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
             }
         });
 
-        var path = Path.Combine(testSheetsDirectoryInfo.FullName, $"{memberQrCodeImageFileInfo.Member.FullName}_TestSheet.png");
+        var path = Path.Combine(testSheetsDirectoryInfo.FullName, $"{memberQrCodeImageFileInfo.ScoutMember.FullName}_TestSheet.png");
 
         outputImage.Save(path);
         
@@ -147,7 +147,7 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
         // Draw original image onto new canvas at offset (padding, padding)
         padded.Mutate(ctx => ctx.DrawImage(original, new Point(padding, padding), 1f));
 
-        var path = Path.Combine(testSheetsPaddedDirectoryInfo.FullName, $"{memberQrCodeImageFileInfo.Member.FullName}_TestSheet.png");
+        var path = Path.Combine(testSheetsPaddedDirectoryInfo.FullName, $"{memberQrCodeImageFileInfo.ScoutMember.FullName}_TestSheet.png");
         Console.WriteLine($"Saving {path}");
         padded.Save(path);
     }
@@ -160,7 +160,7 @@ public class TestSheetGenerator(DirectoryInfo databaseDirectoryInfo, DirectoryIn
 
 public class MemberFileInfo
 {
-    public Member Member { get; set; }
+    public ScoutMember ScoutMember { get; set; }
     public FileInfo FileInfo { get; set; }
     public new Image<Rgba32> Bitmap { get; set; }
 }

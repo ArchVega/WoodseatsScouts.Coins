@@ -1,11 +1,11 @@
 import './MemberDetailsPage.scss'
 import {useParams} from "react-router-dom";
 import React, {type ReactNode, useContext, useEffect, useState} from "react";
-import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
+import {PageActionMenuAreaContext, UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import Spinner from "../../components/widgets/Spinner.tsx";
 import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import type {ActivityBaseHaulResultDto, HaulResultDto, ScannedCoinDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
+import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteSummaryStatsActivityBaseInfoDto, ScannedCoinDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import {logObject} from "../../components/logging/Logger.ts";
@@ -27,6 +27,11 @@ export default function MemberDetailsPage() {
   const [selectedScanSessionId, setSelectedScanSessionId] = useState<number | null>(null);
   const [selectedScannedCoinDto, setSelectedScannedCoinDto] = useState<ScannedCoinDto | undefined>(undefined);
   const {checkPasscode} = usePasscode();
+  const {setPageActionMenuAreaAction} = useContext(PageActionMenuAreaContext)
+
+  useEffect(() => {
+    setPageActionMenuAreaAction(null)
+  }, []);
 
   useEffect(() => {
     if (memberId) {
@@ -56,15 +61,11 @@ export default function MemberDetailsPage() {
   }, [selectedScanSessionId, memberCompleteDto]);
 
   function tryEditScoutMemberPhoto() {
-    if (checkPasscode()) {
-      useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')
-    }
+    useAppCamera ? setShowEditMemberPhotoModal(true) : alert('Device does not have a camera or it is unavailable.')
   }
 
   function tryEditScoutMemberDetails() {
-    if (checkPasscode()) {
-      setShowEditMemberDetailsModal(true)
-    }
+    setShowEditMemberDetailsModal(true)
   }
 
   function formatDateTime(isoDateString: string) {
@@ -156,39 +157,61 @@ export default function MemberDetailsPage() {
             <h4>{memberCompleteDto.firstName}'s Scan Sessions</h4>
           </div>
         </div>
-        <table className="table table-bordered">
-          <thead className="table-dark">
-          <tr>
-            <th>Time</th>
-            <th>Total Points</th>
-            <th>Delete</th>
-          </tr>
-          </thead>
-          <tbody>
-          {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, index) => (
-            <tr key={index} role="button" onClick={() => setSelectedScanSessionId(haulResultDto.scanSessionId)}
-                style={{
-                  backgroundColor: selectedScanSessionId === haulResultDto.scanSessionId ? "#d3e5ff" : "transparent"
-                }}>
-              <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
-              <td>{haulResultDto.totalPoints}</td>
-              <td>
-                <span role="button" onClick={e => deleteScanSession(haulResultDto)}>🗑️</span>
-              </td>
+        {memberCompleteDto && memberCompleteDto.haulResults.length !== 0 && (
+          <table className="table table-bordered">
+            <thead className="table-dark">
+            <tr>
+              <th>Time</th>
+              <th>Total Points</th>
+              <th>Delete</th>
             </tr>
-          ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+            {memberCompleteDto && memberCompleteDto.haulResults.map((haulResultDto, index) => (
+              <tr key={index} role="button" onClick={() => setSelectedScanSessionId(haulResultDto.scanSessionId)}
+                  style={{
+                    backgroundColor: selectedScanSessionId === haulResultDto.scanSessionId ? "#d3e5ff" : "transparent"
+                  }}>
+                <td>{formatDateTime(haulResultDto.hauledAtIso8601)}</td>
+                <td>{haulResultDto.totalPoints}</td>
+                <td>
+                  <span role="button" onClick={e => deleteScanSession(haulResultDto)}>🗑️</span>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        )}
+        {memberCompleteDto && memberCompleteDto.haulResults.length === 0 && (
+          <>
+            <hr/>
+            <div className="row mt-3">
+              <div className="col-12">
+                {memberCompleteDto.firstName} hasn't scanned any coins yet.
+              </div>
+            </div>
+          </>
+        )}
       </div>
     )
   }
 
   function RenderSelectedScanSessions() {
+    if (memberCompleteDto && memberCompleteDto.haulResults.length === 0) {
+      return (
+        <div className="card member-details-table-container">
+          <div className="card-body text-center">
+            Details will be shown here when {memberCompleteDto.firstName} has scanned coins.
+          </div>
+        </div>
+      )
+    }
+
     if (!activeHaulResultDto) {
       return (
-        <div className="card">
+        <div className="card member-details-table-container">
           <div className="card-body text-center">
-            Select a Session
+            Select a Session.
           </div>
         </div>
       )
@@ -261,27 +284,41 @@ export default function MemberDetailsPage() {
 
     return (
       <div id="recent-member-activity-summary-cards" className="row g-1 sticky-top">
-        {RenderActivityCard("Most Visited Base", (
+        {RenderActivityCard("Most Visited Bases", (
           <>
             {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
-              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase
-              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.names.map((x, i) => (
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBasesByParticipant
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBasesByParticipant.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
                 <div key={i}>
-                  <strong className="fs-3">{x}</strong>
+                  <strong className="fs-5">{x.name} ({x.timesVisited})</strong>
                 </div>
               ))}
-            <div><em>{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBase.timesVisited} visits</em></div>
+            {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBasesByParticipant
+              && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostVisitedActivityBasesByParticipant.length === 0
+              && (
+                <strong>No bases visited yet!</strong>
+              )
+            }
           </>
         ))}
-        {RenderActivityCard("Least Visited Base", <>
+        {RenderActivityCard("Least Visited Bases", <>
           {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
-            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase
-            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.names.map((x, i) => (
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBasesByParticipant
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBasesByParticipant.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
               <div key={i}>
-                <strong className="fs-3">{x}</strong>
+                <strong className="fs-5">{x.name} ({x.timesVisited})</strong>
               </div>
             ))}
-          <div><em>{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBase.timesVisited} visits</em></div>
+        </>)}
+        {RenderActivityCard("Least Visited Bases By Others", <>
+          {memberCompleteDto.scoutMemberCompleteSummaryStatsDto
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBasesByOtherParticipants
+            && memberCompleteDto.scoutMemberCompleteSummaryStatsDto.leastVisitedActivityBasesByOtherParticipants.map((x: MemberCompleteSummaryStatsActivityBaseInfoDto, i) => (
+              <div key={i}>
+                <strong className="fs-5">{x.name} ({x.timesVisited})</strong>
+              </div>
+            ))}
         </>)}
         {RenderActivityCard("Most Scans", <>
           <div><strong className="fs-3">{memberCompleteDto.scoutMemberCompleteSummaryStatsDto.mostScans} Tokens</strong></div>

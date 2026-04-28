@@ -5,6 +5,7 @@ import {BaseModal} from "./BaseModal.tsx";
 import Uris from "../../services/apis/Uris.ts";
 import {Button} from "../widgets/HtmlControlWrappers.tsx";
 import type {ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
+import {apiClient} from "../../services/apis/apiClient.ts";
 
 interface EditMemberPhotoModalProps {
   showEditMemberPhotoModal: boolean;
@@ -17,6 +18,7 @@ export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowE
   const webcamRef = useRef<Webcam>(null);
 
   const [screenshot, setScreenshot] = useState<string | null>(null);
+  const [startCamera, setStartCamera] = useState(false);
 
   const capture = useCallback(() => {
     if (webcamRef.current) {
@@ -36,13 +38,7 @@ export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowE
       photo: base64Image
     }
 
-    const requestOptions = {
-      method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload)
-    };
-
-    fetch(Uris.scouts().members().updateMemberPhoto(memberCompleteDto.id), requestOptions).then(() => {
+    apiClient.put(Uris.scouts().members().updateMemberPhoto(memberCompleteDto.id), payload).then(() => {
       const updatedSelectedMember = ({...memberCompleteDto})
       updatedSelectedMember.hasImage = true;
       setMemberCompleteDto(updatedSelectedMember)
@@ -71,28 +67,47 @@ export default function EditMemberPhotoModal({showEditMemberPhotoModal, setShowE
       show={showEditMemberPhotoModal}
       onClose={() => {
         setShowEditMemberPhotoModal(false)
-      }}>
-      <div className="row mb-3 mt-2">
-        <div className="col text-center fs-3">
-          Take a photo of <strong>{memberCompleteDto.firstName}</strong>
-        </div>
-      </div>
-      <div className="row mb-2">
-        <div className="col">
-          <div className="webcam-wrapper">
-            <Webcam
-              id="webcam"
-              width={"100%"}
-              ref={webcamRef}
-              audio={false}
-              screenshotFormat="image/jpeg"
-              forceScreenshotSourceSize={true}
-              videoConstraints={videoConstraints}/>
-            <div className="webcam-overlay" />
+      }}
+      isPhotoModal={true}>
+
+      {!startCamera && (
+        <div className="row">
+          <div className="col text-center">
+            <div className="fs-4 mb-5 mt-5">Click the button to allow the device's webcam to take photos.</div>
+            <button className="fs-3 btn btn-success mb-5" onClick={() => setStartCamera(true)}>
+              Start Camera
+            </button>
           </div>
         </div>
-      </div>
-      <Button className="btn btn-success" onClick={capture}>Capture photo</Button>
+      )}
+
+      {startCamera && (
+        <>
+          <div className="row mb-3 mt-2">
+            <div className="col text-center fs-3">
+              Take a photo of <strong>{memberCompleteDto.firstName} {memberCompleteDto.lastName}</strong>
+            </div>
+          </div>
+          <div className="row mb-2">
+            <div className="col">
+              <div className="webcam-wrapper">
+                <Webcam
+                  id="webcam"
+                  width={"100%"}
+                  ref={webcamRef}
+                  playsInline
+                  onUserMediaError={(err) => console.log("camera error", err)}
+                  audio={false}
+                  screenshotFormat="image/jpeg"
+                  forceScreenshotSourceSize={true}
+                  videoConstraints={videoConstraints}/>
+                <div className="webcam-overlay"/>
+              </div>
+            </div>
+          </div>
+          <Button className="fs-1 btn btn-success w-100" style={{height: "100px"}} onClick={capture}>Take Photo</Button>
+        </>
+      )}
     </BaseModal>
   )
 }

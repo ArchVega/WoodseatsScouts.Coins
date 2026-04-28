@@ -28,17 +28,17 @@ export default function HaulResultsSection({member, haulResult}) {
   }, appSettings.VITE_SCAN_COINS_REDIRECT_DELAY_SECONDS * 1000)
 
   return (
-    <>
+    <div id="summary-haul-page">
       <div className="row mt-5">
         <div className="col text-center">
-          <h1>{congratsPhrase}<span className="font-black">{member.firstName}</span><span
+          <h1 id="congrats-text">{congratsPhrase}<span className="font-black">{member.firstName}</span><span
             style={{fontSize: '1em'}}>👍</span>
           </h1>
         </div>
       </div>
-      <div className="row mb-3">
+      <div className="row mt-2 mb-3">
         <div className="col text-center">
-          <h4>You've just added some more points to your score.</h4>
+          <h4 id="added-points-text">You've just added some more points <br/> to your score.</h4>
         </div>
       </div>
       <div className="row mb-3">
@@ -68,9 +68,9 @@ export default function HaulResultsSection({member, haulResult}) {
             </div>
           </div>)
         : (<></>)}
-      <div className="row mb-4">
+      <div className="row mt-4 mb-4">
         <div className="col text-center">
-          <h4>Head back out there and get some more points...</h4>
+          <h4 id="head-back-out-text">Head back out there and get some more points...</h4>
         </div>
       </div>
       <div className="row">
@@ -80,6 +80,6 @@ export default function HaulResultsSection({member, haulResult}) {
           </button>
         </div>
       </div>
-    </>
+    </div>
   )
 }

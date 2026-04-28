@@ -2,12 +2,13 @@ import './ScoutMembersListPage.scss'
 import React, {useContext, useEffect, useState} from "react";
 import MemberApiService from "../../services/apis/MemberApiService.ts";
 import {useNavigate} from "react-router-dom";
-import {UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
+import {PageActionMenuAreaContext, UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
 import {Button} from "../../components/widgets/HtmlControlWrappers.tsx";
 import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import type {AxiosResponse} from "axios";
 import type {ScoutMemberPointsSummaryDto} from "../../types/ServerTypes.ts";
+import QRWebcamScanner from "../../components/modals/QrWebcamScannerModal.tsx";
 
 export default function ScoutMembersListPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -15,10 +16,16 @@ export default function ScoutMembersListPage() {
 
   const [members, setMembers] = useState<ScoutMemberPointsSummaryDto[]>([]);
   const [userModal, setUserModal] = useState<boolean>(false);
+  const [showQrWebcamScannerModal, setShowQrWebcamScannerModal] = useState<boolean>(false);
   const [editUserModal, setEditUserModal] = useState<boolean>(false);
   const [editMemberNameModal, setEditMemberNameModal] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [filterText, setFilterText] = useState<string | null>(null);
+  const {setPageActionMenuAreaAction} = useContext(PageActionMenuAreaContext)
+
+  useEffect(() => {
+    setPageActionMenuAreaAction(null)
+  }, []);
 
   useEffect(() => {
     const fetchMembers = async (): Promise<AxiosResponse<ScoutMemberPointsSummaryDto[]>> => {
@@ -28,6 +35,33 @@ export default function ScoutMembersListPage() {
       setMembers(response.data)
     });
   }, [])
+
+
+  useEffect(() => {
+    if (members && members.length > 0) {
+      if (selectedUser && selectedUser.hasImage) {
+        const updatedMembers = [...members]
+        const selectedMember = updatedMembers.find(x => x.id === selectedUser.id)
+        selectedMember.hasImage = true
+        setMembers((updatedMembers))
+      }
+
+      if (selectedUser) {
+        const newMembers = members.map((m, i) => {
+          if (m.id === selectedUser.id) {
+            return selectedUser
+          } else {
+            return m
+          }
+        })
+        setMembers([...newMembers])
+      }
+    }
+  }, [selectedUser])
+
+  function onQRWebcamScannerModalButtonClick() {
+    setShowQrWebcamScannerModal(true)
+  }
 
   function showEditUserModal(user1) {
     setSelectedUser(user1)
@@ -101,40 +135,23 @@ export default function ScoutMembersListPage() {
     )
   }
 
-  useEffect(() => {
-    if (members && members.length > 0) {
-      if (selectedUser && selectedUser.hasImage) {
-        const updatedMembers = [...members]
-        const selectedMember = updatedMembers.find(x => x.id === selectedUser.id)
-        selectedMember.hasImage = true
-        setMembers((updatedMembers))
-      }
-
-      if (selectedUser) {
-        const newMembers = members.map((m, i) => {
-          if (m.id === selectedUser.id) {
-            return selectedUser
-          } else {
-            return m
-          }
-        })
-        setMembers([...newMembers])
-      }
-    }
-  }, [selectedUser])
-
   return (
     <div id="members-list-page">
       <div className="row mt-3 mb-3">
         <div className="col">
-          <input
-            style={{width: '100%', height: "40px", color: 'black', textAlign: 'center'}}
-            className="filter-members"
-            data-testid="textbox-search-members"
-            autoFocus={true}
-            placeholder="Search by member, groups or section name"
-            onChange={x => setFilterText(x.target.value)}
-          />
+          <div className="d-flex">
+            <input
+              style={{width: '100%', height: "40px", color: 'black', textAlign: 'center'}}
+              className="filter-members"
+              data-testid="textbox-search-members"
+              autoFocus={true}
+              placeholder="Search by member, groups or section name"
+              onChange={x => setFilterText(x.target.value)}
+            />
+            <button className="webcam-modal-button flex-shrink-0 ms-2" style={{width: "60px"}} onClick={() => onQRWebcamScannerModalButtonClick()}>
+              📷
+            </button>
+          </div>
         </div>
       </div>
       <div className="row">
@@ -144,7 +161,9 @@ export default function ScoutMembersListPage() {
           </div>
         </div>
       </div>
-      <EditMemberPhotoModal showEditMemberPhotoModal={editUserModal} setShowEditMemberPhotoModal={setEditUserModal} memberCompleteDto={selectedUser} setMemberCompleteDto={setSelectedUser}/>
+      <EditMemberPhotoModal showEditMemberPhotoModal={editUserModal} setShowEditMemberPhotoModal={setEditUserModal} memberCompleteDto={selectedUser}
+                            setMemberCompleteDto={setSelectedUser}/>
+      <QRWebcamScanner showModal={showQrWebcamScannerModal} setShowModal={setShowQrWebcamScannerModal} setQrCode={setFilterText}/>
     </div>
   )
 }

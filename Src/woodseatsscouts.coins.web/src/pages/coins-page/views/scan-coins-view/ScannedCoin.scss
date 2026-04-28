@@ -58,15 +58,15 @@
 }
 
 .coin-last-added {
-  animation: breathe 3s ease-in-out infinite;
+  //animation: coin-breathe 3s ease-in-out infinite;
 }
 
-@keyframes breathe {
+@keyframes coin-breathe {
   0%, 100% {
     box-shadow: 0 0 0 2px rgba(116, 19, 220, 0.9);
   }
   45% {
-    box-shadow: 0 0 0 30px rgba(116, 19, 220, 0.4);
+    box-shadow: 0 0 0 5px rgba(116, 19, 220, 0.4);
   }
 }
 
@@ -78,15 +78,6 @@
   top: -20px;
   right: -40px;
 }
-
-//.coin .remove {
-//  position: absolute;
-//  top: -20px;
-//  right: 30px;
-//  color: white;
-//  font-style: normal;
-//  font-size: 10px !important;
-//}
 
 .total-points-so-far {
   & .col.text-end {
@@ -106,13 +97,6 @@
   border-radius: 20px !important;
   box-shadow: 2px 2px rgba(0, 0, 0, 0.3);
 }
-
-//.total-votes {
-//  border-radius: 50% !important;
-//  width: 40px;
-//  height: 40px;
-//  border: 3px solid white;
-//}
 
 #finish-scanning-button {
   border: 2px solid map.get(colours.$colours, black);

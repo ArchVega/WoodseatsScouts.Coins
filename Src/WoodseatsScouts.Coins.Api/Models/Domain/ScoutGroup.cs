@@ -6,7 +6,6 @@ public class ScoutGroup
 {
     public int Id { get; set; }
     
-    [MaxLength(100)]
     public required string Name { get; set; }
 
     public List<ScoutMember> ScoutMembers { get; set; } = [];

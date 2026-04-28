@@ -1,7 +1,7 @@
 const CoinsPageViewName = {
     ScanMember: 'ScanMember',
     ScanCoins: 'ScanCoins',
-    HaulSummary: 'HaulSummary'
+    HaulSummary: 'HaulSummary',
 }
 
 export default CoinsPageViewName

@@ -16,7 +16,7 @@ public class ScoutMemberService(IAppDbContext appDbContext) : IScoutMemberServic
         {
             throw new Exception("Error");
         }
-        
+
         return appDbContext.ScoutMembers!
             .Include(x => x.ScoutGroup)
             .Include(x => x.ScoutSection)
@@ -54,7 +54,7 @@ public class ScoutMemberService(IAppDbContext appDbContext) : IScoutMemberServic
 
     public ScoutMemberCompleteSummaryDto MemberCompleteSummaryDto(int scoutMemberId)
     {
-        return appDbContext.ScoutMembers!
+        var scoutMemberCompleteSummaryDto = appDbContext.ScoutMembers!
             .Include(x => x.ScanSessions)
             .ThenInclude(x => x.ScanCoins)
             .ThenInclude(x => x.Coin)
@@ -65,5 +65,67 @@ public class ScoutMemberService(IAppDbContext appDbContext) : IScoutMemberServic
             .ToList()
             .Select(x => new ScoutMemberCompleteSummaryDto(x))
             .First();
+
+        var visitsPerSessionBaseByMember = appDbContext
+            .ScoutMembers
+            .Where(sm => sm.Id == scoutMemberId)
+            .SelectMany(sm => sm.ScanSessions)
+            .SelectMany(ss => ss.ScanCoins
+                .Where(sc => sc.Coin != null && sc.Coin.ActivityBase != null)
+                .Select(sc => new
+                {
+                    ActivityBaseId = sc.Coin.ActivityBase.Id,
+                    SessionId = ss.Id
+                }))
+            .Distinct();
+        
+        var leastVisitedByParticipant = appDbContext
+            .ActivityBases
+            .GroupJoin(
+                visitsPerSessionBaseByMember,
+                ab => ab.Id,
+                v => v.ActivityBaseId,
+                (ab, visits) => new ScoutMemberCompleteSummaryStatsActivityBaseInfoDto
+                {
+                    Name = ab.Name,
+                    TimesVisited = visits.Count()
+                })
+            .OrderBy(x => x.TimesVisited)
+            .Take(3)
+            .ToList();
+        
+        scoutMemberCompleteSummaryDto.ScoutMemberCompleteSummaryStatsDto.LeastVisitedActivityBasesByParticipant = leastVisitedByParticipant;
+        
+        var visitsPerSessionBaseByOthers = appDbContext
+            .ScoutMembers
+            .Where(sm => sm.Id != scoutMemberId)
+            .SelectMany(sm => sm.ScanSessions)
+            .SelectMany(ss => ss.ScanCoins
+                .Where(sc => sc.Coin != null && sc.Coin.ActivityBase != null)
+                .Select(sc => new
+                {
+                    ActivityBaseId = sc.Coin.ActivityBase.Id,
+                    SessionId = ss.Id
+                }))
+            .Distinct();
+        
+        var leastVisitedByOtherParticipants = appDbContext
+            .ActivityBases
+            .GroupJoin(
+                visitsPerSessionBaseByOthers,
+                ab => ab.Id,
+                v => v.ActivityBaseId,
+                (ab, visits) => new ScoutMemberCompleteSummaryStatsActivityBaseInfoDto
+                {
+                    Name = ab.Name,
+                    TimesVisited = visits.Count()
+                })
+            .OrderBy(x => x.TimesVisited)
+            .Take(3)
+            .ToList();
+        
+        scoutMemberCompleteSummaryDto.ScoutMemberCompleteSummaryStatsDto.LeastVisitedActivityBasesByOtherParticipants = leastVisitedByOtherParticipants;
+
+        return scoutMemberCompleteSummaryDto;
     }
 }

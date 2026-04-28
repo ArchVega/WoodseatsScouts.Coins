@@ -78,13 +78,14 @@ export type ScannedCoinDto = {
 }
 
 export type MemberCompleteSummaryStatsActivityBaseInfoDto = {
-  names: string[]
+  name: string
   timesVisited: number
 }
 
 export type MemberCompleteSummaryStatsDto = {
-  mostVisitedActivityBase: MemberCompleteSummaryStatsActivityBaseInfoDto
-  leastVisitedActivityBase: MemberCompleteSummaryStatsActivityBaseInfoDto
+  mostVisitedActivityBasesByParticipant: MemberCompleteSummaryStatsActivityBaseInfoDto[]
+  leastVisitedActivityBasesByParticipant: MemberCompleteSummaryStatsActivityBaseInfoDto[]
+  leastVisitedActivityBasesByOtherParticipants: MemberCompleteSummaryStatsActivityBaseInfoDto[]
   mostScans: number
   totalTokensScanned: number
 }

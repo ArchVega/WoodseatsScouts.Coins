@@ -23,10 +23,8 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
         
         public int Number { get; set; }
         
-        [MaxLength(100)]
         public string FirstName { get; set; } = null!;
 
-        [MaxLength(100)]
         public string? LastName { get; set; }
         
         public int ScoutGroupId { get; set; }
@@ -38,13 +36,10 @@ namespace WoodseatsScouts.Coins.Api.Models.Domain
         
         public ScoutSection ScoutSection { get; set; } = null!;
         
-        [MaxLength(100)]
         public string? Clue1State { get; init; }
 
-        [MaxLength(100)]
         public string? Clue2State { get; init; }
 
-        [MaxLength(100)]
         public string? Clue3State { get; init; }
         
         public bool IsDayVisitor { get; set; }

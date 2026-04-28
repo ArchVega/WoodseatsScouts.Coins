@@ -23,7 +23,7 @@ namespace WoodseatsScouts.Coins.Api.Data
         public DbSet<Coin> Coins { get; set; }
 
         public DbSet<ActivityBase> ActivityBases { get; set; }
-        
+
         public DbSet<ScannedCoin> ScannedCoins { get; set; }
 
         public DbSet<ScanSession> ScanSessions { get; set; }
@@ -290,7 +290,10 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public List<Coin> CreateCoins(int baseId, int points, int count)
         {
-            var maxBaseValueId = Coins!.Where(x => x.ActivityBaseId == baseId).Max(x => x.ActivityBaseSequenceNumber);
+            var maxBaseValueId = Coins.Any()
+                ? Coins.Where(x => x.ActivityBaseId == baseId).Max(x => x.ActivityBaseSequenceNumber)
+                : 0;
+            
             var newCoins = new List<Coin>();
             for (var i = maxBaseValueId + 1; i < maxBaseValueId + 1 + count; i++)
             {

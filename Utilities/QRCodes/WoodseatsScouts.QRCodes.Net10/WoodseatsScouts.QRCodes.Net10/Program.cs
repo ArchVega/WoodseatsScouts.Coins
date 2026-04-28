@@ -56,7 +56,7 @@ internal class Program
     {
         var fileName = Path.Combine(databaseDirectoryInfo.FullName, "CoinCodes.csv");
         var contents = coinCodes
-            .Select(x => $"{x},{x.Id},{x.Base},{x.Value}")
+            .Select(x => $"{x},{x.Id},{x.ActivityBaseId},{x.Value}")
             .Aggregate((x, y) => $"{x}{Environment.NewLine}{y}");
         contents = $"Code,Id,Base,Value{Environment.NewLine}" + contents;
         File.WriteAllText(fileName, contents);

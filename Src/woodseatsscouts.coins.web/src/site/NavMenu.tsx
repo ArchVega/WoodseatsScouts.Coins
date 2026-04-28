@@ -7,6 +7,7 @@ import CoinsPageViewName from "../pages/coins-page/CoinsPageViewName.ts";
 import {Button, Image} from "../components/widgets/HtmlControlWrappers.tsx";
 import AppSettingsModal from "../components/modals/AppSettingsModal.tsx";
 import ConfirmLogoutModal from "../components/modals/ConfirmLogoutModal.tsx";
+import {usePasscode} from "../components/security/usePasscode.ts";
 
 export default function NavMenu() {
   const {pageActionMenuAreaAction, activeScanningMember} = useContext(PageActionMenuAreaContext)
@@ -17,6 +18,7 @@ export default function NavMenu() {
   const [showConfirmLogoutModal, setShowConfirmLogoutModal] = useState(false);
   const {appCameraAvailable} = useContext(AppCameraAvailableContext)
   const [showNavBarMenu, setShowNavBarMenu] = useState(false)
+  const {checkPasscode} = usePasscode();
 
   function RenderNavBarSubmenu() {
     const RenderNavBarSubmenuItems = () => {
@@ -35,10 +37,10 @@ export default function NavMenu() {
         if (appCameraAvailable) {
           return (
             <div id="app-settings-gear"
-                  className={"me-5 mt-2"}
+                 className={"me-5 mt-2"}
                  style={{fontSize: "2.5em"}}
-                  data-testid="nav-settings-modal"
-                  onClick={() => setAppSettingsModal(true)}>
+                 data-testid="nav-settings-modal"
+                 onClick={() => setAppSettingsModal(true)}>
               ⛭
             </div>
           )
@@ -48,6 +50,10 @@ export default function NavMenu() {
       }
 
       const RenderReturnToMainScreenButton = () => {
+        if (window.location.pathname === '/') {
+          return null
+        }
+
         return (
           <div>
             <span data-testid="nav-coins-page" onClick={() => navigate("/")} className={"scouts-nav-link m-3"}>
@@ -91,7 +97,7 @@ export default function NavMenu() {
       case CoinsPageViewName.ScanCoins:
         return (
           <div className="d-flex h-100 p-2">
-            <Image className="member-image h-100 w-auto me-3" src={activeScanningMember.clientComputedImageUri}></Image>
+            <img className="member-image h-100 me-3" src={activeScanningMember.clientComputedImageUri}></img>
             <div id="member-details" className="flex-fill">
               <div><span>Hello,</span>&nbsp;<b className="text-white">{activeScanningMember.firstName}</b></div>
               <div>{activeScanningMember.scoutSectionName}, {activeScanningMember.scoutGroupName}</div>
@@ -136,7 +142,11 @@ export default function NavMenu() {
         </div>
         <div id="middle-column">
           <Image role="button" src={ScoutsLogo}
-                 style={{height: "70px", width: "100%"}} onClick={() => setShowNavBarMenu(!showNavBarMenu)}/>
+                 style={{height: "70px", width: "100%"}} onClick={() => {
+            if (showNavBarMenu || checkPasscode()) {
+              setShowNavBarMenu(!showNavBarMenu)
+            }
+          }}/>
         </div>
         <div id="right-column">
           {RenderRightSideHeaderSection()}
