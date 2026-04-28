@@ -290,7 +290,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public List<Coin> CreateCoins(int baseId, int points, int count)
         {
-            var maxBaseValueId = Coins.Any()
+            var maxBaseValueId = Coins.Any(x => x.ActivityBaseId == baseId)
                 ? Coins.Where(x => x.ActivityBaseId == baseId).Max(x => x.ActivityBaseSequenceNumber)
                 : 0;
             
