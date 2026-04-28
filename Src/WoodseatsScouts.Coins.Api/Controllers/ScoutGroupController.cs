@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Data;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts;
 using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Groups;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
@@ -24,6 +25,6 @@ public class ScoutGroupController(IAppDbContext appDbContext) : ControllerBase
     {
         var scoutGroup = appDbContext.CreateScoutGroup(createScoutGroupRequest.Name);
 
-        return Ok($"Scout group '{scoutGroup.Name}' created");
+        return Created("", scoutGroup);
     }
 }

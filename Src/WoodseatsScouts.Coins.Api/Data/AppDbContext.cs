@@ -190,6 +190,41 @@ namespace WoodseatsScouts.Coins.Api.Data
             return scoutGroup;
         }
 
+        public ActivityBase CreateActivityBase(string name)
+        {
+            using var transaction = Database.BeginTransaction();
+
+            var activityBases = new ActivityBase
+            {
+                Name = name
+            };
+            ActivityBases.Add(activityBases);
+
+            SaveChanges();
+
+            transaction.Commit();
+
+            return activityBases;
+        }
+        
+        public ScoutSection CreateScoutSection(string code, string name)
+        {
+            using var transaction = Database.BeginTransaction();
+
+            var scoutSection = new ScoutSection
+            {
+                Code = code,
+                Name = name
+            };
+            ScoutSections.Add(scoutSection);
+
+            SaveChanges();
+
+            transaction.Commit();
+
+            return scoutSection;
+        }
+        
         public ScanSession CreateScavengeResult(ScoutMember scoutMember)
         {
             var scavengeResult = new ScanSession
@@ -290,7 +325,7 @@ namespace WoodseatsScouts.Coins.Api.Data
 
         public List<Coin> CreateCoins(int baseId, int points, int count)
         {
-            var maxBaseValueId = Coins.Any()
+            var maxBaseValueId = Coins.Any(x => x.ActivityBaseId == baseId)
                 ? Coins.Where(x => x.ActivityBaseId == baseId).Max(x => x.ActivityBaseSequenceNumber)
                 : 0;
             

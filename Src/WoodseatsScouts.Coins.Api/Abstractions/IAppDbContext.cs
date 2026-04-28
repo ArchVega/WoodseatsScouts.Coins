@@ -30,6 +30,10 @@ public interface IAppDbContext
     
     ScoutGroup CreateScoutGroup(string name);
     
+    ActivityBase CreateActivityBase(string name);
+    
+    ScoutSection CreateScoutSection(string code, string name);
+    
     ScanSession CreateScavengeResult(ScoutMember scoutMember);
     
     void CreateScavengedCoins(ScanSession scanSession, List<string> coinCodes);

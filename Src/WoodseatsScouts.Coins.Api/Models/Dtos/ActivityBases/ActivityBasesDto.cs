@@ -1,6 +1,6 @@
 using WoodseatsScouts.Coins.Api.Models.Domain;
 
-namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+namespace WoodseatsScouts.Coins.Api.Models.Dtos.ActivityBases;
 
 public class ActivityBasesDto
 {
@@ -17,4 +17,9 @@ public class ActivityBasesDto
     public int Id { get; set; }
     
     public string Name { get; set; }
+
+    public override string ToString()
+    {
+        return $"{nameof(Id)}: {Id}, {nameof(Name)}: {Name}";
+    }
 }

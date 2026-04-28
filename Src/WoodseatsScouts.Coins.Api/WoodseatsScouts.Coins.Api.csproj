@@ -36,7 +36,6 @@
 
     <ItemGroup>
       <Folder Include="Migrations\" />
-      <Folder Include="Models\Dtos\Scouts\" />
       <Folder Include="Models\Requests\Scouts\" />
     </ItemGroup>
 

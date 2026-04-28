@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using WoodseatsScouts.Coins.Api.Abstractions;
 using WoodseatsScouts.Coins.Api.Data;
+using WoodseatsScouts.Coins.Api.Models.Dtos.ActivityBases;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Groups;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -15,6 +17,15 @@ public class ActivityBaseController( IAppDbContext appDbContext) : ControllerBas
     public ActionResult GetActivityBases()
     {
         return Ok(appDbContext.ActivityBases.Select(x => new ActivityBasesDto(x)));
+    }
+    
+    [HttpPost]
+    [Route("")]
+    public ActionResult CreateActivityBase([FromBody] CreateActivityBaseRequest createActivityBaseRequest)
+    {
+        var activityBase = appDbContext.CreateActivityBase(createActivityBaseRequest.Name);
+
+        return Created("", activityBase);
     }
     
     [HttpGet]

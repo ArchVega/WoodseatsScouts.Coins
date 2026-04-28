@@ -41,6 +41,9 @@ public class ScannedCoinController(IAppDbContext appDbContext, IOptions<AppSetti
         return Ok(new ScannedCoinDto(scannedCoin));
     }
     
+    /// <summary>
+    /// Overrides the native points for the coin associated with scannedCoinId.
+    /// </summary>
     [HttpPut]
     [Route("{scannedCoinId:int}")]
     public ActionResult UpdateScannedCoinPoints(int scannedCoinId, [FromBody] UpdateScannedCoinPointsValueRequest request)

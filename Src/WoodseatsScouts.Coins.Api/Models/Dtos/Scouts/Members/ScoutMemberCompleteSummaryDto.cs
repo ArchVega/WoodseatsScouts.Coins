@@ -5,6 +5,10 @@ namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 public class ScoutMemberCompleteSummaryDto
 {
+    public ScoutMemberCompleteSummaryDto()
+    {
+    }
+    
     public ScoutMemberCompleteSummaryDto(ScoutMember scoutMember)
     {
         if (scoutMember.ScanSessions == null)

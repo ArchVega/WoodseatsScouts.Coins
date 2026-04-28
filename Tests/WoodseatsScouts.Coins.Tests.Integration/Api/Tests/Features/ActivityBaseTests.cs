@@ -1,6 +1,6 @@
 using WoodseatsScouts.Coins.Tests.Integration.Api.Core;
 
-namespace WoodseatsScouts.Coins.Tests.Integration.Api.Tests;
+namespace WoodseatsScouts.Coins.Tests.Integration.Api.Tests.Features;
 
 public class ActivityBaseTests(CustomWebApplicationFactory factory) : IntegrationTestBase(factory)
 {

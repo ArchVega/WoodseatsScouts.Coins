@@ -4,6 +4,10 @@ namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 public abstract class ScoutMemberBaseDto
 {
+    public ScoutMemberBaseDto()
+    {
+    }
+    
     public int Id { get; set; }
     public string ScoutMemberCode { get; set; }
     public string ComputedImagePath { get; set; }

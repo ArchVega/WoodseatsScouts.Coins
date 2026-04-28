@@ -8,6 +8,7 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Members;
+using ScoutMember = WoodseatsScouts.Coins.Api.Models.Queries.ScoutMember;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -41,17 +42,24 @@ public class ScoutMemberController(
     {
         lock (Locker)
         {
-            return Ok(appDbContext.CreateMember(
+            var scoutMember = appDbContext.CreateMember(
                 createMemberRequest.FirstName,
                 createMemberRequest.LastName,
                 createMemberRequest.ScoutGroupId,
                 createMemberRequest.SectionCode,
-                createMemberRequest.IsDayVisitor));
+                createMemberRequest.IsDayVisitor)!;
+
+            scoutMember = appDbContext.ScoutMembers
+                .Include(x => x.ScoutGroup)
+                .Include(x => x.ScoutSection)
+                .Single(x => x.Id == scoutMember.Id);
+            
+            return Created("", new ScoutMemberDto(scoutMember));
         }
     }
 
     /// <summary>
-    /// Assign coins to a scout member. 
+    /// Assign coins to a scout member. Creates a ScanSession and a ScannedCoin record for each coin.
     /// </summary>
     [HttpPut]
     [Route("{scoutMemberId:int}/coins")]
@@ -60,15 +68,16 @@ public class ScoutMemberController(
         // Todo: wrap in a transaction
         var member = appDbContext.ScoutMembers!.Single(x => x.Id == scoutMemberId);
 
-        var tallyHistoryItem = appDbContext.CreateScavengeResult(member);
+        var scanSession = appDbContext.CreateScavengeResult(member);
 
-        appDbContext.CreateScavengedCoins(tallyHistoryItem, request.CoinCodes);
+        appDbContext.CreateScavengedCoins(scanSession, request.CoinCodes);
 
-        var alreadyScavengedCoins = appDbContext.RecordMemberAgainstUnscavengedCoins(member, request.CoinCodes);
+        var coins = appDbContext.RecordMemberAgainstUnscavengedCoins(member, request.CoinCodes);
 
-        var addPointsToMemberDto = new AddPointsToMemberDto(alreadyScavengedCoins);
+        var addPointsToMemberDto = new AddPointsToMemberDto(scanSession.Id, coins);
 
-        return CreatedAtAction(nameof(AssignCoinsToScoutMember), null, addPointsToMemberDto);
+        // todo: should be in the ScanSessionController.
+        return Created("", addPointsToMemberDto);
     }
 
     /// <summary>
@@ -101,9 +110,9 @@ public class ScoutMemberController(
     /// </summary>
     [HttpGet]
     [Route("{scoutMemberCode}")]
-    public IActionResult GetScoutMemberByCode(string scoutMemberCode, [FromQuery] Member? memberQuery)
+    public IActionResult GetScoutMemberByCode(string scoutMemberCode, [FromQuery] ScoutMember? memberQuery)
     {
-        memberQuery ??= new Member
+        memberQuery ??= new ScoutMember
         {
             View = View.Basic
         };

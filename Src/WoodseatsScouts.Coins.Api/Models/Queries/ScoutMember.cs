@@ -1,6 +1,6 @@
 namespace WoodseatsScouts.Coins.Api.Models.Queries;
 
-public class Member
+public class ScoutMember
 {
     public View View { get; set; }
 }

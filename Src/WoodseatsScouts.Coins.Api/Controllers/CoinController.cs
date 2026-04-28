@@ -20,7 +20,7 @@ public class CoinController(IAppDbContext appDbContext, ICoinService coinService
     {
         return Ok(await coinService.GetCoinFullDtos());
     }
-    
+
     /// <summary>
     /// Create new coins.
     /// </summary>
@@ -49,7 +49,7 @@ public class CoinController(IAppDbContext appDbContext, ICoinService coinService
 
         var coins = appDbContext.CreateCoins(baseId!, createCoinsRequest.PointsPerCoin, createCoinsRequest.NumberToCreate);
 
-        return Ok(coins);
+        return Created("", coins.Select(x => new CoinDto(x.Value, x.ActivityBaseId, x.Code)));
     }
 
     /// <summary>

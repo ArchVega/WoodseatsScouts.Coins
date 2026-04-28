@@ -1,10 +1,21 @@
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 
-public class CoinDto(int pointValue, int activityBaseId, string code)
+public class CoinDto
 {
-    public string Code { get; set; } = code;
+    public CoinDto()
+    {
+    }
+    
+    public CoinDto(int pointValue, int activityBaseId, string code)
+    {
+        Code = code;
+        ActivityBaseId = activityBaseId;
+        PointValue = pointValue;
+    }
 
-    public int ActivityBaseId { get; set; } = activityBaseId;
+    public string Code { get; set; }
 
-    public int PointValue { get; set; } = pointValue;
+    public int ActivityBaseId { get; set; }
+
+    public int PointValue { get; set; }
 }

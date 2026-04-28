@@ -9,14 +9,23 @@ public class IntegrationTestBase : IClassFixture<CustomWebApplicationFactory>, I
 
     protected ActivityBasesClient ActivityBasesClient { get; }
     protected CoinsClient CoinsClient { get; }
-    
+    protected ScoutMembersClient ScoutMembersClient { get; }
+
+    protected ScoutGroupsClient ScoutGroupsClient { get; }
+    protected ScoutSectionsClient ScoutSectionsClient { get; }
+    protected ScansClient ScansClient { get; }
+
     protected IntegrationTestBase(CustomWebApplicationFactory factory)
     {
         this.factory = factory;
         client = factory.CreateClient();
-        
-        ActivityBasesClient = new  ActivityBasesClient(client);
-        CoinsClient = new  CoinsClient(client);
+
+        ActivityBasesClient = new ActivityBasesClient(client);
+        CoinsClient = new CoinsClient(client);
+        ScoutMembersClient = new ScoutMembersClient(client);
+        ScoutGroupsClient = new ScoutGroupsClient(client);
+        ScoutSectionsClient = new ScoutSectionsClient(client);
+        ScansClient = new ScansClient(client);
     }
 
     public async Task InitializeAsync()

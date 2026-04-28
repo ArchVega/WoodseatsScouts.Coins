@@ -1,5 +1,7 @@
 using System.Net.Http.Json;
+using WoodseatsScouts.Coins.Api.Models.Dtos.ActivityBases;
 using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Groups;
 using WoodseatsScouts.Coins.Tests.Integration.Api.Core;
 
 namespace WoodseatsScouts.Coins.Tests.Integration.Api.Helpers;
@@ -13,5 +15,19 @@ public class ActivityBasesClient(HttpClient client)
         var data = (await response.Content.ReadFromJsonAsync<List<ActivityBasesDto>>())!;
 
         return new ApiResult<List<ActivityBasesDto>>(data, response);
+    }
+    
+    public async Task<ActivityBasesDto> PostActivityBases(string name)
+    {
+        var response = await client.PostAsJsonAsync(
+            "/api/activities/bases",
+            new CreateActivityBaseRequest
+            {
+                Name = name
+            });
+
+        response.EnsureSuccessStatusCode();
+
+        return (await response.Content.ReadFromJsonAsync<ActivityBasesDto>())!;
     }
 }

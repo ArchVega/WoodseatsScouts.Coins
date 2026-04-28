@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WoodseatsScouts.Coins.Api.Abstractions;
-using WoodseatsScouts.Coins.Api.Data;
-using WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
+using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts;
+using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Groups;
 
 namespace WoodseatsScouts.Coins.Api.Controllers;
 
@@ -15,5 +15,14 @@ public class ScoutSectionController( IAppDbContext appDbContext) : ControllerBas
     public ActionResult ScoutSections()
     {
         return Ok(appDbContext.ScoutSections!.Select(x => new ScoutSectionDto(x)));
+    }
+    
+    [HttpPost]
+    [Route("")]
+    public ActionResult CreateScoutSection([FromBody] CreateScoutSectionRequest createScoutSectionRequest)
+    {
+        var scoutSection = appDbContext.CreateScoutSection(createScoutSectionRequest.Code, createScoutSectionRequest.Name);
+
+        return Created("", scoutSection);
     }
 }

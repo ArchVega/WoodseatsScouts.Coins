@@ -16,7 +16,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         {
             var settings = new Dictionary<string, string>
             {
-                ["ConnectionStrings:Default"] = ConnectionString
+                ["ConnectionStrings:WoodseatsScouts.Coins"] = ConnectionString
             };
 
             config.AddInMemoryCollection(settings!);

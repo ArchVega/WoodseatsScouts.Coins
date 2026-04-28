@@ -6,17 +6,25 @@ namespace WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 
 public class AddPointsToMemberDto
 {
+    public AddPointsToMemberDto()
+    {
+    }
+    
+    public int ScanSessionId { get; set; }
+
     public bool HasAnomalyOccurred { get; set; }
 
-    public dynamic AffectedCoins { get; set; }
-    
+    public List<CoinAndMember> AffectedCoins { get; set; } = [];
+
     public int AnomalousCoinsTotalValue { get; set; }
 
-    public AddPointsToMemberDto(IReadOnlyCollection<Coin> alreadyScavengedCoins)
+    public AddPointsToMemberDto(int scanSessionId, IReadOnlyCollection<Coin> alreadyScavengedCoins)
     {
+        ScanSessionId = scanSessionId;
+
         HasAnomalyOccurred = alreadyScavengedCoins.Count != 0;
 
-        AffectedCoins = alreadyScavengedCoins.Select(x => new
+        AffectedCoins = alreadyScavengedCoins.Select(x => new CoinAndMember
         {
             CoinCode = x.Code,
             MemberName = x.Member!.FullName

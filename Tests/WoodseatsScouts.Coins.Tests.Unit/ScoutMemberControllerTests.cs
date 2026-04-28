@@ -16,6 +16,7 @@ using WoodseatsScouts.Coins.Api.Models.Dtos.Scouts.Members;
 using WoodseatsScouts.Coins.Api.Models.Queries;
 using WoodseatsScouts.Coins.Api.Models.Requests.Scouts.Members;
 using Xunit;
+using ScoutMember = WoodseatsScouts.Coins.Api.Models.Queries.ScoutMember;
 
 namespace WoodseatsScouts.Coins.Tests;
 
@@ -64,7 +65,7 @@ public class ScoutMemberControllerTests
         };
 
         memberServiceMock.Setup(x => x.ScoutGetMemberWithPointsSummaryDtos()).Returns([
-            new ScoutMemberPointsSummaryDto(new ScoutMember
+            new ScoutMemberPointsSummaryDto(new Api.Models.Domain.ScoutMember
             {
                 ScoutGroup = TestDataFactory.CreateScoutGroup(""),
                 ScoutSection = TestDataFactory.CreateScoutSection(""),
@@ -119,7 +120,7 @@ public class ScoutMemberControllerTests
     {
         var membersController = CreateCut();
 
-        var result = membersController.GetScoutMemberByCode("M001A003", new Member { View = View.Basic });
+        var result = membersController.GetScoutMemberByCode("M001A003", new ScoutMember { View = View.Basic });
         result.ShouldBeOfType<OkObjectResult>();
         memberServiceMock.Verify(x => x.GetScoutMemberId(3, 1, "A"), Times.Once);
     }
