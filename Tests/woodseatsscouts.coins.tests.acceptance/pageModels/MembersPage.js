@@ -7,7 +7,7 @@ const MembersPage = (page) => {
         goTo: async () => {
             await page.goto('/members');
 
-            membersTable = page.getByTestId("table-members")
+            membersTable = page.getByTestId("members-list-item-card")
 
             await expect(membersTable).toBeVisible()
         },

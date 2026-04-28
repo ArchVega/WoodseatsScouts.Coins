@@ -1,22 +1,21 @@
 const baseUri = "http://localhost:7167"
 
 const Uris = {
-    adminCreateMember: `${baseUri}/Admin/Member`,
-    adminCreateScoutGroup: `${baseUri}/Admin/ScoutGroup`,
-    sutMembers: `${baseUri}/Sut/Members`,
-    coinsGet: `${baseUri}/Sut/Coins`,
-    sutSetMemberPropertyHasImageToTrue: `${baseUri}/Sut/Members/HasImage/True`,
+    adminCreateMember: `${baseUri}/api/scouts/members`,
+    adminCreateScoutGroup: `${baseUri}/api/scouts/groups`,
+    sutMembers: `${baseUri}/api/system/tests/members`,
+    coinsGet: `${baseUri}/api/system/tests/coins`,
+    sutSetMemberPropertyHasImageToTrue: `${baseUri}/api/system/tests/members/has-image/true`,
     memberPhoto: function(member) {
-        return `${baseUri}/Members/${member.id}/Photo`
+        return `${baseUri}/api/scouts/members/${member.id}/photo`
     },
-    sutScavengerHuntDeadline: (minutesToAdd) => `${baseUri}/Sut/Leaderboard/Deadline/${minutesToAdd}`,
-    sutSystemDateTime: (minutesToAdd) => {
-        if (minutesToAdd === undefined || minutesToAdd === null) {
-            return `${baseUri}/Sut/SystemDateTime`
-        } else {
-            return `${baseUri}/Sut/SystemDateTime/${minutesToAdd}`
-        }
-    }
+    // sutSystemDateTime: (minutesToAdd) => {
+    //     if (minutesToAdd === undefined || minutesToAdd === null) {
+    //         return `${baseUri}/Sut/SystemDateTime`
+    //     } else {
+    //         return `${baseUri}/Sut/SystemDateTime/${minutesToAdd}`
+    //     }
+    // }
 }
 
 export default Uris

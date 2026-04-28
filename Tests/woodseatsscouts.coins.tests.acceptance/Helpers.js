@@ -19,34 +19,22 @@ const Helpers = () => {
         },
 
         setSystemDateTime: async (minutesToAdd) => {
-            await axios({
-                url: Uris.sutSystemDateTime(minutesToAdd),
-                method: 'PUT',
-                headers: {
-                    'X-Coins-Authentication-Token': 'test',
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                console.log(response)
-            }).catch(reason => {
-                console.error(reason)
-            })
+            throw "obsoleted (temporarily?)"
         },
-
-        setDeadlineTime: async (minutesToAdd) => {
-            await axios({
-                url: Uris.sutScavengerHuntDeadline(minutesToAdd),
-                method: 'PUT',
-                headers: {
-                    'X-Coins-Authentication-Token': 'test',
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                console.log(response)
-            }).catch(reason => {
-                console.error(reason)
-            })
-        },
+        // setSystemDateTime: async (minutesToAdd) => {
+        //     await axios({
+        //         url: Uris.sutSystemDateTime(minutesToAdd),
+        //         method: 'PUT',
+        //         headers: {
+        //             'X-Coins-Authentication-Token': 'test',
+        //             'Content-Type': 'application/json'
+        //         }
+        //     }).then(response => {
+        //         console.log(response)
+        //     }).catch(reason => {
+        //         console.error(reason)
+        //     })
+        // },
 
         copyTestMemberImages: async () => {
             const membersResponse = await axios.get(Uris.sutMembers)

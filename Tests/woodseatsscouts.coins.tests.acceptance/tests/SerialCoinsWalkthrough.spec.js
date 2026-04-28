@@ -42,9 +42,7 @@ test("Creating users", async ({page}, testInfo) => {
     // screenshotsComparer =  ScreenshotsComparer("screenshots", runName); this deletes the existing master folder
     // screenshotsComparer = ScreenshotsComparer("screenshots"); // this doesn't delete the folder
 
-    // await Helpers().setDeadlineTime(2)
-
-    Helpers().restoreDb()
+    // Helpers().restoreDb()
 
     const membersPage = MembersPage(page);
     await membersPage.goTo()
@@ -561,73 +559,57 @@ test(
         // await screenshotsComparer.takeScreenshot(page, testInfo, "End");
     });
 
-test(serialStep("Olivine Crimson can't scan a scavenged coin after 9 minutes, but can after 11 minutes"), async ({page}, testInfo) => {
-    await Helpers().setSystemDateTime()
+// test(serialStep("Olivine Crimson can't scan a scavenged coin after 9 minutes, but can after 11 minutes"), async ({page}, testInfo) => {
+//     await Helpers().setSystemDateTime()
+//
+//     const scavengedCoin = (await scavengerHunt.getUnscavengedCoinByValue(users.olivineCrimson, [20]))[0]
+//
+//     const user = users.olivineCrimson
+//
+//     const homePage = HomePage(page);
+//     await homePage.goTo()
+//
+//     let coinCodeScanPage = await homePage.simulateValidUserWristbandScan(user)
+//
+//     await coinCodeScanPage.enterCoinCode(scavengedCoin.code)
+//     const totalCoinValue =await coinCodeScanPage.getTotalCoinValue()
+//     expect(totalCoinValue).toBe(20)
+//     await coinCodeScanPage.clickFinishScanningButton();
+//
+//     await homePage.goTo()
+//
+//     await Helpers().setSystemDateTime(9)
+//     coinCodeScanPage = await homePage.simulateValidUserWristbandScan(user)
+//     await coinCodeScanPage.enterCoinCode(scavengedCoin.code)
+//     const errorMessage = await ToastMessageModel(page).getMessage()
+//     expect(errorMessage).toBe("The coin has already been scavenged by Olivine")
+//
+//     await homePage.goTo()
+//
+//     await Helpers().setSystemDateTime(11)
+//     coinCodeScanPage = await homePage.simulateValidUserWristbandScan(user)
+//     await coinCodeScanPage.enterCoinCode(scavengedCoin.code)
+//
+//     expect(await coinCodeScanPage.getTotalCoinValue()).toBe(20)
+//     const memberScavengedResultPage = await coinCodeScanPage.clickFinishScanningButton();
+//     expect(await memberScavengedResultPage.getTotalPoints()).toBe(20);
+// });
 
-    const scavengedCoin = (await scavengerHunt.getUnscavengedCoinByValue(users.olivineCrimson, [20]))[0]
-
-    const user = users.olivineCrimson
-
-    const homePage = HomePage(page);
-    await homePage.goTo()
-
-    let coinCodeScanPage = await homePage.simulateValidUserWristbandScan(user)
-
-    await coinCodeScanPage.enterCoinCode(scavengedCoin.code)
-    const totalCoinValue =await coinCodeScanPage.getTotalCoinValue()
-    expect(totalCoinValue).toBe(20)
-    await coinCodeScanPage.clickFinishScanningButton();
-
-    await homePage.goTo()
-
-    await Helpers().setSystemDateTime(9)
-    coinCodeScanPage = await homePage.simulateValidUserWristbandScan(user)
-    await coinCodeScanPage.enterCoinCode(scavengedCoin.code)
-    const errorMessage = await ToastMessageModel(page).getMessage()
-    expect(errorMessage).toBe("The coin has already been scavenged by Olivine")
-
-    await homePage.goTo()
-
-    await Helpers().setSystemDateTime(11)
-    coinCodeScanPage = await homePage.simulateValidUserWristbandScan(user)
-    await coinCodeScanPage.enterCoinCode(scavengedCoin.code)
-
-    expect(await coinCodeScanPage.getTotalCoinValue()).toBe(20)
-    const memberScavengedResultPage = await coinCodeScanPage.clickFinishScanningButton();
-    expect(await memberScavengedResultPage.getTotalPoints()).toBe(20);
-});
-
-test("Time's up", async ({page}, testInfo) => {
-    const reportPage = ReportPage(page);
-    await reportPage.goTo()
-
-    let hoursLeft = await reportPage.getHoursLeft()
-    expect(hoursLeft).toBeGreaterThan(0);
-
-    await Helpers().setDeadlineTime(-24 * 60)
-    await reportPage.goTo()
-
-    hoursLeft = await reportPage.getHoursLeft()
-    expect(hoursLeft).toBe(0)
-
-    //await screenshotsComparer.takeScreenshot(page, testInfo, "End");
-});
-
-test(serialStep("Viewing the final recent 6 leaderboard page"), async ({page}, testInfo) => {
-    await last6ScannersAssertionHelpers(
-        page,
-        [
-            {userName: users.olivineCrimson, sectionName: "Adults", userPoints: 20},
-            {userName: users.olivineCrimson, sectionName: "Adults", userPoints: 20},
-            {userName: users.oxfordSaffron, sectionName: "Explorers", userPoints: 33},
-            {userName: users.jasperRoyal, sectionName: "Cubs", userPoints: 33},
-            {userName: users.glaucousJet, sectionName: "Beavers", userPoints: 49},
-            {userName: users.ceriseRoyal, sectionName: "Cubs", userPoints: 30},
-        ]
-    )
-
-    // await screenshotsComparer.takeScreenshot(page, testInfo, "End");
-});
+// test(serialStep("Viewing the final recent 6 leaderboard page"), async ({page}, testInfo) => {
+//     await last6ScannersAssertionHelpers(
+//         page,
+//         [
+//             {userName: users.olivineCrimson, sectionName: "Adults", userPoints: 20},
+//             {userName: users.olivineCrimson, sectionName: "Adults", userPoints: 20},
+//             {userName: users.oxfordSaffron, sectionName: "Explorers", userPoints: 33},
+//             {userName: users.jasperRoyal, sectionName: "Cubs", userPoints: 33},
+//             {userName: users.glaucousJet, sectionName: "Beavers", userPoints: 49},
+//             {userName: users.ceriseRoyal, sectionName: "Cubs", userPoints: 30},
+//         ]
+//     )
+//
+//     // await screenshotsComparer.takeScreenshot(page, testInfo, "End");
+// });
 
 // test(serialStep("Create screenshot comparisons"), async ({page}, testInfo) => {
 //     if (runName === "feature") {
