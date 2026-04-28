@@ -2,9 +2,19 @@ using WoodseatsScouts.Coins.Api.Models.Domain;
 
 namespace WoodseatsScouts.Coins.Api.Models.Dtos.Coins;
 
-public class ActivityBasesDto(ActivityBase activityBase)
+public class ActivityBasesDto
 {
-    public int Id { get; set; } = activityBase.Id;
+    public ActivityBasesDto()
+    {
+    }
     
-    public string Name { get; set; } = activityBase.Name;
+    public ActivityBasesDto(ActivityBase activityBase)
+    {
+        Id = activityBase.Id;
+        Name = activityBase.Name;
+    }
+
+    public int Id { get; set; }
+    
+    public string Name { get; set; }
 }
