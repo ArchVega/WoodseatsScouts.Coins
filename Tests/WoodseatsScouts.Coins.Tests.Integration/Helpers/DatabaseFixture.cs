@@ -22,9 +22,6 @@ public class DatabaseFixture
 
     public AppDbContext AppDbContext => new(contextOptions, appSettingsOptions);
 
-    private const string SourceDatabaseConnectionString 
-        = "Server=localhost,1433;Database=WoodseatsScouts.Coins.Development;User Id=SA;Password=Pa55w0rd123;TrustServerCertificate=True;Encrypt=False";
-
     private const string TestDatabaseConnectionString 
         = "Server=localhost,1433;Database=WoodseatsScouts.Coins.Tests.Integration;User Id=SA;Password=Pa55w0rd123;TrustServerCertificate=True;Encrypt=False";
 
