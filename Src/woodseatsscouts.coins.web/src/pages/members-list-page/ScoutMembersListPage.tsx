@@ -148,9 +148,11 @@ export default function ScoutMembersListPage() {
               placeholder="Search by member, groups or section name"
               onChange={x => setFilterText(x.target.value)}
             />
-            <button className="webcam-modal-button flex-shrink-0 ms-2" style={{width: "60px"}} onClick={() => onQRWebcamScannerModalButtonClick()}>
-              📷
-            </button>
+            {useAppCamera && (
+              <button className="webcam-modal-button flex-shrink-0 ms-2" style={{width: "60px"}} onClick={() => onQRWebcamScannerModalButtonClick()}>
+                📷
+              </button>
+            )}
           </div>
         </div>
       </div>
