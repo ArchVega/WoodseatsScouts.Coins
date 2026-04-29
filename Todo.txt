@@ -61,3 +61,7 @@ the desaturate idea (2026 release pdf) is cool
 
 BUG: seen one case of clicking the Save Points button immediately after a point has been scanned and it goes through to the 
 summary page and it says the user has 0 points!
+
+When deleting the first scan session in a table, the secondary table is loaded but empty - because the scan session itself has not been deleted.
+
+When going over 35 coins, the CSS in the grid gets messed up
