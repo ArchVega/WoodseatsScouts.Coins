@@ -29,57 +29,79 @@ export default function HaulResultsSection({member, haulResult}) {
 
   return (
     <div id="summary-haul-page">
-      <div className="row mt-5">
-        <div className="col text-center">
-          <h1 id="congrats-text">{congratsPhrase}<span className="font-black">{member.firstName}</span><span
-            style={{fontSize: '1em'}}>👍</span>
-          </h1>
-        </div>
-      </div>
-      <div className="row mt-2 mb-3">
-        <div className="col text-center">
-          <h4 id="added-points-text">You've just added some more points <br/> to your score.</h4>
-        </div>
-      </div>
-      <div className="row mb-3">
-        <div className="col text-center">
-          <button id="haul-summary-tally-total-box" data-testid="button-finish-scanning" className="btn btn-success btn-lg">
-            <div style={{lineHeight: "normal"}}>
-              <strong className="finish-scanning-button-points-value" data-testid="coin-total">
-                {haulResult.coinTotal}
-              </strong>
-              &nbsp;
-              <span className="text-white" style={{fontSize: "2em"}}>points</span></div>
-          </button>
-        </div>
-      </div>
       {haulResult.additionalData !== undefined && haulResult.additionalData.hasAnomalyOccurred
         ? (
-          <div className="row">
-            <div className="col-6 offset-6 text-center alert alert-danger" data-testid="div-additional-message" role="alert">
-              <p>Unfortunately, there was an issue with at least one of your coins.</p>
+          <div className="row mt-5">
+            <div className="col-6 offset-3 text-center alert alert-danger" data-testid="div-additional-message" role="alert">
+              <p className="fs-1">On no!</p>
+              <p className="fs-4">There's been a problem with at least one of your coins {member.firstName}. 🙁</p>
               <ul className="list-group list-group-flush">
                 {haulResult.additionalData.affectedCoins.map(affectedCoin => (
                   <li className="list-group-item bg-danger text-white">
-                    {affectedCoin.coinCode} scanned by {affectedCoin.memberName}
+                    {affectedCoin.coinCode} has already been scanned by {affectedCoin.memberName}
                   </li>
                 ))}
               </ul>
             </div>
+            <div className="row mt-3">
+              <div className="col-6 offset-3 text-center fs-4">
+                <div className="row">
+                  <div className="col-12">
+                    Click
+                  </div>
+                  <div className="col-12">
+                    <button className="btn btn-success w-25" type="button"  onClick={() => reloadPage()}>here</button>
+                  </div>
+                  <div className="col-12">
+                    to go back to the
+                  </div>
+                  <div className="col-12">
+                    home page
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>)
-        : (<></>)}
-      <div className="row mt-4 mb-4">
-        <div className="col text-center">
-          <h4 id="head-back-out-text">Head back out there and get some more points...</h4>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col text-center">
-          <button className="btn-warning btn-next-member" onClick={reloadPage}>
-            <span className="font-bold-italic">Next member</span>
-          </button>
-        </div>
-      </div>
+        : (
+          <>
+            <div className="row mt-5">
+              <div className="col text-center">
+                <h1 id="congrats-text">{congratsPhrase}<span className="font-black">{member.firstName}</span><span
+                  style={{fontSize: '1em'}}>👍</span>
+                </h1>
+              </div>
+            </div>
+            <div className="row mt-2 mb-3">
+              <div className="col text-center">
+                <h4 id="added-points-text">You've just added some more points <br/> to your score.</h4>
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col text-center">
+                <button id="haul-summary-tally-total-box" data-testid="button-finish-scanning" className="btn btn-success btn-lg">
+                  <div style={{lineHeight: "normal"}}>
+                    <strong className="finish-scanning-button-points-value" data-testid="coin-total">
+                      {haulResult.coinTotal}
+                    </strong>
+                    &nbsp;
+                    <span className="text-white" style={{fontSize: "2em"}}>points</span></div>
+                </button>
+              </div>
+            </div>
+            <div className="row mt-4 mb-4">
+              <div className="col text-center">
+                <h4 id="head-back-out-text">Head back out there and get some more points...</h4>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col text-center">
+                <button className="btn-warning btn-next-member" onClick={reloadPage}>
+                  <span className="font-bold-italic">Next member</span>
+                </button>
+              </div>
+            </div>
+          </>
+        )}
     </div>
   )
 }
