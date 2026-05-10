@@ -1,13 +1,11 @@
-﻿import "./EditMemberPhotoModal.scss"
-import React, {useEffect, useState} from "react";
-import {BaseModal} from "./BaseModal.tsx";
-import Uris from "../../services/apis/Uris.ts";
-import {Button} from "../widgets/HtmlControlWrappers.tsx";
-import type {ActivityGroupDto, ScoutMemberCompleteDto, ScoutGroupDto, ScoutSectionDto} from "../../types/ServerTypes.ts";
-import AppStateApiService from "../../services/apis/AppStateApiService.tsx";
-import MemberApiService from "../../services/apis/MemberApiService.ts";
-import type {UpdateScoutMemberRequestPayload} from "../../types/ClientTypes.ts";
+﻿import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import type {ScoutGroupDto, ScoutMemberCompleteDto, ScoutSectionDto} from "@/types/ServerTypes.ts";
+import AppStateApiService from "@/services/apis/AppStateApiService.tsx";
+import type {UpdateScoutMemberRequestPayload} from "@/types/ClientTypes.ts";
+import MemberApiService from "@/services/apis/MemberApiService.ts";
+import {BaseModal} from "@/components/modals/BaseModal.tsx";
+import {Button} from "@/components/widgets/HtmlControlWrappers.tsx";
 
 interface EditMemberDetailsModalProps {
   showModal: boolean;

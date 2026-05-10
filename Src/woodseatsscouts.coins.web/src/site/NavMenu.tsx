@@ -4,7 +4,7 @@ import React, {useContext, useState} from 'react';
 import {NavLink, useNavigate} from 'react-router-dom';
 import {AppCameraAvailableContext, PageActionMenuAreaContext} from "../contexts/AppContextExporter.tsx";
 import CoinsPageViewName from "../pages/coins-page/CoinsPageViewName.ts";
-import {Button, Image} from "../components/widgets/HtmlControlWrappers.tsx";
+import {Button, ImageWidget} from "../components/widgets/HtmlControlWrappers.tsx";
 import AppSettingsModal from "../components/modals/AppSettingsModal.tsx";
 import ConfirmLogoutModal from "../components/modals/ConfirmLogoutModal.tsx";
 import {usePasscode} from "../components/security/usePasscode.ts";
@@ -13,7 +13,6 @@ export default function NavMenu() {
   const {pageActionMenuAreaAction, activeScanningMember} = useContext(PageActionMenuAreaContext)
   const navigate = useNavigate()
 
-  const [collapsed, setCollapsed] = useState(true);
   const [appSettingsModal, setAppSettingsModal] = useState(false);
   const [showConfirmLogoutModal, setShowConfirmLogoutModal] = useState(false);
   const {appCameraAvailable} = useContext(AppCameraAvailableContext)
@@ -141,8 +140,8 @@ export default function NavMenu() {
           {RenderLeftSideHeaderSection()}
         </div>
         <div id="middle-column">
-          <Image role="button" src={ScoutsLogo}
-                 style={{height: "70px", width: "100%"}} onClick={() => {
+          <ImageWidget role="button" src={ScoutsLogo}
+                       style={{height: "70px", width: "100%"}} onClick={() => {
             if (showNavBarMenu || checkPasscode()) {
               setShowNavBarMenu(!showNavBarMenu)
             }

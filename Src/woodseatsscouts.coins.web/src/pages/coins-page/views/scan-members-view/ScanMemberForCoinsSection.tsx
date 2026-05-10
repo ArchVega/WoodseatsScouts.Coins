@@ -1,17 +1,16 @@
 import React, {useContext, useEffect, useState} from "react";
 import wave from "../../../../images/wave.png";
 import "./ScanMemberForCoinsSection.scss"
-import MemberApiService from "../../../../services/apis/MemberApiService.ts";
-import {PageActionMenuAreaContext} from "../../../../contexts/AppContextExporter.tsx";
-import AudioFx from "../../../../components/fx/AudioFx.ts";
-import Spinner from "../../../../components/widgets/Spinner.tsx";
-import QRCodeInputDevices from "../../../../components/io/qr-input-devices/QRCodeInputDevices.tsx";
-import QRScanCodeType from "../../../../components/io/qr-input-devices/QRScanCodeType.ts";
-import {logDebug, logError, logObject} from "../../../../components/logging/Logger.ts";
-import {toastError} from "../../../../components/toaster/toaster.ts";
+import {PageActionMenuAreaContext} from "@/contexts/AppContextExporter.tsx";
+import {logDebug, logError, logObject} from "@/components/logging/Logger.ts";
+import {toastError} from "@/components/toaster/toaster.ts";
 import type {AxiosResponse} from "axios";
-import type {ScoutMemberDto} from "../../../../types/ServerTypes.ts";
-import Uris from "../../../../services/apis/Uris.ts";
+import type {ScoutMemberDto} from "@/types/ServerTypes.ts";
+import Spinner from "@/components/widgets/Spinner.tsx";
+import MemberApiService from "@/services/apis/MemberApiService.ts";
+import AudioFx from "@/components/fx/AudioFx.ts";
+import QRCodeInputDevices from "@/components/io/qr-input-devices/QRCodeInputDevices.tsx";
+import QRScanCodeType from "@/components/io/qr-input-devices/QRScanCodeType.ts";
 
 export default function ScanMemberForCoinsSection({setMember}) {
   const audioFx = AudioFx(); // todo: move into Context

@@ -1,19 +1,19 @@
 import './MemberDetailsPage.scss'
 import {useParams} from "react-router-dom";
 import React, {type ReactNode, useContext, useEffect, useState} from "react";
-import {PageActionMenuAreaContext, UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
-import MemberApiService from "../../services/apis/MemberApiService.ts";
-import Spinner from "../../components/widgets/Spinner.tsx";
-import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteSummaryStatsActivityBaseInfoDto, ScannedCoinDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
-import {getSectionBranding} from "../../utilities/branding.ts";
-import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
-import {logObject} from "../../components/logging/Logger.ts";
-import EditMemberDetailsModal from "../../components/modals/EditMemberDetailsModal.tsx";
-import EditScannedCoinPointsModal from "../../components/modals/EditScannedCoinPointsModal.tsx";
-import ScannedCoinApiService from "../../services/apis/ScannedCoinApiService.ts";
-import ScanSessionApiService from "../../services/apis/ScanSessionApiService.ts";
-import {usePasscode} from "../../components/security/usePasscode.ts";
+import type {ActivityBaseHaulResultDto, HaulResultDto, MemberCompleteSummaryStatsActivityBaseInfoDto, ScannedCoinDto, ScoutMemberCompleteDto} from "@/types/ServerTypes.ts";
+import {getSectionBranding} from "@/utilities/branding.ts";
+import {logObject} from "@/components/logging/Logger.ts";
+import {usePasscode} from "@/components/security/usePasscode.ts";
+import {ImageWidget} from "@/components/widgets/HtmlControlWrappers.tsx"
+import {PageActionMenuAreaContext, UseAppCameraContext} from "@/contexts/AppContextExporter.tsx";
+import MemberApiService from "@/services/apis/MemberApiService.ts";
+import ScanSessionApiService from "@/services/apis/ScanSessionApiService.ts";
+import ScannedCoinApiService from "@/services/apis/ScannedCoinApiService.ts";
+import Spinner from "@/components/widgets/Spinner.tsx";
+import EditMemberPhotoModal from "@/components/modals/EditMemberPhotoModal.tsx";
+import EditMemberDetailsModal from "@/components/modals/EditMemberDetailsModal.tsx";
+import EditScannedCoinPointsModal from "@/components/modals/EditScannedCoinPointsModal.tsx";
 
 export default function MemberDetailsPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
@@ -117,10 +117,10 @@ export default function MemberDetailsPage() {
       <>
         <div className="card member-details-member-card flex-shrink-0 sticky-top mb-3">
           <div className="card-body">
-            <Image className="mb-2"
-                   onClick={() => tryEditScoutMemberPhoto()}
-                   title={"User id: " + memberCompleteDto.id}
-                   src={memberCompleteDto.clientComputedImageUri}/>
+            <ImageWidget className="mb-2"
+                         onClick={() => tryEditScoutMemberPhoto()}
+                         title={"User id: " + memberCompleteDto.id}
+                         src={memberCompleteDto.clientComputedImageUri}/>
             <div className="row mb-2">
               <div role="button" className={"d-flex justify-content-center align-items-center members-list-item-section"} style={{height: "100px"}}
                    onClick={() => tryEditScoutMemberDetails()}>

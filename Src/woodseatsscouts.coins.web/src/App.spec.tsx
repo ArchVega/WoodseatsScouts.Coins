@@ -1,7 +1,7 @@
 import {expect, test, vi} from "vitest";
-import App from "./App.tsx";
+import App from "@/App.tsx";
 import {render, screen} from "@testing-library/react";
-import * as storageModule from "./components/storage/AppLocalStorage.ts";
+import * as storageModule from "@/components/storage/AppLocalStorage.ts";
 
 vi.spyOn(storageModule, 'default').mockReturnValue({
   getAppSettings: vi.fn().mockReturnValue(false),

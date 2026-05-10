@@ -1,6 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
-import {BaseModal} from "./BaseModal.tsx";
+import React, {useEffect, useState} from "react";
 import {Scanner} from "@yudiel/react-qr-scanner";
+import {BaseModal} from "@/components/modals/BaseModal.tsx";
 
 interface QrWebcamScannerModalProps {
   showModal: boolean;
@@ -8,9 +8,8 @@ interface QrWebcamScannerModalProps {
   setQrCode: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default function QRWebcamScanner({showModal, setShowModal, setQrCode, ...props}: QrWebcamScannerModalProps) {
+export default function QRWebcamScannerModal({showModal, setShowModal, setQrCode, ...props}: QrWebcamScannerModalProps) {
   const [currentQRCode, setCurrentQRCode] = useState("");
-  const [timeoutHandle, setTimeoutHandle] = useState(0);
 
   useEffect(() => {
     if (currentQRCode) {

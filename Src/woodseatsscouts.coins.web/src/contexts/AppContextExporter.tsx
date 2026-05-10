@@ -1,7 +1,6 @@
-import {createContext} from "react";
 import * as React from "react";
-import type {AppSettings} from "../AppSettings.ts";
-import type {ScoutMemberDto} from "../types/ServerTypes.ts";
+import type {ScoutMemberDto} from "@/types/ServerTypes.ts";
+import type {AppSettings} from "@/AppSettings.ts";
 
 const cameraAvailable = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 
@@ -37,15 +36,15 @@ type AppSettingsContextType = {
     appSettings: AppSettings;
 }
 
-export const AppCameraAvailableContext = createContext<AppCameraAvailableContextType>({appCameraAvailable: cameraAvailable});
+export const AppCameraAvailableContext = React.createContext<AppCameraAvailableContextType>({appCameraAvailable: cameraAvailable});
 
-export const UseAppCameraContext = createContext<UseAppCameraContextType | undefined>(undefined);
+export const UseAppCameraContext = React.createContext<UseAppCameraContextType | undefined>(undefined);
 
 // Todo: if AppTestModeContext is still needed, refactor into an env variable to remove the React Context
-export const AppTestModeContext = createContext<AppTestModeContextType | undefined>(undefined);
+export const AppTestModeContext = React.createContext<AppTestModeContextType | undefined>(undefined);
 
-export const AppModeContext = createContext<AppModeContextType | undefined>(undefined);
+export const AppModeContext = React.createContext<AppModeContextType | undefined>(undefined);
 
-export const PageActionMenuAreaContext = createContext<PageActionMenuAreaContextType | undefined>(undefined);
+export const PageActionMenuAreaContext = React.createContext<PageActionMenuAreaContextType | undefined>(undefined);
 
-export const AppSettingsContext = createContext<AppSettingsContextType | undefined>(undefined)
+export const AppSettingsContext = React.createContext<AppSettingsContextType | undefined>(undefined)

@@ -1,9 +1,10 @@
 import Uris from "./Uris.ts";
 import {apiClient} from "./apiClient.ts";
+import type {AppModeContextTypeEnum} from "@/contexts/AppContextExporter.tsx";
 
 export default function AppStateApiService() {
   return {
-    getAppSate: (responseFunc: (response: any) => void) => {
+    getAppSate: (responseFunc: (response: AppModeContextTypeEnum) => void) => {
       async function fetchAppState() {
         const response = await apiClient.get(Uris.application().mode());
         return response.data

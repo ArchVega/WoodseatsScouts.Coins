@@ -1,11 +1,8 @@
-﻿import React, {useContext, useEffect, useState} from "react";
-import {AppCameraAvailableContext, UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
-import AppStateApiService from "../../services/apis/AppStateApiService.tsx";
-import {BaseModal} from "./BaseModal.tsx";
-import {Button, Switch} from "../widgets/HtmlControlWrappers.tsx";
-import AppLocalStorage from "../storage/AppLocalStorage.ts";
-import type {ScannedCoinDto, ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
-import ScannedCoinApiService from "../../services/apis/ScannedCoinApiService.ts";
+﻿import React, {useEffect, useState} from "react";
+import type {ScannedCoinDto} from "@/types/ServerTypes.ts";
+import ScannedCoinApiService from "@/services/apis/ScannedCoinApiService.ts";
+import {BaseModal} from "@/components/modals/BaseModal.tsx";
+import {Button} from "@/components/widgets/HtmlControlWrappers.tsx";
 
 interface EditScannedCoinPointsModalProps {
   showModal: boolean;

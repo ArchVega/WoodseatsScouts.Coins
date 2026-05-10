@@ -8,16 +8,16 @@ import {getSectionBranding} from "../../utilities/branding.ts";
 import EditMemberPhotoModal from "../../components/modals/EditMemberPhotoModal.tsx";
 import type {AxiosResponse} from "axios";
 import type {ScoutMemberPointsSummaryDto} from "../../types/ServerTypes.ts";
-import QRWebcamScanner from "../../components/modals/QrWebcamScannerModal.tsx";
+import QRWebcamScannerModal from "../../components/modals/QrWebcamScannerModal.tsx";
 
 export default function ScoutMembersListPage() {
   const {useAppCamera} = useContext(UseAppCameraContext)
   const navigate = useNavigate();
 
   const [members, setMembers] = useState<ScoutMemberPointsSummaryDto[]>([]);
-  const [userModal, setUserModal] = useState<boolean>(false);
   const [showQrWebcamScannerModal, setShowQrWebcamScannerModal] = useState<boolean>(false);
   const [editUserModal, setEditUserModal] = useState<boolean>(false);
+
   const [editMemberNameModal, setEditMemberNameModal] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [filterText, setFilterText] = useState<string | null>(null);
@@ -165,7 +165,7 @@ export default function ScoutMembersListPage() {
       </div>
       <EditMemberPhotoModal showEditMemberPhotoModal={editUserModal} setShowEditMemberPhotoModal={setEditUserModal} memberCompleteDto={selectedUser}
                             setMemberCompleteDto={setSelectedUser}/>
-      <QRWebcamScanner showModal={showQrWebcamScannerModal} setShowModal={setShowQrWebcamScannerModal} setQrCode={setFilterText}/>
+      <QRWebcamScannerModal showModal={showQrWebcamScannerModal} setShowModal={setShowQrWebcamScannerModal} setQrCode={setFilterText}/>
     </div>
   )
 }

@@ -1,7 +1,7 @@
-import Uris from "../../services/apis/Uris.ts";
-import {apiClient} from "../../services/apis/apiClient.ts";
-import type {ScoutMemberPointsSummaryDto} from "../../types/ServerTypes.ts";
-import type {UnscavengedCoin} from "../../types/ClientTypes.ts";
+import type {UnscavengedCoin} from "@/types/ClientTypes.ts";
+import Uris from "@/services/apis/Uris.ts";
+import {apiClient} from "@/services/apis/apiClient.ts";
+import type {ScoutMemberPointsSummaryDto} from "@/types/ServerTypes.ts";
 
 export default function TestDataApiService() {
     return {

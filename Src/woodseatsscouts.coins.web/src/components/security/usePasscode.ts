@@ -1,4 +1,4 @@
-import getAppSettings from "../../AppSettings.ts";
+import getAppSettings from "@/AppSettings.ts";
 
 export function usePasscode() {
   const appSettings = getAppSettings();

@@ -1,9 +1,9 @@
 ﻿import {useContext, useEffect, useState} from "react";
-import {AppCameraAvailableContext, UseAppCameraContext} from "../../contexts/AppContextExporter.tsx";
-import AppStateApiService from "../../services/apis/AppStateApiService.tsx";
-import {BaseModal} from "./BaseModal.tsx";
-import {Switch} from "../widgets/HtmlControlWrappers.tsx";
-import AppLocalStorage from "../storage/AppLocalStorage.ts";
+import {AppCameraAvailableContext, UseAppCameraContext} from "@/contexts/AppContextExporter.tsx";
+import AppStateApiService from "@/services/apis/AppStateApiService.tsx";
+import AppLocalStorage from "@/components/storage/AppLocalStorage.ts";
+import {BaseModal} from "@/components/modals/BaseModal.tsx";
+import {Switch} from "@/components/widgets/HtmlControlWrappers.tsx";
 
 export default function AppSettingsModal({appSettingsModal, setAppSettingsModal}) {
   const {useAppCamera, setUseAppCamera} = useContext(UseAppCameraContext)

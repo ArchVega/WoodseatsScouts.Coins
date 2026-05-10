@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import type {QRCodeInputDevicesProps} from "../QRCodeInputDevicesProps.tsx";
 import {Scanner} from "@yudiel/react-qr-scanner";
+import type {QRCodeInputDevicesProps} from "@/components/io/qr-input-devices/QRCodeInputDevicesProps.tsx";
 
 interface QRWebcamScannerProps extends QRCodeInputDevicesProps {
   videoSizeEm: any

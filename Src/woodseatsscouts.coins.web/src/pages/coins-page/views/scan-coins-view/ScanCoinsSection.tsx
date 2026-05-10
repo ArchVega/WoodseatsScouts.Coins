@@ -1,16 +1,16 @@
 import {toast} from "react-toastify";
 import React, {useEffect, useState} from "react";
 import ScannedCoin from "./ScannedCoin.tsx";
-import QRCodeInputDevices from "../../../../components/io/qr-input-devices/QRCodeInputDevices";
-import AudioFx from "../../../../components/fx/AudioFx";
-import CoinApiService from "../../../../services/apis/CoinApiService.tsx";
-import QRScanCodeType from "../../../../components/io/qr-input-devices/QRScanCodeType.ts";
-import {logDebug, logError, logObject, logReactSet} from "../../../../components/logging/Logger.ts";
-import {toastError} from "../../../../components/toaster/toaster.ts";
+import {logDebug, logError, logObject} from "@/components/logging/Logger.ts";
+import {toastError} from "@/components/toaster/toaster.ts";
 import './ScanCoinsSection.scss'
 import type {AxiosResponse} from "axios";
-import type {CoinDto, ScoutMemberDto} from "../../../../types/ServerTypes.ts";
-import type {HaulResult} from "../../../../types/ClientTypes.ts";
+import type {CoinDto, ScoutMemberDto} from "@/types/ServerTypes.ts";
+import type {HaulResult} from "@/types/ClientTypes.ts";
+import AudioFx from "@/components/fx/AudioFx.ts";
+import CoinApiService from "@/services/apis/CoinApiService.tsx";
+import QRCodeInputDevices from "@/components/io/qr-input-devices/QRCodeInputDevices.tsx";
+import QRScanCodeType from "@/components/io/qr-input-devices/QRScanCodeType.ts";
 
 interface ScanCoinsSectionProps {
   member: ScoutMemberDto;

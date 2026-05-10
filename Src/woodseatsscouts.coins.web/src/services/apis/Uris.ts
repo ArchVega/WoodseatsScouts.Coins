@@ -10,14 +10,6 @@ const Uris = {
     }
   },
 
-  activities: () => {
-    const resourcePath = `application`
-
-    return {
-      bases: () => logApi(`activities/bases`),
-    }
-  },
-
   coins: () => {
     const resourcePath = `coins`
 

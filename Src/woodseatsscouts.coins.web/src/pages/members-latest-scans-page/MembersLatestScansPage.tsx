@@ -2,12 +2,11 @@ import "./MembersLatestScans.scss"
 import {useContext, useEffect, useState} from "react";
 import Uris from "../../services/apis/Uris.ts";
 import {type AxiosResponse} from "axios";
-import {Image} from "../../components/widgets/HtmlControlWrappers.tsx";
-import type {ScoutMemberPointsSummaryDto} from "../../types/ServerTypes.ts";
-import {getSectionBranding} from "../../utilities/branding.ts";
+import type {ScoutMemberPointsSummaryDto} from "@/types/ServerTypes.ts";
+import {getSectionBranding} from "@/utilities/branding.ts";
 import {format} from 'timeago.js';
 import {AppSettingsContext, PageActionMenuAreaContext} from "../../contexts/AppContextExporter.tsx";
-import {apiClient} from "../../services/apis/apiClient.ts";
+import {apiClient} from "@/services/apis/apiClient.ts";
 
 export default function MembersLatestScansPage() {
   const {appSettings} = useContext(AppSettingsContext)

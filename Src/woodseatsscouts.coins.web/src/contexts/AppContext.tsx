@@ -1,4 +1,6 @@
 import {useEffect, useState} from "react";
+import type {AppSettings} from "@/AppSettings.ts";
+import AppLocalStorage from "@/components/storage/AppLocalStorage.ts";
 import {
   AppCameraAvailableContext,
   AppModeContext,
@@ -7,10 +9,9 @@ import {
   AppTestModeContext,
   PageActionMenuAreaContext,
   UseAppCameraContext
-} from "./AppContextExporter";
-import AppStateApiService from "../services/apis/AppStateApiService.tsx";
-import AppLocalStorage from "../components/storage/AppLocalStorage.ts";
-import getAppSettings, {type AppSettings} from "../AppSettings.ts";
+} from "@/contexts/AppContextExporter.tsx";
+import AppStateApiService from "@/services/apis/AppStateApiService.tsx";
+
 
 const cameraAvailable = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices;
 

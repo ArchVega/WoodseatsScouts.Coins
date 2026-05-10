@@ -1,7 +1,7 @@
-import AppContext from "./contexts/AppContext";
 import {Route, Routes} from "react-router-dom";
-import AppRoutes from "./site/AppRoutes.tsx";
-import Layout from "./pages/Layout.tsx";
+import AppContext from "@/contexts/AppContext.tsx";
+import Layout from "@/pages/Layout.tsx";
+import AppRoutes from "@/site/AppRoutes.tsx";
 
 export default function App() {
   return (

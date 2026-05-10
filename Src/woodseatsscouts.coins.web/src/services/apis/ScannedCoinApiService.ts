@@ -1,8 +1,5 @@
-import {type AxiosResponse} from "axios";
 import Uris from "./Uris.ts";
-import type {ScoutMemberCompleteDto, ScoutMemberDto, ScoutMemberPointsSummaryDto} from "../../types/ServerTypes.ts";
 import {apiClient} from "./apiClient.ts";
-import type {UpdateScoutMemberRequestPayload} from "../../types/ClientTypes.ts";
 
 export default function ScannedCoinApiService() {
   return {

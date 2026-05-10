@@ -10,7 +10,7 @@ export function Button({children, className, ...props}: ButtonProps) {
 /* Image -------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 type ImageProps = React.ComponentPropsWithoutRef<"img">;
 
-export function Image({children, className, style, ...props}: ImageProps) {
+export function ImageWidget({children, className, style, ...props}: ImageProps) {
   const baseStyle: React.CSSProperties = {
     objectFit: "contain"
   };

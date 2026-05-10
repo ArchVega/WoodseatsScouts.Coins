@@ -1,4 +1,4 @@
-import getAppSettings, {type AppSettings} from "../../AppSettings.ts";
+import getAppSettings, {type AppSettings} from "@/AppSettings.ts";
 
 export default function AppLocalStorage() {
   const keys = {

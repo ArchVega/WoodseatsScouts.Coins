@@ -1,8 +1,7 @@
 ﻿import {useEffect, useState} from "react";
-import QRScanCodeType from "../io/qr-input-devices/QRScanCodeType.ts";
-import TestDataApiService from "./TestDataApiService.tsx";
-import {BaseModal} from "../modals/BaseModal.tsx";
-import type {ScoutMemberCompleteDto} from "../../types/ServerTypes.ts";
+import QRScanCodeType from "@/components/io/qr-input-devices/QRScanCodeType.ts";
+import TestDataApiService from "@/components/_dev/TestDataApiService.tsx";
+import {BaseModal} from "@/components/modals/BaseModal.tsx";
 
 type TestQRBarcodeDataModalModel = {
   name: string

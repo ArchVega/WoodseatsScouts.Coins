@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
-import CoinsPageViewName from "./CoinsPageViewName.ts";
-import {PageActionMenuAreaContext} from "../../contexts/AppContextExporter.tsx";
-import ScanMemberForCoinsSection from "./views/scan-members-view/ScanMemberForCoinsSection.tsx";
-import ScanCoinsSection from "./views/scan-coins-view/ScanCoinsSection.tsx";
-import HaulResultsSection from "./views/haul-summary-view/HaulSummarySection.tsx";
-import AudioFx from "../../components/fx/AudioFx.ts";
-import type {ScoutMemberDto} from "../../types/ServerTypes.ts";
+import type {ScoutMemberDto} from "@/types/ServerTypes.ts";
+import {PageActionMenuAreaContext} from "@/contexts/AppContextExporter.tsx";
+import CoinsPageViewName from "@/pages/coins-page/CoinsPageViewName.ts";
+import AudioFx from "@/components/fx/AudioFx.ts";
+import ScanMemberForCoinsSection from "@/pages/coins-page/views/scan-members-view/ScanMemberForCoinsSection.tsx";
+import ScanCoinsSection from "@/pages/coins-page/views/scan-coins-view/ScanCoinsSection.tsx";
+import HaulResultsSection from "@/pages/coins-page/views/haul-summary-view/HaulSummarySection.tsx";
 
 export default function CoinsPage() {
   const {setPageActionMenuAreaAction} = useContext(PageActionMenuAreaContext)

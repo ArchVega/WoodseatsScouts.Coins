@@ -1,8 +1,7 @@
-import "./QRBarcodeScanner.scss"
 import {useContext, useState} from "react";
-import {AppModeContext, AppTestModeContext} from "../../../../contexts/AppContextExporter.tsx";
-import TestQRBarcodeDataModal from "../../../_dev/TestQRBarcodeDataModal.tsx";
-import type {QRCodeInputDevicesProps} from "../QRCodeInputDevicesProps.tsx";
+import {AppModeContext, AppTestModeContext} from "@/contexts/AppContextExporter.tsx";
+import type {QRCodeInputDevicesProps} from "@/components/io/qr-input-devices/QRCodeInputDevicesProps.tsx";
+import TestQRBarcodeDataModal from "@/components/_dev/TestQRBarcodeDataModal.tsx";
 
 interface QRBarcodeScannerProps extends QRCodeInputDevicesProps {
 }

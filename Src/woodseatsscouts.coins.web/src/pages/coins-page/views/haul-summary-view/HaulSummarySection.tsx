@@ -1,8 +1,6 @@
 import "./HaulSummarySection.scss"
-import {useContext, useEffect} from "react";
-import {AppSettingsContext} from "../../../../contexts/AppContextExporter.tsx";
-import {logInfo} from "../../../../components/logging/Logger.ts";
-import getAppSettings from "../../../../AppSettings.ts";
+import {useContext} from "react";
+import {AppSettingsContext} from "@/contexts/AppContextExporter.tsx";
 
 export default function HaulResultsSection({member, haulResult}) {
   const {appSettings} = useContext(AppSettingsContext)
