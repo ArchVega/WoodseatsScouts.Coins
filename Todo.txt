@@ -65,3 +65,12 @@ summary page and it says the user has 0 points!
 When deleting the first scan session in a table, the secondary table is loaded but empty - because the scan session itself has not been deleted.
 
 When going over 35 coins, the CSS in the grid gets messed up
+
+use vite config server proxy to map /api to webapi (using vite with react, 'configuring vite for react'). 
+
+client-side data persistence, 'adding filters to travel wishlist app' has some good things to note
+
+
+indexdb to store a users haul and if there is a server issue, the haul is remembered
+
+make swagger site only accessible from the same machine, not client.
